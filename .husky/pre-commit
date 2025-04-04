@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 pre-commit: lint-staged 실행 중..."
+
+npx lint-staged
