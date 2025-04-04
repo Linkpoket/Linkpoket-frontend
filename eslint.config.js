@@ -45,6 +45,7 @@ export default [
         },
       ],
       '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-explicit-any': 'off', // any를 제한적 사용. 이후 타입 지정이 이뤄지면 삭제 예정
     },
   },
 ];
