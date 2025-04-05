@@ -1,6 +1,37 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@theme {
+  --color-primary-0: #ffffff;
+  --color-primary-5: #fff4e8;
+  --color-primary-10: #ffe9d2;
+  --color-primary-20: #ffd4a6;
+  --color-primary-30: #ffbe78;
+  --color-primary-40: #ffa94c;
+  --color-primary-50: #ff9320;
+  --color-primary-60: #ff8400;
+  --color-primary-70: #995813;
+  --color-primary-80: #663b0d;
+  --color-primary-90: #331d06;
+  --color-primary-100: #000000;
+
+  --color-gray-0: #ffffff;
+  --color-gray-5: #f8f8f8;
+  --color-gray-10: #f0f0f0;
+  --color-gray-20: #e4e4e4;
+  --color-gray-30: #d8d8d8;
+  --color-gray-40: #c6c6c6;
+  --color-gray-50: #8e8e8e;
+  --color-gray-60: #717171;
+  --color-gray-70: #555555;
+  --color-gray-80: #2d2d2d;
+  --color-gray-90: #1d1d1d;
+  --color-gray-100: #000000;
+
+  --color-status-info: #2768ff;
+  --color-status-warning: #ffa100;
+  --color-status-success: #4caf50;
+  --color-status-danger: #f44336;
+}
 
 @font-face {
   font-family: 'SpoqaHanSansNeo';

@@ -2,8 +2,8 @@ import axios from 'axios';
 import ReactDOM from 'react-dom/client';
 // import { client, handleGenericError } from '~shared/api'
 // import { useSessionStore } from '~shared/session'
-// import { Provider } from './providers';
-import '../app/global.css';
+import { Provider } from './providers';
+import './global.css';
 
 window.addEventListener('error', (event) => {
   if (axios.isAxiosError(event.error)) {
@@ -35,10 +35,7 @@ window.addEventListener('error', (event) => {
 // )
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  // <div className="font-sans">
-  //   <Provider />
-  // </div>
-  <div className="!bg-red-500 text-white text-2xl p-8">
-    Tailwind 스타일 제대로 적용됐나요?
+  <div className="font-sans">
+    <Provider />
   </div>
 );
