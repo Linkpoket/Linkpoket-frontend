@@ -1,4 +1,4 @@
-import { cn } from "~shared/lib/shadcn";
+import { cn } from '@/shared/lib/util/utils';
 
 type SpinnerProps = {
   display?: boolean;
@@ -30,7 +30,7 @@ const Spinner = (props: SpinnerProps) => {
       className={cn(
         'fixed z-[10000] w-10 h-10 flex items-center justify-center',
         display ? 'block' : 'hidden',
-        positionClasses[position],
+        positionClasses[position]
       )}
     >
       <div className="relative w-8 h-8">

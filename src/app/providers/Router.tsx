@@ -1,11 +1,11 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import TEST from "../../pages/(authenticated)/personal/page";
-import Layout from "../layout";
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import TEST from '@/pages/TEST';
+import Layout from '../layout';
 
 const router = createBrowserRouter([
   {
     element: <Layout />,
-    children: [{ path: "/", element: <TEST /> }],
+    children: [{ path: '/', element: <TEST /> }],
   },
 ]);
 

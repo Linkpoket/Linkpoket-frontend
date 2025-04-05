@@ -1,14 +1,16 @@
-import { Button } from '../button'
+//이후 버튼이 개발되고 다시 살릴 컴포넌트
+
+import { Button } from '../Button';
 
 type ErrorHandlerProps = {
-  error: Error
-  resetErrorBoundary?: (...args: any[]) => void
-}
+  error: Error;
+  resetErrorBoundary?: (...args: any[]) => void;
+};
 
-const isDevelopment = process.env.NODE_ENV // TODO: check if this works
+const isDevelopment = process.env.NODE_ENV; // TODO: check if this works
 
 export function ErrorHandler(props: ErrorHandlerProps) {
-  const { error, resetErrorBoundary } = props
+  const { error, resetErrorBoundary } = props;
 
   return (
     <div>
@@ -21,12 +23,9 @@ export function ErrorHandler(props: ErrorHandlerProps) {
           <pre>{error.stack}</pre>
         </>
       )}
-      <Button
-        type="button"
-        onClick={resetErrorBoundary}
-      >
+      <Button type="button" onClick={resetErrorBoundary}>
         Try again
       </Button>
     </div>
-  )
+  );
 }

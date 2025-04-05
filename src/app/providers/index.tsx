@@ -1,11 +1,11 @@
-import { withErrorBoundary } from "react-error-boundary";
-import { ErrorHandler, logError } from "@/shared/ui/error-handler";
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorHandler, logError } from '@/shared/ui/error-handler';
 import {
   Spinner,
   // spinnerModel
-} from "@/shared/ui/spinner";
-import { QueryClientProvider } from "./QueryClientProvider";
-import Router from "./Router";
+} from '@/shared/ui/Spinner';
+import { QueryClientProvider } from './QueryClientProvider';
+import Router from './Router';
 
 export const Provider = withErrorBoundary(
   () => (
