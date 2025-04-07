@@ -8,11 +8,11 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          'bg-primary-50 text-white font-semibold hover:bg-primary-40 active:bg-primary-60 disabled:bg-gray-20 disabled:text-gray-50',
+          'bg-primary-50 text-primary-0 font-semibold hover:bg-primary-40 active:bg-primary-60 disabled:bg-gray-20 disabled:text-gray-50',
         secondary:
           'bg-primary-10 text-primary-60 font-semibold hover:bg-primary-20 active:bg-primary-30 disabled:bg-gray-20 disabled:text-gray-50',
         ghost:
-          'bg-white text-gray-90 font-semibold border border-gray-30 hover:bg-gray-5 active:bg-gray-10 disabled:bg-white disabled:text-gray-50',
+          'bg-primary-0 text-gray-90 font-semibold border border-gray-30 hover:bg-gray-5 active:bg-gray-10 disabled:bg-primary-0 disabled:text-gray-50',
       },
       size: {
         sm: 'px-[10px] rounded-md',
