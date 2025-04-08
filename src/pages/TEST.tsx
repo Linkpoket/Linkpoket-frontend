@@ -1,13 +1,20 @@
-import { Footer } from '@/widgets/footer/Footer';
-import { FooterLanding } from '@/widgets/footer/FooterLanding';
-import { Header } from '@/widgets/header/Header';
+import SideBar from '@/widgets/side-bar/SideBar';
+
+const sharedPagesData = [
+  { id: '1', title: '공유 페이지 1' },
+  { id: '2', title: '공유 페이지 2' },
+];
 
 export default function TEST() {
   return (
     <div>
-      <Header isLoggedIn={false} hasSidebar={false} showDepth={true} />
-      <Footer />
-      <FooterLanding />
+      <SideBar
+        avatarUrl="/avatar.png"
+        nickname="김링크"
+        email="linkmoa@gmail.com"
+        sharedPages={sharedPagesData}
+        showFooter={true}
+      />
     </div>
   );
 }
