@@ -10,7 +10,7 @@ const inputVariants = cva(
       variant: {
         default: 'border-gray-30 focus:ring-primary-30 focus:border-primary-40',
         error:
-          'border-error-50 focus:ring-error-30 focus:border-error-50 text-error-60',
+          'border-error-50 focus:ring-error-30 focus:border-error-50 text-status-danger',
         disabled: 'bg-gray-10 text-gray-50 border-gray-30 cursor-not-allowed',
       },
     },
@@ -46,7 +46,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     // 에러 상태일 때 적용할 스타일 클래스
     const errorStyles =
       variant === 'error'
-        ? 'border-[#f44336] focus:ring-[#f44336] focus:border-[#f44336]'
+        ? 'border-status-danger focus:ring-status-danger focus:border-status-danger'
         : '';
 
     return (
@@ -74,9 +74,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {errorMessage && variant === 'error' && (
           <div className="flex mt-1">
             <Status className="mr-1" />
-            <p className="text-sm text-error-60  text-[#f44336]">
-              {errorMessage}
-            </p>
+            <p className="text-sm text-status-danger">{errorMessage}</p>
           </div>
         )}
       </div>
