@@ -1,6 +1,6 @@
 //이후 버튼이 개발되고 다시 살릴 컴포넌트
 
-import { Button } from '../Button';
+import { Button } from '../button';
 
 type ErrorHandlerProps = {
   error: Error;
