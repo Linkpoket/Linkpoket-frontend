@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
 // 모달 컨텍스트 생성
@@ -20,18 +20,28 @@ const Modal = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener('click', handleClick, true); // 캡처링 단계에서 이벤트 처리 (true파라미터)
+
+    return () => document.removeEventListener('click', handleClick, true);
+  }, [onClose]);
+
   if (!isOpen) return null;
 
   return createPortal(
     <ModalContext.Provider value={{ isOpen, onClose }}>
-      <div
-        className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center "
-        onClick={onClose}
-        // 모달 바깥 영역 클릭 시 모달 닫힘
-      >
+      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center ">
         <div
           className="bg-white rounded-lg overflow-hidden max-w-[700px] w-full max-h-[90vh] flex flex-col p-[36px]"
-          onClick={(e) => e.stopPropagation()} // 이벤트 버블링 방지
+          ref={modalRef}
         >
           {children}
         </div>
