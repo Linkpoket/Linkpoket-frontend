@@ -2,9 +2,10 @@ import axios, { AxiosError } from 'axios';
 import { z } from 'zod';
 
 export const client = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: 'http://dev.linkrew.com /api',
 });
 
+//백엔드 api 유효성 검증 에러 응답
 export function handleGenericError(error: AxiosError) {
   const validation = GenericErrorSchema.safeParse(error.response?.data);
 
