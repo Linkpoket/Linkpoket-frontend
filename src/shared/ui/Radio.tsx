@@ -12,6 +12,9 @@ const radioVariants = cva('relative flex items-center', {
     disabled: {
       true: 'opacity-50 cursor-not-allowed',
     },
+    error: {
+      true: 'text-red-500',
+    },
   },
   defaultVariants: {
     size: 'md',
@@ -27,6 +30,7 @@ export interface RadioProps
     VariantProps<typeof radioVariants> {
   label?: string;
   containerClassName?: string;
+  error?: boolean;
   disabled?: boolean;
 }
 
@@ -35,6 +39,7 @@ export const Radio = ({
   size,
   label,
   disabled,
+  error,
   containerClassName,
   ...props
 }: RadioProps) => {
@@ -52,16 +57,21 @@ export const Radio = ({
 
   return (
     <label
-      className={cn(radioVariants({ size, disabled }), containerClassName)}
+      className={cn(
+        radioVariants({ size, disabled, error }),
+        containerClassName
+      )}
     >
       <div className="relative flex items-center justify-center">
         <input
           type="radio"
           disabled={disabled}
           className={cn(
-            'peer appearance-none border border-gray-30 rounded-full',
-            'checked:border-[#FF9320] checked:border-2',
-            'focus:outline-none focus:ring-2 focus:ring-[#FF9320]/50',
+            'peer appearance-none border rounded-full',
+            error
+              ? 'border-red-500 checked:border-red-500 checked:border-2 focus:ring-red-500/50'
+              : 'border-gray-30 checked:border-[#FF9320] checked:border-2 focus:ring-[#FF9320]/50',
+            'focus:outline-none focus:ring-2',
             'disabled:border-gray-30 disabled:bg-gray-10',
             radioSize[size || 'md'],
             className
