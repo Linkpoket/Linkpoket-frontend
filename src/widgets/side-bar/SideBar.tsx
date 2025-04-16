@@ -33,7 +33,7 @@ const SideBar: React.FC<MenubarProps> = ({
   };
 
   return showSidebar ? (
-    <aside className="border-r-gray-30 flex w-[320px] flex-col justify-between border-r">
+    <aside className="border-r-gray-30 flex min-h-screen w-[320px] flex-col justify-between border-r">
       <div className="gap-[16px pt-[14px]] mb-[16px] flex flex-col px-[10px]">
         <div className="flex flex-col gap-[16px]">
           <div className="py-[10px]">
