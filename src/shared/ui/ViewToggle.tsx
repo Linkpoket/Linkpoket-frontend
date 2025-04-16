@@ -26,7 +26,7 @@ const toggleButton = cva(
   }
 );
 
-const iconClass = cva('h-[20px] w-[20px] transition-colors', {
+const iconClass = cva('h-[20px] w-[20px] p-[2px] transition-colors', {
   variants: {
     active: {
       true: 'text-gray-70',
@@ -44,15 +44,13 @@ export function ViewToggle({
   className,
 }: ViewToggleProps) {
   return (
-    <div
-      className={cn(
-        'flex h-[58px] w-[128px] overflow-hidden rounded-[8px]',
-        className
-      )}
-    >
+    <div className={cn('flex h-[58px] w-[128px]', className)}>
       <button
         onClick={() => onChange('grid')}
-        className={toggleButton({ active: selectedView === 'grid' })}
+        className={cn(
+          toggleButton({ active: selectedView === 'grid' }),
+          'rounded-tl-[8px] rounded-bl-[8px] px-[20px] py-[16px]'
+        )}
       >
         <ToggleList
           className={iconClass({ active: selectedView === 'grid' })}
@@ -60,7 +58,10 @@ export function ViewToggle({
       </button>
       <button
         onClick={() => onChange('list')}
-        className={toggleButton({ active: selectedView === 'list' })}
+        className={cn(
+          toggleButton({ active: selectedView === 'list' }),
+          'rounded-tr-[8px] rounded-br-[8px] px-[20px] py-[16px]'
+        )}
       >
         <ToggleGrid
           className={iconClass({ active: selectedView === 'list' })}
