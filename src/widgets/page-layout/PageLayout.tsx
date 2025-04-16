@@ -4,6 +4,7 @@ import SiteIcon from '@/widgets/assets/SiteIcon.svg?react';
 import { Button } from '@/shared/ui/button';
 import { SearchBar } from '@/shared/ui/SearchBar';
 import { ViewToggle } from '@/shared/ui/ViewToggle';
+import PageSelectBox from '@/widgets/page-layout/PageSelectBox';
 
 export default function PageLayout() {
   const [title, setTitle] = useState('');
@@ -56,6 +57,8 @@ export default function PageLayout() {
         </div>
         <div className="flex gap-[20px]">
           <SearchBar size="fixed" />
+          <PageSelectBox />
+
           <ViewToggle selectedView="grid" onChange={() => {}} />
         </div>
       </div>
