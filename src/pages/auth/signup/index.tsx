@@ -5,6 +5,7 @@ import { Checkbox } from '@/shared/ui/CheckBox';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/shared/ui/button';
+import { useEffect, useState } from 'react';
 
 // Zod 스키마 정의
 const signupSchema = z.object({
@@ -28,6 +29,8 @@ const SignupPage = () => {
   const {
     control,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors, isSubmitting, isValid },
   } = useForm<FormData>({
     resolver: zodResolver(signupSchema),
@@ -40,6 +43,35 @@ const SignupPage = () => {
       termsAgreed: false,
     },
   });
+
+  // 개별 약관 동의 상태 관리
+  const [termsStatus, setTermsStatus] = useState({
+    terms1: false,
+    terms2: false,
+  });
+
+  const termsAgreedValue = watch('termsAgreed');
+
+  // 전체 동의 상태가 변경될 때 개별 약관 상태 업데이트
+  useEffect(() => {
+    setTermsStatus({
+      terms1: termsAgreedValue,
+      terms2: termsAgreedValue,
+    });
+  }, [termsAgreedValue]);
+
+  // 개별 약관 변경 처리
+  const handleTermChange = (
+    termName: 'terms1' | 'terms2',
+    checked: boolean
+  ) => {
+    const newTermsStatus = { ...termsStatus, [termName]: checked };
+    setTermsStatus(newTermsStatus);
+
+    // 모든 약관이 동의되었는지 확인
+    const allAgreed = Object.values(newTermsStatus).every((status) => status);
+    setValue('termsAgreed', allAgreed, { shouldValidate: true });
+  };
 
   // 폼 제출 처리
   const onSubmit = async (data: FormData) => {
@@ -199,10 +231,14 @@ const SignupPage = () => {
 
           {/* 약관 항목 1 */}
           <div
-            className={`flex items-center justify-between text-sm ${errors.termsAgreed ? 'text-red-500' : 'text-gray-700'} pl-1`}
+            className={`flex items-center justify-between text-sm ${errors.termsAgreed ? 'text-red-500' : 'text-gray-700'}`}
           >
             <div className="flex items-center space-x-1">
-              <span className="text-orange-500">✓</span>
+              <Checkbox
+                checked={termsStatus.terms1}
+                onChange={(e) => handleTermChange('terms1', e.target.checked)}
+                variant="checkOnly"
+              />
               <span>(필수) 링크모아 이용약관 동의</span>
             </div>
             <button type="button" className="text-gray-500 underline">
@@ -212,10 +248,14 @@ const SignupPage = () => {
 
           {/* 약관 항목 2 */}
           <div
-            className={`flex items-center justify-between text-sm ${errors.termsAgreed ? 'text-red-500' : 'text-gray-700'} pl-1`}
+            className={`flex items-center justify-between text-sm ${errors.termsAgreed ? 'text-red-500' : 'text-gray-700'}`}
           >
             <div className="flex items-center space-x-1">
-              <span className="text-orange-500">✓</span>
+              <Checkbox
+                checked={termsStatus.terms2}
+                onChange={(e) => handleTermChange('terms2', e.target.checked)}
+                variant="checkOnly"
+              />
               <span>(필수) 개인정보 처리방침 동의</span>
             </div>
             <button type="button" className="text-gray-500 underline">
