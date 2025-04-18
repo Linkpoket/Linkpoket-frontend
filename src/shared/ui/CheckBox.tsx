@@ -1,22 +1,18 @@
 interface CheckboxProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'className'> {
   label?: string;
-  checkColor?: string;
   variant?: 'default' | 'checkOnly';
 }
 
 export const Checkbox = ({
   label,
-  checkColor = 'white',
   variant = 'default',
   ...props
 }: CheckboxProps) => {
   return (
     <label className="flex cursor-pointer items-center space-x-2">
       <div className="relative h-4 w-4">
-        {/* 고정 크기 지정 */}
         <input type="checkbox" className="peer sr-only" {...props} />
-        {/* 테두리와 배경 - default 변형에만 스타일 적용, 하지만 항상 렌더링 */}
         <div
           className={`h-4 w-4 rounded ${
             variant === 'default'
@@ -24,11 +20,10 @@ export const Checkbox = ({
               : 'border-transparent bg-transparent'
           }`}
         ></div>
-        {/* 체크 표시 */}
         <div
           className={`pointer-events-none absolute inset-0 flex items-center justify-center ${
             variant === 'default'
-              ? `text-${checkColor} opacity-0 peer-checked:opacity-100`
+              ? `text-white opacity-0 peer-checked:opacity-100`
               : 'peer-checked:text-primary-50 text-gray-300'
           }`}
         >
