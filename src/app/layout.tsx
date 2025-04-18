@@ -46,7 +46,7 @@ export default function Layout() {
           />
         ) : null}
         <main>
-          <Outlet />
+          <Outlet context={{ showSidebar }} />
         </main>
       </div>
     </div>

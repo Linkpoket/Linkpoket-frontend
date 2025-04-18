@@ -30,7 +30,7 @@ export function Header({
   return (
     // Header 1920기준 w값 1600고정 - 반응형 고려시 해당부분 수정
 
-    <header className="flex justify-between px-[22px] py-[12px]">
+    <header className="border-b-gray-30 flex justify-between border-b px-[22px] py-[12px]">
       <div className="flex items-center gap-[24px]">
         {!showSidebar && setShowSidebar && (
           <HamburgerButton onClick={() => setShowSidebar(!showSidebar)} />

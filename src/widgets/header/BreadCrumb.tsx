@@ -18,18 +18,18 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
         <li>
           <Link
             to="/mypage"
-            className="text-gray-50 text-[19px] font-[400] p-[6px]"
+            className="p-[6px] text-[19px] font-[400] text-gray-50"
           >
             개인 페이지
           </Link>
         </li>
 
         {items.map((item) => (
-          <li key={item.id} className="flex items-center gap-[4px] ">
+          <li key={item.id} className="flex items-center gap-[4px]">
             <Depth className="mr-[4px] text-gray-50" />
             <Link
               to={`/mypage?dir=${item.id}`}
-              className="text-gray-50 text-[19px] font-[400] p-[6px]"
+              className="p-[6px] text-[19px] font-[400] text-gray-50"
             >
               {item.name}
             </Link>
