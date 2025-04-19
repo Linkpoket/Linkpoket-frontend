@@ -16,7 +16,7 @@ const searchBarVariants = cva(
         sm: 'h-8 text-sm rounded-md',
         md: 'h-10 text-base rounded-lg',
         lg: 'h-12 text-lg rounded-lg',
-        fixed: 'h-[57px] text-base rounded-lg', // 피그마 디자인 기준 고정 높이
+        fixed: 'h-[48px] text-base rounded-lg', // 피그마 디자인 기준 고정 높이
       },
       width: {
         auto: 'w-full',
@@ -85,11 +85,11 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
     };
 
     return (
-      <div className="flex flex-col w-full gap-1">
+      <div className="flex w-full flex-col gap-1">
         {label && (
           <label
             htmlFor={props.id}
-            className="text-sm font-medium text-gray-80"
+            className="text-gray-80 text-sm font-medium"
           >
             {label}
           </label>
@@ -104,7 +104,7 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
           <input
             ref={ref}
             className={cn(
-              'w-full h-full bg-transparent px-3 py-2 focus:outline-none placeholder:text-gray-50',
+              'h-full w-full bg-transparent px-3 py-2 placeholder:text-gray-50 focus:outline-none',
               className
             )}
             type="text"
@@ -118,7 +118,7 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
             <button
               type="button"
               onClick={handleClear}
-              className="flex-shrink-0 p-1 mr-2 text-gray-60 hover:text-gray-90 rounded-full"
+              className="text-gray-60 hover:text-gray-90 mr-2 flex-shrink-0 rounded-full p-1"
               aria-label="Clear search"
             >
               <Close
@@ -129,7 +129,7 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
           ) : (
             rightIcon || (
               <Search
-                className="mr-3 flex-shrink-0 text-gray-60"
+                className="text-gray-60 mr-3 flex-shrink-0"
                 width={size === 'sm' ? 16 : size === 'md' ? 20 : 24}
                 height={size === 'sm' ? 16 : size === 'md' ? 20 : 24}
               />
@@ -138,7 +138,7 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
         </div>
 
         {errorMessage && isError && (
-          <p className="mt-1 text-sm text-error-60">{errorMessage}</p>
+          <p className="text-error-60 mt-1 text-sm">{errorMessage}</p>
         )}
       </div>
     );

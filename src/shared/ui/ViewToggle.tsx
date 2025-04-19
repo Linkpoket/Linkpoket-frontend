@@ -12,7 +12,7 @@ interface ViewToggleProps {
 }
 
 const toggleButton = cva(
-  'flex-1 flex items-center justify-center transition-colors bg-[#E4E4E4] p-2 cursor-pointer',
+  'flex-1 flex items-center justify-center transition-colors bg-[#E4E4E4] cursor-pointer',
   {
     variants: {
       active: {
@@ -44,33 +44,35 @@ export function ViewToggle({
   className,
 }: ViewToggleProps) {
   return (
-    <div className={cn('flex h-[58px] w-[128px]', className)}>
-      <button
-        onClick={() => onChange('grid')}
-        className={cn(
-          toggleButton({ active: selectedView === 'grid' }),
-          'rounded-tl-[8px] rounded-bl-[8px] px-[20px] py-[16px]'
-        )}
-      >
-        <ToggleList
-          className={iconClass({ active: selectedView === 'grid' })}
-        />
-      </button>
+    <div className={cn('flex h-[48px]', className)}>
       <button
         onClick={() => onChange('list')}
         className={cn(
           toggleButton({ active: selectedView === 'list' }),
-          'rounded-tr-[8px] rounded-br-[8px] px-[20px] py-[16px]'
+          'rounded-tl-[8px] rounded-bl-[8px] p-[16px]'
         )}
       >
         <ToggleGrid
           className={iconClass({ active: selectedView === 'list' })}
         />
       </button>
+      <button
+        onClick={() => onChange('grid')}
+        className={cn(
+          toggleButton({ active: selectedView === 'grid' }),
+          'rounded-tr-[8px] rounded-br-[8px] p-[16px]'
+        )}
+      >
+        <ToggleList
+          className={cn(
+            iconClass({ active: selectedView === 'grid' }),
+            'px-[3px] py-[4px]'
+          )}
+        />
+      </button>
     </div>
   );
 }
-
 // 사용방법;
 // const [view, setView] = useState<'grid' | 'list'>('grid');
 //   <ViewToggle selectedView={view} onChange={setView} />;

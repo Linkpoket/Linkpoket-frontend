@@ -15,10 +15,10 @@ const buttonVariants = cva(
           'bg-primary-0 text-gray-90 font-semibold border border-gray-30 hover:bg-gray-5 active:bg-gray-10 disabled:bg-primary-0 disabled:text-gray-50',
       },
       size: {
-        sm: 'px-[10px] py-[6px] rounded-[6px] text-[19px] font-bold',
-        md: 'px-[16px] py-[12px] rounded-[8px] text-[19px] font-bold',
-        lg: 'px-[20px] py-[14px] rounded-[8px] text-[19px] font-bold',
-        xl: 'px-[20px] py-[18px]rounded-[8px] text-[19px] font-bold',
+        sm: 'px-[10px] py-[6px] rounded-[6px] text-[15px] font-[600]',
+        md: 'px-[16px] py-[12px] rounded-[8px] text-[17px] font-[600]',
+        lg: 'px-[20px] py-[14px] rounded-[8px] text-[19px] font-[600]',
+        xl: 'px-[20px] py-[18px] rounded-[8px] text-[19px] font-[600]',
       },
     },
     defaultVariants: {

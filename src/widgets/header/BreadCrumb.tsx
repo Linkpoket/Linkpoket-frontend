@@ -13,23 +13,23 @@ interface BreadcrumbProps {
 export default function Breadcrumb({ items }: BreadcrumbProps) {
   return (
     <nav>
-      <ol className="flex items-center gap-[4px]">
+      <ol className="flex items-center">
         {/* TODO : 기본 값 depth 수정  */}
         <li>
           <Link
             to="/mypage"
-            className="p-[6px] text-[19px] font-[400] text-gray-50"
+            className="p-[6px] text-[15px] font-[400] text-gray-50"
           >
             개인 페이지
           </Link>
         </li>
 
         {items.map((item) => (
-          <li key={item.id} className="flex items-center gap-[4px]">
-            <Depth className="mr-[4px] text-gray-50" />
+          <li key={item.id} className="flex items-center">
+            <Depth className="text-gray-30" />
             <Link
               to={`/mypage?dir=${item.id}`}
-              className="p-[6px] text-[19px] font-[400] text-gray-50"
+              className="p-[6px] px-[8px] py-[5px] text-[15px] font-[400] text-gray-50"
             >
               {item.name}
             </Link>

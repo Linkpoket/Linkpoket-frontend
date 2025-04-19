@@ -23,7 +23,7 @@ export default function PageLayout() {
   return (
     <div className="flex flex-col gap-[40px]">
       {/* HEADER SECTION */}
-      <div className="border-b-gray-30 flex flex-col gap-[16px] border-b px-[70px] py-[32px]">
+      <div className="border-b-gray-30 flex flex-col gap-[8px] border-b px-[64px] py-[24px]">
         <div className="relative w-full">
           <input
             type="text"
@@ -34,7 +34,7 @@ export default function PageLayout() {
               }
             }}
             placeholder="제목을 입력하세요"
-            className="inline-block text-[32px] font-bold text-gray-100 outline-none"
+            className="inline-block text-[24px] font-bold text-gray-100 outline-none"
           />
         </div>
         <div>
@@ -45,27 +45,27 @@ export default function PageLayout() {
                 setDescription(e.target.value);
               }
             }}
-            placeholder="페이지에 대한 설명을 입력하세요"
-            className="text-gray-70 h-[116px] w-full resize-none overflow-y-scroll text-[19px] font-[400] outline-none"
+            placeholder="페이지에 대한 설명을 입력하세요. 디렉토리 소개글은 200자를 넘을 수 없습니다"
+            className="text-gray-70 max-h-[98px] w-full resize-none overflow-y-auto text-[16px] font-[400] outline-none"
           />
         </div>
       </div>
       {/* CONTROLLER */}
       <div className="flex justify-between px-[64px]">
-        <div className="flex gap-[20px]">
-          <Button variant="ghost" size="lg" className="flex gap-[10px]">
+        <div className="flex h-[48px] gap-[12px]">
+          <Button variant="ghost" size="md" className="flex gap-[6px]">
             <FolderIcon />
             폴더 추가
           </Button>
-          <Button variant="ghost" size="lg" className="flex gap-[10px]">
+          <Button variant="ghost" size="md" className="flex gap-[6px]">
             <SiteIcon />
             사이트 추가
           </Button>
         </div>
-        <div className="flex gap-[20px]">
-          <SearchBar size="fixed" />
+        <div className="flex gap-[12px]">
+          <SearchBar size="fixed" placeholder="폴더, 사이트 검색" />
           <PageSelectBox />
-          <ViewToggle selectedView={view} onChange={setView} />;
+          <ViewToggle selectedView={view} onChange={setView} />
         </div>
       </div>
       <div>

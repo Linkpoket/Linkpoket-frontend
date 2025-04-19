@@ -50,7 +50,7 @@ export default function PageSelectBox({
       <button
         aria-haspopup="listbox"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="bg-gray-5 text-gray-60 inline-flex w-[126px] cursor-pointer items-center justify-between rounded-[8px] px-[20px] py-[15px] text-[19px] font-[600]"
+        className="bg-gray-5 text-gray-60 inline-flex h-[48px] min-w-max cursor-pointer items-center justify-between gap-[10px] rounded-[8px] px-[20px] text-[17px] font-[600]"
       >
         <span>{selected}</span>
         {isOpen ? <PageSelectBoxIconUp /> : <PageSelectBoxIcon />}
@@ -59,7 +59,7 @@ export default function PageSelectBox({
       {isOpen && (
         <ul
           role="menu"
-          className="border-gray-30 text-gray-90 absolute z-10 mt-1 w-full rounded-[10px] border p-[8px] text-[19px] font-[600]"
+          className="border-gray-30 text-gray-90 absolute z-10 mt-1 w-full rounded-[10px] border p-[8px] text-[17px] font-[600]"
         >
           {options.map((opt) => (
             <li
