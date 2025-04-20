@@ -1,4 +1,4 @@
-import ListBookmarkModal from './ListBookmarkModal';
+import ListBookmarkModal from './ListBookmarkOption';
 
 interface FolderItemProps {
   item: {

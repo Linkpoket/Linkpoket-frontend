@@ -1,5 +1,5 @@
 import FolderItemIcon from '@/assets/common-ui-assets/FolderItemIcon.svg?react';
-import ListBookmarkModal from './ListBookmarkModal';
+import ListBookmarkModal from './ListBookmarkOption';
 
 interface FolderItemProps {
   item: {

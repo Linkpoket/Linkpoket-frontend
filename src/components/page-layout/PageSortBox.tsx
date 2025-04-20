@@ -57,7 +57,7 @@ export default function PageSortBox({
       {isOpen && (
         <ul
           role="menu"
-          className="border-gray-30 text-gray-90 absolute z-10 mt-1 w-full rounded-[10px] border p-[8px] text-[17px] font-[600]"
+          className="border-gray-30 text-gray-90 bg-gray-0 absolute z-10 mt-1 w-full rounded-[10px] border p-[8px] text-[17px] font-[600]"
         >
           {options.map((option) => (
             <li
