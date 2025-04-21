@@ -16,6 +16,8 @@ type ContextType = {
 export default function PageLayout() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [isBookmark, setIsBookmark] = useState(false);
+  const [isDropDownInline, setIsDropDownInline] = useState(false);
   const [view, setView] = useState<'grid' | 'list'>('grid');
   const { showSidebar } = useOutletContext<ContextType>();
 
@@ -85,8 +87,18 @@ export default function PageLayout() {
               : 'flex max-w-[1374px] min-w-[422px] flex-col'
           }
         >
-          <FolderItem item={{ id: '1', title: '폴더 이름' }} view={view} />
-          <LinkItem item={{ id: '1', title: '링크 이름' }} view={view} />
+          <FolderItem
+            isBookmark={isBookmark}
+            setIsBookmark={setIsBookmark}
+            item={{ id: '1', title: '폴더 이름' }}
+            view={view}
+          />
+          <LinkItem
+            isBookmark={isBookmark}
+            setIsBookmark={setIsBookmark}
+            item={{ id: '1', title: '링크 이름' }}
+            view={view}
+          />
         </div>
       </div>
     </div>

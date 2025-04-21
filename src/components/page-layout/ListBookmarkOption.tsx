@@ -4,8 +4,15 @@ import Menu from '@/assets/widget-ui-assets/Menu.svg?react';
 import { useState } from 'react';
 import DropDownInline from '../common-ui/DropDownInline';
 
-export default function ListBookMarkOption() {
-  const [isBookmark, setIsBookmark] = useState(false);
+interface ListBookmarkOptionInterface {
+  isBookmark: boolean;
+  setIsBookmark: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function ListBookMarkOption({
+  isBookmark,
+  setIsBookmark,
+}: ListBookmarkOptionInterface) {
   const [isDropDownInline, setIsDropDownInline] = useState(false);
 
   const handleBookmark = () => {
