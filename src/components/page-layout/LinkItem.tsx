@@ -1,14 +1,7 @@
-import ListBookmarkModal from './ListBookmarkOption';
+import { PageItemProps } from '@/types/pageItems';
+import ListBookmarkOption from './ListBookmarkOption';
 
-interface FolderItemProps {
-  item: {
-    id: string;
-    title: string;
-  };
-  view: 'grid' | 'list';
-}
-
-export default function LinkItem({ item, view }: FolderItemProps) {
+export default function LinkItem({ item, view }: PageItemProps) {
   const isGrid = view === 'grid';
 
   return isGrid ? (
@@ -29,7 +22,7 @@ export default function LinkItem({ item, view }: FolderItemProps) {
         </span>
       </div>
       <div>
-        <ListBookmarkModal />
+        <ListBookmarkOption />
       </div>
     </div>
   );

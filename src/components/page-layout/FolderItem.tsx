@@ -1,15 +1,8 @@
 import FolderItemIcon from '@/assets/common-ui-assets/FolderItemIcon.svg?react';
 import ListBookmarkModal from './ListBookmarkOption';
+import { PageItemProps } from '@/types/pageItems';
 
-interface FolderItemProps {
-  item: {
-    id: string;
-    title: string;
-  };
-  view: 'grid' | 'list';
-}
-
-export default function FolderItem({ item, view }: FolderItemProps) {
+export default function FolderItem({ item, view }: PageItemProps) {
   const isGrid = view === 'grid';
 
   return isGrid ? (
