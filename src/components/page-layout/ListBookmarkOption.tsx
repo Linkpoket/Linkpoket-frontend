@@ -25,7 +25,7 @@ export default function ListBookMarkOption({
   };
 
   return (
-    <div className="flex items-center">
+    <div className="relative flex items-center">
       <button
         className="h-[38px] w-[38px] px-[10px] py-[10px]"
         onClick={handleBookmark}
@@ -37,22 +37,22 @@ export default function ListBookMarkOption({
         )}
       </button>
       <button
-        className="active:bg-gray-10 relative h-[38px] w-[38px] cursor-pointer px-[10px] py-[10px] active:rounded-[8px]"
+        className="active:bg-gray-10 h-[38px] w-[38px] cursor-pointer px-[10px] py-[10px] active:rounded-[8px]"
         onClick={handleDropDownInline}
       >
         <Menu width={20} height={20} />
-        {isDropDownInline && (
-          <DropDownInline
-            id="1"
-            type="site"
-            initialTitle="타이틀"
-            initialLink="링크"
-            className="absolute right-1 z-1"
-            isDropDownInline={isDropDownInline}
-            setIsDropDownInline={setIsDropDownInline}
-          />
-        )}
       </button>
+      {isDropDownInline && (
+        <DropDownInline
+          id="1"
+          type="site"
+          initialTitle="타이틀"
+          initialLink="링크"
+          className="absolute top-10 right-1 z-1"
+          isDropDownInline={isDropDownInline}
+          setIsDropDownInline={setIsDropDownInline}
+        />
+      )}
     </div>
   );
 }
