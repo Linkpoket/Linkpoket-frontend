@@ -14,4 +14,5 @@ export default defineConfig({
       '@assets': resolve(__dirname, 'src/assets'),
     },
   },
+  assetsInclude: ['**/*.webp'],
 });
