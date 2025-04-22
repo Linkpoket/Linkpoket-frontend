@@ -1,5 +1,5 @@
-import FolderImg from '@/assets/common-ui-assets/FolderImg.svg?react';
-import ShareImg from '@/assets/common-ui-assets/ShareImg.svg?react';
+import FolderImg from '@/assets/common-ui-assets/FolderImg.webp';
+import ShareImg from '@/assets/common-ui-assets/ShareImg.webp';
 
 const featureData = [
   {
@@ -44,7 +44,7 @@ const FeatureSection: React.FC = () => {
                   {feature.description}
                 </p>
                 <div className="mt-8 flex rounded-lg">
-                  <feature.image />
+                  <img src={feature.image} />
                 </div>
               </div>
             </div>

@@ -1,5 +1,5 @@
 import { Button } from '@/components/common-ui/button';
-import LandingMain from '@/assets/common-ui-assets/LandingMain.svg?react';
+import LandingMainWebp from '@/assets/common-ui-assets/LandingMain.webp';
 
 const HeroSection: React.FC = () => {
   const heroTitles = ['링크를 한눈에', '모아두고', '간편하게 관리하세요'];
@@ -46,9 +46,10 @@ const HeroSection: React.FC = () => {
           </div>
         </header>
         <div className="flex w-full justify-center lg:w-auto lg:justify-end">
-          <LandingMain
+          <img
+            src={LandingMainWebp}
+            alt="Landing page main illustration"
             className="h-auto w-full max-w-[500px] lg:w-auto lg:max-w-none"
-            aria-label="Landing page main illustration"
           />
         </div>
       </div>
