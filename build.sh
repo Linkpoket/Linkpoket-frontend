@@ -1,5 +1,5 @@
 #!/bin/sh
 cd ../
 mkdir output
-cp -R ./Linkmoa-frontend/* ./output
-cp -R ./output ./Linkmoa-frontend/
+cp -R ./Linkrew-frontend/* ./output
+cp -R ./output ./Linkrew-frontend/
