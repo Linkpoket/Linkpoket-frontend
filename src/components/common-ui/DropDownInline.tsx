@@ -61,9 +61,9 @@ const DropDownInline = ({
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('click', handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('click', handleClickOutside);
     };
   }, [isDropDownInline, setIsDropDownInline]);
 
@@ -71,39 +71,39 @@ const DropDownInline = ({
   return (
     <div
       ref={dropdownRef}
-      className={`border-gray-30 focus:bg-gray-30 focus:border-gray-30 bg-gray-0 inline-flex flex-col rounded-[10px] border p-[8px] text-[16px] font-[600] shadow ${className}`}
+      className={`border-gray-30 focus:bg-gray-30 focus:border-gray-30 bg-gray-0 inline-flex w-[214px] flex-col rounded-[10px] border p-[8px] text-[14px] font-[600] shadow ${className}`}
     >
       {type === 'directory' && (
-        <>
+        <div className="flex flex-col">
           <input
             value={title}
             onChange={handleTitleChange}
             placeholder="디렉토리명 입력"
-            className="border-gray-30 rounded-lg border p-[12px] outline-none"
+            className="border-gray-30 rounded-lg border p-[8px] outline-none"
           />
           <button
             onClick={() => onShare?.(id)}
-            className="flex cursor-pointer items-center gap-[10px] p-[12px]"
+            className="flex cursor-pointer items-center gap-[10px] px-[8px] py-[11px]"
           >
-            <Transfer width={20} height={20} /> 전송하기
+            <Transfer width={18} height={18} /> 전송하기
           </button>
           <button
             onClick={() => onCopy?.(title)}
-            className="flex cursor-pointer items-center gap-[10px] p-[12px]"
+            className="flex cursor-pointer items-center gap-[10px] px-[8px] py-[11px]"
           >
-            <Copy width={20} height={20} /> 복사하기
+            <Copy width={18} height={18} /> 복사하기
           </button>
           <button
             onClick={() => onDelete?.(id)}
-            className="text-status-danger flex cursor-pointer items-center gap-[10px] p-[12px]"
+            className="text-status-danger flex cursor-pointer items-center gap-[10px] px-[8px] py-[11px]"
           >
-            <Delete width={20} height={20} /> 삭제하기
+            <Delete width={18} height={18} /> 삭제하기
           </button>
-        </>
+        </div>
       )}
 
       {type === 'site' && (
-        <>
+        <div className="flex flex-col">
           <div className="border-gray-30 flex flex-col overflow-hidden rounded-lg border">
             <input
               value={title}
@@ -115,7 +115,6 @@ const DropDownInline = ({
               value={link}
               onChange={handleLinkChange}
               placeholder="링크를 입력하세요"
-              rows={2}
               className="text-gray-60 cursor-pointer resize-none p-[12px] font-[400] outline-none"
             />
           </div>
@@ -123,15 +122,15 @@ const DropDownInline = ({
             onClick={() => onShare?.(id)}
             className="flex cursor-pointer items-center gap-[10px] p-[12px]"
           >
-            <Transfer /> 전송하기
+            <Transfer width={18} height={18} /> 전송하기
           </button>
           <button
             onClick={() => onDelete?.(id)}
             className="text-status-danger flex cursor-pointer items-center gap-[10px] p-[12px]"
           >
-            <Delete /> 삭제하기
+            <Delete width={18} height={18} /> 삭제하기
           </button>
-        </>
+        </div>
       )}
     </div>
   );

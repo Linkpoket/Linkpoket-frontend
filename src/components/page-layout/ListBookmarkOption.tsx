@@ -19,7 +19,8 @@ export default function ListBookMarkOption({
     setIsBookmark((prev) => !prev);
   };
 
-  const handleDropDownInline = () => {
+  const handleDropDownInline = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     setIsDropDownInline((prev) => !prev);
   };
 
@@ -43,7 +44,7 @@ export default function ListBookMarkOption({
         {isDropDownInline && (
           <DropDownInline
             id="1"
-            type="directory"
+            type="site"
             initialTitle="타이틀"
             initialLink="링크"
             className="absolute right-1 z-1"
