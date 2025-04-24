@@ -1,21 +1,25 @@
+import { cn } from '@/utils/cn';
 import { Button } from './button';
 
 export const SocialLoginButton = ({
   provider,
   icon: Icon,
   bgColor,
-  hoverColor,
+  className,
   onClick,
 }: {
   provider: string;
   icon: React.ElementType;
   bgColor: string;
-  hoverColor: string;
+  className?: string;
   onClick: () => void;
 }) => (
   <Button
     onClick={onClick}
-    className={`flex w-full items-center justify-center rounded-lg ${bgColor} py-3 font-semibold text-gray-800 hover:${hoverColor} text-[21px]`}
+    className={cn(
+      `flex w-full items-center justify-center rounded-lg ${bgColor} text-gray-90 h-[63px] py-3 text-[21px] font-semibold`,
+      className
+    )}
   >
     <Icon className="mr-[10px]" />
     {provider} 로그인

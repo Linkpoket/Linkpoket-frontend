@@ -14,22 +14,35 @@ const LoginPage = () => {
     console.log('구글 로그인 시도');
   };
 
+  const textData = [
+    { text: '링크를 한눈에' },
+    { text: '모아두고' },
+    { text: '간편하게 관리하세요' },
+  ];
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-white p-4">
-      <section className="flex w-full max-w-md flex-col items-start">
-        <div className="mb-[69px] flex flex-col text-left text-[28px] leading-[150%] font-bold">
-          <Logo />
-          <h2 className="mt-4 text-orange-500">링크를 한눈에</h2>
-          <span className="text-gray-100">모아두고</span>
-          <span className="text-gray-100">간편하게 관리하세요</span>
+    <main className="flex min-h-screen flex-col items-center justify-center bg-white">
+      <section className="flex w-full max-w-[460px] flex-col items-start">
+        <Logo />
+        <div className="mb-[56px] flex flex-col text-left text-[26px] font-bold">
+          {textData.map((text, index) => {
+            return (
+              <span
+                key={index}
+                className={`${index === 0 ? 'text-primary-50 mt-4' : 'text-gray-100'}`}
+              >
+                {text.text}
+              </span>
+            );
+          })}
         </div>
 
         <section className="w-full space-y-4">
           <SocialLoginButton
             provider="카카오"
             icon={Kakao}
-            bgColor="bg-yellow-300"
-            hoverColor="bg-yellow-400"
+            bgColor="bg-kakao-yellow"
+            className="hover:bg-[#F4DC03] active:bg-[#F4DC03]"
             onClick={handleKakaoLogin}
           />
 
@@ -37,7 +50,7 @@ const LoginPage = () => {
             provider="Google"
             icon={Google}
             bgColor="bg-gray-5"
-            hoverColor="bg-gray-200"
+            className="hover:bg-[#E6E6E6] active:bg-[#E6E6E6]"
             onClick={handleGoogleLogin}
           />
         </section>

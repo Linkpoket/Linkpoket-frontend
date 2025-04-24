@@ -32,6 +32,8 @@
   --color-status-warning: #ffa100;
   --color-status-success: #4caf50;
   --color-status-danger: #f44336;
+
+  --color-kakao-yellow: rgba(254, 229, 0, 1);
 }
 
 @theme {
