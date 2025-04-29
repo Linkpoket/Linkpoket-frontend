@@ -39,8 +39,8 @@ export function UserActions() {
           isOpen={open}
           onClose={() => setOpen(!open)}
           notifications={notifications}
-          onAccept={(id) => console.log('수락', id)}
-          onReject={(id) => console.log('거절', id)}
+          onAccept={() => setOpen((prev) => !prev)}
+          onReject={() => setOpen((prev) => !prev)}
         />
       )}
 
