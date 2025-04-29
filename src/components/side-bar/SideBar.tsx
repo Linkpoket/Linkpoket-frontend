@@ -6,6 +6,7 @@ import BookMark from '@/assets/widget-ui-assets/BookMark.svg?react';
 import PersonalPage from '@/assets/widget-ui-assets/PersonalPage.svg?react';
 import SharedPage from '@/assets/widget-ui-assets/SharedPage.svg?react';
 import PlusIcon from '@/assets/common-ui-assets/PlusIcon.svg?react';
+import profile from '@/assets/common-ui-assets/Profile.webp';
 
 type SharedPage = {
   id: string;
@@ -41,9 +42,9 @@ const SideBar: React.FC<MenubarProps> = ({
 
           <div className="flex gap-[12px] p-[8px]">
             <img
-              src={avatarUrl}
+              src={profile}
               alt="avatar"
-              className="rounded-full p-[8px]"
+              className="h-[50px] w-[50px] rounded-full p-[8px]"
             />
             <div>
               <p className="text-gray-90 text-[18px] font-semibold">
