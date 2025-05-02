@@ -6,26 +6,63 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/common-ui/button';
 import { useEffect, useState } from 'react';
+import { Select } from '@/components/common-ui/Select';
 
 // Zod 스키마 정의
-const signupSchema = z.object({
-  ageGroup: z.string().min(1, '연령대를 선택해주세요.'),
-  gender: z.string().min(1, '성별을 선택해주세요.'),
-  job: z.string().min(1, '직업을 입력해주세요.'),
-  nickname: z
-    .string()
-    .min(1, '닉네임을 입력해주세요.')
-    .max(10, '닉네임은 최대 10글자까지 입력 가능합니다.'),
-  termsAgreed: z
-    .boolean()
-    .refine((val) => val === true, { message: '약관에 동의해주세요' }),
-});
+const signupSchema = z
+  .object({
+    ageGroup: z.string().min(1, '연령대를 선택해주세요.'),
+    gender: z.string().min(1, '성별을 선택해주세요.'),
+    job: z.string().min(1, '직업을 선택해주세요.'),
+    customJob: z.string().optional(),
+    nickname: z
+      .string()
+      .min(1, '닉네임을 입력해주세요.')
+      .max(10, '닉네임은 최대 10글자까지 입력 가능합니다.'),
+    termsAgreed: z
+      .boolean()
+      .refine((val) => val === true, { message: '약관에 동의해주세요' }),
+  })
+  .refine(
+    (data) => {
+      if (data.job === 'other') {
+        return !!data.customJob && data.customJob.trim() !== '';
+      }
+      return true;
+    },
+    {
+      message: '직업을 입력해주세요.',
+      path: ['customJob'],
+    }
+  );
 
-// Zod 스키마에서 타입 추출
+// 확장된 직업 옵션 리스트
+const JOB_OPTIONS = [
+  { value: 'student', label: '학생' },
+  { value: 'it_developer', label: 'IT/개발' },
+  { value: 'designer', label: '디자인' },
+  { value: 'business', label: '비즈니스/경영' },
+  { value: 'marketing', label: '마케팅/광고' },
+  { value: 'education', label: '교육/연구' },
+  { value: 'medical', label: '의료/보건' },
+  { value: 'legal', label: '법률/법조' },
+  { value: 'finance', label: '금융/회계' },
+  { value: 'manufacturing', label: '제조/생산' },
+  { value: 'architecture', label: '건축/토목/설계' },
+  { value: 'service', label: '서비스/고객지원' },
+  { value: 'media', label: '미디어/콘텐츠' },
+  { value: 'government', label: '공공기관/정부/행정' },
+  { value: 'engineering', label: '엔지니어링/기술직' },
+  { value: 'logistics', label: '물류/운송/무역' },
+  { value: 'art', label: '예술/문화/공연' },
+  { value: 'environment', label: '농림어업/환경' },
+  { value: 'sports', label: '스포츠/레저' },
+  { value: 'other', label: '기타 (직접 입력)' },
+];
+
 type FormData = z.infer<typeof signupSchema>;
 
 const SignupPage = () => {
-  // react-hook-form 설정 (zod resolver 사용)
   const {
     control,
     handleSubmit,
@@ -39,10 +76,15 @@ const SignupPage = () => {
       ageGroup: '',
       gender: '',
       job: '',
+      customJob: '',
       nickname: '',
       termsAgreed: false,
     },
   });
+
+  // 직업 선택값과 커스텀 직업값 감시
+  const selectedJob = watch('job');
+  const customJobValue = watch('customJob');
 
   // 개별 약관 동의 상태 관리
   const [termsStatus, setTermsStatus] = useState({
@@ -75,8 +117,18 @@ const SignupPage = () => {
 
   // 폼 제출 처리
   const onSubmit = async (data: FormData) => {
+    // 제출할 최종 데이터 구성
+    const submitData = {
+      ...data,
+      // 기타(직접입력)를 선택한 경우 customJob 값을 jobText로 추가
+      jobText:
+        data.job === 'other'
+          ? data.customJob
+          : JOB_OPTIONS.find((opt) => opt.value === data.job)?.label || '',
+    };
+
     // API 호출 시뮬레이션
-    console.log('회원가입 데이터:', data);
+    console.log('회원가입 데이터:', submitData);
 
     try {
       // 실제 API 호출 로직
@@ -185,14 +237,35 @@ const SignupPage = () => {
             name="job"
             control={control}
             render={({ field }) => (
-              <Input
-                {...field}
-                placeholder="현재 직업을 선택해주세요."
-                variant={errors.job ? 'error' : 'default'}
+              <Select
+                value={field.value}
+                onChange={field.onChange}
+                options={JOB_OPTIONS}
+                placeholder="선택해 주세요"
+                error={!!errors.job}
                 errorMessage={errors.job?.message}
+                maxHeight="370px"
               />
             )}
           />
+
+          {/* 기타 직업 직접 입력 필드 (기타 선택 시에만 표시) */}
+          {selectedJob === 'other' && (
+            <div className="mt-2">
+              <Controller
+                name="customJob"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    placeholder="현재 활동 중인 직업 분야를 입력해 주세요"
+                    variant={errors.customJob ? 'error' : 'default'}
+                    errorMessage={errors.customJob?.message}
+                  />
+                )}
+              />
+            </div>
+          )}
         </div>
 
         {/* 닉네임 */}

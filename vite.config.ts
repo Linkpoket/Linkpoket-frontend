@@ -16,4 +16,7 @@ export default defineConfig({
   },
   assetsInclude: ['**/*.webp'],
   server: {},
+  optimizeDeps: {
+    exclude: ['@emotion/react', '@emotion/styled', '@mui/material'],
+  },
 });
