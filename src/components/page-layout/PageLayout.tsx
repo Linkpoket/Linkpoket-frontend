@@ -37,14 +37,8 @@ export default function PageLayout() {
   // 서버 연결 테스트용
   useEffect(() => {
     axiosInstance
-      .request({
-        method: 'GET',
-        url: '/api/page/details',
-        headers: {
-          ...axiosInstance.defaults.headers.common,
-          'Content-Type': 'application/json',
-        },
-        data: {
+      .get('/api/page/dashboard', {
+        params: {
           pageId: 2,
           commandType: 'VIEW',
         },
@@ -53,7 +47,7 @@ export default function PageLayout() {
         console.log('응답:', res.data);
       })
       .catch((err) => {
-        console.error('에러:', err.response?.status);
+        console.error('에러 코드:', err.response?.status);
         console.error('에러 메시지:', err.response?.data);
       });
   }, []);
@@ -104,7 +98,9 @@ export default function PageLayout() {
         <div className="flex gap-[12px]">
           <SearchBar size="fixed" placeholder="폴더, 링크 검색" />
           <PageSortBox />
-          <ViewToggle selectedView={view} onChange={setView} />
+          <div className="hidden xl:block">
+            <ViewToggle selectedView={view} onChange={setView} />
+          </div>
         </div>
       </div>
 
@@ -118,7 +114,7 @@ export default function PageLayout() {
         <div
           className={
             view === 'grid'
-              ? 'grid [grid-template-columns:repeat(auto-fit,minmax(134px,max-content))] gap-4'
+              ? 'grid [grid-template-columns:repeat(auto-fit,minmax(134px,max-content))] place-items-center gap-4'
               : 'flex max-w-[1374px] min-w-[422px] flex-col'
           }
         >
@@ -126,6 +122,60 @@ export default function PageLayout() {
             isBookmark={isBookmark}
             setIsBookmark={setIsBookmark}
             item={{ id: '1', title: '폴더 이름' }}
+            view={view}
+          />
+          <FolderItem
+            isBookmark={isBookmark}
+            setIsBookmark={setIsBookmark}
+            item={{ id: '1', title: '폴더 이름' }}
+            view={view}
+          />
+          <FolderItem
+            isBookmark={isBookmark}
+            setIsBookmark={setIsBookmark}
+            item={{ id: '1', title: '폴더 이름' }}
+            view={view}
+          />
+          <FolderItem
+            isBookmark={isBookmark}
+            setIsBookmark={setIsBookmark}
+            item={{ id: '1', title: '폴더 이름' }}
+            view={view}
+          />
+          <FolderItem
+            isBookmark={isBookmark}
+            setIsBookmark={setIsBookmark}
+            item={{ id: '1', title: '폴더 이름' }}
+            view={view}
+          />
+          <LinkItem
+            isBookmark={isBookmark}
+            setIsBookmark={setIsBookmark}
+            item={{ id: '1', title: '링크 이름' }}
+            view={view}
+          />
+          <LinkItem
+            isBookmark={isBookmark}
+            setIsBookmark={setIsBookmark}
+            item={{ id: '1', title: '링크 이름' }}
+            view={view}
+          />
+          <LinkItem
+            isBookmark={isBookmark}
+            setIsBookmark={setIsBookmark}
+            item={{ id: '1', title: '링크 이름' }}
+            view={view}
+          />
+          <LinkItem
+            isBookmark={isBookmark}
+            setIsBookmark={setIsBookmark}
+            item={{ id: '1', title: '링크 이름' }}
+            view={view}
+          />
+          <LinkItem
+            isBookmark={isBookmark}
+            setIsBookmark={setIsBookmark}
+            item={{ id: '1', title: '링크 이름' }}
             view={view}
           />
           <LinkItem

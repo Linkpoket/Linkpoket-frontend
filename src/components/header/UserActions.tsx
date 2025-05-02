@@ -1,9 +1,9 @@
 import Bell from '@/assets/widget-ui-assets/Bell.svg?react';
 import Menu from '@/assets/widget-ui-assets/Menu.svg?react';
 import { useState } from 'react';
-import NotificationModal from '../modal/modal-alarm/ModalNotification';
+import NotificationModal from '../modal/modal-page/ModalNotification';
 import { NotificationItem } from '@/types/modalAlaram';
-import DropDownMenu from '../common-ui/DropDownMenu';
+import DropDownMenu from '../modal/modal-page/ModalMenu';
 
 //테스트용 목데이터 POSTMAN참고
 const notifications: NotificationItem[] = [
