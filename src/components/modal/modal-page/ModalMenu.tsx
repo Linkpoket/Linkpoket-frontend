@@ -31,15 +31,15 @@ export default function DropDownMenu({
 
   return (
     <div
-      className="border-gray-30 bg-gray-0 absolute top-12 right-7 z-1 inline-flex flex-col justify-center rounded-[10px] border p-[8px] font-[600] shadow-lg"
+      className="border-gray-30 bg-gray-0 absolute top-14 right-6 z-1 inline-flex w-[198px] flex-col justify-center rounded-[10px] border p-[8px] font-[600] shadow-lg"
       ref={modalRef}
     >
       <div className="flex flex-col">
         <button
           onClick={onContact}
-          className="hover:bg-gray-5 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] p-[12px] hover:rounded-[8px]"
+          className="text-gray-90 active:bg-gray-10 hover:bg-gray-10 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[600]"
         >
-          <Consult /> <span className="text-[19px]">문의하기</span>
+          <Consult /> <span className="text-[14px]">문의하기</span>
         </button>
         {/* <div className="hover:bg-gray-5 active:bg-gray-5 flex items-center justify-between gap-[20px] hover:rounded-[8px]">
           <button className="flex items-center gap-[10px] p-[12px]">
@@ -53,20 +53,20 @@ export default function DropDownMenu({
         </div> */}
         <div className="flex"></div>
       </div>
-      <div className="border-gray-40 mx-[10px] my-[8px] w-[274px] border" />
+      <div className="border-gray-40 m-[8px] w-[166px] border" />
       <div className="flex flex-col">
         <button
           onClick={onWithDrawPage}
-          className="text-status-danger hover:bg-gray-5 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] p-[12px] hover:rounded-[8px]"
+          className="text-status-danger hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[600]"
         >
-          <Withdraw /> <span className="text-[19px]">공유 페이지 탈퇴</span>
+          <Withdraw /> <span className="text-[14px]">공유 페이지 탈퇴</span>
         </button>
         {isHost && (
           <button
             onClick={onDeletePage}
-            className="text-status-danger hover:bg-gray-5 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] p-[12px] hover:rounded-[8px]"
+            className="text-status-danger hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[600]"
           >
-            <Deleted /> <span className="text-[19px]">페이지 삭제하기</span>
+            <Deleted /> <span className="text-[14px]">페이지 삭제하기</span>
           </button>
         )}
       </div>

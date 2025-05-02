@@ -17,7 +17,7 @@ export default function NotificationModal({
   useClickOutside(modalRef, setIsOpen);
 
   return (
-    <div className="absolute top-12 right-17 z-1" ref={modalRef}>
+    <div className="absolute top-14 right-16 z-1" ref={modalRef}>
       <div
         className="border-gray-30 bg-gray-0 max-h-[590px] w-[434px] rounded-2xl border p-[24px] pt-[8px]"
         style={{ boxShadow: '0px 4px 8px 0px rgba(0, 0, 0, 0.08)' }}
@@ -25,20 +25,20 @@ export default function NotificationModal({
         {/* 탭 */}
         <div className="border-gray-30 flex border-b">
           <button
-            className={`cursor-pointer px-4 py-[14px] text-[13px] font-semibold ${
+            className={`cursor-pointer px-4 py-[14px] text-[13px] leading-[18px] font-semibold ${
               selectedTab === 'time'
                 ? 'border-primary-50 text-primary-60 border-b-2'
-                : 'text-gray-90 border-b-2 border-transparent'
+                : 'text-gray-70 border-b-2 border-transparent'
             }`}
             onClick={() => setSelectedTab('time')}
           >
             시간순
           </button>
           <button
-            className={`cursor-pointer px-4 py-[14px] text-[13px] font-semibold ${
+            className={`cursor-pointer px-4 py-[14px] text-[13px] leading-[18px] font-semibold ${
               selectedTab === 'type'
                 ? 'border-primary-50 text-primary-60 border-b-2'
-                : 'text-gray-90 border-b-2 border-transparent'
+                : 'text-gray-70 border-b-2 border-transparent'
             }`}
             onClick={() => setSelectedTab('type')}
           >
@@ -100,13 +100,13 @@ export default function NotificationModal({
                 <div className="mt-2 flex justify-end gap-2">
                   <button
                     onClick={() => onReject?.(item.id)}
-                    className="border-gray-30 text-gray-90 cursor-pointer rounded-[6px] border px-[10px] py-[6px] text-[15px]"
+                    className="border-gray-30 text-gray-90 cursor-pointer rounded-[6px] border px-[10px] py-[6px] text-[15px] font-semibold"
                   >
                     거절
                   </button>
                   <button
                     onClick={() => onAccept?.(item.id)}
-                    className="bg-primary-50 text-primary-0 cursor-pointer rounded-[6px] px-[10px] py-[6px] text-[15px]"
+                    className="bg-primary-50 text-primary-0 cursor-pointer rounded-[6px] px-[10px] py-[6px] text-[15px] font-semibold"
                   >
                     수락
                   </button>
