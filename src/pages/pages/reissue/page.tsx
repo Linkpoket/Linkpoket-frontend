@@ -25,15 +25,23 @@ export default function ReissuePage() {
         console.log('응답 데이터:', response.data);
         console.log('응답 헤더:', response.headers);
 
-        const accessToken = response.data.access_token;
+        const accessToken = response.data.data;
         console.log('추출된 액세스 토큰:', accessToken);
 
-        localStorage.setItem('access_token', accessToken);
-        console.log('로컬 스토리지에 토큰 저장 완료');
+        if (accessToken) {
+          localStorage.setItem('access_token', accessToken);
+          console.log('로컬 스토리지에 토큰 저장 완료');
 
-        console.log('메인 페이지로 리다이렉트 시작');
-        navigate('/');
-        console.log('리다이렉트 명령 실행됨');
+          // 저장 후 확인
+          const storedToken = localStorage.getItem('access_token');
+          console.log('저장 후 확인한 토큰:', storedToken);
+
+          console.log('메인 페이지로 리다이렉트 시작');
+          navigate('/');
+          console.log('리다이렉트 명령 실행됨');
+        } else {
+          console.error('응답에 토큰이 없습니다:', response.data);
+        }
       } catch (error) {
         console.error('액세스 토큰 요청 중 오류 발생:', error);
 
