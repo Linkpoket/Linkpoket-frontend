@@ -5,12 +5,11 @@ import { SocialLoginButton } from '@/components/common-ui/SocialLoginButton';
 
 const LoginPage = () => {
   const handleKakaoLogin = () => {
-    window.location.href = 'https://dev.linkrew.com/oauth2/authorization/kakao';
+    window.location.href = 'http://localhost:8080/oauth2/authorization/kakao';
   };
 
   const handleGoogleLogin = () => {
-    window.location.href =
-      'https://dev.linkrew.com/oauth2/authorization/google';
+    window.location.href = 'http://localhost:8080/oauth2/authorization/google';
   };
 
   const textData = [
