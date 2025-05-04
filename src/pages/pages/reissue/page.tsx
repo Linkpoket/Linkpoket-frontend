@@ -13,14 +13,11 @@ export default function ReissuePage() {
     const fetchAccessToken = async () => {
       console.log('액세스 토큰 요청 함수 시작');
       try {
-        console.log(
-          'API 요청 시작: https://dev.linkrew.com/api/jwt/access-token'
-        );
+        console.log('API 요청 시작: /api/jwt/access-token');
 
-        const response = await axios.get(
-          'https://dev.linkrew.com/api/jwt/access-token',
-          { withCredentials: true }
-        );
+        const response = await axios.get('/api/jwt/access-token', {
+          withCredentials: true,
+        });
         console.log('API 응답 받음:', response);
         console.log('응답 데이터:', response.data);
         console.log('응답 헤더:', response.headers);
