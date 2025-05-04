@@ -43,9 +43,9 @@ export default function PageLayout() {
   }, [isUnderDesktop]);
 
   return (
-    <div className="flex h-screen flex-col gap-[40px]">
+    <div className="mx-auto flex h-screen w-full max-w-[1180px] flex-col gap-[40px]">
       {/* HEADER SECTION */}
-      <div className="border-b-gray-30 flex flex-col gap-[8px] border-b px-[64px] py-[24px]">
+      <div className="border-b-gray-30 mx-auto flex w-full max-w-[1180px] min-w-[328px] flex-col gap-[8px] border-b px-[64px] py-[24px]">
         <div className="relative w-full">
           <input
             type="text"
@@ -88,7 +88,7 @@ export default function PageLayout() {
         <div className="flex gap-[12px]">
           <SearchBar size="fixed" placeholder="폴더, 링크 검색" />
           <PageSortBox />
-          <div className="hidden xl:block">
+          <div className="hidden md:block">
             <ViewToggle selectedView={view} onChange={setView} />
           </div>
         </div>
@@ -97,16 +97,14 @@ export default function PageLayout() {
       {/* Folder, Link */}
       <div
         onContextMenu={handleContextMenu}
-        className={`flex-1 text-3xl font-bold ${
-          showSidebar ? 'px-[140px]' : 'px-[142px]'
-        }`}
+        className={`flex-1 overflow-y-auto px-[104px] text-3xl font-bold`}
       >
         <div
-          className={
+          className={`w-full max-w-[1180px] min-w-[328px] ${
             view === 'grid'
-              ? 'grid [grid-template-columns:repeat(auto-fit,minmax(134px,max-content))] place-items-center gap-4'
-              : 'flex max-w-[1374px] min-w-[422px] flex-col'
-          }
+              ? 'grid-cols-custom grid gap-4'
+              : 'flex flex-col gap-4'
+          }`}
         >
           <FolderItem
             isBookmark={isBookmark}

@@ -7,6 +7,7 @@ import PersonalPage from '@/assets/widget-ui-assets/PersonalPage.svg?react';
 import SharedPage from '@/assets/widget-ui-assets/SharedPage.svg?react';
 import PlusIcon from '@/assets/common-ui-assets/PlusIcon.svg?react';
 import profile from '@/assets/common-ui-assets/Profile.webp';
+import { useMobile } from '@/hooks/useMobile';
 
 type SharedPage = {
   id: string;
@@ -30,12 +31,16 @@ const SideBar: React.FC<MenubarProps> = ({
   showSidebar,
   setShowSidebar,
 }) => {
+  const isMobile = useMobile();
+
   const HandleSidebar = () => {
     setShowSidebar(!showSidebar);
   };
 
   return showSidebar ? (
-    <aside className="border-r-gray-30 flex min-h-screen w-[260px] flex-col justify-between border-r">
+    <aside
+      className={`border-gray-30 flex w-[260px] flex-col justify-between border-r ${isMobile ? 'bg-gray-0 absolute top-0 left-0 z-50 h-screen' : 'relative'} `}
+    >
       <div className="flex flex-col gap-[16px] px-[12px] pt-[12px] pb-[8px]">
         <div className="flex flex-col gap-[16px]">
           <HamburgerButton onClick={HandleSidebar} />

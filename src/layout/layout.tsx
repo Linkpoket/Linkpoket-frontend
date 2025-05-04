@@ -16,9 +16,10 @@ export default function Layout() {
 
   const isLoginPage = path === '/login';
   const isSignUpPage = path === '/signup';
+  const isLadningPage = path === '/landing';
 
-  const isHideSidebar = isLoginPage || isSignUpPage; // 로그인 페이지 또는 회원가입 페이지에서 사이드바 숨김
-  const isHideHeader = isLoginPage; // 로그인 페이지에서 헤더 숨김
+  const isHideSidebar = isLoginPage || isSignUpPage || isLadningPage; // 로그인 페이지 또는 회원가입 페이지에서 사이드바 숨김
+  const isHideHeader = isLoginPage || isLadningPage; // 로그인 페이지에서 헤더 숨김
   const showHeaderButton = !isSignUpPage; // 회원가입 페이지에서 header의 button 숨김 숨김
   const showDepth = !isLoginPage && !isSignUpPage; // 로그인,회원가입 페이지에서 header의 button 숨김 숨김
 

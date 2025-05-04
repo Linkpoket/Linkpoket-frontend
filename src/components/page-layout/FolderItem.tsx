@@ -13,7 +13,7 @@ export default function FolderItem({
   const isGrid = view === 'grid';
 
   return isGrid ? (
-    <div className="bg-gray-0 hover:bg-gray-5 active:bg-gray-5 relative inline-flex cursor-pointer flex-col items-center gap-2 rounded-[8px] p-[12px]">
+    <div className="bg-gray-0 hover:bg-gray-5 active:bg-gray-5 relative inline-flex w-full cursor-pointer flex-col items-center gap-2 rounded-[8px] p-[12px]">
       <FolderItemIcon />
       <button
         className="absolute top-10 right-5 cursor-pointer bg-transparent"
@@ -26,7 +26,7 @@ export default function FolderItem({
       </span>
     </div>
   ) : (
-    <div className="border-gray-30 border-b-gray-30 active:bg-gray-5 hover:bg-gray-5 flex w-full items-center justify-between border-b py-[16px] pl-[8px] last:border-b-0">
+    <div className="border-gray-30 hover:bg-gray-5 active:bg-gray-5 flex w-full items-center justify-between border-b px-[12px] py-[16px] last:border-b-0">
       <div className="flex items-center gap-[20px]">
         <FolderItemIcon width={42} height={38} />
         <span className="text-gray-90 text-[16px] font-[400]">

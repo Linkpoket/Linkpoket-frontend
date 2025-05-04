@@ -36,6 +36,26 @@
   --color-kakao-yellow: rgba(254, 229, 0, 1);
 }
 
+@layer utilities {
+  @media (min-width: 768px) and (max-width: 1279px) {
+    .grid-cols-custom {
+      grid-template-columns: repeat(5, minmax(134px, max-content));
+    }
+  }
+
+  @media (min-width: 1280px) and (max-width: 1439px) {
+    .grid-cols-custom {
+      grid-template-columns: repeat(6, minmax(134px, max-content));
+    }
+  }
+
+  @media (min-width: 1440px) {
+    .grid-cols-custom {
+      grid-template-columns: repeat(7, minmax(134px, max-content));
+    }
+  }
+}
+
 @theme {
   --font-sans: 'Pretendard', sans-serif;
 }
