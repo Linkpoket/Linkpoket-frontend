@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { cn } from '@/utils/cn';
 
 // 모달 컨텍스트 생성
 const ModalContext = createContext<{
@@ -15,10 +16,12 @@ const Modal = ({
   children,
   isOpen,
   onClose,
+  className,
 }: {
   children: React.ReactNode;
   isOpen: boolean;
   onClose: () => void;
+  className?: string;
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -29,7 +32,7 @@ const Modal = ({
       }
     };
 
-    document.addEventListener('click', handleClick, true); // 캡처링 단계에서 이벤트 처리 (true파라미터)
+    document.addEventListener('click', handleClick, true);
 
     return () => document.removeEventListener('click', handleClick, true);
   }, [onClose]);
@@ -40,7 +43,10 @@ const Modal = ({
     <ModalContext.Provider value={{ isOpen, onClose }}>
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
         <div
-          className="flex max-h-[90vh] w-full max-w-[700px] flex-col overflow-hidden rounded-lg bg-white p-[36px]"
+          className={cn(
+            'flex w-full max-w-[70%] flex-col overflow-hidden rounded-2xl bg-white p-[36px] md:max-w-[466px]',
+            className
+          )}
           ref={modalRef}
         >
           {children}
@@ -52,24 +58,49 @@ const Modal = ({
 };
 
 // 헤더 컴포넌트
-const Header = ({ children }: { children: React.ReactNode }) => {
+const Header = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
   return (
-    <div className="border-b border-[var(--color-gray-40)] pb-4">
-      <h2 className="text-[28px] font-bold text-[var-(--color-gray-100)]">
-        {children}
-      </h2>
-    </div>
+    <h2
+      className={cn(
+        'border-b border-[var(--color-gray-40)] pb-4 text-[28px] font-bold text-[var(--color-gray-100)]',
+        className
+      )}
+    >
+      {children}
+    </h2>
   );
 };
 
 // 본문 컴포넌트
-const Body = ({ children }: { children: React.ReactNode }) => {
-  return <div className="flex-1 py-8">{children}</div>;
+const Body = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  return <div className={cn('flex-1 py-8', className)}>{children}</div>;
 };
 
 // 푸터 컴포넌트
-const Footer = ({ children }: { children: React.ReactNode }) => {
-  return <div className="flex justify-end space-x-2 pt-4">{children}</div>;
+const Footer = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  return (
+    <div className={cn('flex justify-end space-x-2 pt-4', className)}>
+      {children}
+    </div>
+  );
 };
 
 // 확인 버튼 컴포넌트
@@ -78,23 +109,29 @@ const ConfirmButton = ({
   onClick,
   disabled = false,
   variant = 'primary',
+  className,
 }: {
   children: React.ReactNode;
   onClick: () => void;
   disabled?: boolean;
-  variant?: 'primary' | 'danger' | 'default';
+  variant?: 'primary' | 'danger' | 'default' | 'check';
+  className?: string;
 }) => {
   const variantClasses = {
     primary: 'bg-[var(--color-primary-50)] text-[var(--color-primary-0)]',
     danger: 'bg-[var(--color-status-danger)] text-[var(--color-primary-0)]',
     default: 'bg-[var(--color-gray-20)] text-[var(--color-gray-50)]',
+    check: 'bg-none text-gray=90 border-1 border-gray-30',
   };
 
   return (
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`rounded-lg px-5 py-3 ${variantClasses[variant]}`}
+      className={cn(
+        `rounded-lg px-5 py-3 ${variantClasses[variant]}`,
+        className
+      )}
     >
       {children}
     </button>
@@ -102,7 +139,13 @@ const ConfirmButton = ({
 };
 
 // 취소 버튼 컴포넌트
-const CancelButton = ({ onClick }: { onClick: () => void }) => {
+const CancelButton = ({
+  onClick,
+  className,
+}: {
+  onClick?: () => void;
+  className?: string;
+}) => {
   const { onClose } = useContext(ModalContext);
 
   return (
@@ -111,7 +154,10 @@ const CancelButton = ({ onClick }: { onClick: () => void }) => {
         onClick?.();
         onClose();
       }}
-      className="rounded-lg border border-[var(--color-gray-20)] px-5 py-3"
+      className={cn(
+        'rounded-lg border border-[var(--color-gray-20)] px-5 py-3',
+        className
+      )}
     >
       취소
     </button>

@@ -33,6 +33,7 @@ export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement>,
     VariantProps<typeof inputVariants> {
   label?: string;
+  labelClassName?: string;
   errorMessage?: string;
   containerClassName?: string;
   inputSize?: 'default' | 'medium';
@@ -45,6 +46,7 @@ export const Input = ({
   inputSize = 'default',
   isModal = false,
   label,
+  labelClassName,
   errorMessage,
   containerClassName,
   disabled,
@@ -58,14 +60,15 @@ export const Input = ({
       : '';
 
   return (
-    <div className={cn('flex flex-col space-y-1', containerClassName)}>
+    <div className={cn('flex flex-col space-y-4', containerClassName)}>
       {label && (
         <label
           htmlFor={props.id}
           className={cn(
             'text-gray-80 font-medium',
             // 모달용 라벨 폰트 사이즈 조정
-            isModal || inputSize === 'medium' ? 'text-[16px]' : 'text-sm'
+            isModal || inputSize === 'medium' ? 'text-[16px]' : 'text-sm',
+            labelClassName
           )}
         >
           {label}
