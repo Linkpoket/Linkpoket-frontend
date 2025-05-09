@@ -10,20 +10,30 @@ import FolderTransferModal from '../modal/folder/FolderTransferModal';
 import AddFolderModal from '../modal/folder/AddFolderModal';
 import DeleteFolderModal from '../modal/folder/DeleteFolderModal';
 import ErrorModal from '../modal/folder/ErrorModal';
+import AddLinkModal from '../modal/link/AddLinkModal';
+import DeleteLinkModal from '../modal/link/DeleteLinkModal';
 
 export default function PageControllerSection({
   view,
   setView,
 }: PageControllerSectionProps) {
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
+  const [isAddLinkModalOpen, setIsAddLinkModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleteLinkModalOpen, setIsDeleteLinkModalOpen] = useState(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [selectedFolderId, setSelectedFolderId] = useState(null);
+  const [selectedLinkId, setSelectedLinkId] = useState(null);
 
   // 폴더 전송 버튼 클릭 핸들러
   const handleTransferFolder = () => {
     setIsTransferModalOpen(true);
+  };
+
+  // 링크 추가 버튼 클릭 핸들러
+  const handleAddLink = () => {
+    setIsAddLinkModalOpen(true);
   };
 
   // 폴더 추가 버튼 클릭 핸들러
@@ -36,7 +46,12 @@ export default function PageControllerSection({
     setIsDeleteModalOpen(true);
   };
 
-  // 폴더 삭제 버튼 클릭 핸들러
+  // 링크 삭제 버튼 클릭 핸들러
+  const handleDeleteLinkFolder = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  // 에러 버튼 클릭 핸들러
   const handleErrorModal = () => {
     setIsErrorModalOpen(true);
   };
@@ -44,6 +59,12 @@ export default function PageControllerSection({
   // 이메일 전송 처리 함수
   const handleEmailSubmit = async (email: string) => {
     console.log(`폴더를 ${email}로 전송합니다.`);
+    return Promise.resolve();
+  };
+
+  // 이메일 전송 처리 함수
+  const handleLinkSubmit = async (link: string, url: string) => {
+    console.log(`링크: ${link}, url:${url}`);
     return Promise.resolve();
   };
 
@@ -65,6 +86,15 @@ export default function PageControllerSection({
     return Promise.resolve();
   };
 
+  // 폴더 삭제 처리 함수
+  const handleDeleteLinkSubmit = async () => {
+    if (selectedLinkId) {
+      console.log(`폴더 ID: ${selectedLinkId} 삭제`);
+      // 실제 API 호출 추가
+    }
+    return Promise.resolve();
+  };
+
   return (
     <div className="flex flex-col justify-between gap-[16px] px-[64px] xl:flex-row xl:gap-0">
       <div className="flex h-[48px] gap-[12px]">
@@ -78,7 +108,12 @@ export default function PageControllerSection({
           <FolderIcon />
           폴더 추가
         </Button>
-        <Button variant="ghost" size="md" className="flex gap-[6px]">
+        <Button
+          variant="ghost"
+          size="md"
+          className="flex gap-[6px]"
+          onClick={handleAddLink}
+        >
           <SiteIcon />
           링크 추가
         </Button>
@@ -115,6 +150,17 @@ export default function PageControllerSection({
           <SiteIcon />
           에러 모달 확인 버튼
         </Button>
+
+        {/* 링크 삭제 모달 확인 버튼*/}
+        <Button
+          variant="ghost"
+          size="md"
+          className="flex gap-[6px]"
+          onClick={handleDeleteLinkFolder}
+        >
+          <SiteIcon />
+          링크 삭제
+        </Button>
       </div>
 
       <div className="flex gap-[12px]">
@@ -133,6 +179,13 @@ export default function PageControllerSection({
         onSubmit={handleEmailSubmit}
       />
 
+      <AddLinkModal
+        isOpen={isAddLinkModalOpen}
+        onClose={() => setIsAddLinkModalOpen(false)}
+        linkName="새 폴더"
+        onSubmit={handleLinkSubmit}
+      />
+
       {/* 폴더 추가 모달 */}
       <AddFolderModal
         isOpen={isAddModalOpen}
@@ -147,6 +200,14 @@ export default function PageControllerSection({
         onClose={() => setIsDeleteModalOpen(false)}
         folderId={selectedFolderId}
         onSubmit={handleDeleteSubmit}
+      />
+
+      {/* 링크 삭제 모달 */}
+      <DeleteLinkModal
+        isOpen={isDeleteLinkModalOpen}
+        onClose={() => setIsDeleteLinkModalOpen}
+        linkId={selectedLinkId}
+        onSubmit={handleDeleteLinkSubmit}
       />
 
       {/* 에러 모달 */}

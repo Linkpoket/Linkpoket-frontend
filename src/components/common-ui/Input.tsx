@@ -32,7 +32,7 @@ const inputVariants = cva(
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement>,
     VariantProps<typeof inputVariants> {
-  label?: string;
+  label?: React.ReactNode;
   labelClassName?: string;
   errorMessage?: string;
   containerClassName?: string;
