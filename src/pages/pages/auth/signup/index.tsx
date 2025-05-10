@@ -7,14 +7,17 @@ import { z } from 'zod';
 import { Button } from '@/components/common-ui/button';
 import { useEffect, useState } from 'react';
 import { Select } from '@/components/common-ui/Select';
+import { axiosInstance } from '@/apis/axiosInstance';
+import { useNavigate } from 'react-router-dom';
 
 // Zod 스키마 정의
 const signupSchema = z
   .object({
-    ageGroup: z.string().min(1, '연령대를 선택해주세요.'),
+    ageRange: z.string().min(1, '연령대를 선택해주세요.'),
     gender: z.string().min(1, '성별을 선택해주세요.'),
     job: z.string().min(1, '직업을 선택해주세요.'),
     customJob: z.string().optional(),
+    colorCode: z.string().optional(),
     nickname: z
       .string()
       .min(1, '닉네임을 입력해주세요.')
@@ -73,7 +76,7 @@ const SignupPage = () => {
     resolver: zodResolver(signupSchema),
     mode: 'onChange',
     defaultValues: {
-      ageGroup: '',
+      ageRange: '',
       gender: '',
       job: '',
       customJob: '',
@@ -83,6 +86,7 @@ const SignupPage = () => {
   });
 
   // 직업 선택값과 커스텀 직업값 감시
+  const navigate = useNavigate();
   const selectedJob = watch('job');
   const customJobValue = watch('customJob');
 
@@ -131,10 +135,19 @@ const SignupPage = () => {
     console.log('회원가입 데이터:', submitData);
 
     try {
-      // 실제 API 호출 로직
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      alert('회원가입이 완료되었습니다!');
-      // 회원가입 성공 후 페이지 이동 로직
+
+      const response = await axiosInstance.post('/api/member/sign-up', {
+        ageRange: '20대',
+        gender: 1, // 조건에 따라 1 또는 2로 설정 필요
+        job: '학생',
+        nickName: 'hoonshi',
+        colorCode: 'color',
+      });
+
+      console.log('응답 성공:', response.data);
+
+      navigate('/');
     } catch (error) {
       console.error('회원가입 오류:', error);
     }
@@ -155,35 +168,35 @@ const SignupPage = () => {
           <label className="mb-2 block font-medium text-gray-700">연령대</label>
           <div className="flex flex-row space-x-4">
             <Controller
-              name="ageGroup"
+              name="ageRange"
               control={control}
               render={({ field }) => (
                 <>
                   <Radio
                     label="10대"
                     value="10s"
-                    error={!!errors.ageGroup}
+                    error={!!errors.ageRange}
                     checked={field.value === '10s'}
                     onChange={() => field.onChange('10s')}
                   />
                   <Radio
                     label="20대"
                     value="20s"
-                    error={!!errors.ageGroup}
+                    error={!!errors.ageRange}
                     checked={field.value === '20s'}
                     onChange={() => field.onChange('20s')}
                   />
                   <Radio
                     label="30대"
                     value="30s"
-                    error={!!errors.ageGroup}
+                    error={!!errors.ageRange}
                     checked={field.value === '30s'}
                     onChange={() => field.onChange('30s')}
                   />
                   <Radio
                     label="40대 이상"
                     value="40plus"
-                    error={!!errors.ageGroup}
+                    error={!!errors.ageRange}
                     checked={field.value === '40plus'}
                     onChange={() => field.onChange('40plus')}
                   />
@@ -191,9 +204,9 @@ const SignupPage = () => {
               )}
             />
           </div>
-          {errors.ageGroup && (
+          {errors.ageRange && (
             <p className="mt-1 text-sm text-red-500">
-              {errors.ageGroup.message}
+              {errors.ageRange.message}
             </p>
           )}
         </div>
