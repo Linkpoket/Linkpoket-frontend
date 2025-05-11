@@ -15,6 +15,24 @@ export default function PageLayout() {
     }
   }, [isMobile]);
 
+  function decodeJwt(token: string) {
+    try {
+      const payload = token.split('.')[1];
+      const decoded = JSON.parse(atob(payload));
+      return decoded;
+    } catch (error) {
+      console.error('JWT 디코딩 실패:', error);
+      return null;
+    }
+  }
+
+  const token = localStorage.getItem('access_token');
+
+  if (token) {
+    const decoded = decodeJwt(token);
+    console.log('디코딩된 payload:', decoded);
+  }
+
   return (
     <div className="flex h-screen flex-col">
       {/* HEADER SECTION*/}

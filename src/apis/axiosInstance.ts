@@ -2,10 +2,19 @@ import axios, { AxiosError } from 'axios';
 import { z } from 'zod';
 
 export const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_HOST,
-  headers: {
-    Authorization: import.meta.env.VITE_API_TOKEN,
-  },
+  baseURL: 'http://localhost:8080',
+  withCredentials: true,
+});
+
+// 요청 전마다 accessToken을 최신 상태로 헤더에 넣어줌
+axiosInstance.interceptors.request.use((config) => {
+  const accessToken = localStorage.getItem('access_token');
+
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+  console.log(`엑세스토큰: ${accessToken}`);
+  return config;
 });
 
 //백엔드 api 유효성 검증 에러 응답
