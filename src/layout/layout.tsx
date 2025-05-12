@@ -40,9 +40,6 @@ export default function Layout() {
           <SideBar
             showSidebar={showSidebar}
             setShowSidebar={setShowSidebar}
-            avatarUrl="/avatar.png"
-            nickname="김링크"
-            email="linkmoa@gmail.com"
             sharedPages={sharedPagesData}
           />
         ) : null}

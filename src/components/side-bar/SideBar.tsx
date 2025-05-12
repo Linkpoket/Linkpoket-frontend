@@ -5,8 +5,8 @@ import BookMark from '@/assets/widget-ui-assets/BookMark.svg?react';
 import PersonalPage from '@/assets/widget-ui-assets/PersonalPage.svg?react';
 import SharedPage from '@/assets/widget-ui-assets/SharedPage.svg?react';
 import PlusIcon from '@/assets/common-ui-assets/PlusIcon.svg?react';
-import profile from '@/assets/common-ui-assets/Profile.webp';
 import { useMobile } from '@/hooks/useMobile';
+import { useUserStore } from '@/stores/userStore';
 
 type SharedPage = {
   id: string;
@@ -14,24 +14,19 @@ type SharedPage = {
 };
 
 type MenubarProps = {
-  avatarUrl: string;
-  nickname: string;
-  email: string;
   sharedPages: SharedPage[];
   showSidebar: boolean;
   setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const SideBar: React.FC<MenubarProps> = ({
-  avatarUrl,
-  nickname,
-  email,
   sharedPages,
   showSidebar,
   setShowSidebar,
 }) => {
   const sidebarRef = useRef<HTMLElement | null>(null);
   const isMobile = useMobile();
+  const { nickname, email, colorCode } = useUserStore();
 
   //768px 이하의 경우, showSidebar를 false처리, 이외엔 true처리
   useEffect(() => {
@@ -65,11 +60,12 @@ const SideBar: React.FC<MenubarProps> = ({
       <div className="flex flex-col gap-[16px] px-[12px] pt-[24px] pb-[8px]">
         <div className="flex flex-col gap-[16px]">
           <div className="flex gap-[12px] p-[8px]">
-            <img
-              src={profile}
-              alt="avatar"
-              className="h-[50px] w-[50px] rounded-full p-[8px]"
-            />
+            <div
+              style={{ backgroundColor: colorCode }}
+              className="flex h-[50px] w-[50px] items-center justify-center rounded-full p-[8px]"
+            >
+              {nickname.charAt(0).toUpperCase()}
+            </div>
             <div>
               <p className="text-gray-90 text-[18px] font-semibold">
                 {nickname}
