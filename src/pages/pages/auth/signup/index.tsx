@@ -63,6 +63,8 @@ const JOB_OPTIONS = [
   { value: 'other', label: '기타 (직접 입력)' },
 ];
 
+const COLOR_OPTIONS = ['#f3d9fa', '#91a7ff', '#1971c2'];
+
 type FormData = z.infer<typeof signupSchema>;
 
 const SignupPage = () => {
@@ -121,6 +123,8 @@ const SignupPage = () => {
 
   // 폼 제출 처리
   const onSubmit = async (data: FormData) => {
+    // TODO 이후 회원가입시 처리예정
+
     // 제출할 최종 데이터 구성
     const submitData = {
       ...data,
@@ -129,6 +133,9 @@ const SignupPage = () => {
         data.job === 'other'
           ? data.customJob
           : JOB_OPTIONS.find((opt) => opt.value === data.job)?.label || '',
+      // 색상 코드 랜덤 선택
+      colorCode:
+        COLOR_OPTIONS[Math.floor(Math.random() * COLOR_OPTIONS.length)],
     };
 
     // API 호출 시뮬레이션
@@ -137,12 +144,14 @@ const SignupPage = () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
+      const genderValue = data.gender === 'male' ? 1 : 2;
+
       const response = await axiosInstance.post('/api/member/sign-up', {
-        ageRange: '20대',
-        gender: 1, // 조건에 따라 1 또는 2로 설정 필요
-        job: '학생',
-        nickName: 'hoonshi',
-        colorCode: 'color',
+        ageRange: data.ageRange,
+        gender: genderValue,
+        job: submitData.jobText,
+        nickName: data.nickname,
+        colorCode: submitData.colorCode,
       });
 
       console.log('응답 성공:', response.data);
