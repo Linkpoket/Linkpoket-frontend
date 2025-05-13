@@ -11,11 +11,6 @@ import AddSharedPageModal from '../modal/page/AddSharedPageModal';
 import useFetchJoinedPage from '@/hooks/queries/useFetchJoinedPage';
 import { JoinedPageData } from '@/types/sharedPage';
 
-type SharedPage = {
-  id: string;
-  title: string;
-};
-
 type MenubarProps = {
   showSidebar: boolean;
   setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
@@ -53,6 +48,7 @@ const SideBar: React.FC<MenubarProps> = ({ showSidebar, setShowSidebar }) => {
 
   // 현재 참여중인 페이지 호출
   const { joinedPage } = useFetchJoinedPage();
+  //첫 번째 항목은 항상 개인 페이지이므로 제외합니다
   const joinedPageData = (joinedPage ?? []).slice(1);
 
   return showSidebar ? (
@@ -118,7 +114,9 @@ const SideBar: React.FC<MenubarProps> = ({ showSidebar, setShowSidebar }) => {
                 </div>
                 <PlusIcon
                   className="text-gray-60 hover:text-gray-90 opacity-0 transition-opacity group-hover:opacity-100"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
                     setShowAddSharedPageModal(true);
                   }}
                 />
