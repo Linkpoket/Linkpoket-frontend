@@ -6,22 +6,26 @@ export const SocialLoginButton = ({
   icon: Icon,
   bgColor,
   className,
+  iconClassName,
   onClick,
+  noMargin,
 }: {
-  provider: string;
+  provider?: string;
   icon: React.ElementType;
-  bgColor: string;
+  bgColor?: string;
   className?: string;
+  iconClassName?: string;
   onClick: () => void;
+  noMargin?: boolean;
 }) => (
   <Button
     onClick={onClick}
     className={cn(
-      `flex w-full items-center justify-center rounded-lg ${bgColor} text-gray-90 h-[63px] py-3 text-[21px] font-semibold`,
+      `flex w-full items-center justify-center rounded-lg ${bgColor} text-gray-90 group h-[63px] py-3 text-[21px] font-semibold`,
       className
     )}
   >
-    <Icon className="mr-[10px]" />
-    {provider} 로그인
+    <Icon className={cn(!noMargin && 'mr-[10px]', iconClassName)} />
+    {provider && provider}
   </Button>
 );
