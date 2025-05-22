@@ -7,6 +7,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import { useFetchSelectedPage } from '@/hooks/queries/useFetchSelectedPage';
 import useFetchFavorite from '@/hooks/queries/useFetchFavorite';
 import { usePageStore } from '@/stores/pageStore';
+import useFetchSharedPageDashboard from '@/hooks/queries/useFetchSharedPageDashboard';
 
 export default function PageContentSection({ view }: PageContentSectionProps) {
   const [isBookmark, setIsBookmark] = useState(false);
@@ -14,11 +15,6 @@ export default function PageContentSection({ view }: PageContentSectionProps) {
     x: number;
     y: number;
   } | null>(null);
-
-  const handleContextMenu = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setContextMenu({ x: e.clientX, y: e.clientY });
-  };
 
   //만약 path param이 없다면 1로 간주하고, 있다면 그대로 꺼내와서 사용.
   const { pageId } = useParams();
@@ -30,7 +26,14 @@ export default function PageContentSection({ view }: PageContentSectionProps) {
     resolvedPageId = parseInt(pageId);
   }
 
-  // 분기: bookmarks면 useFetchFavorite, 아니면 useFetchSelectedPage
+  // 클릭해서 들어간 페이지 정보 전역 변수로사 저장
+  const { setPageInfo } = usePageStore();
+
+  useEffect(() => {
+    setPageInfo(resolvedPageId, 'VIEW');
+  }, [resolvedPageId, setPageInfo]);
+
+  // 분기처리: bookmarks면 useFetchFavorite, 아니면 useFetchSelectedPage
   const favoriteQuery = useFetchFavorite();
   const selectedPageQuery = useFetchSelectedPage({
     pageId: resolvedPageId,
@@ -43,12 +46,19 @@ export default function PageContentSection({ view }: PageContentSectionProps) {
 
   console.log(data);
 
-  // 클릭해서 들어간 페이지 정보 저장
-  const { setPageInfo } = usePageStore();
+  //TODO: 해당 값을 통해서 현재 참여한 유저정보 리스팅
+  const sharedPageDashboardQuery = useFetchSharedPageDashboard({
+    pageId: resolvedPageId,
+    commandType: 'VIEW',
+    enabled: isBookmarks,
+  });
 
-  useEffect(() => {
-    setPageInfo(resolvedPageId, 'VIEW');
-  }, [resolvedPageId]);
+  console.log(sharedPageDashboardQuery.data);
+
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setContextMenu({ x: e.clientX, y: e.clientY });
+  };
 
   return (
     <div
