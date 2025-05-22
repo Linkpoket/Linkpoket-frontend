@@ -6,6 +6,7 @@ export default function useFetchJoinedPage() {
     queryKey: ['joinedPage'],
     queryFn: fetchJoinedPage,
     select: (response) => response.data,
+    staleTime: 1000 * 60,
   });
 
   return { joinedPage: data, ...rest };

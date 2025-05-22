@@ -74,7 +74,6 @@ export function UserActions() {
           // onToggleDarkMode={handleToggleDarkMode}
           setIsOpen={() => setIsMenuOpen(!isMenuOpen)}
           onWithDrawPage={() => console.log('탈퇴')}
-          onDeletePage={() => console.log('삭제')}
           onContact={() => console.log('문의')}
         />
       )}

@@ -49,47 +49,13 @@ export default function AddFolderModal({
         pageId,
         commandType,
       },
-      folderName,
+      directoryName: folderName,
       parentFolderId,
       folderDescription,
     });
   };
 
   const inputClass = 'w-full';
-
-  useEffect(() => {
-    const updateFolder = async () => {
-      try {
-        const res = await fetch('http://localhost:8080/api/folders', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            baseRequest: {
-              pageId: 1,
-              commandType: 'CREATE',
-            },
-            folderName: 'B2',
-            parentFolderId: 1,
-            folderDescription: 'favorite directory4',
-          }),
-        });
-
-        if (!res.ok) {
-          const errData = await res.json();
-          console.error('서버 오류:', errData);
-        } else {
-          const data = await res.json();
-          console.log('업데이트 성공:', data);
-        }
-      } catch (error) {
-        console.error('요청 실패:', error);
-      }
-    };
-
-    updateFolder(); // ✅ 내부에서 실행
-  }, []);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>

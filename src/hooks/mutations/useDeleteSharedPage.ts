@@ -3,16 +3,16 @@ import {
   UseMutationOptions,
   useQueryClient,
 } from '@tanstack/react-query';
-import { createSharedPage } from '@/apis/page-apis/createSharedPage';
-import { CreateSharedPageData } from '@/types/pages';
+import { deleteSharedPage } from '@/apis/page-apis/deleteSharedPage';
+import { DeleteSharedPageData } from '@/types/pages';
 
-export function useCreateSharedPage(
-  options?: UseMutationOptions<any, unknown, CreateSharedPageData>
+export function useDeleteSharedPage(
+  options?: UseMutationOptions<any, unknown, DeleteSharedPageData>
 ) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: createSharedPage,
+    mutationFn: deleteSharedPage,
     onSuccess: (data, variables, context) => {
       queryClient.refetchQueries({ queryKey: ['joinedPage'] });
       options?.onSuccess?.(data, variables, context);

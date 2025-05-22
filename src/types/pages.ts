@@ -16,3 +16,10 @@ export interface SelectedPageData {
   pageId: number;
   commandType: string;
 }
+
+export interface DeleteSharedPageData {
+  baseRequest: {
+    pageId: number;
+    commandType: string;
+  };
+}

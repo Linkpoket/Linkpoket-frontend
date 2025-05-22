@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import FolderItem from './FolderItem';
 import LinkItem from './LinkItem';
 import { ContextMenu } from '../common-ui/ContextMenu';
@@ -6,6 +6,7 @@ import { PageContentSectionProps } from '@/types/pageItems';
 import { useLocation, useParams } from 'react-router-dom';
 import { useFetchSelectedPage } from '@/hooks/queries/useFetchSelectedPage';
 import useFetchFavorite from '@/hooks/queries/useFetchFavorite';
+import { usePageStore } from '@/stores/pageStore';
 
 export default function PageContentSection({ view }: PageContentSectionProps) {
   const [isBookmark, setIsBookmark] = useState(false);
@@ -41,6 +42,13 @@ export default function PageContentSection({ view }: PageContentSectionProps) {
   const data = isBookmarks ? favoriteQuery.favorite : selectedPageQuery.data;
 
   console.log(data);
+
+  // 클릭해서 들어간 페이지 정보 저장
+  const { setPageInfo } = usePageStore();
+
+  useEffect(() => {
+    setPageInfo(resolvedPageId, 'VIEW');
+  }, [resolvedPageId]);
 
   return (
     <div
