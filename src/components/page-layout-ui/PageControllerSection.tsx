@@ -7,12 +7,26 @@ import PageSortBox from './PageSortBox';
 import { PageControllerSectionProps } from '@/types/pageItems';
 import { useState } from 'react';
 import AddFolderModal from '../modal/folder/AddFolderModal';
+import AddLinkModal from '../modal/link/AddLinkModal';
+import { useCreateLink } from '@/hooks/mutations/useCreateLink';
+import { usePageStore } from '@/stores/pageStore';
 
 export default function PageControllerSection({
   view,
   setView,
 }: PageControllerSectionProps) {
   const [isFolderOpen, setIsFolderOpen] = useState(false);
+  const [isLinkOpen, setIsLinkOpen] = useState(false);
+  const pageId = usePageStore((state) => state.pageId);
+
+  const { mutate: createLink } = useCreateLink({
+    onSuccess: () => {
+      console.log('링크 생성 성공');
+    },
+    onError: (error) => {
+      console.error('링크 생성 실패:', error);
+    },
+  });
 
   return (
     <div className="flex flex-col justify-between gap-[16px] px-[64px] xl:flex-row xl:gap-0">
@@ -26,7 +40,12 @@ export default function PageControllerSection({
           <FolderIcon />
           폴더 추가
         </Button>
-        <Button variant="ghost" size="md" className="flex gap-[6px]">
+        <Button
+          variant="ghost"
+          size="md"
+          className="flex gap-[6px]"
+          onClick={() => setIsLinkOpen(true)}
+        >
           <SiteIcon />
           링크 추가
         </Button>
@@ -44,6 +63,24 @@ export default function PageControllerSection({
           onClose={() => setIsFolderOpen(false)}
           pageId={2}
           parentFolderId={1}
+        />
+      )}
+      {isLinkOpen && (
+        <AddLinkModal
+          isOpen={isLinkOpen}
+          onClose={() => setIsLinkOpen(false)}
+          onSubmit={async (linkName, linkUrl) => {
+            createLink({
+              baseRequest: {
+                pageId,
+                commandType: 'CREATE',
+              },
+              linkName,
+              linkUrl,
+              directoryId: 1, // 실제 폴더 ID
+              faviconUrl: `${linkUrl}/favicon.ico`,
+            });
+          }}
         />
       )}
     </div>
