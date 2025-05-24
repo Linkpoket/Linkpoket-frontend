@@ -1,27 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Input } from '@/components/common-ui/Input';
 import Modal from '@/components/common-ui/Modal';
 import FolderItemIcon from '@/assets/common-ui-assets/FolderItemIcon.svg?react';
 import { useCreateFolder } from '@/hooks/mutations/useCreateFolder';
+import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 
 interface AddFolderModalProps {
   isOpen: boolean;
   onClose: () => void;
-  pageId: number;
-  parentFolderId: number;
-  commandType?: string;
 }
 
 export default function AddFolderModal({
   isOpen,
   onClose,
-  pageId = 1,
-  parentFolderId = 1,
-  commandType = 'CREATE',
 }: AddFolderModalProps) {
   const [folderName, setFolderName] = useState('');
   const [folderDescription, setFolderDescription] = useState('');
   const [error, setError] = useState('');
+  const { pageId: id, commandType: type } = usePageStore();
+  const { parentsFolderId } = useParentsFolderIdStore();
+
+  console.log('현재 폴더 id', parentsFolderId);
 
   const isConfirmDisabled = !folderName;
 
@@ -44,15 +43,19 @@ export default function AddFolderModal({
       return;
     }
     setError('');
-    createFolderMutation.mutate({
+
+    const requestBody = {
       baseRequest: {
-        pageId,
-        commandType,
+        pageId: id,
+        commandType: type,
       },
-      directoryName: folderName,
-      parentFolderId,
+      folderName,
+      parentFolderId: parentsFolderId,
       folderDescription,
-    });
+    };
+
+    console.log('폴더 생성 요청 데이터:', requestBody);
+    createFolderMutation.mutate(requestBody);
   };
 
   const inputClass = 'w-full';

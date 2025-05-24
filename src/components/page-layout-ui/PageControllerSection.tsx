@@ -61,8 +61,6 @@ export default function PageControllerSection({
         <AddFolderModal
           isOpen={isFolderOpen}
           onClose={() => setIsFolderOpen(false)}
-          pageId={2}
-          parentFolderId={1}
         />
       )}
       {isLinkOpen && (

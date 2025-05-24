@@ -3,7 +3,7 @@ export type CreateFolderData = {
     pageId: number;
     commandType: string;
   };
-  directoryName: string;
+  folderName: string;
   parentFolderId: number;
   folderDescription: string;
 };
