@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useMobile } from '@/hooks/useMobile';
 import { useFetchSelectedPage } from '@/hooks/queries/useFetchSelectedPage';
-import { usePageStore } from '@/stores/pageStore';
+import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import SharedPageContentSection from '@/components/page-layout-ui/SharedPageContentSection';
 import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
@@ -30,18 +30,27 @@ export default function SharedPage() {
 
   // 클릭해서 들어간 페이지 정보 전역 변수로tj 저장
   const { setPageInfo } = usePageStore();
-
-  useEffect(() => {
-    setPageInfo(resolvedPageId, 'VIEW');
-  }, [resolvedPageId, setPageInfo]);
+  const { setParentsFolderId } = useParentsFolderIdStore();
 
   const selectedPageQuery = useFetchSelectedPage({
     pageId: resolvedPageId,
     commandType: 'VIEW',
   });
 
-  console.log('선택한 페이지 데이터', selectedPageQuery.data);
-  console.log('선택한 페이지 데이터', selectedPageQuery.data?.data.pageTitle);
+  useEffect(() => {
+    setPageInfo(resolvedPageId, 'VIEW');
+    setParentsFolderId(selectedPageQuery.data?.data.rootFolderId);
+  }, [resolvedPageId, setPageInfo, setParentsFolderId, selectedPageQuery.data]);
+
+  console.log('선택한 페이지 데이터:', selectedPageQuery.data);
+  console.log(
+    '선택한 페이지 데이터 타이틀 이름:',
+    selectedPageQuery.data?.data.pageTitle
+  );
+  console.log(
+    '선택한 페이지 데이터 디렉토리 상세 정보:',
+    selectedPageQuery.data?.data.directoryDetailRespons
+  );
 
   //TODO: 해당 값을 통해서 현재 공유페이지의 정보 리스팅
   const sharedPageDashboardQuery = useFetchSharedPageDashboard({
@@ -72,7 +81,10 @@ export default function SharedPage() {
       <PageControllerSection view={view} setView={setView} />
 
       {/*CONTENT SECTION*/}
-      <SharedPageContentSection view={view} />
+      <SharedPageContentSection
+        view={view}
+        contentData={selectedPageQuery.data?.data}
+      />
     </div>
   );
 }

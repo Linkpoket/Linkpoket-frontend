@@ -5,7 +5,7 @@ import { ContextMenu } from '../common-ui/ContextMenu';
 import { PageContentSectionProps } from '@/types/pageItems';
 import { useParams } from 'react-router-dom';
 import { useFetchSelectedPage } from '@/hooks/queries/useFetchSelectedPage';
-import { usePageStore } from '@/stores/pageStore';
+import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 
 export default function PersonalPageContentSection({
   view,
@@ -24,25 +24,34 @@ export default function PersonalPageContentSection({
     resolvedPageId = parseInt(pageId);
   }
 
-  // 클릭해서 들어간 페이지 정보 전역 변수로사 저장
+  // 클릭해서 들어간 페이지 정보 전역 변수로서 저장
   const { setPageInfo } = usePageStore();
-
-  useEffect(() => {
-    setPageInfo(resolvedPageId, 'VIEW');
-  }, [resolvedPageId, setPageInfo]);
+  const { setParentsFolderId } = useParentsFolderIdStore();
 
   const selectedPageQuery = useFetchSelectedPage({
     pageId: resolvedPageId,
     commandType: 'VIEW',
   });
 
+  useEffect(() => {
+    setPageInfo(resolvedPageId, 'VIEW');
+    setParentsFolderId(selectedPageQuery.data?.data.parentsFolderId);
+  }, [resolvedPageId, setPageInfo, setParentsFolderId, selectedPageQuery.data]);
+
   // 실제 사용할 데이터
-  console.log('선택한 페이지 데이터', selectedPageQuery.data);
 
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
     setContextMenu({ x: e.clientX, y: e.clientY });
   };
+
+  const folderData = selectedPageQuery.data?.data.directoryDetailRespons ?? [];
+  const linkData = selectedPageQuery.data?.data.siteDetailResponses ?? [];
+  const mergedList = [...folderData, ...linkData].sort(
+    (a, b) => a.orderIndex - b.orderIndex
+  );
+
+  console.log('합친 데이터', mergedList);
 
   return (
     <div
@@ -56,18 +65,34 @@ export default function PersonalPageContentSection({
             : 'flex flex-col gap-4'
         }`}
       >
-        <FolderItem
-          isBookmark={isBookmark}
-          setIsBookmark={setIsBookmark}
-          item={{ id: '1', title: '폴더 이름' }}
-          view={view}
-        />
-        <LinkItem
-          isBookmark={isBookmark}
-          setIsBookmark={setIsBookmark}
-          item={{ id: '1', title: '링크 이름' }}
-          view={view}
-        />
+        {mergedList.map((item) => {
+          if ('folderId' in item) {
+            return (
+              <FolderItem
+                key={item.orderIndex}
+                isBookmark={item.isFavorite}
+                setIsBookmark={setIsBookmark}
+                item={{ id: item.folderId, title: item.folderName }}
+                view={view}
+              />
+            );
+          } else if ('linkId' in item) {
+            return (
+              <LinkItem
+                key={item.orderIndex}
+                isBookmark={item.isFavorite}
+                setIsBookmark={setIsBookmark}
+                item={{
+                  id: item.linkId,
+                  title: item.linkName,
+                  linkUrl: item.linkUrl,
+                }}
+                view={view}
+              />
+            );
+          }
+          return null;
+        })}
 
         {contextMenu && (
           <ContextMenu

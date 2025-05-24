@@ -6,6 +6,7 @@ import { PageContentSectionProps } from '@/types/pageItems';
 
 export default function SharedPageContentSection({
   view,
+  contentData,
 }: PageContentSectionProps) {
   const [isBookmark, setIsBookmark] = useState(false);
   const [contextMenu, setContextMenu] = useState<{
@@ -17,6 +18,13 @@ export default function SharedPageContentSection({
     e.preventDefault();
     setContextMenu({ x: e.clientX, y: e.clientY });
   };
+
+  const folderData = contentData?.directoryDetailRespons ?? [];
+  const linkData = contentData?.siteDetailResponses ?? [];
+  const mergedList = [...folderData, ...linkData].sort(
+    (a, b) => a.orderIndex - b.orderIndex
+  );
+  console.log('합친 데이터', mergedList);
 
   return (
     <div
@@ -30,18 +38,34 @@ export default function SharedPageContentSection({
             : 'flex flex-col gap-4'
         }`}
       >
-        <FolderItem
-          isBookmark={isBookmark}
-          setIsBookmark={setIsBookmark}
-          item={{ id: '1', title: '폴더 이름' }}
-          view={view}
-        />
-        <LinkItem
-          isBookmark={isBookmark}
-          setIsBookmark={setIsBookmark}
-          item={{ id: '1', title: '링크 이름' }}
-          view={view}
-        />
+        {mergedList.map((item) => {
+          if ('folderId' in item) {
+            return (
+              <FolderItem
+                key={item.orderIndex}
+                isBookmark={item.isFavorite}
+                setIsBookmark={setIsBookmark}
+                item={{ id: item.folderId, title: item.folderName }}
+                view={view}
+              />
+            );
+          } else if ('linkId' in item) {
+            return (
+              <LinkItem
+                key={item.orderIndex}
+                isBookmark={item.isFavorite}
+                setIsBookmark={setIsBookmark}
+                item={{
+                  id: item.linkId,
+                  title: item.linkName,
+                  linkUrl: item.linkUrl,
+                }}
+                view={view}
+              />
+            );
+          }
+          return null;
+        })}
 
         {contextMenu && (
           <ContextMenu
