@@ -9,7 +9,7 @@ import { ProtectedRoute } from './guards/ProtectedRoute';
 import PersonalPage from '@/pages/PersonalPage';
 import BookmarkPage from '@/pages/BookmarkPage';
 import SharedPage from '@/pages/SharedPage';
-
+import FolderDetailPage from '@/pages/FolderDetailPage';
 const router = createBrowserRouter([
   {
     element: <Layout />,
@@ -20,12 +20,18 @@ const router = createBrowserRouter([
         children: [
           { path: '/', element: <PersonalPage /> },
           { path: '/personal', element: <PersonalPage /> },
+          { path: '/personal/folder/:folderId', element: <FolderDetailPage /> },
           { path: '/bookmarks', element: <BookmarkPage /> },
-          { path: '/shared/:pageId', element: <SharedPage /> },
+          {
+            path: '/shared/:pageId',
+            element: <SharedPage />,
+          },
+          {
+            path: '/shared/:pageId/folder/:folderId',
+            element: <FolderDetailPage />,
+          },
           // 이후 디렉토리에 따른 경로
-          // { path: '/personal/folder/:folderId', element: <PersonalPage /> },
-          // {
-          //   path: '/personal/bookmarks/folder/:folderId',
+          // { path: '/bookmarks/folder/:folderId',
           //   element: <BookmarkPage />,
           // },
           // {

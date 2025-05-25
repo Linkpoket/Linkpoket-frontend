@@ -17,14 +17,14 @@ export default function AddFolderModal({
   const [folderName, setFolderName] = useState('');
   const [folderDescription, setFolderDescription] = useState('');
   const [error, setError] = useState('');
-  const { pageId: id, commandType: type } = usePageStore();
+  const { pageId, commandType } = usePageStore();
   const { parentsFolderId } = useParentsFolderIdStore();
 
   console.log('현재 폴더 id', parentsFolderId);
 
   const isConfirmDisabled = !folderName;
 
-  const createFolderMutation = useCreateFolder({
+  const createFolderMutation = useCreateFolder(pageId, commandType, {
     onSuccess: () => {
       setFolderName('');
       setFolderDescription('');
@@ -46,11 +46,11 @@ export default function AddFolderModal({
 
     const requestBody = {
       baseRequest: {
-        pageId: id,
-        commandType: type,
+        pageId,
+        commandType,
       },
       folderName,
-      parentFolderId: parentsFolderId,
+      parentFolderId: parentsFolderId ?? 1,
       folderDescription,
     };
 

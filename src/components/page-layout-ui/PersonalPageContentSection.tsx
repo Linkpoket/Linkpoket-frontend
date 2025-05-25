@@ -69,7 +69,7 @@ export default function PersonalPageContentSection({
           if ('folderId' in item) {
             return (
               <FolderItem
-                key={item.orderIndex}
+                key={item.folderName}
                 isBookmark={item.isFavorite}
                 setIsBookmark={setIsBookmark}
                 item={{ id: item.folderId, title: item.folderName }}
@@ -79,14 +79,10 @@ export default function PersonalPageContentSection({
           } else if ('linkId' in item) {
             return (
               <LinkItem
-                key={item.orderIndex}
+                key={item.linkName}
                 isBookmark={item.isFavorite}
                 setIsBookmark={setIsBookmark}
-                item={{
-                  id: item.linkId,
-                  title: item.linkName,
-                  linkUrl: item.linkUrl,
-                }}
+                item={{ id: item.linkId, title: item.linkName }}
                 view={view}
               />
             );

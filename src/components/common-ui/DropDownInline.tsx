@@ -3,18 +3,16 @@ import Transfer from '@/assets/common-ui-assets/Transfer.svg?react';
 import Copy from '@/assets/common-ui-assets/Copy.svg?react';
 import Delete from '@/assets/common-ui-assets/Delete.svg?react';
 import { useClickOutside } from '@/hooks/useClickOutside';
-
+import useDeleteFolder from '@/hooks/mutations/useDeleteFolder';
+import { usePageStore } from '@/stores/pageStore';
 type DropDownInlineProps = {
-  id: string;
-  type: 'directory' | 'site';
+  id: number;
+  type: string;
   initialTitle: string;
   initialLink: string;
 
-  onDelete?: (id: string) => void;
-  onShare?: (id: string) => void;
-  onCopy?: (title: string) => void;
-  onTitleChange?: (id: string, title: string) => void;
-  onLinkChange?: (id: string, link: string) => void;
+  onTitleChange?: (id: number, title: string) => void;
+  onLinkChange?: (id: number, link: string) => void;
   className?: string;
   isDropDownInline: boolean;
   setIsDropDownInline: React.Dispatch<React.SetStateAction<boolean>>;
@@ -25,14 +23,13 @@ const DropDownInline = ({
   type,
   initialTitle = '',
   initialLink = '',
-  onDelete,
-  onShare,
-  onCopy,
+
   onTitleChange,
   onLinkChange,
   setIsDropDownInline,
   className,
 }: DropDownInlineProps) => {
+  const { pageId, commandType } = usePageStore();
   const [title, setTitle] = useState(initialTitle);
   const [link, setLink] = useState(initialLink);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -49,15 +46,28 @@ const DropDownInline = ({
     onLinkChange?.(id, value);
   };
 
+  const { mutate: deleteFolder } = useDeleteFolder(pageId, commandType);
+
+  const handleDelete = () => {
+    const requestBody = {
+      baseRequest: {
+        pageId,
+        commandType: 'DELETE',
+      },
+      folderId: id,
+    };
+    console.log('폴더 삭제 요청 데이터:', requestBody);
+    deleteFolder(requestBody);
+  };
+
   useClickOutside(dropdownRef, setIsDropDownInline);
 
-  // TODO : 삭제하기 disabled의 경우, auth가 추가되면 분기처리예정
   return (
     <div
       ref={dropdownRef}
       className={`border-gray-30 focus:bg-gray-30 focus:border-gray-30 bg-gray-0 inline-flex w-[214px] flex-col rounded-[10px] border p-[8px] text-[14px] font-[600] shadow ${className}`}
     >
-      {type === 'directory' && (
+      {type === 'folder' && (
         <div className="flex flex-col">
           <input
             value={title}
@@ -66,19 +76,19 @@ const DropDownInline = ({
             className="border-gray-30 rounded-lg border p-[8px] outline-none"
           />
           <button
-            onClick={() => onShare?.(id)}
+            onClick={() => console.log('전송')}
             className="flex cursor-pointer items-center gap-[10px] px-[8px] py-[11px]"
           >
             <Transfer width={18} height={18} /> 전송하기
           </button>
           <button
-            onClick={() => onCopy?.(title)}
+            onClick={() => console.log('복사')}
             className="flex cursor-pointer items-center gap-[10px] px-[8px] py-[11px]"
           >
             <Copy width={18} height={18} /> 복사하기
           </button>
           <button
-            onClick={() => onDelete?.(id)}
+            onClick={handleDelete}
             className="text-status-danger flex cursor-pointer items-center gap-[10px] px-[8px] py-[11px]"
           >
             <Delete width={18} height={18} /> 삭제하기
@@ -86,7 +96,7 @@ const DropDownInline = ({
         </div>
       )}
 
-      {type === 'site' && (
+      {type === 'link' && (
         <div className="flex flex-col">
           <div className="border-gray-30 flex flex-col overflow-hidden rounded-lg border">
             <input
@@ -103,13 +113,13 @@ const DropDownInline = ({
             />
           </div>
           <button
-            onClick={() => onShare?.(id)}
+            onClick={() => console.log('전송')}
             className="flex cursor-pointer items-center gap-[10px] p-[12px]"
           >
             <Transfer width={18} height={18} /> 전송하기
           </button>
           <button
-            onClick={() => onDelete?.(id)}
+            onClick={() => console.log('삭제')}
             className="text-status-danger flex cursor-pointer items-center gap-[10px] p-[12px]"
           >
             <Delete width={18} height={18} /> 삭제하기

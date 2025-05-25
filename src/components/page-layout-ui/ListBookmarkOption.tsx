@@ -3,15 +3,22 @@ import ActiveBookmarkIcon from '@/assets/common-ui-assets/ActiveBookmarkIcon.svg
 import Menu from '@/assets/widget-ui-assets/Menu.svg?react';
 import { useState } from 'react';
 import DropDownInline from '../common-ui/DropDownInline';
-
 interface ListBookmarkOptionInterface {
   isBookmark: boolean;
   setIsBookmark: React.Dispatch<React.SetStateAction<boolean>>;
+  item: {
+    id: number;
+    title: string;
+    linkUrl?: string;
+  };
+  type: string;
 }
 
 export default function ListBookMarkOption({
   isBookmark,
   setIsBookmark,
+  item,
+  type,
 }: ListBookmarkOptionInterface) {
   const [isDropDownInline, setIsDropDownInline] = useState(false);
 
@@ -44,10 +51,10 @@ export default function ListBookMarkOption({
       </button>
       {isDropDownInline && (
         <DropDownInline
-          id="1"
-          type="site"
-          initialTitle="타이틀"
-          initialLink="링크"
+          id={item.id}
+          type={type}
+          initialTitle={item.title}
+          initialLink={item.linkUrl ?? ''}
           className="absolute top-10 right-1 z-1"
           isDropDownInline={isDropDownInline}
           setIsDropDownInline={setIsDropDownInline}

@@ -9,7 +9,7 @@ import { useState } from 'react';
 import AddFolderModal from '../modal/folder/AddFolderModal';
 import AddLinkModal from '../modal/link/AddLinkModal';
 import { useCreateLink } from '@/hooks/mutations/useCreateLink';
-import { usePageStore } from '@/stores/pageStore';
+import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 
 export default function PageControllerSection({
   view,
@@ -18,6 +18,7 @@ export default function PageControllerSection({
   const [isFolderOpen, setIsFolderOpen] = useState(false);
   const [isLinkOpen, setIsLinkOpen] = useState(false);
   const pageId = usePageStore((state) => state.pageId);
+  const { parentsFolderId } = useParentsFolderIdStore();
 
   const { mutate: createLink } = useCreateLink({
     onSuccess: () => {
@@ -75,7 +76,7 @@ export default function PageControllerSection({
               },
               linkName,
               linkUrl,
-              directoryId: 1, // 실제 폴더 ID
+              directoryId: parentsFolderId ?? 1, // 실제 폴더 ID
               faviconUrl: `${linkUrl}/favicon.ico`,
             });
           }}
