@@ -1,33 +1,31 @@
-import { useState } from 'react';
 import Modal from '@/components/common-ui/Modal';
 import Status from '@/assets/common-ui-assets/Status.svg?react';
+import useDeleteFolder from '@/hooks/mutations/useDeleteFolder';
 
 const DeleteFolderModal = ({
   isOpen,
   onClose,
-  onSubmit,
   folderId,
+  pageId,
 }: {
   isOpen: boolean;
   onClose: () => void;
-  folderId: number | null;
-  onSubmit: (folderId: null | number) => Promise<void>;
+  folderId: number;
+  pageId: number;
 }) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { mutate: deleteFolder } = useDeleteFolder(pageId, 'EDIT');
 
-  const handleSubmit = async (folderId: number | null) => {
-    setIsSubmitting(true);
-
-    try {
-      console.log('삭제할 폴더 ID:', folderId);
-      await onSubmit(folderId);
-      onClose();
-    } catch (error) {
-      console.error('폴더 삭제 오류:', error);
-      // Todo 에러 로직 추가 필요
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleDelete = () => {
+    const requestBody = {
+      baseRequest: {
+        pageId,
+        commandType: 'EDIT',
+      },
+      folderId: folderId,
+    };
+    console.log('폴더 삭제 요청 데이터:', requestBody);
+    deleteFolder(requestBody);
+    onClose();
   };
 
   return (
@@ -44,12 +42,7 @@ const DeleteFolderModal = ({
 
       <Modal.Footer className="pt-0">
         <Modal.CancelButton />
-        <Modal.ConfirmButton
-          onClick={() => handleSubmit(folderId)}
-          disabled={isSubmitting}
-        >
-          삭제
-        </Modal.ConfirmButton>
+        <Modal.ConfirmButton onClick={handleDelete}>삭제</Modal.ConfirmButton>
       </Modal.Footer>
     </Modal>
   );

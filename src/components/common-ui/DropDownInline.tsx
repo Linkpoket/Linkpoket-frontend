@@ -5,6 +5,7 @@ import Delete from '@/assets/common-ui-assets/Delete.svg?react';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import useDeleteFolder from '@/hooks/mutations/useDeleteFolder';
 import { usePageStore } from '@/stores/pageStore';
+import DeleteFolderModal from '../modal/folder/DeleteFolderModal';
 type DropDownInlineProps = {
   id: number;
   type: string;
@@ -29,9 +30,10 @@ const DropDownInline = ({
   setIsDropDownInline,
   className,
 }: DropDownInlineProps) => {
-  const { pageId, commandType } = usePageStore();
+  const { pageId } = usePageStore();
   const [title, setTitle] = useState(initialTitle);
   const [link, setLink] = useState(initialLink);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,21 +48,11 @@ const DropDownInline = ({
     onLinkChange?.(id, value);
   };
 
-  const { mutate: deleteFolder } = useDeleteFolder(pageId, commandType);
-
-  const handleDelete = () => {
-    const requestBody = {
-      baseRequest: {
-        pageId,
-        commandType: 'EDIT',
-      },
-      folderId: id,
-    };
-    console.log('폴더 삭제 요청 데이터:', requestBody);
-    deleteFolder(requestBody);
+  const handleDeleteOpen = () => {
+    setIsDeleteOpen(true);
   };
 
-  useClickOutside(dropdownRef, setIsDropDownInline);
+  useClickOutside(dropdownRef, setIsDropDownInline, !isDeleteOpen);
 
   return (
     <div
@@ -88,11 +80,20 @@ const DropDownInline = ({
             <Copy width={18} height={18} /> 복사하기
           </button>
           <button
-            onClick={handleDelete}
+            onClick={handleDeleteOpen}
             className="text-status-danger flex cursor-pointer items-center gap-[10px] px-[8px] py-[11px]"
           >
             <Delete width={18} height={18} /> 삭제하기
           </button>
+
+          {isDeleteOpen && (
+            <DeleteFolderModal
+              isOpen={isDeleteOpen}
+              onClose={() => setIsDeleteOpen(false)}
+              folderId={id}
+              pageId={pageId}
+            />
+          )}
         </div>
       )}
 

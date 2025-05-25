@@ -2,9 +2,12 @@ import { useEffect } from 'react';
 
 export function useClickOutside<T extends HTMLElement>(
   ref: React.RefObject<T>,
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
+  enabled: boolean = true
 ) {
   useEffect(() => {
+    if (!enabled) return;
+
     if (!ref.current) return;
 
     const handleClickOutside = (e: MouseEvent) => {
@@ -18,7 +21,7 @@ export function useClickOutside<T extends HTMLElement>(
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  }, [ref, setIsOpen]);
+  }, [ref, setIsOpen, enabled]);
 }
 
 /* 
