@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, Outlet } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useMobile } from '@/hooks/useMobile';
 import { useFetchSelectedPage } from '@/hooks/queries/useFetchSelectedPage';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';

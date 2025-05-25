@@ -20,7 +20,7 @@ const router = createBrowserRouter([
         children: [
           { path: '/', element: <PersonalPage /> },
           { path: '/personal', element: <PersonalPage /> },
-          { path: '/personal/folder/:folderId', element: <FolderDetailPage /> },
+          { path: '/folder/:folderId', element: <FolderDetailPage /> },
           { path: '/bookmarks', element: <BookmarkPage /> },
           {
             path: '/shared/:pageId',

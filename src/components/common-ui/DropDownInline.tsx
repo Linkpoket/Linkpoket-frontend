@@ -52,7 +52,7 @@ const DropDownInline = ({
     const requestBody = {
       baseRequest: {
         pageId,
-        commandType: 'DELETE',
+        commandType: 'EDIT',
       },
       folderId: id,
     };

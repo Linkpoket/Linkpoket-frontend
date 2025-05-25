@@ -19,8 +19,12 @@ export default function SharedPageContentSection({
     setContextMenu({ x: e.clientX, y: e.clientY });
   };
 
-  const folderData = contentData?.directoryDetailRespons ?? [];
-  const linkData = contentData?.siteDetailResponses ?? [];
+  const folderData =
+    contentData?.directoryDetailRespons ??
+    contentData?.directoryDetailResponses ??
+    [];
+  const linkData =
+    contentData?.siteDetailResponses ?? contentData?.siteDetailResponses ?? [];
   const mergedList = [...folderData, ...linkData].sort(
     (a, b) => a.orderIndex - b.orderIndex
   );
