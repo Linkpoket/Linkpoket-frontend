@@ -52,6 +52,9 @@ export default function LinkItem({
         <ListBookmarkModal
           isBookmark={isBookmark}
           setIsBookmark={setIsBookmark}
+          itemId={item.id}
+          initialTitle={item.title}
+          initialLink={item.linkUrl}
         />
       </div>
     </div>
