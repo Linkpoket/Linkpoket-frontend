@@ -129,7 +129,7 @@ const ConfirmButton = ({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        `rounded-lg px-5 py-3 ${variantClasses[variant]}`,
+        `cursor-pointer rounded-lg px-5 py-3 ${variantClasses[variant]}`,
         className
       )}
     >
@@ -155,7 +155,7 @@ const CancelButton = ({
         onClose();
       }}
       className={cn(
-        'rounded-lg border border-[var(--color-gray-20)] px-5 py-3',
+        'cursor-pointer rounded-lg border border-[var(--color-gray-20)] px-5 py-3',
         className
       )}
     >

@@ -76,6 +76,8 @@ export default function SharedPageContentSection({
             x={contextMenu.x}
             y={contextMenu.y}
             onClose={() => setContextMenu(null)}
+            onAddFolder={() => {}}
+            onAddLink={() => {}}
           />
         )}
       </div>

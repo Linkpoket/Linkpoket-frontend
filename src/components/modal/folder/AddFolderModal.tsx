@@ -20,8 +20,6 @@ export default function AddFolderModal({
   const { pageId, commandType } = usePageStore();
   const { parentsFolderId } = useParentsFolderIdStore();
 
-  console.log('현재 폴더 id', parentsFolderId);
-
   const isConfirmDisabled = !folderName;
 
   const createFolderMutation = useCreateFolder(pageId, commandType, {

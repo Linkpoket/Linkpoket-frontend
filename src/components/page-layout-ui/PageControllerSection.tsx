@@ -34,13 +34,13 @@ export default function PageControllerSection({
   const { mutate: deleteLinkMutate } = useDeleteLink();
 
   const deleteHandler = useCallback(
-    (id: string) => {
+    (id: number) => {
       deleteLinkMutate({
         baseRequest: {
           pageId,
           commandType: 'EDIT',
         },
-        linkId: Number(id),
+        linkId: id,
       });
     },
     [deleteLinkMutate, pageId]

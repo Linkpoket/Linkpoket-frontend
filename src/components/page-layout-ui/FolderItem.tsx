@@ -50,7 +50,8 @@ export default function FolderItem({
         <ListBookmarkModal
           isBookmark={isBookmark}
           setIsBookmark={setIsBookmark}
-          item={item}
+          itemId={item.id}
+          initialTitle={item.title}
           type={type}
         />
       </div>

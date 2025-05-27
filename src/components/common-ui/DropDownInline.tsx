@@ -6,6 +6,7 @@ import { useClickOutside } from '@/hooks/useClickOutside';
 import { useLinkActionStore } from '@/stores/linkActionStore';
 import { useUpdateLink } from '@/hooks/mutations/useUpdateLink';
 import { usePageStore } from '@/stores/pageStore';
+import DeleteFolderModal from '../modal/folder/DeleteFolderModal';
 
 type DropDownInlineProps = {
   id: number;
@@ -31,7 +32,6 @@ const DropDownInline = ({
   setIsDropDownInline,
   className,
 }: DropDownInlineProps) => {
-  const { pageId } = usePageStore();
   const [title, setTitle] = useState(initialTitle);
   const [link, setLink] = useState(initialLink);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
