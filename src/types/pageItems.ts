@@ -1,3 +1,5 @@
+import { PageItemSearchResponse } from './search';
+
 export type ViewType = 'grid' | 'list';
 
 export interface ContentData {
@@ -27,9 +29,12 @@ export interface PageItemProps {
 export interface PageContentSectionProps {
   view: ViewType;
   contentData?: any;
-  pageDescription?: string;
+  searchResult?: PageItemSearchResponse;
 }
 
-export interface PageControllerSectionProps extends PageContentSectionProps {
+export interface PageControllerSectionProps {
+  view: ViewType;
   setView: React.Dispatch<React.SetStateAction<'list' | 'grid'>>;
+  searchKeyword: string;
+  setSearchKeyword: React.Dispatch<React.SetStateAction<string>>;
 }

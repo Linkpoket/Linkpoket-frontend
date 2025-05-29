@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/utils/cn';
 import Close from '@/assets/common-ui-assets/Close.svg?react';
@@ -67,6 +67,10 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
     ref
   ) => {
     const [inputValue, setInputValue] = useState(props.value || '');
+
+    useEffect(() => {
+      setInputValue(props.value || '');
+    }, [props.value]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setInputValue(e.target.value);

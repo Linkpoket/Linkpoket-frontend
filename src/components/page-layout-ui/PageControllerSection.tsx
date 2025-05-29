@@ -17,6 +17,8 @@ import { useModalStore } from '@/stores/modalStore';
 export default function PageControllerSection({
   view,
   setView,
+  searchKeyword,
+  setSearchKeyword,
 }: PageControllerSectionProps) {
   const {
     isLinkModalOpen,
@@ -27,6 +29,7 @@ export default function PageControllerSection({
     closeFolderModal,
   } = useModalStore();
   const pageId = usePageStore((state) => state.pageId);
+
   const setDeleteLink = useLinkActionStore((state) => state.setDeleteLink);
   const { parentsFolderId } = useParentsFolderIdStore();
 
@@ -73,7 +76,13 @@ export default function PageControllerSection({
         </Button>
       </div>
       <div className="flex gap-[12px]">
-        <SearchBar size="fixed" placeholder="폴더, 링크 검색" />
+        <SearchBar
+          size="fixed"
+          placeholder="폴더, 링크 검색"
+          value={searchKeyword}
+          onChange={(e) => setSearchKeyword(e.target.value)}
+          onClear={() => setSearchKeyword('')}
+        />
         <PageSortBox />
         <div className="hidden lg:block">
           <ViewToggle selectedView={view} onChange={setView} />

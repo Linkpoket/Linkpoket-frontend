@@ -8,6 +8,7 @@ import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 import useFetchSharedPageDashboard from '@/hooks/queries/useFetchSharedPageDashboard';
 import useFetchSharedPageMember from '@/hooks/queries/useFetchSharedPageMember';
+import { usePageSearch } from '@/hooks/usePageSearch';
 
 export default function SharedPage() {
   const [view, setView] = useState<'grid' | 'list'>('grid');
@@ -27,6 +28,10 @@ export default function SharedPage() {
   if (pageId) {
     resolvedPageId = parseInt(pageId);
   }
+  const { searchKeyword, setSearchKeyword, searchResult } = usePageSearch(
+    resolvedPageId,
+    'TITLE'
+  );
 
   // 클릭해서 들어간 페이지 정보 전역 변수로tj 저장
   const { setPageInfo } = usePageStore();
@@ -78,12 +83,18 @@ export default function SharedPage() {
       <div className="border-b-gray-30 mb-[40px] w-full border-b" />
 
       {/* CONTROLLER SECTION*/}
-      <PageControllerSection view={view} setView={setView} />
+      <PageControllerSection
+        view={view}
+        setView={setView}
+        searchKeyword={searchKeyword}
+        setSearchKeyword={setSearchKeyword}
+      />
 
       {/*CONTENT SECTION*/}
       <SharedPageContentSection
         view={view}
         contentData={selectedPageQuery.data?.data}
+        searchResult={searchResult}
       />
     </div>
   );
