@@ -4,6 +4,8 @@ import InactiveBookmarkIcon from '@/assets/common-ui-assets/FolderBookmarkInacti
 import ActiveBookmarkIcon from '@/assets/common-ui-assets/FolderBookmarkActive.svg?react';
 import { PageItemProps } from '@/types/pageItems';
 import { useNavigate } from 'react-router-dom';
+import DropDownInline from '../common-ui/DropDownInline';
+import { useModalStore } from '@/stores/modalStore';
 
 export default function FolderItem({
   item,
@@ -14,15 +16,27 @@ export default function FolderItem({
   const isGrid = view === 'grid';
   const type = 'folder';
   const navigate = useNavigate();
+  const {
+    isFolderContextMenuOpen,
+    openFolderContextMenu,
+    closeFolderContextMenu,
+  } = useModalStore();
 
   const handleDoubleClick = () => {
     navigate(`folder/${item.id}`);
   };
 
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    openFolderContextMenu();
+  };
+
   return isGrid ? (
     <div
-      className="bg-gray-0 hover:bg-gray-5 active:bg-gray-5 relative inline-flex w-full cursor-pointer flex-col items-center gap-2 rounded-[8px] p-[12px]"
+      className="folder-item bg-gray-0 hover:bg-gray-5 active:bg-gray-5 relative inline-flex w-full cursor-pointer flex-col items-center gap-2 rounded-[8px] p-[12px]"
       onDoubleClick={handleDoubleClick}
+      onContextMenu={handleContextMenu}
     >
       <FolderItemIcon />
       <button
@@ -34,6 +48,16 @@ export default function FolderItem({
       <span className="text-gray-90 text-center text-[14px] font-[400]">
         {item.title}
       </span>
+      {isFolderContextMenuOpen && (
+        <DropDownInline
+          id={item.id}
+          type={type}
+          initialTitle={item.title}
+          isDropDownInline={isFolderContextMenuOpen}
+          setIsDropDownInline={closeFolderContextMenu}
+          className="absolute top-32 left-2"
+        />
+      )}
     </div>
   ) : (
     <div

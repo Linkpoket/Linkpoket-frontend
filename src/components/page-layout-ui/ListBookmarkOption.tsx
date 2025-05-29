@@ -20,7 +20,6 @@ export default function ListBookMarkOption({
   initialTitle,
   initialLink,
   type,
-  pageDescription,
 }: ListBookmarkOptionInterface) {
   const [isDropDownInline, setIsDropDownInline] = useState(false);
 
@@ -60,7 +59,6 @@ export default function ListBookMarkOption({
           className="absolute top-10 right-1 z-1"
           isDropDownInline={isDropDownInline}
           setIsDropDownInline={setIsDropDownInline}
-          pageDescription={pageDescription ?? ''}
         />
       )}
     </div>

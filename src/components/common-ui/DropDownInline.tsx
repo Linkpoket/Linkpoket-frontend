@@ -13,7 +13,7 @@ type DropDownInlineProps = {
   id: number;
   type: string;
   initialTitle: string;
-  initialLink: string;
+  initialLink?: string;
   onTitleChange?: (id: number, title: string) => void;
   onLinkChange?: (id: number, link: string) => void;
   className?: string;
@@ -70,7 +70,7 @@ const DropDownInline = ({
   return (
     <div
       ref={dropdownRef}
-      className={`border-gray-30 focus:bg-gray-30 focus:border-gray-30 bg-gray-0 inline-flex w-[214px] flex-col rounded-[10px] border p-[8px] text-[14px] font-[600] shadow ${className}`}
+      className={`border-gray-30 focus:bg-gray-30 focus:border-gray-30 bg-gray-0 z-50 inline-flex w-[214px] flex-col rounded-[10px] border p-[8px] text-[14px] font-[600] shadow ${className}`}
     >
       {type === 'folder' && (
         <div className="flex flex-col">
