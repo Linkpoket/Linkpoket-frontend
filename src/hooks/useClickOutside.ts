@@ -10,18 +10,21 @@ export function useClickOutside<T extends HTMLElement>(
 
     if (!ref.current) return;
 
-    const handleClickOutside = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
+      if (
+        ref.current &&
+        !ref.current.contains(target) &&
+        !ignoreRef?.current?.contains(target)
+      ) {
         setIsOpen(false);
       }
     };
 
-    document.addEventListener('click', handleClickOutside, true);
-
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener('click', handleClickOutside, true);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [ref, setIsOpen, enabled]);
+
 }
 
 /* 

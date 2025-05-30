@@ -52,6 +52,7 @@ export default function FolderItem({
           setIsBookmark={setIsBookmark}
           itemId={item.id}
           initialTitle={item.title}
+          item={item}
           type={type}
         />
       </div>

@@ -1,26 +1,25 @@
-import { useState } from 'react';
+import { useState, forwardRef } from 'react';
 import { Input } from '@/components/common-ui/Input';
 import Modal from '@/components/common-ui/Modal';
 import FolderItemIcon from '@/assets/common-ui-assets/FolderItemIcon.svg?react';
 import { ToastCustom } from '@/components/common-ui/ToastCustom';
 
-const FolderTransferModal = ({
-  isOpen,
-  onClose,
-  folderName,
-  onSubmit,
-}: {
+type Props = {
   isOpen: boolean;
   onClose: () => void;
   folderName: string;
-  onSubmit: (email: string) => Promise<void>;
-}) => {
+  onSubmit: (email: string, directoryId: number) => Promise<void>;
+  directoryId: number;
+};
+
+const FolderTransferModal = forwardRef<HTMLDivElement, Props>((props, ref) => {
+  const { isOpen, onClose, folderName, onSubmit, directoryId } = props;
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async () => {
     if (!email) return;
-    // 이메일 형식 검사
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       ToastCustom.error('유효한 이메일 주소를 입력해 주세요.');
@@ -29,7 +28,7 @@ const FolderTransferModal = ({
 
     setIsSubmitting(true);
     try {
-      await onSubmit(email);
+      await onSubmit(email, directoryId);
       setEmail('');
       ToastCustom.success('폴더를 성공적으로 전송했습니다.');
       onClose();
@@ -43,42 +42,43 @@ const FolderTransferModal = ({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <Modal.Header>폴더 전송</Modal.Header>
-
-      <Modal.Body className="py-4">
-        <div>
-          <div className="text-gray-90 mb-4 flex items-center px-[8px] py-[11px] text-sm font-semibold">
-            <FolderItemIcon className="mr-[10px] h-[18px] w-[18px]" />
-            {folderName}
-          </div>
-
+      <div ref={ref}>
+        <Modal.Header>폴더 전송</Modal.Header>
+        <Modal.Body className="py-4">
           <div>
-            <Input
-              label="받는 분 이메일"
-              placeholder="받는 분의 이메일 주소를 입력해 주세요"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              isModal={true}
-              inputSize="medium"
-              containerClassName="w-full"
-              labelClassName="font-bold leading-[140%]"
-            />
-          </div>
-        </div>
-      </Modal.Body>
+            <div className="text-gray-90 mb-4 flex items-center px-[8px] py-[11px] text-sm font-semibold">
+              <FolderItemIcon className="mr-[10px] h-[18px] w-[18px]" />
+              {folderName}
+            </div>
 
-      <Modal.Footer className="pt-0">
-        <Modal.CancelButton onClick={() => setEmail('')} />
-        <Modal.ConfirmButton
-          onClick={handleSubmit}
-          disabled={!email || isSubmitting}
-          variant={email ? 'primary' : 'default'}
-        >
-          {isSubmitting ? '전송 중...' : '전송'}
-        </Modal.ConfirmButton>
-      </Modal.Footer>
+            <div>
+              <Input
+                label="받는 분 이메일"
+                placeholder="받는 분의 이메일 주소를 입력해 주세요"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                isModal={true}
+                inputSize="medium"
+                containerClassName="w-full"
+                labelClassName="font-bold leading-[140%]"
+              />
+            </div>
+          </div>
+        </Modal.Body>
+
+        <Modal.Footer className="pt-0">
+          <Modal.CancelButton onClick={() => setEmail('')} />
+          <Modal.ConfirmButton
+            onClick={handleSubmit}
+            disabled={!email || isSubmitting}
+            variant={email ? 'primary' : 'default'}
+          >
+            {isSubmitting ? '전송 중...' : '전송'}
+          </Modal.ConfirmButton>
+        </Modal.Footer>
+      </div>
     </Modal>
   );
-};
+});
 
 export default FolderTransferModal;

@@ -13,6 +13,8 @@ import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useDeleteLink } from '@/hooks/mutations/useDeleteLink';
 import { useLinkActionStore } from '@/stores/linkActionStore';
 import { useModalStore } from '@/stores/modalStore';
+import { useTransferFolder } from '@/hooks/mutations/useTransferFolder';
+import { useTransferActionStore } from '@/stores/transferActionStore';
 
 export default function PageControllerSection({
   view,
@@ -29,13 +31,15 @@ export default function PageControllerSection({
     closeFolderModal,
   } = useModalStore();
   const pageId = usePageStore((state) => state.pageId);
-
   const setDeleteLink = useLinkActionStore((state) => state.setDeleteLink);
+  const setTransferFolder = useTransferActionStore(
+    (state) => state.setTransferFolder
+  );
   const { parentsFolderId } = useParentsFolderIdStore();
 
   const { mutate: createLink } = useCreateLink();
-  const { mutate: deleteLinkMutate } = useDeleteLink();
 
+  const { mutate: deleteLinkMutate } = useDeleteLink();
   const deleteHandler = useCallback(
     (id: number) => {
       deleteLinkMutate({
@@ -48,10 +52,27 @@ export default function PageControllerSection({
     },
     [deleteLinkMutate, pageId]
   );
-
   useEffect(() => {
     setDeleteLink(deleteHandler);
   }, [setDeleteLink, deleteHandler]);
+
+  const { mutate: transferFolder } = useTransferFolder();
+  const transferHandler = useCallback(
+    (receiverEmail: string, directoryId: number) => {
+      transferFolder({
+        baseRequest: {
+          pageId,
+          commandType: 'DIRECTORY_TRANSMISSION',
+        },
+        receiverEmail,
+        directoryId,
+      });
+    },
+    [transferFolder, pageId]
+  );
+  useEffect(() => {
+    setTransferFolder(transferHandler);
+  }, [setTransferFolder, transferHandler]);
 
   return (
     <div className="flex flex-col justify-between gap-[16px] px-[64px] xl:flex-row xl:gap-0">

@@ -7,6 +7,9 @@ type ModalStore = {
   isFolderModalOpen: boolean;
   openFolderModal: () => void;
   closeFolderModal: () => void;
+  isTransferFolderModalOpen: boolean;
+  openTransferFolderModal: () => void;
+  closeTransferFolderModal: () => void;
 };
 
 export const useModalStore = create<ModalStore>((set) => ({
@@ -16,4 +19,7 @@ export const useModalStore = create<ModalStore>((set) => ({
   isFolderModalOpen: false,
   openFolderModal: () => set({ isFolderModalOpen: true }),
   closeFolderModal: () => set({ isFolderModalOpen: false }),
+  isTransferFolderModalOpen: false,
+  openTransferFolderModal: () => set({ isTransferFolderModalOpen: true }),
+  closeTransferFolderModal: () => set({ isTransferFolderModalOpen: false }),
 }));

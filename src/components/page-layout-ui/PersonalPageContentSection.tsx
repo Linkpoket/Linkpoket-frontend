@@ -58,7 +58,10 @@ export default function PersonalPageContentSection({
         ...(searchResult.siteSimpleResponses ?? []),
       ].map((item, index) => ({
         ...item,
-        orderIndex: index, // orderIndex는 없기 때문에 임의 부여
+        orderIndex:
+          'orderIndex' in item && typeof item.orderIndex === 'number'
+            ? item.orderIndex
+            : index, // orderIndex가 없을 때만 index로 대체
       }))
     : [...folderData, ...linkData].sort((a, b) => a.orderIndex - b.orderIndex);
 
