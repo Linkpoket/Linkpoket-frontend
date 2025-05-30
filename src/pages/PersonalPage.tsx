@@ -45,6 +45,7 @@ export default function PersonalPage() {
       <PageHeaderSection
         pageTitle={pageDetails?.pageTitle}
         pageDescription={pageDetails?.pageDescription}
+        folderId={pageDetails?.rootFolderId}
       />
 
       {/* Boundary line */}

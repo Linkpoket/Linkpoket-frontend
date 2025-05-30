@@ -36,6 +36,8 @@ export default function PersonalPageContentSection({
     commandType: 'VIEW',
   });
 
+  console.log('선택한 페이지 데이터:', selectedPageQuery.data);
+
   useEffect(() => {
     setPageInfo(resolvedPageId, 'VIEW');
     setParentsFolderId(selectedPageQuery.data?.data.parentsFolderId);
@@ -94,11 +96,7 @@ export default function PersonalPageContentSection({
                 key={`link-${item.linkId}`}
                 isBookmark={item.isFavorite}
                 setIsBookmark={setIsBookmark}
-                item={{
-                  id: item.linkId,
-                  title: item.linkName,
-                  linkUrl: item.linkUrl,
-                }}
+                item={{ id: item.linkId, title: item.linkName }}
                 view={view}
               />
             );

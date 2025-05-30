@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 
 type LinkActionStore = {
-  deleteLink: (id: string) => void;
-  setDeleteLink: (fn: (id: string) => void) => void;
+  deleteLink: (id: number) => void;
+  setDeleteLink: (fn: (id: number) => void) => void;
 };
 
 export const useLinkActionStore = create<LinkActionStore>((set) => ({

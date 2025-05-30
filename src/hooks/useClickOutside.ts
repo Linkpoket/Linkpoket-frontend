@@ -3,11 +3,12 @@ import { useEffect } from 'react';
 export function useClickOutside<T extends HTMLElement>(
   ref: React.RefObject<T>,
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
-  ignoreRef?: React.RefObject<HTMLElement>
+  enabled: boolean = true
 ) {
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node;
+    if (!enabled) return;
+
+    if (!ref.current) return;
 
       if (
         ref.current &&
@@ -22,7 +23,8 @@ export function useClickOutside<T extends HTMLElement>(
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [ref, setIsOpen, ignoreRef]);
+  }, [ref, setIsOpen, enabled]);
+
 }
 
 /* 

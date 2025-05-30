@@ -11,6 +11,7 @@ export default function LinkItem({
   setIsBookmark,
 }: PageItemProps) {
   const isGrid = view === 'grid';
+  const type = 'link';
 
   const handleDoubleClick = () => {
     if ('linkUrl' in item) {
@@ -56,6 +57,7 @@ export default function LinkItem({
           initialTitle={item.title}
           initialLink={item.linkUrl}
           item={item}
+          type={type}
         />
       </div>
     </div>

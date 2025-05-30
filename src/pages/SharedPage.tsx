@@ -77,6 +77,7 @@ export default function SharedPage() {
       <PageHeaderSection
         pageTitle={selectedPageQuery.data?.data.pageTitle}
         pageDescription={selectedPageQuery.data?.data.pageDescription}
+        folderId={selectedPageQuery.data?.data.rootFolderId}
       />
 
       {/* Boundary line */}
