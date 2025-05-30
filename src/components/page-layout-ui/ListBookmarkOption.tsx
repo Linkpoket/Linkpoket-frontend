@@ -25,11 +25,10 @@ export default function ListBookMarkOption({
   itemId,
   initialTitle,
   initialLink,
-  type,
   pageDescription,
 }: ListBookmarkOptionInterface) {
   const [isDropDownInline, setIsDropDownInline] = useState(false);
-  const isDirectory = item.linkUrl ? 'site' : 'directory';
+  const isDirectory = item.linkUrl ? 'link' : 'directory';
 
   const handleBookmark = () => {
     setIsBookmark((prev) => !prev);

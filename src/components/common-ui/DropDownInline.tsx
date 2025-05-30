@@ -35,6 +35,8 @@ const DropDownInline = ({
   setIsDropDownInline,
   className,
 }: DropDownInlineProps) => {
+  console.log('DropDownInline 렌더됨?', id, initialTitle);
+
   const [title, setTitle] = useState(initialTitle);
 
   const [link, setLink] = useState(initialLink);
@@ -47,9 +49,9 @@ const DropDownInline = ({
 
   const { isTransferFolderModalOpen, closeTransferFolderModal } =
     useModalStore();
-  
+
   const transferFolder = useTransferActionStore((s) => s.transferFolder);
-  
+
   const isModifiedLink = title !== initialTitle || link !== initialLink;
   const isModifiedFolder = title !== initialTitle;
 
@@ -70,7 +72,6 @@ const DropDownInline = ({
     onLinkChange?.(id, value);
   };
 
-
   const modalRef = useRef<HTMLDivElement>(null);
 
   const handleDeleteOpen = () => {
@@ -84,7 +85,7 @@ const DropDownInline = ({
       ref={dropdownRef}
       className={`border-gray-30 focus:bg-gray-30 focus:border-gray-30 bg-gray-0 inline-flex w-[214px] flex-col rounded-[10px] border p-[8px] text-[14px] font-[600] shadow ${className}`}
     >
-      {type === 'folder' && (
+      {type === 'directory' && (
         <div className="flex flex-col">
           <input
             value={title}

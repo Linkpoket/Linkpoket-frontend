@@ -96,7 +96,11 @@ export default function PersonalPageContentSection({
                 key={`link-${item.linkId}`}
                 isBookmark={item.isFavorite}
                 setIsBookmark={setIsBookmark}
-                item={{ id: item.linkId, title: item.linkName }}
+                item={{
+                  id: item.linkId,
+                  title: item.linkName,
+                  linkUrl: item.linkUrl,
+                }}
                 view={view}
               />
             );
