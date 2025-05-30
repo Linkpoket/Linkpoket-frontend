@@ -10,8 +10,6 @@ import AddFolderModal from '../modal/folder/AddFolderModal';
 import AddLinkModal from '../modal/link/AddLinkModal';
 import { useCreateLink } from '@/hooks/mutations/useCreateLink';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
-import { useDeleteLink } from '@/hooks/mutations/useDeleteLink';
-import { useLinkActionStore } from '@/stores/linkActionStore';
 import { useModalStore } from '@/stores/modalStore';
 import { useTransferFolder } from '@/hooks/mutations/useTransferFolder';
 import { useTransferActionStore } from '@/stores/transferActionStore';
@@ -31,30 +29,12 @@ export default function PageControllerSection({
     closeFolderModal,
   } = useModalStore();
   const pageId = usePageStore((state) => state.pageId);
-  const setDeleteLink = useLinkActionStore((state) => state.setDeleteLink);
   const setTransferFolder = useTransferActionStore(
     (state) => state.setTransferFolder
   );
   const { parentsFolderId } = useParentsFolderIdStore();
 
   const { mutate: createLink } = useCreateLink();
-
-  const { mutate: deleteLinkMutate } = useDeleteLink();
-  const deleteHandler = useCallback(
-    (id: number) => {
-      deleteLinkMutate({
-        baseRequest: {
-          pageId,
-          commandType: 'EDIT',
-        },
-        linkId: id,
-      });
-    },
-    [deleteLinkMutate, pageId]
-  );
-  useEffect(() => {
-    setDeleteLink(deleteHandler);
-  }, [setDeleteLink, deleteHandler]);
 
   const { mutate: transferFolder } = useTransferFolder();
   const transferHandler = useCallback(

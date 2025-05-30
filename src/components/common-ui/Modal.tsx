@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useEffect, useRef } from 'react';
+import React, {
+  createContext,
+  forwardRef,
+  useContext,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/utils/cn';
 
@@ -12,18 +19,18 @@ const ModalContext = createContext<{
 });
 
 // 기본 모달 컴포넌트
-const Modal = ({
-  children,
-  isOpen,
-  onClose,
-  className,
-}: {
-  children: React.ReactNode;
-  isOpen: boolean;
-  onClose: () => void;
-  className?: string;
-}) => {
+const BaseModal = forwardRef<
+  HTMLDivElement,
+  {
+    children: React.ReactNode;
+    isOpen: boolean;
+    onClose: () => void;
+    className?: string;
+  }
+>(({ children, isOpen, onClose, className }, ref) => {
   const modalRef = useRef<HTMLDivElement>(null);
+
+  useImperativeHandle(ref, () => modalRef.current!, []);
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -33,7 +40,6 @@ const Modal = ({
     };
 
     document.addEventListener('click', handleClick, true);
-
     return () => document.removeEventListener('click', handleClick, true);
   }, [onClose]);
 
@@ -55,7 +61,7 @@ const Modal = ({
     </ModalContext.Provider>,
     document.body
   );
-};
+});
 
 // 헤더 컴포넌트
 const Header = ({
@@ -164,10 +170,12 @@ const CancelButton = ({
   );
 };
 
-Modal.Header = Header;
-Modal.Body = Body;
-Modal.Footer = Footer;
-Modal.ConfirmButton = ConfirmButton;
-Modal.CancelButton = CancelButton;
+const Modal = Object.assign(BaseModal, {
+  Header,
+  Body,
+  Footer,
+  ConfirmButton,
+  CancelButton,
+});
 
 export default Modal;

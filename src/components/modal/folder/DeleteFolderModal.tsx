@@ -1,18 +1,17 @@
 import Modal from '@/components/common-ui/Modal';
 import Status from '@/assets/common-ui-assets/Status.svg?react';
 import useDeleteFolder from '@/hooks/mutations/useDeleteFolder';
+import { forwardRef } from 'react';
 
-const DeleteFolderModal = ({
-  isOpen,
-  onClose,
-  folderId,
-  pageId,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-  folderId: number;
-  pageId: number;
-}) => {
+const DeleteFolderModal = forwardRef<
+  HTMLDivElement,
+  {
+    isOpen: boolean;
+    onClose: () => void;
+    folderId: number;
+    pageId: number;
+  }
+>(({ isOpen, onClose, folderId, pageId }, ref) => {
   const { mutate: deleteFolder } = useDeleteFolder(pageId);
 
   const handleDelete = () => {
@@ -29,7 +28,12 @@ const DeleteFolderModal = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} className="p-4 md:max-w-[544px]">
+    <Modal
+      ref={ref}
+      isOpen={isOpen}
+      onClose={onClose}
+      className="p-4 md:max-w-[544px]"
+    >
       <Modal.Header className="border-none text-[22px] font-bold">
         <div className="flex items-center">
           <Status className="mr-[10px] py-[2.5px]" />
@@ -46,6 +50,6 @@ const DeleteFolderModal = ({
       </Modal.Footer>
     </Modal>
   );
-};
+});
 
 export default DeleteFolderModal;

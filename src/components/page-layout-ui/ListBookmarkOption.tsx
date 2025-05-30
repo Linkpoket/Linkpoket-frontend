@@ -15,20 +15,17 @@ interface ListBookmarkOptionInterface {
   initialTitle: string;
   initialLink?: string;
   type: string;
-  pageDescription?: string;
 }
 
 export default function ListBookMarkOption({
   isBookmark,
   setIsBookmark,
-  item,
   itemId,
   initialTitle,
   initialLink,
-  pageDescription,
+  type,
 }: ListBookmarkOptionInterface) {
   const [isDropDownInline, setIsDropDownInline] = useState(false);
-  const isDirectory = item.linkUrl ? 'link' : 'directory';
 
   const handleBookmark = () => {
     setIsBookmark((prev) => !prev);
@@ -60,13 +57,12 @@ export default function ListBookMarkOption({
       {isDropDownInline && (
         <DropDownInline
           id={itemId}
-          type={isDirectory}
+          type={type}
           initialTitle={initialTitle}
           initialLink={initialLink ?? ''}
           className="absolute top-10 right-1 z-1"
           isDropDownInline={isDropDownInline}
           setIsDropDownInline={setIsDropDownInline}
-          pageDescription={pageDescription ?? ''}
         />
       )}
     </div>

@@ -2,15 +2,15 @@ import { useRef, useState } from 'react';
 import Transfer from '@/assets/common-ui-assets/Transfer.svg?react';
 import Copy from '@/assets/common-ui-assets/Copy.svg?react';
 import Delete from '@/assets/common-ui-assets/Delete.svg?react';
-import { useClickOutside } from '@/hooks/useClickOutside';
-import { useLinkActionStore } from '@/stores/linkActionStore';
 import { useUpdateLink } from '@/hooks/mutations/useUpdateLink';
 import { usePageStore } from '@/stores/pageStore';
 import { useModalStore } from '@/stores/modalStore';
 import FolderTransferModal from '../modal/folder/FolderTransferModal';
 import { useTransferActionStore } from '@/stores/transferActionStore';
 import DeleteFolderModal from '../modal/folder/DeleteFolderModal';
+import DeleteLinkModal from '../modal/link/DeleteLinkModal';
 import useUpdateFolder from '@/hooks/mutations/useUpdateFolder';
+import { useClickOutsideMultiple } from '@/hooks/useClickOutsideMultiple';
 
 type DropDownInlineProps = {
   id: number;
@@ -35,17 +35,13 @@ const DropDownInline = ({
   setIsDropDownInline,
   className,
 }: DropDownInlineProps) => {
-  console.log('DropDownInline 렌더됨?', id, initialTitle);
-
   const [title, setTitle] = useState(initialTitle);
-
   const [link, setLink] = useState(initialLink);
 
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isFolderDeleteOpen, setIsFolderDeleteOpen] = useState(false);
+  const [isLinkDeleteOpen, setIsLinkDeleteOpen] = useState(false);
 
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const { openTransferFolderModal } = useModalStore();
-  const deleteLink = useLinkActionStore((state) => state.deleteLink);
 
   const { isTransferFolderModalOpen, closeTransferFolderModal } =
     useModalStore();
@@ -57,7 +53,7 @@ const DropDownInline = ({
 
   const pageId = usePageStore((state) => state.pageId);
 
-  const { mutate } = useUpdateLink();
+  const { mutate: mutateLink } = useUpdateLink();
   const { mutate: mutateFolder } = useUpdateFolder(pageId);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,20 +68,34 @@ const DropDownInline = ({
     onLinkChange?.(id, value);
   };
 
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  const handleDeleteOpen = () => {
-    setIsDeleteOpen(true);
+  const handleFolderDeleteOpen = () => {
+    setIsFolderDeleteOpen(true);
   };
 
-  useClickOutside(dropdownRef, setIsDropDownInline, !isDeleteOpen);
+  const handleLinkDeleteOpen = () => {
+    setIsLinkDeleteOpen(true);
+  };
+
+  const isAnyModalOpen =
+    isFolderDeleteOpen || isLinkDeleteOpen || isTransferFolderModalOpen;
+
+  const dropdownRef = useRef(null);
+  const folderModalRef = useRef(null);
+  const linkModalRef = useRef(null);
+  const transferModalRef = useRef(null);
+
+  useClickOutsideMultiple(
+    [dropdownRef, folderModalRef, linkModalRef, transferModalRef],
+    setIsDropDownInline,
+    !isAnyModalOpen
+  );
 
   return (
     <div
       ref={dropdownRef}
       className={`border-gray-30 focus:bg-gray-30 focus:border-gray-30 bg-gray-0 inline-flex w-[214px] flex-col rounded-[10px] border p-[8px] text-[14px] font-[600] shadow ${className}`}
     >
-      {type === 'directory' && (
+      {type === 'folder' && (
         <div className="flex flex-col">
           <input
             value={title}
@@ -137,16 +147,17 @@ const DropDownInline = ({
             <Copy width={18} height={18} /> 복사하기
           </button>
           <button
-            onClick={handleDeleteOpen}
+            onClick={handleFolderDeleteOpen}
             className="text-status-danger flex cursor-pointer items-center gap-[10px] px-[8px] py-[11px]"
           >
             <Delete width={18} height={18} /> 삭제하기
           </button>
 
-          {isDeleteOpen && (
+          {isFolderDeleteOpen && (
             <DeleteFolderModal
-              isOpen={isDeleteOpen}
-              onClose={() => setIsDeleteOpen(false)}
+              ref={folderModalRef}
+              isOpen={isFolderDeleteOpen}
+              onClose={() => setIsFolderDeleteOpen(false)}
               folderId={id}
               pageId={pageId}
             />
@@ -173,7 +184,7 @@ const DropDownInline = ({
           {isModifiedLink && (
             <button
               onClick={() => {
-                mutate(
+                mutateLink(
                   {
                     baseRequest: {
                       pageId,
@@ -206,15 +217,24 @@ const DropDownInline = ({
             <Transfer width={18} height={18} /> 전송하기
           </button>
           <button
-            onClick={() => deleteLink(id)}
+            onClick={() => handleLinkDeleteOpen()}
             className="text-status-danger flex cursor-pointer items-center gap-[10px] p-[12px]"
           >
             <Delete width={18} height={18} /> 삭제하기
           </button>
+          {isLinkDeleteOpen && (
+            <DeleteLinkModal
+              ref={linkModalRef}
+              isOpen={isLinkDeleteOpen}
+              onClose={() => setIsLinkDeleteOpen(false)}
+              linkId={id}
+              pageId={pageId}
+            />
+          )}
         </div>
       )}
       <FolderTransferModal
-        ref={modalRef}
+        ref={transferModalRef}
         isOpen={isTransferFolderModalOpen}
         onClose={closeTransferFolderModal}
         directoryId={Number(id)}
