@@ -80,6 +80,7 @@ export default function LinkItem({
           itemId={item.id}
           initialTitle={item.title}
           initialLink={item.linkUrl}
+          item={item}
           type={type}
         />
       </div>

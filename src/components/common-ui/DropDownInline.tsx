@@ -6,6 +6,9 @@ import { useClickOutside } from '@/hooks/useClickOutside';
 import { useLinkActionStore } from '@/stores/linkActionStore';
 import { useUpdateLink } from '@/hooks/mutations/useUpdateLink';
 import { usePageStore } from '@/stores/pageStore';
+import { useModalStore } from '@/stores/modalStore';
+import FolderTransferModal from '../modal/folder/FolderTransferModal';
+import { useTransferActionStore } from '@/stores/transferActionStore';
 import DeleteFolderModal from '../modal/folder/DeleteFolderModal';
 import useUpdateFolder from '@/hooks/mutations/useUpdateFolder';
 
@@ -32,6 +35,8 @@ const DropDownInline = ({
   setIsDropDownInline,
   className,
 }: DropDownInlineProps) => {
+  console.log('DropDownInline 렌더됨?', id, initialTitle);
+
   const [title, setTitle] = useState(initialTitle);
 
   const [link, setLink] = useState(initialLink);
@@ -39,7 +44,13 @@ const DropDownInline = ({
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { openTransferFolderModal } = useModalStore();
   const deleteLink = useLinkActionStore((state) => state.deleteLink);
+
+  const { isTransferFolderModalOpen, closeTransferFolderModal } =
+    useModalStore();
+
+  const transferFolder = useTransferActionStore((s) => s.transferFolder);
 
   const isModifiedLink = title !== initialTitle || link !== initialLink;
   const isModifiedFolder = title !== initialTitle;
@@ -61,6 +72,8 @@ const DropDownInline = ({
     onLinkChange?.(id, value);
   };
 
+  const modalRef = useRef<HTMLDivElement>(null);
+
   const handleDeleteOpen = () => {
     setIsDeleteOpen(true);
   };
@@ -72,7 +85,7 @@ const DropDownInline = ({
       ref={dropdownRef}
       className={`border-gray-30 focus:bg-gray-30 focus:border-gray-30 bg-gray-0 z-50 inline-flex w-[214px] flex-col rounded-[10px] border p-[8px] text-[14px] font-[600] shadow ${className}`}
     >
-      {type === 'folder' && (
+      {type === 'directory' && (
         <div className="flex flex-col">
           <input
             value={title}
@@ -110,7 +123,9 @@ const DropDownInline = ({
             </button>
           )}
           <button
-            onClick={() => console.log('전송')}
+            onClick={() => {
+              openTransferFolderModal();
+            }}
             className="flex cursor-pointer items-center gap-[10px] px-[8px] py-[11px]"
           >
             <Transfer width={18} height={18} /> 전송하기
@@ -198,6 +213,14 @@ const DropDownInline = ({
           </button>
         </div>
       )}
+      <FolderTransferModal
+        ref={modalRef}
+        isOpen={isTransferFolderModalOpen}
+        onClose={closeTransferFolderModal}
+        directoryId={Number(id)}
+        folderName={title}
+        onSubmit={async (email) => transferFolder(email, Number(id))}
+      />
     </div>
   );
 };

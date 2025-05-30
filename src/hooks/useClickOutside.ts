@@ -8,18 +8,16 @@ export function useClickOutside<T extends HTMLElement>(
   useEffect(() => {
     if (!enabled) return;
 
-    if (!ref.current) return;
-
-    const handleClickOutside = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (ref.current && !ref.current.contains(target)) {
         setIsOpen(false);
       }
     };
 
-    document.addEventListener('click', handleClickOutside, true);
-
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener('click', handleClickOutside, true);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [ref, setIsOpen, enabled]);
 }
