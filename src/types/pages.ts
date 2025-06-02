@@ -12,7 +12,7 @@ export interface JoinedPageData {
   pageType: string;
 }
 
-export interface SelectedPageData {
+export interface PageParamsData {
   pageId: number;
   commandType: string;
 }
@@ -22,4 +22,20 @@ export interface DeleteSharedPageData {
     pageId: number;
     commandType: string;
   };
+}
+
+export interface UpdatePageTitleData {
+  baseRequest: {
+    pageId: number;
+    commandType: 'EDIT';
+  };
+  pageTitle: string;
+}
+
+export interface UpdatePageDescriptionData {
+  baseRequest: {
+    pageId: number;
+    commandType: 'EDIT';
+  };
+  pageDescription: string;
 }

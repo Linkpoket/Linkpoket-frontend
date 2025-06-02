@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { usePageStore } from '@/stores/pageStore';
 import useUpdateFolder from '@/hooks/mutations/useUpdateFolder';
 import { useDebounce } from '@/hooks/useDebounce';
+import useUpdatePersonalPageTitle from '@/hooks/mutations/useUpdatePersonalPageTitle';
+import useUpdatePersonalPageDescription from '@/hooks/mutations/useUpdatePersonalPageDescription';
 
 type PageHeaderSectionProps = {
   pageTitle: string;
@@ -31,6 +33,10 @@ export default function PageHeaderSection({
 
   const { pageId } = usePageStore();
   const { mutate: updateFolder } = useUpdateFolder(pageId);
+
+  const { mutate: updatePersonalPageTitle } = useUpdatePersonalPageTitle();
+  const { mutate: updatePersonalPageDescription } =
+    useUpdatePersonalPageDescription();
 
   const updateFolderImmediately = (data: FolderUpdateData) => {
     console.log('updateFolderImmediately called with:', data);

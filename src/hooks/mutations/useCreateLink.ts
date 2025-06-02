@@ -15,7 +15,7 @@ export function useCreateLink(
     mutationFn: createLink,
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
-        queryKey: ['selectedPage', variables.baseRequest.pageId, 'VIEW'],
+        queryKey: ['sharedPage', variables.baseRequest.pageId],
       });
 
       options?.onSuccess?.(data, variables, context);

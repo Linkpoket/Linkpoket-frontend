@@ -6,13 +6,9 @@ import { PageItemProps } from '@/types/pageItems';
 import { useNavigate } from 'react-router-dom';
 import DropDownInline from '../common-ui/DropDownInline';
 import { useModalStore } from '@/stores/modalStore';
+import useUpdateFolderBookmark from '@/hooks/mutations/useUpdateFolderBookmark';
 
-export default function FolderItem({
-  item,
-  view,
-  isBookmark,
-  setIsBookmark,
-}: PageItemProps) {
+export default function FolderItem({ item, view, isBookmark }: PageItemProps) {
   const isGrid = view === 'grid';
   const type = 'folder';
   const navigate = useNavigate();
@@ -22,6 +18,10 @@ export default function FolderItem({
     openFolderContextMenu,
     closeFolderContextMenu,
   } = useModalStore();
+
+  const { mutate: updateFolderBookmark } = useUpdateFolderBookmark({
+    folderId: item.id,
+  });
 
   const handleDoubleClick = () => {
     navigate(`folder/${item.id}`);
@@ -33,6 +33,13 @@ export default function FolderItem({
     openFolderContextMenu(item.id);
   };
 
+  const handleBookmark = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    updateFolderBookmark(item.id);
+    console.log('북마크 업데이트', item.id);
+  };
+
   return isGrid ? (
     <div
       className="folder-item bg-gray-0 hover:bg-gray-5 active:bg-gray-5 relative inline-flex w-full cursor-pointer flex-col items-center gap-2 rounded-[8px] p-[12px]"
@@ -42,7 +49,7 @@ export default function FolderItem({
       <FolderItemIcon />
       <button
         className="absolute top-10 right-5 cursor-pointer bg-transparent"
-        onClick={() => setIsBookmark((prev) => !prev)}
+        onClick={handleBookmark}
       >
         {isBookmark ? <ActiveBookmarkIcon /> : <InactiveBookmarkIcon />}
       </button>
@@ -74,7 +81,6 @@ export default function FolderItem({
       <div>
         <ListBookmarkModal
           isBookmark={isBookmark}
-          setIsBookmark={setIsBookmark}
           itemId={item.id}
           initialTitle={item.title}
           item={item}

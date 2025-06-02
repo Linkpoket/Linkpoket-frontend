@@ -16,39 +16,17 @@ export default function useUpdateFolder(
     ...options,
     mutationFn: updateFolder,
     onSuccess: async (response, variables, context) => {
-      // 모든 commandType에 대해 캐시 무효화
-      const commandTypes = ['VIEW', 'EDIT'];
-
-      await Promise.all([
-        // 페이지 쿼리 무효화
-        queryClient.invalidateQueries({
-          queryKey: ['selectedPage', pageId, 'VIEW'],
-          refetchType: 'active',
-        }),
-        // 폴더 상세 정보 쿼리 무효화 (모든 commandType에 대해)
-        ...commandTypes.flatMap((commandType) => [
-          queryClient.invalidateQueries({
-            queryKey: [
-              'folderDetails',
-              pageId,
-              variables.folderId,
-              commandType,
-            ],
-            refetchType: 'active',
-          }),
-          queryClient.invalidateQueries({
-            queryKey: ['folderDetails', pageId],
-            refetchType: 'active',
-          }),
-        ]),
-      ]);
-
-      console.log('캐시 무효화 완료:', {
-        pageId,
-        folderId: variables.folderId,
-        commandTypes,
+      console.log('폴더 업데이트 성공 응답:', response);
+      // 캐시 무효화
+      queryClient.invalidateQueries({
+        queryKey: ['folderDetails', pageId, variables.folderId],
+        refetchType: 'active',
       });
-
+      // sharedPage 캐시 무효화
+      queryClient.invalidateQueries({
+        queryKey: ['sharedPage', pageId],
+        refetchType: 'active',
+      });
       if (options?.onSuccess) {
         options.onSuccess(response, variables, context);
       }

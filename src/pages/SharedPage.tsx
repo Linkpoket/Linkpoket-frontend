@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useMobile } from '@/hooks/useMobile';
-import { useFetchSelectedPage } from '@/hooks/queries/useFetchSelectedPage';
+import { useFetchSelectedPage } from '@/hooks/queries/useFetchSharedPage';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import SharedPageContentSection from '@/components/page-layout-ui/SharedPageContentSection';
 import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
@@ -58,17 +58,17 @@ export default function SharedPage() {
   );
 
   //TODO: 해당 값을 통해서 현재 공유페이지의 정보 리스팅
-  const sharedPageDashboardQuery = useFetchSharedPageDashboard({
-    pageId: resolvedPageId,
-    commandType: 'VIEW',
-  });
+  // const sharedPageDashboardQuery = useFetchSharedPageDashboard({
+  //   pageId: resolvedPageId,
+  //   commandType: 'VIEW',
+  // });
 
   const sharedPageMemberQuery = useFetchSharedPageMember({
     pageId: resolvedPageId,
     commandType: 'VIEW',
   });
 
-  console.log('페이지 대쉬보드 정보', sharedPageDashboardQuery.data);
+  // console.log('페이지 대쉬보드 정보', sharedPageDashboardQuery.data);
   console.log('페이지 멤버 정보', sharedPageMemberQuery.data);
 
   return (

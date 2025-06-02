@@ -1,14 +1,17 @@
-import { SelectedPageData } from '@/types/pages';
+import { PageParamsData } from '@/types/pages';
 import { axiosInstance } from '../axiosInstance';
 
-export async function fetchSharedPageDashboard(data: SelectedPageData) {
+export async function fetchSharedPageDashboard(data: PageParamsData) {
   try {
-    const response = await axiosInstance.get('/api/page/dashboard', {
-      params: {
-        pageId: data.pageId,
-        commandType: data.commandType,
-      },
-    });
+    const response = await axiosInstance.get(
+      '/api/share-pages/dashboard/permission',
+      {
+        params: {
+          pageId: data.pageId,
+          commandType: 'VIEW',
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error('Error fetching shared page dashboard:', error);

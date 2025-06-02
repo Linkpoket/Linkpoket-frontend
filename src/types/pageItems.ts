@@ -21,7 +21,6 @@ export interface PageItemProps {
     linkUrl?: string;
   };
   isBookmark: boolean;
-  setIsBookmark: React.Dispatch<React.SetStateAction<boolean>>;
   view: ViewType;
   pageDescription?: string;
 }

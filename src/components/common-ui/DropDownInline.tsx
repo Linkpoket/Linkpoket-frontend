@@ -35,8 +35,6 @@ const DropDownInline = ({
   setIsDropDownInline,
   className,
 }: DropDownInlineProps) => {
-  console.log('DropDownInline 렌더됨?', id, initialTitle);
-
   const [title, setTitle] = useState(initialTitle);
 
   const [link, setLink] = useState(initialLink);

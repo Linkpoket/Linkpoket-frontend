@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 
 export default function useFetchFolderDetails(data: FetchFolderDetailsProps) {
   return useQuery({
-    queryKey: ['folderDetails', data.pageId, data.folderId, data.commandType],
+    queryKey: ['folderDetails', data.pageId],
     queryFn: () => fetchFolderDetails(data),
   });
 }

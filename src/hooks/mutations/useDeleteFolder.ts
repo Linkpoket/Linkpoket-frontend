@@ -17,7 +17,7 @@ export default function useDeleteFolder(
     mutationFn: deleteFolder,
     onSuccess: async (response, variables, context) => {
       await queryClient.invalidateQueries({
-        queryKey: ['selectedPage', pageId, 'VIEW'],
+        queryKey: ['sharedPage', pageId],
         refetchType: 'active',
       });
 

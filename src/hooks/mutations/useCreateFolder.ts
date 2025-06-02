@@ -8,11 +8,10 @@ import { CreateFolderData } from '@/types/folders';
 
 export function useCreateFolder(
   pageId: number,
-  commandType: string,
   options?: UseMutationOptions<any, unknown, CreateFolderData>
 ) {
   const queryClient = useQueryClient();
-
+  const isMainPage = pageId === 1;
   return useMutation({
     ...options,
     mutationFn: createFolder,
@@ -21,7 +20,7 @@ export function useCreateFolder(
       await Promise.all([
         // 일반 페이지 쿼리 무효화
         queryClient.invalidateQueries({
-          queryKey: ['selectedPage', pageId, commandType],
+          queryKey: ['sharedPage', pageId],
           refetchType: 'active',
         }),
         // 폴더 상세 페이지 쿼리 무효화 (모든 폴더 ID에 대해)
@@ -29,6 +28,12 @@ export function useCreateFolder(
           queryKey: ['folderDetails', pageId],
           refetchType: 'active',
         }),
+        // 메인 페이지에서만 personalPage 캐시 무효화
+        isMainPage &&
+          queryClient.invalidateQueries({
+            queryKey: ['personalPage'],
+            refetchType: 'active',
+          }),
       ]);
 
       if (options?.onSuccess) {

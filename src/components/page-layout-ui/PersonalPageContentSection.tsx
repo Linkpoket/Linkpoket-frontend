@@ -4,7 +4,7 @@ import LinkItem from './LinkItem';
 import { ContextMenu } from '../common-ui/ContextMenu';
 import { PageContentSectionProps } from '@/types/pageItems';
 import { useParams } from 'react-router-dom';
-import { useFetchSelectedPage } from '@/hooks/queries/useFetchSelectedPage';
+import { useFetchSelectedPage } from '@/hooks/queries/useFetchSharedPage';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useModalStore } from '@/stores/modalStore';
 
@@ -13,7 +13,6 @@ export default function PersonalPageContentSection({
   searchResult,
 }: PageContentSectionProps) {
   const { openLinkModal, openFolderModal } = useModalStore();
-  const [isBookmark, setIsBookmark] = useState(false);
   const [contextMenu, setContextMenu] = useState<{
     x: number;
     y: number;
@@ -33,7 +32,6 @@ export default function PersonalPageContentSection({
 
   const selectedPageQuery = useFetchSelectedPage({
     pageId: resolvedPageId,
-    commandType: 'VIEW',
   });
 
   console.log('선택한 페이지 데이터:', selectedPageQuery.data);
@@ -85,7 +83,6 @@ export default function PersonalPageContentSection({
               <FolderItem
                 key={`folder-${item.folderId}`}
                 isBookmark={item.isFavorite}
-                setIsBookmark={setIsBookmark}
                 item={{ id: item.folderId, title: item.folderName }}
                 view={view}
               />
@@ -95,7 +92,6 @@ export default function PersonalPageContentSection({
               <LinkItem
                 key={`link-${item.linkId}`}
                 isBookmark={item.isFavorite}
-                setIsBookmark={setIsBookmark}
                 item={{
                   id: item.linkId,
                   title: item.linkName,

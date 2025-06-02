@@ -6,12 +6,7 @@ import { PageItemProps } from '@/types/pageItems';
 import DropDownInline from '../common-ui/DropDownInline';
 import { useModalStore } from '@/stores/modalStore';
 
-export default function LinkItem({
-  item,
-  view,
-  isBookmark,
-  setIsBookmark,
-}: PageItemProps) {
+export default function LinkItem({ item, view, isBookmark }: PageItemProps) {
   const isGrid = view === 'grid';
   const type = 'link';
 
@@ -41,7 +36,6 @@ export default function LinkItem({
         className="absolute top-4 right-4 cursor-pointer bg-transparent"
         onClick={(e) => {
           e.stopPropagation();
-          setIsBookmark((prev) => !prev);
         }}
       >
         {isBookmark ? <ActiveBookmarkIcon /> : <InactiveBookmarkIcon />}
@@ -75,7 +69,6 @@ export default function LinkItem({
       <div>
         <ListBookmarkModal
           isBookmark={isBookmark}
-          setIsBookmark={setIsBookmark}
           itemId={item.id}
           initialTitle={item.title}
           initialLink={item.linkUrl}

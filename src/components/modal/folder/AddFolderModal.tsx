@@ -17,12 +17,12 @@ export default function AddFolderModal({
   const [folderName, setFolderName] = useState('');
   const [folderDescription, setFolderDescription] = useState('');
   const [error, setError] = useState('');
-  const { pageId, commandType } = usePageStore();
+  const { pageId } = usePageStore();
   const { parentsFolderId } = useParentsFolderIdStore();
 
   const isConfirmDisabled = !folderName;
 
-  const createFolderMutation = useCreateFolder(pageId, commandType, {
+  const createFolderMutation = useCreateFolder(pageId, {
     onSuccess: () => {
       setFolderName('');
       setFolderDescription('');
@@ -45,7 +45,7 @@ export default function AddFolderModal({
     const requestBody = {
       baseRequest: {
         pageId,
-        commandType,
+        commandType: 'EDIT',
       },
       folderName,
       parentFolderId: parentsFolderId ?? 1,
