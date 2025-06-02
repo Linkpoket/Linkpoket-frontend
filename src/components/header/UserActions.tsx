@@ -2,27 +2,8 @@ import Bell from '@/assets/widget-ui-assets/Bell.svg?react';
 import Menu from '@/assets/widget-ui-assets/Menu.svg?react';
 import { useState } from 'react';
 import NotificationModal from '../modal/page/ModalNotification';
-import { NotificationItem } from '@/types/modalAlarm';
 import ModalMenu from '../modal/page/ModalMenu';
 import { useFetchNotifications } from '@/hooks/queries/useFetchNotification';
-
-//테스트용 목데이터 POSTMAN참고
-// const notifications: NotificationItem[] = [
-//   {
-//     id: 1,
-//     type: 'link',
-//     senderEmail: 'linkmoa@gmail.com',
-//     receiverEmail: 'youremail@gmail.com',
-//     directoryName: '00페이지',
-//     dateTime: '2025.04.09 | 08:20',
-//   },
-//   {
-//     id: 2,
-//     type: 'edit',
-//     directoryName: '00페이지',
-//     dateTime: '2025.04.09 | 08:20',
-//   },
-// ];
 
 export function UserActions() {
   const [isAlarmOpen, setIsAlarmOpen] = useState(false);

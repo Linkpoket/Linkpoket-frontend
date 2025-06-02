@@ -50,7 +50,7 @@ export default function NotificationModal({
         <ul>
           {notifications.map((item, idx) => (
             <li
-              key={item.id}
+              key={`${item.notificationType}-${item.id}`}
               className={`py-4 ${notifications.length - 1 === idx ? '' : 'border-b-gray-30 border-b'}`}
             >
               <div className="flex items-start gap-[10px]">
