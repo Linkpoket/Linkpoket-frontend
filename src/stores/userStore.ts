@@ -6,6 +6,7 @@ interface UserState {
   email: string;
   colorCode: string;
   setUser: (nickname: string, email: string, colorCode: string) => void;
+  setColorCode: (colorCode: string) => void;
   clearUser: () => void;
   isLoggedIn: boolean;
 }
@@ -19,6 +20,7 @@ export const useUserStore = create(
       isLoggedIn: false,
       setUser: (nickname: string, email: string, colorCode: string) =>
         set({ nickname, email, colorCode, isLoggedIn: true }),
+      setColorCode: (colorCode: string) => set({ colorCode }),
       clearUser: () =>
         set({ nickname: '', email: '', colorCode: '', isLoggedIn: false }),
     }),
