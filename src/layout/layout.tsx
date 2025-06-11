@@ -1,11 +1,11 @@
 import { Header } from '@/components/header/Header';
 import SideBar from '@/components/side-bar/SideBar';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { useUserStore } from '@/stores/userStore';
-import { useNotificationStore } from '@/stores/notification';
 import ProfileSettingsModal from '@/components/modal/profile/ProfileSettingsModal';
 import { useProfileModalStore } from '@/stores/profileModalStore';
+import { useNotificationSSE } from '@/hooks/useNotificationSSE';
 
 export default function Layout() {
   const location = useLocation();
@@ -14,7 +14,6 @@ export default function Layout() {
   const { isProfileModalOpen, closeProfileModal } = useProfileModalStore();
 
   const isLoggedIn = useUserStore((s) => s.isLoggedIn);
-  const setUnreadCount = useNotificationStore((s) => s.setUnreadCount);
 
   const isLoginPage = path === '/login';
   const isSignUpPage = path === '/signup';
@@ -25,28 +24,7 @@ export default function Layout() {
   const showHeaderButton = !isSignUpPage; // 회원가입 페이지에서 header의 button 숨김 숨김
   const showDepth = !isLoginPage && !isSignUpPage; // 로그인,회원가입 페이지에서 header의 button 숨김 숨김
 
-  useEffect(() => {
-    if (!isLoggedIn) return;
-
-    const eventSource = new EventSource('/api/notification/subscribe', {
-      withCredentials: true,
-    });
-
-    eventSource.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      console.log('🔔 알림 수신:', data);
-      setUnreadCount(data.countUnreadNotifications);
-    };
-
-    eventSource.onerror = (error) => {
-      console.error('❌ SSE 연결 오류:', error);
-      eventSource.close();
-    };
-
-    return () => {
-      eventSource.close();
-    };
-  }, [isLoggedIn]);
+  useNotificationSSE(isLoggedIn);
 
   return (
     <div className="flex flex-col">
