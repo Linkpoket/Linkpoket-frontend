@@ -5,7 +5,7 @@ import { UserActions } from './UserActions';
 import { AuthButtons } from './AuthButtons';
 import { useMobile } from '@/hooks/useMobile';
 import { Link } from 'react-router-dom';
-
+import { useBreadcrumbStore } from '@/stores/breadcrumb';
 interface Props {
   isLoggedIn: boolean;
   showDepth: boolean;
@@ -15,13 +15,7 @@ interface Props {
 }
 
 //Todo: 해당 데이터는 useQuery 활용하여 대체.
-const data = {
-  breadcrumb: [
-    { id: '1', name: '디렉토리1' },
-    { id: '2', name: '디렉토리2' },
-  ],
-  current: { id: '2', name: '디렉토리2' },
-};
+
 export function Header({
   isLoggedIn = true,
   showDepth = true,
@@ -29,6 +23,7 @@ export function Header({
   showHeaderButton,
 }: Props) {
   const isMobile = useMobile();
+  const { breadcrumbs, trimToIndex, resetBreadcrumbs } = useBreadcrumbStore();
 
   return (
     // Header 1920기준 w값 1600고정 - 반응형 고려시 해당부분 수정
@@ -41,7 +36,13 @@ export function Header({
         <Link to="/">
           <Logo className="h-[24px]" />
         </Link>
-        {showDepth && <Breadcrumb items={data.breadcrumb} />}
+        {showDepth && (
+          <Breadcrumb
+            items={breadcrumbs}
+            trimToIndex={trimToIndex}
+            resetBreadcrumbs={resetBreadcrumbs}
+          />
+        )}
       </div>
       {showHeaderButton && (isLoggedIn ? <UserActions /> : <AuthButtons />)}
     </header>

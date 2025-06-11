@@ -9,7 +9,7 @@ import PageControllerSection from '@/components/page-layout-ui/PageControllerSec
 import useFetchSharedPageDashboard from '@/hooks/queries/useFetchSharedPageDashboard';
 import useFetchSharedPageMember from '@/hooks/queries/useFetchSharedPageMember';
 import { usePageSearch } from '@/hooks/usePageSearch';
-
+import { useBreadcrumbStore } from '@/stores/breadcrumb';
 export default function SharedPage() {
   const [view, setView] = useState<'grid' | 'list'>('grid');
 
@@ -70,6 +70,19 @@ export default function SharedPage() {
 
   console.log('페이지 대쉬보드 정보', sharedPageDashboardQuery.data);
   console.log('페이지 멤버 정보', sharedPageMemberQuery.data);
+
+  //BreadCrumb용 공유페이지 정보 추가
+  const { addCrumb } = useBreadcrumbStore();
+
+  useEffect(() => {
+    if (selectedPageQuery.data?.data) {
+      addCrumb({
+        id: selectedPageQuery.data.data.pageId.toString(),
+        title: selectedPageQuery.data.data.pageTitle,
+        type: 'shared',
+      });
+    }
+  }, [selectedPageQuery.data, addCrumb]);
 
   return (
     <div className="flex h-screen flex-col">

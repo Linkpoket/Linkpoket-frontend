@@ -2,16 +2,23 @@ import { Link } from 'react-router-dom';
 import Depth from '@/assets/common-ui-assets/BreadCrumbDepth.svg?react';
 import { useMobile } from '@/hooks/useMobile';
 
-type Directory = {
+type Crumb = {
   id: string;
-  name: string;
+  title: string;
+  type: 'folder' | 'shared';
 };
 
 interface BreadcrumbProps {
-  items: Directory[];
+  items: Crumb[];
+  trimToIndex: (index: string) => void;
+  resetBreadcrumbs: () => void;
 }
 
-export default function Breadcrumb({ items }: BreadcrumbProps) {
+export default function Breadcrumb({
+  items,
+  trimToIndex,
+  resetBreadcrumbs,
+}: BreadcrumbProps) {
   const isMobile = useMobile();
 
   return (
@@ -20,21 +27,23 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
         {/* TODO : 기본 값 depth 수정  */}
         <li>
           <Link
-            to="/mypage"
+            to="/"
             className="p-[6px] text-[15px] font-[400] text-gray-50"
+            onClick={() => resetBreadcrumbs()}
           >
             개인 페이지
           </Link>
         </li>
 
-        {items.map((item) => (
+        {items.map((item, index) => (
           <li key={item.id} className="flex items-center">
             <Depth className="text-gray-30" />
             <Link
-              to={`/mypage?dir=${item.id}`}
+              to={`/${item.type}/${item.id}`}
               className="p-[6px] px-[8px] py-[5px] text-[15px] font-[400] text-gray-50"
+              onClick={() => trimToIndex(index.toString())}
             >
-              {item.name}
+              {item.title}
             </Link>
           </li>
         ))}
@@ -42,15 +51,3 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
     </nav>
   );
 }
-
-// 받아올 데이터와 사용방법
-//
-//  const data = {
-//     breadcrumb: [
-//       { id: '1', name: '디렉토리1' },
-//       { id: '2', name: '디렉토리2' },
-//     ],
-//     current: { id: '2', name: '디렉토리2' },
-//   };
-
-// <Breadcrumb items={data.breadcrumb} />

@@ -1,17 +1,12 @@
 import { PageContentSectionProps } from '@/types/pageItems';
-import useFetchFavorite from '@/hooks/queries/useFetchFavorite';
 import FolderItem from './FolderItem';
 import LinkItem from './LinkItem';
 export default function BookmarkPageContentSection({
   view,
+  contentData,
 }: PageContentSectionProps) {
-  const favoriteQuery = useFetchFavorite();
-
-  // 실제 사용할 데이터
-  const data = favoriteQuery.favorite;
-
-  const folderData = data.directorySimpleResponses;
-  const linkData = data.siteSimpleResponses;
+  const folderData = contentData?.directorySimpleResponses ?? [];
+  const linkData = contentData?.siteSimpleResponses ?? [];
   const mergedList = [...folderData, ...linkData];
 
   return (
@@ -25,9 +20,7 @@ export default function BookmarkPageContentSection({
             : 'flex flex-col gap-4'
         }`}
       >
-        {mergedList.map((item, idx) => {
-          console.log(idx, 'item', item);
-
+        {mergedList.map((item) => {
           if ('folderId' in item) {
             return (
               <FolderItem

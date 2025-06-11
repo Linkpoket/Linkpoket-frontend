@@ -23,6 +23,7 @@ export default function useUpdateLinkBookmark({
       queryClient.invalidateQueries({ queryKey: ['bookmark', linkId] });
       queryClient.invalidateQueries({ queryKey: ['sharedPage', pageId] });
       queryClient.invalidateQueries({ queryKey: ['personalPage', pageId] });
+      queryClient.invalidateQueries({ queryKey: ['favorite'] });
       if (options?.onSuccess) {
         options.onSuccess(response, variables, context);
       }

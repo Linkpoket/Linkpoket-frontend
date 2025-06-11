@@ -6,7 +6,7 @@ import { PageItemProps } from '@/types/pageItems';
 import DropDownInline from '../common-ui/DropDownInline';
 import { useModalStore } from '@/stores/modalStore';
 import { usePageStore } from '@/stores/pageStore';
-import useUpdateLinkBookmark from '@/hooks/mutations/useUpdateLinkBookmkar';
+import useUpdateLinkBookmark from '@/hooks/mutations/useUpdateLinkBookmark';
 
 export default function LinkItem({ item, view, isBookmark }: PageItemProps) {
   const isGrid = view === 'grid';
@@ -87,6 +87,7 @@ export default function LinkItem({ item, view, isBookmark }: PageItemProps) {
           initialLink={item.linkUrl}
           item={item}
           type={type}
+          handleBookmark={handleBookmark}
         />
       </div>
     </div>

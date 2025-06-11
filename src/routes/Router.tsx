@@ -26,18 +26,6 @@ const router = createBrowserRouter([
             path: '/shared/:pageId',
             element: <SharedPage />,
           },
-          {
-            path: '/shared/:pageId/folder/:folderId',
-            element: <FolderDetailPage />,
-          },
-          // 이후 디렉토리에 따른 경로
-          // { path: '/bookmarks/folder/:folderId',
-          //   element: <BookmarkPage />,
-          // },
-          // {
-          //   path: '/personal/shared/folder/:folderId',
-          //   element: <SharedPage />,
-          // },
         ],
       },
 

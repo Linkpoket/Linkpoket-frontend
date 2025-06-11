@@ -5,6 +5,7 @@ import PageControllerSection from '@/components/page-layout-ui/PageControllerSec
 import BookmarkPageContentSection from '@/components/page-layout-ui/BookmarkPageContentSection';
 import { usePageStore } from '@/stores/pageStore';
 import { usePageSearch } from '@/hooks/usePageSearch';
+import useFetchFavorite from '@/hooks/queries/useFetchFavorite';
 export default function BookmarkPage() {
   const [view, setView] = useState<'grid' | 'list'>('grid');
   const pageId = usePageStore((state) => state.pageId);
@@ -21,6 +22,11 @@ export default function BookmarkPage() {
       setView('list');
     }
   }, [isMobile]);
+
+  const favoriteQuery = useFetchFavorite();
+
+  // 실제 사용할 데이터
+  const data = favoriteQuery.favorite;
 
   return (
     <div className="flex h-screen flex-col">
@@ -42,7 +48,11 @@ export default function BookmarkPage() {
       />
 
       {/*CONTENT SECTION*/}
-      <BookmarkPageContentSection view={view} searchResult={searchResult} />
+      <BookmarkPageContentSection
+        view={view}
+        searchResult={searchResult}
+        contentData={data}
+      />
     </div>
   );
 }
