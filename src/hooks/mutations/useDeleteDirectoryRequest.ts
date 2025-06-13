@@ -1,4 +1,5 @@
 import { deleteDirectoryRequest } from '@/apis/alarm-apis/deleteDirectoryRequest';
+import { ToastCustom } from '@/components/common-ui/ToastCustom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useDeleteDirectoryRequest = () => {
@@ -8,10 +9,10 @@ export const useDeleteDirectoryRequest = () => {
     mutationFn: deleteDirectoryRequest,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
-      console.log('폴더 요청 삭제 성공');
+      ToastCustom.success('폴더 요청을 삭제했습니다.');
     },
     onError: () => {
-      console.log('폴더 요청 삭제 실패');
+      ToastCustom.error('폴더 요청 삭제에 실패했습니다.');
     },
   });
 };

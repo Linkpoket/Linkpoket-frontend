@@ -5,6 +5,7 @@ import ChevronLeft from '@/assets/common-ui-assets/ChevronLeft.svg?react';
 import Check from '@/assets/common-ui-assets/Check.svg?react';
 import { useUpdateProfileColor } from '@/hooks/mutations/useUpdateProfileColor';
 import { ToastCustom } from '@/components/common-ui/ToastCustom';
+import { COLOR_OPTIONS } from '@/styles/tokens';
 
 const ProfileChangeBody = ({ onBack }: { onBack: () => void }) => {
   const { nickname, colorCode } = useUserStore();
@@ -25,19 +26,6 @@ const ProfileChangeBody = ({ onBack }: { onBack: () => void }) => {
       onBack();
     }
   };
-
-  const colorPalette = [
-    '#FF6464',
-    '#FC82E3',
-    '#FF931F',
-    '#FFCA3E',
-    '#48BF5A',
-    '#60B5FF',
-    '#5085FF',
-    '#9771FF',
-    '#A17C5E',
-    '#5A5A5A',
-  ];
 
   return (
     <>
@@ -66,7 +54,7 @@ const ProfileChangeBody = ({ onBack }: { onBack: () => void }) => {
             {nickname.charAt(0).toUpperCase()}
           </div>
           <div className="mt-6 grid grid-cols-5 gap-4">
-            {colorPalette.map((color) => (
+            {COLOR_OPTIONS.map((color) => (
               <button
                 key={color}
                 disabled={isPending}

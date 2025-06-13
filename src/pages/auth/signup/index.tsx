@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { Select } from '@/components/common-ui/Select';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { useNavigate } from 'react-router-dom';
+import { COLOR_OPTIONS } from '@/styles/tokens';
 
 // Zod 스키마 정의
 const signupSchema = z
@@ -61,19 +62,6 @@ const JOB_OPTIONS = [
   { value: 'environment', label: '농림어업/환경' },
   { value: 'sports', label: '스포츠/레저' },
   { value: 'other', label: '기타 (직접 입력)' },
-];
-
-const COLOR_OPTIONS = [
-  '#FF6464',
-  '#FC82E3',
-  '#FF931F',
-  '#FFCA3E',
-  '#48BF5A',
-  '#60B5FF',
-  '#5085FF',
-  '#9771FF',
-  '#A17C5E',
-  '#5A5A5A',
 ];
 
 type FormData = z.infer<typeof signupSchema>;

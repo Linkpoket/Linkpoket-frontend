@@ -5,7 +5,15 @@ import { ToastCustom } from '@/components/common-ui/ToastCustom';
 export function usePatchDirectoryTransmissionStatus() {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  return useMutation<
+    unknown,
+    unknown,
+    {
+      requestId: number;
+      requestStatus: 'ACCEPTED' | 'REJECTED';
+      notificationType: 'TRANSMIT_DIRECTORY';
+    }
+  >({
     mutationFn: patchDirectoryTransmissionStatus,
     onSuccess: (_data, variables) => {
       if (variables.requestStatus === 'ACCEPTED') {
@@ -15,10 +23,9 @@ export function usePatchDirectoryTransmissionStatus() {
       }
 
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
-      console.log('디렉토리 요청 상태 변경 성공');
     },
     onError: () => {
-      console.log('디렉토리 요청 상태 변경 실패');
+      ToastCustom.error('폴더 초대 상태 변경에 실패했습니다.');
     },
   });
 }

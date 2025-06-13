@@ -1,6 +1,6 @@
 import Bell from '@/assets/widget-ui-assets/Bell.svg?react';
 import Menu from '@/assets/widget-ui-assets/Menu.svg?react';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import NotificationModal from '../modal/page/NotificationModal';
 import ModalMenu from '../modal/page/ModalMenu';
 import { useFetchNotifications } from '@/hooks/queries/useFetchNotification';
@@ -14,9 +14,34 @@ export function UserActions() {
   const { data: notifications = [] } = useFetchNotifications();
 
   const { mutate: patchShareInvitation } = usePatchShareInvitationStatus();
-  const { mutate: patchDirectoryTransmission } =
+  const { mutate: patchDirectoryTransmission, isPending: isProcessing } =
     usePatchDirectoryTransmissionStatus();
   const { mutate: deleteDirectoryRequest } = useDeleteDirectoryRequest();
+
+  const handleStatusChange = useCallback(
+    (
+      requestId: number,
+      requestStatus: 'ACCEPTED' | 'REJECTED',
+      type: 'INVITE_PAGE' | 'TRANSMIT_DIRECTORY'
+    ) => {
+      if (type === 'INVITE_PAGE') {
+        patchShareInvitation({
+          requestId,
+          requestStatus,
+          notificationType: 'INVITE_PAGE',
+        });
+      } else if (type === 'TRANSMIT_DIRECTORY') {
+        patchDirectoryTransmission({
+          requestId,
+          requestStatus,
+          notificationType: 'TRANSMIT_DIRECTORY',
+        });
+      } else {
+        console.warn('Unknown notification type:', type);
+      }
+    },
+    [patchShareInvitation, patchDirectoryTransmission]
+  );
 
   return (
     <div className="flex items-center">
@@ -35,34 +60,9 @@ export function UserActions() {
           isOpen={isAlarmOpen}
           setIsOpen={() => setIsAlarmOpen(!isAlarmOpen)}
           notifications={notifications}
-          onAccept={(requestId, type) => {
-            if (type === 'INVITE_PAGE')
-              patchShareInvitation({
-                requestId,
-                requestStatus: 'ACCEPTED',
-                notificationType: 'INVITE_PAGE',
-              });
-            else if (type === 'TRANSMIT_DIRECTORY')
-              patchDirectoryTransmission({
-                requestId,
-                requestStatus: 'ACCEPTED',
-                notificationType: 'TRANSMIT_DIRECTORY',
-              });
-          }}
-          onReject={(requestId, type) => {
-            if (type === 'INVITE_PAGE')
-              patchShareInvitation({
-                requestId,
-                requestStatus: 'REJECTED',
-                notificationType: 'INVITE_PAGE',
-              });
-            else if (type === 'TRANSMIT_DIRECTORY')
-              patchDirectoryTransmission({
-                requestId,
-                requestStatus: 'REJECTED',
-                notificationType: 'TRANSMIT_DIRECTORY',
-              });
-          }}
+          isProcessing={isProcessing}
+          onAccept={({ id, type }) => handleStatusChange(id, 'ACCEPTED', type)}
+          onReject={({ id, type }) => handleStatusChange(id, 'REJECTED', type)}
           onDelete={(dispatchId) => deleteDirectoryRequest({ dispatchId })}
         />
       )}

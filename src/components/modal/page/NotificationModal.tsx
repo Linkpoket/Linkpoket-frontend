@@ -7,6 +7,7 @@ import Close from '@/assets/common-ui-assets/AlarmModalClose.svg?react';
 export default function NotificationModal({
   setIsOpen,
   notifications,
+  isProcessing,
   onAccept,
   onReject,
   onDelete,
@@ -17,20 +18,24 @@ export default function NotificationModal({
   useClickOutside(modalRef, setIsOpen);
 
   const sortedNotifications = useMemo(() => {
+    if (!notifications.length) return [];
+
     if (selectedTab === 'time') {
       return [...notifications].sort(
         (a, b) =>
           new Date(b.senderInfo.sentAt).getTime() -
           new Date(a.senderInfo.sentAt).getTime()
       );
-    } else {
+    }
+
+    if (selectedTab === 'type') {
       return [...notifications].sort((a, b) =>
         a.notificationType.localeCompare(b.notificationType)
       );
     }
-  }, [selectedTab, notifications]);
 
-  console.log('notifications', notifications);
+    return notifications;
+  }, [selectedTab, notifications]);
 
   return (
     <div className="absolute top-14 right-16 z-1" ref={modalRef}>
@@ -97,13 +102,19 @@ export default function NotificationModal({
               {item.requestStatus === 'WAITING' && (
                 <div className="mt-2 flex justify-end gap-2">
                   <button
-                    onClick={() => onReject?.(item.id, item.notificationType)}
+                    disabled={isProcessing}
+                    onClick={() =>
+                      onReject?.({ id: item.id, type: item.notificationType })
+                    }
                     className="border-gray-30 text-gray-90 cursor-pointer rounded-[6px] border px-[10px] py-[6px] text-[15px] font-semibold"
                   >
                     거절
                   </button>
                   <button
-                    onClick={() => onAccept?.(item.id, item.notificationType)}
+                    disabled={isProcessing}
+                    onClick={() =>
+                      onAccept?.({ id: item.id, type: item.notificationType })
+                    }
                     className="bg-primary-50 text-primary-0 cursor-pointer rounded-[6px] px-[10px] py-[6px] text-[15px] font-semibold"
                   >
                     수락
