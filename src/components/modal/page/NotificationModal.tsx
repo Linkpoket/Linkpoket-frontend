@@ -1,5 +1,5 @@
 import { NotificationModalProps } from '@/types/modalAlarm';
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import profile from '@/assets/common-ui-assets/Profile.webp';
 import Close from '@/assets/common-ui-assets/AlarmModalClose.svg?react';
@@ -15,6 +15,22 @@ export default function NotificationModal({
   const modalRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(modalRef, setIsOpen);
+
+  const sortedNotifications = useMemo(() => {
+    if (selectedTab === 'time') {
+      return [...notifications].sort(
+        (a, b) =>
+          new Date(b.senderInfo.sentAt).getTime() -
+          new Date(a.senderInfo.sentAt).getTime()
+      );
+    } else {
+      return [...notifications].sort((a, b) =>
+        a.notificationType.localeCompare(b.notificationType)
+      );
+    }
+  }, [selectedTab, notifications]);
+
+  console.log('notifications', notifications);
 
   return (
     <div className="absolute top-14 right-16 z-1" ref={modalRef}>
@@ -48,7 +64,7 @@ export default function NotificationModal({
 
         {/* 알림 리스트 */}
         <ul>
-          {notifications.map((item, idx) => (
+          {sortedNotifications.map((item, idx) => (
             <li
               key={`${item.notificationType}-${item.id}`}
               className={`py-4 ${notifications.length - 1 === idx ? '' : 'border-b-gray-30 border-b'}`}
@@ -78,16 +94,16 @@ export default function NotificationModal({
               </div>
 
               {/* 수락/거절 버튼 (초대일 경우만) */}
-              {item.notificationType === 'INVITE_PAGE' && (
+              {item.requestStatus === 'WAITING' && (
                 <div className="mt-2 flex justify-end gap-2">
                   <button
-                    onClick={() => onReject?.(item.id)}
+                    onClick={() => onReject?.(item.id, item.notificationType)}
                     className="border-gray-30 text-gray-90 cursor-pointer rounded-[6px] border px-[10px] py-[6px] text-[15px] font-semibold"
                   >
                     거절
                   </button>
                   <button
-                    onClick={() => onAccept?.(item.id)}
+                    onClick={() => onAccept?.(item.id, item.notificationType)}
                     className="bg-primary-50 text-primary-0 cursor-pointer rounded-[6px] px-[10px] py-[6px] text-[15px] font-semibold"
                   >
                     수락

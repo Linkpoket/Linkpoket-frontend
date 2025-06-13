@@ -63,7 +63,18 @@ const JOB_OPTIONS = [
   { value: 'other', label: '기타 (직접 입력)' },
 ];
 
-const COLOR_OPTIONS = ['#f3d9fa', '#91a7ff', '#1971c2'];
+const COLOR_OPTIONS = [
+  '#FF6464',
+  '#FC82E3',
+  '#FF931F',
+  '#FFCA3E',
+  '#48BF5A',
+  '#60B5FF',
+  '#5085FF',
+  '#9771FF',
+  '#A17C5E',
+  '#5A5A5A',
+];
 
 type FormData = z.infer<typeof signupSchema>;
 
@@ -142,8 +153,6 @@ const SignupPage = () => {
     console.log('회원가입 데이터:', submitData);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
       const genderValue = data.gender === 'male' ? 1 : 2;
 
       const response = await axiosInstance.post('/api/member/sign-up', {

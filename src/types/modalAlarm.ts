@@ -21,7 +21,7 @@ export interface NotificationModalProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   notifications: NotificationItem[];
-  onAccept?: (id: number) => void;
-  onReject?: (id: number) => void;
+  onAccept?: (id: number, type: NotificationType) => void;
+  onReject?: (id: number, type: NotificationType) => void;
   onDelete?: (id: number) => void;
 }

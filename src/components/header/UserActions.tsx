@@ -1,14 +1,22 @@
 import Bell from '@/assets/widget-ui-assets/Bell.svg?react';
 import Menu from '@/assets/widget-ui-assets/Menu.svg?react';
 import { useState } from 'react';
-import NotificationModal from '../modal/page/ModalNotification';
+import NotificationModal from '../modal/page/NotificationModal';
 import ModalMenu from '../modal/page/ModalMenu';
 import { useFetchNotifications } from '@/hooks/queries/useFetchNotification';
+import { usePatchShareInvitationStatus } from '@/hooks/mutations/usePatchShareInvitationStatus';
+import { usePatchDirectoryTransmissionStatus } from '@/hooks/mutations/usePatchDirectoryTransmissionStatus';
+import { useDeleteDirectoryRequest } from '@/hooks/mutations/useDeleteDirectoryRequest';
 
 export function UserActions() {
   const [isAlarmOpen, setIsAlarmOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: notifications = [] } = useFetchNotifications();
+
+  const { mutate: patchShareInvitation } = usePatchShareInvitationStatus();
+  const { mutate: patchDirectoryTransmission } =
+    usePatchDirectoryTransmissionStatus();
+  const { mutate: deleteDirectoryRequest } = useDeleteDirectoryRequest();
 
   return (
     <div className="flex items-center">
@@ -27,9 +35,35 @@ export function UserActions() {
           isOpen={isAlarmOpen}
           setIsOpen={() => setIsAlarmOpen(!isAlarmOpen)}
           notifications={notifications}
-          onAccept={(id) => console.log(`${id} 수락`)}
-          onReject={(id) => console.log(`${id} 거절`)}
-          onDelete={(id) => console.log(`${id} 삭제`)}
+          onAccept={(requestId, type) => {
+            if (type === 'INVITE_PAGE')
+              patchShareInvitation({
+                requestId,
+                requestStatus: 'ACCEPTED',
+                notificationType: 'INVITE_PAGE',
+              });
+            else if (type === 'TRANSMIT_DIRECTORY')
+              patchDirectoryTransmission({
+                requestId,
+                requestStatus: 'ACCEPTED',
+                notificationType: 'TRANSMIT_DIRECTORY',
+              });
+          }}
+          onReject={(requestId, type) => {
+            if (type === 'INVITE_PAGE')
+              patchShareInvitation({
+                requestId,
+                requestStatus: 'REJECTED',
+                notificationType: 'INVITE_PAGE',
+              });
+            else if (type === 'TRANSMIT_DIRECTORY')
+              patchDirectoryTransmission({
+                requestId,
+                requestStatus: 'REJECTED',
+                notificationType: 'TRANSMIT_DIRECTORY',
+              });
+          }}
+          onDelete={(dispatchId) => deleteDirectoryRequest({ dispatchId })}
         />
       )}
 
