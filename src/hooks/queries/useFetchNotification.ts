@@ -1,4 +1,4 @@
-import { fetchNotifications } from '@/apis/alarm-apis/useFetchNotifications';
+import { fetchNotifications } from '@/apis/alarm-apis/fetchNotifications';
 import { useQuery } from '@tanstack/react-query';
 
 export const useFetchNotifications = () => {

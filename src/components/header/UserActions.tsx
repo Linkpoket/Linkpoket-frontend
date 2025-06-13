@@ -1,14 +1,48 @@
 import Bell from '@/assets/widget-ui-assets/Bell.svg?react';
 import Menu from '@/assets/widget-ui-assets/Menu.svg?react';
-import { useState } from 'react';
-import NotificationModal from '../modal/page/ModalNotification';
+import { useCallback, useState } from 'react';
+import NotificationModal from '../modal/page/NotificationModal';
 import ModalMenu from '../modal/page/ModalMenu';
 import { useFetchNotifications } from '@/hooks/queries/useFetchNotification';
+import { usePatchShareInvitationStatus } from '@/hooks/mutations/usePatchShareInvitationStatus';
+import { usePatchDirectoryTransmissionStatus } from '@/hooks/mutations/usePatchDirectoryTransmissionStatus';
+import { useDeleteDirectoryRequest } from '@/hooks/mutations/useDeleteDirectoryRequest';
 
 export function UserActions() {
   const [isAlarmOpen, setIsAlarmOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: notifications = [] } = useFetchNotifications();
+
+  const { mutate: patchShareInvitation, isPending: isShareProcessing } =
+    usePatchShareInvitationStatus();
+  const { mutate: patchDirectoryTransmission, isPending: isProcessing } =
+    usePatchDirectoryTransmissionStatus();
+  const { mutate: deleteDirectoryRequest } = useDeleteDirectoryRequest();
+
+  const handleStatusChange = useCallback(
+    (
+      requestId: number,
+      requestStatus: 'ACCEPTED' | 'REJECTED',
+      type: 'INVITE_PAGE' | 'TRANSMIT_DIRECTORY'
+    ) => {
+      if (type === 'INVITE_PAGE') {
+        patchShareInvitation({
+          requestId,
+          requestStatus,
+          notificationType: 'INVITE_PAGE',
+        });
+      } else if (type === 'TRANSMIT_DIRECTORY') {
+        patchDirectoryTransmission({
+          requestId,
+          requestStatus,
+          notificationType: 'TRANSMIT_DIRECTORY',
+        });
+      } else {
+        console.warn('Unknown notification type:', type);
+      }
+    },
+    [patchShareInvitation, patchDirectoryTransmission]
+  );
 
   return (
     <div className="flex items-center">
@@ -25,11 +59,13 @@ export function UserActions() {
       {isAlarmOpen && (
         <NotificationModal
           isOpen={isAlarmOpen}
-          setIsOpen={() => setIsAlarmOpen(!isAlarmOpen)}
+          setIsOpen={setIsAlarmOpen}
           notifications={notifications}
-          onAccept={(id) => console.log(`${id} 수락`)}
-          onReject={(id) => console.log(`${id} 거절`)}
-          onDelete={(id) => console.log(`${id} 삭제`)}
+          isProcessing={isProcessing}
+          isShareProcessing={isShareProcessing}
+          onAccept={({ id, type }) => handleStatusChange(id, 'ACCEPTED', type)}
+          onReject={({ id, type }) => handleStatusChange(id, 'REJECTED', type)}
+          onDelete={(dispatchId) => deleteDirectoryRequest({ dispatchId })}
         />
       )}
 

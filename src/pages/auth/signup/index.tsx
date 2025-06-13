@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { Select } from '@/components/common-ui/Select';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { useNavigate } from 'react-router-dom';
+import { COLOR_OPTIONS } from '@/styles/tokens';
 
 // Zod 스키마 정의
 const signupSchema = z
@@ -62,8 +63,6 @@ const JOB_OPTIONS = [
   { value: 'sports', label: '스포츠/레저' },
   { value: 'other', label: '기타 (직접 입력)' },
 ];
-
-const COLOR_OPTIONS = ['#f3d9fa', '#91a7ff', '#1971c2'];
 
 type FormData = z.infer<typeof signupSchema>;
 
@@ -142,8 +141,6 @@ const SignupPage = () => {
     console.log('회원가입 데이터:', submitData);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
       const genderValue = data.gender === 'male' ? 1 : 2;
 
       const response = await axiosInstance.post('/api/member/sign-up', {
