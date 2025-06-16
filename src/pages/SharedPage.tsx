@@ -10,10 +10,43 @@ import useFetchSharedPageDashboard from '@/hooks/queries/useFetchSharedPageDashb
 import useFetchSharedPageMember from '@/hooks/queries/useFetchSharedPageMember';
 import { usePageSearch } from '@/hooks/usePageSearch';
 import { useBreadcrumbStore } from '@/stores/breadcrumb';
-export default function SharedPage() {
-  const [view, setView] = useState<'grid' | 'list'>('grid');
 
+export default function SharedPage() {
+  const { pageId } = useParams();
+  const numericId = Number.parseInt(pageId ?? '', 10);
+  const resolvedPageId = Number.isFinite(numericId) ? numericId : null;
+
+  const [view, setView] = useState<'grid' | 'list'>('grid');
   const isMobile = useMobile();
+
+  const { setPageInfo } = usePageStore();
+  const { setParentsFolderId } = useParentsFolderIdStore();
+
+  // resolvedPageId가 null인 경우 usePageSearch 내부에서 문제가 발생할 수 있으므로,
+  // 존재하지 않는 ID인 -1을 더미 값으로 사용해 안전하게 Hook을 호출함
+  const { searchKeyword, setSearchKeyword, searchResult } = usePageSearch(
+    resolvedPageId ?? -1,
+    'TITLE'
+  );
+  const selectedPageQuery = useFetchSelectedPage({
+    pageId: resolvedPageId ?? -1,
+    commandType: 'VIEW',
+  });
+  const sharedPageDashboardQuery = useFetchSharedPageDashboard({
+    pageId: resolvedPageId ?? -1,
+    commandType: 'VIEW',
+  });
+  const sharedPageMemberQuery = useFetchSharedPageMember({
+    pageId: resolvedPageId ?? -1,
+    commandType: 'VIEW',
+  });
+
+  console.log('페이지 대쉬보드 정보', sharedPageDashboardQuery.data);
+  console.log('페이지 멤버 정보', sharedPageMemberQuery.data);
+
+  const { addCrumb } = useBreadcrumbStore();
+
+  const selectedPage = selectedPageQuery.data?.data;
 
   useEffect(() => {
     if (isMobile) {
@@ -21,80 +54,46 @@ export default function SharedPage() {
     }
   }, [isMobile]);
 
-  //만약 path param이 없다면 1로 간주하고, 있다면 그대로 꺼내와서 사용.
-  const { pageId } = useParams();
+  useEffect(() => {
+    const rootFolderId = selectedPage?.rootFolderId;
 
-  let resolvedPageId = 1;
-  if (pageId) {
-    resolvedPageId = parseInt(pageId);
-  }
-  const { searchKeyword, setSearchKeyword, searchResult } = usePageSearch(
+    if (resolvedPageId !== null && rootFolderId) {
+      setPageInfo(resolvedPageId, 'VIEW');
+      setParentsFolderId(rootFolderId);
+    }
+  }, [
     resolvedPageId,
-    'TITLE'
-  );
-
-  // 클릭해서 들어간 페이지 정보 전역 변수로tj 저장
-  const { setPageInfo } = usePageStore();
-  const { setParentsFolderId } = useParentsFolderIdStore();
-
-  const selectedPageQuery = useFetchSelectedPage({
-    pageId: resolvedPageId,
-    commandType: 'VIEW',
-  });
+    selectedPage?.rootFolderId,
+    setPageInfo,
+    setParentsFolderId,
+  ]);
 
   useEffect(() => {
-    setPageInfo(resolvedPageId, 'VIEW');
-    setParentsFolderId(selectedPageQuery.data?.data.rootFolderId);
-  }, [resolvedPageId, setPageInfo, setParentsFolderId, selectedPageQuery.data]);
-
-  console.log('선택한 페이지 데이터:', selectedPageQuery.data);
-  console.log(
-    '선택한 페이지 데이터 타이틀 이름:',
-    selectedPageQuery.data?.data.pageTitle
-  );
-  console.log(
-    '선택한 페이지 데이터 디렉토리 상세 정보:',
-    selectedPageQuery.data?.data.directoryDetailRespons
-  );
-
-  //TODO: 해당 값을 통해서 현재 공유페이지의 정보 리스팅
-  const sharedPageDashboardQuery = useFetchSharedPageDashboard({
-    pageId: resolvedPageId,
-    commandType: 'VIEW',
-  });
-
-  const sharedPageMemberQuery = useFetchSharedPageMember({
-    pageId: resolvedPageId,
-    commandType: 'VIEW',
-  });
-
-  console.log('페이지 대쉬보드 정보', sharedPageDashboardQuery.data);
-  console.log('페이지 멤버 정보', sharedPageMemberQuery.data);
-
-  //BreadCrumb용 공유페이지 정보 추가
-  const { addCrumb } = useBreadcrumbStore();
-
-  useEffect(() => {
-    if (selectedPageQuery.data?.data) {
+    if (selectedPage) {
       addCrumb({
-        id: selectedPageQuery.data.data.pageId.toString(),
-        title: selectedPageQuery.data.data.pageTitle,
+        id: selectedPage.pageId.toString(),
+        title: selectedPage.pageTitle,
         type: 'shared',
       });
     }
-  }, [selectedPageQuery.data, addCrumb]);
+  }, [selectedPage, addCrumb]);
+
+  if (resolvedPageId === null) return <div>잘못된 접근입니다.</div>;
 
   return (
     <div className="flex h-screen flex-col">
       {/* HEADER SECTION*/}
-      <PageHeaderSection
-        pageTitle={selectedPageQuery.data?.data.pageTitle}
-        pageDescription={selectedPageQuery.data?.data.pageDescription}
-        folderId={selectedPageQuery.data?.data.rootFolderId}
-      />
-
-      {/* Boundary line */}
-      <div className="border-b-gray-30 mb-[40px] w-full border-b" />
+      {selectedPage && (
+        <>
+          <PageHeaderSection
+            pageTitle={selectedPage.pageTitle}
+            pageDescription={selectedPage.pageDescription}
+            folderId={selectedPage.rootFolderId}
+          />
+          {/* Boundary line */}
+          <div className="border-b-gray-30 mb-[40px] w-full border-b" />
+        </>
+      )}
 
       {/* CONTROLLER SECTION*/}
       <PageControllerSection
@@ -107,7 +106,7 @@ export default function SharedPage() {
       {/*CONTENT SECTION*/}
       <SharedPageContentSection
         view={view}
-        contentData={selectedPageQuery.data?.data}
+        contentData={selectedPage}
         searchResult={searchResult}
       />
     </div>

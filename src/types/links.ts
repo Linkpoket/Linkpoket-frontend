@@ -5,6 +5,15 @@ export type BaseRequest = {
   commandType: CommandType;
 };
 
+export interface LinkDetail {
+  linkId: number;
+  linkName: string;
+  linkUrl: string;
+  isFavorite: boolean;
+  faviconUrl: string;
+  orderIndex: number;
+}
+
 export type CreateLinkData = {
   baseRequest: BaseRequest;
   linkName: string;

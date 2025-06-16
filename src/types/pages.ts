@@ -1,3 +1,6 @@
+import { FolderDetail } from './folders';
+import { LinkDetail } from './links';
+
 export interface CreateSharedPageData {
   pageTitle: string;
   pageDescription?: string;
@@ -15,6 +18,16 @@ export interface JoinedPageData {
 export interface PageParamsData {
   pageId: number;
   commandType: string;
+}
+
+export interface PageDetails {
+  pageId: number;
+  pageTitle: string;
+  pageDescription: string;
+  rootFolderId: number;
+  directoryDetailRespons: FolderDetail[];
+  siteDetailResponses: LinkDetail[];
+  fullPath: string;
 }
 
 export interface DeleteSharedPageData {

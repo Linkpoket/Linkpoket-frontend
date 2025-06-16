@@ -1,3 +1,4 @@
+import { PageDetails } from './pages';
 import { PageItemSearchResponse } from './search';
 
 export type ViewType = 'grid' | 'list';
@@ -29,6 +30,7 @@ export interface PageContentSectionProps {
   view: ViewType;
   contentData?: any;
   searchResult?: PageItemSearchResponse;
+  pageDetails?: PageDetails;
 }
 
 export interface PageControllerSectionProps {

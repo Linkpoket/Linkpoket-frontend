@@ -4,17 +4,20 @@ import PersonalPageContentSection from '@/components/page-layout-ui/PersonalPage
 import { useFetchPersonalPage } from '@/hooks/queries/useFetchPersonalPage';
 import { useMobile } from '@/hooks/useMobile';
 import { usePageSearch } from '@/hooks/usePageSearch';
-import { usePageStore } from '@/stores/pageStore';
+import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useUserStore } from '@/stores/userStore';
 import { useEffect, useState } from 'react';
 
 export default function PersonalPage() {
   const { member, pageDetails, isLoading, error } = useFetchPersonalPage();
+  const { setPageInfo } = usePageStore();
+  const { setParentsFolderId } = useParentsFolderIdStore();
   const setUser = useUserStore((state) => state.setUser);
-  const pageId = usePageStore((state) => state.pageId);
+
+  const resolvedPageId = pageDetails?.pageId;
 
   const { searchKeyword, setSearchKeyword, searchResult } = usePageSearch(
-    pageId,
+    resolvedPageId,
     'TITLE'
   );
 
@@ -28,28 +31,38 @@ export default function PersonalPage() {
     }
   }, [isMobile]);
 
-  const { nickName, email, colorCode } = member || {};
-
   useEffect(() => {
-    if (nickName && email && colorCode) {
+    if (member?.nickName && member?.email && member?.colorCode) {
+      const { nickName, email, colorCode } = member;
       setUser(nickName, email, colorCode);
     }
-  }, [nickName, email, colorCode, setUser]);
+  }, [member, setUser]);
+
+  useEffect(() => {
+    if (pageDetails?.pageId && pageDetails?.rootFolderId) {
+      setPageInfo(pageDetails.pageId, 'VIEW');
+      setParentsFolderId(pageDetails.rootFolderId);
+    }
+  }, [pageDetails, setPageInfo, setParentsFolderId]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading data</div>;
+  if (!pageDetails) return <div>No page data</div>;
 
   return (
     <div className="flex h-screen flex-col">
       {/* HEADER SECTION*/}
-      <PageHeaderSection
-        pageTitle={pageDetails?.pageTitle}
-        pageDescription={pageDetails?.pageDescription}
-        folderId={pageDetails?.rootFolderId}
-      />
-
-      {/* Boundary line */}
-      <div className="border-b-gray-30 mb-[40px] w-full border-b" />
+      {pageDetails && (
+        <>
+          <PageHeaderSection
+            pageTitle={pageDetails.pageTitle}
+            pageDescription={pageDetails.pageDescription}
+            folderId={pageDetails.rootFolderId}
+          />
+          {/* Boundary line */}
+          <div className="border-b-gray-30 mb-[40px] w-full border-b" />
+        </>
+      )}
 
       {/* CONTROLLER SECTION*/}
       <PageControllerSection
@@ -60,7 +73,11 @@ export default function PersonalPage() {
       />
 
       {/*CONTENT SECTION*/}
-      <PersonalPageContentSection view={view} searchResult={searchResult} />
+      <PersonalPageContentSection
+        view={view}
+        searchResult={searchResult}
+        pageDetails={pageDetails}
+      />
     </div>
   );
 }
