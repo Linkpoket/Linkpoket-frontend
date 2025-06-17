@@ -16,5 +16,8 @@ export const patchProfileColor = async (
     colorCode,
   });
 
+  if (response.data.status !== 200)
+    throw new Error(response.data.message ?? '프로필 색상 변경 실패');
+
   return response.data.data;
 };

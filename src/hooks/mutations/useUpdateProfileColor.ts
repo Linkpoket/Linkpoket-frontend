@@ -9,7 +9,7 @@ export const useUpdateProfileColor = () => {
   return useMutation({
     mutationFn: patchProfileColor,
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['profileColor'] });
+      queryClient.invalidateQueries({ queryKey: ['personalPage'] });
       useUserStore.getState().setColorCode(variables);
     },
     onError: () => {

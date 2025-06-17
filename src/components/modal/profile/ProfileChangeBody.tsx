@@ -21,6 +21,13 @@ const ProfileChangeBody = ({ onBack }: { onBack: () => void }) => {
           ToastCustom.success('프로필 색상이 변경되었습니다.');
           onBack();
         },
+        onError: (error) => {
+          if (error instanceof Error) {
+            ToastCustom.error(error.message);
+          } else {
+            ToastCustom.error('알 수 없는 오류가 발생했습니다.');
+          }
+        },
       });
     } else {
       onBack();

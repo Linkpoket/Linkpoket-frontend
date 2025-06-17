@@ -8,12 +8,15 @@ export const useUpdateProfileNickname = () => {
 
   return useMutation({
     mutationFn: patchProfileNickname,
-    onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['profileNickname'] });
-      useUserStore.getState().setNickname(variables);
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['personalPage'] });
+      useUserStore.getState().setNickname(data.nickname);
+      ToastCustom.success('닉네임을 변경했습니다.');
     },
-    onError: () => {
-      ToastCustom.error('닉네임 변경에 실패했습니다. 다시 시도해 주세요.');
+    onError: (error) => {
+      if (error instanceof Error) {
+        ToastCustom.error(error.message);
+      }
     },
   });
 };

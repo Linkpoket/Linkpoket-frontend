@@ -15,5 +15,8 @@ export const patchProfileNickname = async (
   }>('/api/member/nickname', {
     nickname,
   });
+
+  if (response.data.status !== 200) throw new Error(response.data.message);
+
   return response.data.data;
 };
