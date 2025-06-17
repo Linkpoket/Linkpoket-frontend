@@ -1,41 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Modal from '@/components/common-ui/Modal';
 import { Button } from '@/components/common-ui/button';
 import ToggleButton from '@/components/common-ui/ToggleButton';
 import { Input } from '@/components/common-ui/Input';
 import { Radio } from '@/components/common-ui/Radio';
 import PageSortBox from '@/components/page-layout-ui/PageSortBox';
-
-const MEMBERS = [
-  {
-    colorCode: 'bg-yellow-400',
-    email: 'linkmoa@gmail.com',
-    isWaiting: false,
-    nickName: '김링크',
-    role: 'HOST',
-  },
-  {
-    colorCode: 'bg-sky-400',
-    email: 'linkmoa@gmail.com',
-    isWaiting: false,
-    nickName: '링크누',
-    role: 'VIEWER',
-  },
-  {
-    colorCode: 'bg-yellow-300',
-    email: 'linkmoa@gmail.com',
-    isWaiting: false,
-    nickName: '링크누룽',
-    role: 'VIEWER',
-  },
-  {
-    colorCode: 'bg-purple-400',
-    email: 'linkmoa@gmail.com',
-    isWaiting: true,
-    nickName: '링크지',
-    role: 'VIEWER',
-  },
-];
+import { useLocation, useParams } from 'react-router-dom';
+import useFetchSharedPageDashboard from '@/hooks/queries/useFetchSharedPageDashboard';
 
 const TIERS = [
   { label: '베이직(5명)', value: 'BASIC' },
@@ -52,9 +23,56 @@ const ManageSharedPageModal = ({
   isOpen,
   onClose,
 }: ManageSharedPageModalProps) => {
-  const [isPublic, setIsPublic] = useState(false);
-  const [tier, setTier] = useState('premium');
+  const [isPublic, setIsPublic] = useState<'RESTRICTED' | 'PUBLIC'>(
+    'RESTRICTED'
+  );
   const [search, setSearch] = useState('');
+
+  const pathname = useLocation().pathname;
+  const { pageId } = useParams();
+  const numericId = Number.parseInt(pageId ?? '', 10);
+  const resolvedPageId = Number.isFinite(numericId) ? numericId : null;
+
+  const sharedPageDashboardQuery = useFetchSharedPageDashboard({
+    pageId: resolvedPageId ?? -1,
+    commandType: 'VIEW',
+  });
+
+  // API 데이터가 로드된 후 state 업데이트
+  useEffect(() => {
+    if (sharedPageDashboardQuery.data?.data.pageType) {
+      // pageType에 따라 isPublic 설정
+      setIsPublic(
+        sharedPageDashboardQuery.data.data.pageType === 'PUBLIC'
+          ? 'PUBLIC'
+          : 'RESTRICTED'
+      );
+    }
+  }, [sharedPageDashboardQuery.data]);
+
+  // 링크 복사 함수
+  const handleCopyLink = async () => {
+    try {
+      const currentUrl = window.location.href;
+      await navigator.clipboard.writeText(currentUrl);
+    } catch (error) {
+      console.error('링크 복사 실패:', error);
+    }
+  };
+
+  console.log('페이지 대쉬보드 정보', sharedPageDashboardQuery.data);
+  console.log(
+    '페이지 대쉬보드 정보',
+    sharedPageDashboardQuery.data?.data.pageType
+  );
+
+  const MEMBERS: {
+    nickName: string;
+    email: string;
+    colorCode: string;
+    isWaiting: boolean;
+    role: string;
+  }[] = sharedPageDashboardQuery.data?.data.pageMembers || [];
 
   const filteredMembers = (
     search.trim()
@@ -83,8 +101,10 @@ const ManageSharedPageModal = ({
         <div className="mb-2 flex items-center justify-between">
           <span className="text-[16px] font-semibold">페이지 공개</span>
           <ToggleButton
-            checked={isPublic}
-            onClick={() => setIsPublic((v) => !v)}
+            checked={isPublic === 'PUBLIC'}
+            onClick={() =>
+              setIsPublic((v) => (v === 'PUBLIC' ? 'RESTRICTED' : 'PUBLIC'))
+            }
           />
         </div>
         <div className="text-gray-70 mb-4 text-[16px]">
@@ -96,10 +116,10 @@ const ManageSharedPageModal = ({
             <Input
               containerClassName="flex-1 min-w-0"
               className="!w-auto"
-              value="주소"
+              value={pathname}
               readOnly
             />
-            <Button size="sm" variant="secondary">
+            <Button size="sm" variant="secondary" onClick={handleCopyLink}>
               링크 복사
             </Button>
           </div>
@@ -116,8 +136,8 @@ const ManageSharedPageModal = ({
               key={t.value}
               name="tier"
               value={t.value}
-              checked={tier === t.value}
-              onChange={() => setTier(t.value)}
+              checked={sharedPageDashboardQuery.data?.data.pageType === t.value}
+              onChange={() => {}}
               label={t.label}
               isModal
             />
@@ -147,7 +167,8 @@ const ManageSharedPageModal = ({
               className="border-gray-10 flex items-center gap-3 border-b py-2 last:border-b-0"
             >
               <div
-                className={`text-primary-0 flex items-center justify-center rounded-full px-[16px] py-[10px] text-[22px] font-[500] ${m.colorCode}`}
+                className="text-primary-0 flex items-center justify-center rounded-full px-[16px] py-[10px] text-[22px] font-[500]"
+                style={{ backgroundColor: m.colorCode }}
               >
                 {m.nickName[0]}
               </div>
@@ -158,12 +179,20 @@ const ManageSharedPageModal = ({
                 <div className="text-[16px] text-gray-50">{m.email}</div>
               </div>
               <div>
-                <PageSortBox
-                  options={
-                    m.role === 'HOST' ? ['호스트', '뷰어'] : ['뷰어', '호스트']
-                  }
-                  onChange={(v) => console.log(v)}
-                />
+                {m.isWaiting === false ? (
+                  <PageSortBox
+                    options={
+                      m.role === 'HOST'
+                        ? ['호스트', '뷰어', '에디터', '내보내기']
+                        : ['뷰어', '호스트', '에디터', '내보내기']
+                    }
+                    onChange={(v) => console.log(v)}
+                  />
+                ) : (
+                  <Button variant="ghost" className="bg-gray-20 text-gray-50">
+                    수락 대기
+                  </Button>
+                )}
               </div>
             </div>
           ))}

@@ -32,16 +32,12 @@ export default function SharedPage() {
     pageId: resolvedPageId ?? -1,
     commandType: 'VIEW',
   });
-  const sharedPageDashboardQuery = useFetchSharedPageDashboard({
-    pageId: resolvedPageId ?? -1,
-    commandType: 'VIEW',
-  });
+
   const sharedPageMemberQuery = useFetchSharedPageMember({
     pageId: resolvedPageId ?? -1,
     commandType: 'VIEW',
   });
 
-  console.log('페이지 대쉬보드 정보', sharedPageDashboardQuery.data);
   console.log('페이지 멤버 정보', sharedPageMemberQuery.data);
 
   const { addCrumb } = useBreadcrumbStore();

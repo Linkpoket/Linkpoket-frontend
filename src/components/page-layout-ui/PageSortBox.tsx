@@ -4,18 +4,18 @@ import PageSortBoxIcon from '@/assets/common-ui-assets/PageSortBoxIcon.svg?react
 import PageSortBoxIconUp from '@/assets/common-ui-assets/PageSortBoxIconUp.svg?react';
 import PageSortBoxIconCheck from '@/assets/common-ui-assets/PageSortBoxIconCheck.svg?react';
 
-type Option = '기본순' | '최신순' | '이름순' | '호스트' | '뷰어';
-
 interface SortSelectProps {
-  options?: Option[];
-  onChange?: (value: Option) => void;
+  options?: string[];
+  onChange?: (value: string) => void;
+  className?: string;
 }
 
 export default function PageSortBox({
   options = ['기본순', '최신순', '이름순', '호스트', '뷰어'],
   onChange,
+  className,
 }: SortSelectProps) {
-  const [selected, setSelected] = useState<Option>(options[0]);
+  const [selected, setSelected] = useState<string>(options[0]);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -37,14 +37,17 @@ export default function PageSortBox({
     };
   }, [isOpen]);
 
-  const handleSelect = (option: Option) => {
+  const handleSelect = (option: string) => {
     setSelected(option);
     setIsOpen(false);
     onChange?.(option);
   };
 
   return (
-    <div ref={dropdownRef} className="relative inline-block text-left">
+    <div
+      ref={dropdownRef}
+      className={cn('relative inline-block text-left', className)}
+    >
       <button
         aria-haspopup="listbox"
         onClick={() => setIsOpen((prev) => !prev)}
