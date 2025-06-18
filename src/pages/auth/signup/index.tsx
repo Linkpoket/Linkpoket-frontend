@@ -82,10 +82,12 @@ const TERMS_ITEMS = [
   {
     name: 'terms1',
     label: '(필수) 링크모아 이용약관 동의',
+    modal: 'terms',
   },
   {
     name: 'terms2',
     label: '(필수) 개인정보 처리방침 동의',
+    modal: 'privacy',
   },
 ];
 
@@ -329,7 +331,7 @@ const SignupPage = () => {
           )}
 
           {/* 약관 항목 */}
-          {TERMS_ITEMS.map((term, idx) => (
+          {TERMS_ITEMS.map((term) => (
             <div
               key={term.name}
               className={`flex items-center justify-between text-sm ${errors.termsAgreed ? 'text-red-500' : 'text-gray-700'}`}
@@ -350,13 +352,11 @@ const SignupPage = () => {
               <button
                 type="button"
                 className="text-gray-500 underline"
-                onClick={() => {
-                  if (idx === 0) {
-                    setShowTermsModal((prev) => !prev);
-                  } else {
-                    setShowPrivacyModal((prev) => !prev);
-                  }
-                }}
+                onClick={() =>
+                  term.modal === 'terms'
+                    ? setShowTermsModal((prev) => !prev)
+                    : setShowPrivacyModal((prev) => !prev)
+                }
               >
                 보기
               </button>
