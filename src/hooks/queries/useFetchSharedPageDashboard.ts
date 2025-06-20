@@ -6,7 +6,7 @@ export default function useFetchSharedPageDashboard(
   data: PageParamsData & { enabled?: boolean }
 ) {
   return useQuery({
-    queryKey: ['sharedPageDashboard', data],
+    queryKey: ['sharedPageDashboard', data.pageId],
     queryFn: () => fetchSharedPageDashboard(data),
     enabled: !!data.pageId,
   });

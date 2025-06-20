@@ -17,7 +17,6 @@ export interface JoinedPageData {
 
 export interface PageParamsData {
   pageId: number;
-  commandType: string;
 }
 
 export interface PageDetails {
@@ -51,4 +50,13 @@ export interface UpdatePageDescriptionData {
     commandType: 'EDIT';
   };
   pageDescription: string;
+}
+
+export interface UpdateSharedPageInvitationData {
+  baseRequest: {
+    pageId: number;
+    commandType: 'SHARED_PAGE_INVITATION';
+  };
+  receiverEmail: string;
+  permissionType: string;
 }

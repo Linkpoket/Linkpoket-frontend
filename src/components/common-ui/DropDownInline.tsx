@@ -246,6 +246,3 @@ const DropDownInline = ({
 };
 
 export default DropDownInline;
-
-// // 추후 api 전달에따라 내부로직 변경 가능
-// onShare,onCopy,onDelete,onTitleChange의 경우 부모 컴포넌트에서 useMutation 처리하도록 설계

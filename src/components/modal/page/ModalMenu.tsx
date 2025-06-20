@@ -1,11 +1,15 @@
 import Consult from '@/assets/common-ui-assets/Consult.svg?react';
 import Withdraw from '@/assets/common-ui-assets/Withdraw.svg?react';
 import Deleted from '@/assets/common-ui-assets/Deleted.svg?react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useClickOutside } from '@/hooks/useClickOutside';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useDeleteSharedPage } from '@/hooks/mutations/useDeleteSharedPage';
+import { useLocation } from 'react-router-dom';
 import { usePageStore } from '@/stores/pageStore';
+import DeleteSharedPageModal from './DeleteSharedPageModal';
+import WithdrawSharedPageModal from './WithdrawlSharedPageModal';
+import ManageSharedPageModal from './ManageSharedPageModal';
+import SharedPage from '@/assets/widget-ui-assets/SharedPage.svg?react';
+
 // import DarkMode from '@/assets/common-ui-assets/DarkMode.svg?react';
 // import ToggleButton from './ToggleButton';
 
@@ -22,14 +26,28 @@ export default function ModalMenu({
   // isDarkMode = false,
   // onToggleDarkMode,
   isHost,
-  onWithDrawPage,
   onContact,
   setIsOpen,
 }: ModalMenuProps) {
+  const [isDeleteSharedPageModalOpen, setIsDeleteSharedPageModalOpen] =
+    useState(false);
+  const [isWithdrawSharedPageModalOpen, setisWithdrawSharedPageModalOpen] =
+    useState(false);
+  const [isManageSharedPageModalOpen, setIsManageSharedPageModalOpen] =
+    useState(false);
+
   const modalRef = useRef<HTMLDivElement>(null);
 
-  const navigate = useNavigate();
-  useClickOutside(modalRef, setIsOpen);
+  useClickOutside(modalRef, () => {
+    // 모달이 열려있지 않을 때만 메뉴 닫기
+    if (
+      !isWithdrawSharedPageModalOpen &&
+      !isDeleteSharedPageModalOpen &&
+      !isManageSharedPageModalOpen
+    ) {
+      setIsOpen(false);
+    }
+  });
 
   const location = useLocation();
   const isShared = location.pathname.includes('shared');
@@ -39,28 +57,6 @@ export default function ModalMenu({
   useEffect(() => {
     console.log(id, type);
   }, [id, type]);
-
-  //TODO: 공유 페이지 삭제 모달 추가 후 그 곳으로 옮길 예정
-  const deleteSharedPageMutation = useDeleteSharedPage({
-    onSuccess: () => {
-      console.log('공유 페이지 삭제 성공');
-      setIsOpen(false);
-      navigate('/');
-    },
-    onError: () => {
-      console.log('공유 페이지 삭제 실패');
-    },
-  });
-
-  const handleDeleteSharedPage = () => {
-    deleteSharedPageMutation.mutate({
-      baseRequest: {
-        pageId: id,
-        commandType: type,
-      },
-    });
-    console.log('페이지 번호:', id, '삭제 완료');
-  };
 
   return (
     <div
@@ -91,18 +87,56 @@ export default function ModalMenu({
           <div className="border-gray-40 m-[8px] w-[166px] border" />
           <div className="flex flex-col">
             <button
-              onClick={onWithDrawPage}
+              onClick={() => setisWithdrawSharedPageModalOpen(true)}
               className="text-status-danger hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[600]"
             >
               <Withdraw /> <span className="text-[14px]">공유 페이지 탈퇴</span>
             </button>
+
+            {isWithdrawSharedPageModalOpen && (
+              <WithdrawSharedPageModal
+                isOpen={isWithdrawSharedPageModalOpen}
+                onClose={() => setisWithdrawSharedPageModalOpen(false)}
+                pageId={id}
+              />
+            )}
+
             {isHost && (
-              <button
-                onClick={handleDeleteSharedPage}
-                className="text-status-danger hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[600]"
-              >
-                <Deleted /> <span className="text-[14px]">페이지 삭제하기</span>
-              </button>
+              <>
+                {/*TODO: 이후 삭제 예정 버튼 */}
+                <button
+                  onClick={() => setIsManageSharedPageModalOpen(true)}
+                  className="hover:bg-gray-10 active:bg-gray-5 text-gray-90 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[600]"
+                >
+                  <SharedPage width={20} height={21} />
+                  <span className="text-[14px]">공유 페이지 관리</span>
+                </button>
+
+                <button
+                  onClick={() => setIsDeleteSharedPageModalOpen(true)}
+                  className="text-status-danger hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[600]"
+                >
+                  <Deleted />{' '}
+                  <span className="text-[14px]">페이지 삭제하기</span>
+                </button>
+              </>
+            )}
+
+            {/*TODO: 이후 삭제 예정 조건*/}
+
+            {isManageSharedPageModalOpen && (
+              <ManageSharedPageModal
+                isOpen={isManageSharedPageModalOpen}
+                onClose={() => setIsManageSharedPageModalOpen(false)}
+              />
+            )}
+
+            {isDeleteSharedPageModalOpen && (
+              <DeleteSharedPageModal
+                isOpen={isDeleteSharedPageModalOpen}
+                onClose={() => setIsDeleteSharedPageModalOpen(false)}
+                pageId={id}
+              />
             )}
           </div>
         </>
