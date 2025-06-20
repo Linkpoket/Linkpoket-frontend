@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { COLOR_OPTIONS } from '@/styles/tokens';
 import { TermsModal } from '@/components/modal/signup/TermsModal';
 import { PrivacyModal } from '@/components/modal/signup/PrivacyModal';
+import axios from 'axios';
 
 // Zod 스키마 정의
 const signupSchema = z
@@ -177,7 +178,7 @@ const SignupPage = () => {
         ageRange: data.ageRange,
         gender: genderValue,
         job: submitData.jobText,
-        nickname: data.nickname,
+        nickName: data.nickname,
         colorCode: submitData.colorCode,
       });
 
@@ -185,7 +186,12 @@ const SignupPage = () => {
 
       navigate('/');
     } catch (error) {
-      console.error('회원가입 오류:', error);
+      if (axios.isAxiosError(error)) {
+        console.error('응답 상태 코드:', error.response?.status);
+        console.error('응답 메시지:', error.response?.data);
+      } else {
+        console.error('기타 오류:', error);
+      }
     }
   };
 
