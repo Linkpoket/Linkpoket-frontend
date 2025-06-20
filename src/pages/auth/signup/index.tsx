@@ -10,6 +10,8 @@ import { Select } from '@/components/common-ui/Select';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 import { COLOR_OPTIONS } from '@/styles/tokens';
+import { TermsModal } from '@/components/modal/signup/TermsModal';
+import { PrivacyModal } from '@/components/modal/signup/PrivacyModal';
 
 // Zod 스키마 정의
 const signupSchema = z
@@ -64,6 +66,31 @@ const JOB_OPTIONS = [
   { value: 'other', label: '기타 (직접 입력)' },
 ];
 
+const AGE_OPTIONS = [
+  { label: '10대', value: '10s' },
+  { label: '20대', value: '20s' },
+  { label: '30대', value: '30s' },
+  { label: '40대 이상', value: '40plus' },
+];
+
+const GENDER_OPTIONS = [
+  { label: '남성', value: 'male' },
+  { label: '여성', value: 'female' },
+];
+
+const TERMS_ITEMS = [
+  {
+    name: 'terms1',
+    label: '(필수) 링크모아 이용약관 동의',
+    modal: 'terms',
+  },
+  {
+    name: 'terms2',
+    label: '(필수) 개인정보 처리방침 동의',
+    modal: 'privacy',
+  },
+];
+
 type FormData = z.infer<typeof signupSchema>;
 
 const SignupPage = () => {
@@ -86,10 +113,13 @@ const SignupPage = () => {
     },
   });
 
+  const [showTermsModal, setShowTermsModal] = useState<boolean>(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState<boolean>(false);
+
   // 직업 선택값과 커스텀 직업값 감시
   const navigate = useNavigate();
   const selectedJob = watch('job');
-  const customJobValue = watch('customJob');
+  // const customJobValue = watch('customJob');
 
   // 개별 약관 동의 상태 관리
   const [termsStatus, setTermsStatus] = useState({
@@ -147,7 +177,7 @@ const SignupPage = () => {
         ageRange: data.ageRange,
         gender: genderValue,
         job: submitData.jobText,
-        nickName: data.nickname,
+        nickname: data.nickname,
         colorCode: submitData.colorCode,
       });
 
@@ -165,9 +195,9 @@ const SignupPage = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="w-[460px] max-w-md space-y-6"
       >
-        <h1 className="mb-8 flex justify-center text-[26px] font-bold">
+        <h2 className="mb-8 flex justify-center text-[26px] font-bold">
           링크모아 회원 가입
-        </h1>
+        </h2>
 
         {/* 연령대 */}
         <div>
@@ -178,34 +208,16 @@ const SignupPage = () => {
               control={control}
               render={({ field }) => (
                 <>
-                  <Radio
-                    label="10대"
-                    value="10s"
-                    error={!!errors.ageRange}
-                    checked={field.value === '10s'}
-                    onChange={() => field.onChange('10s')}
-                  />
-                  <Radio
-                    label="20대"
-                    value="20s"
-                    error={!!errors.ageRange}
-                    checked={field.value === '20s'}
-                    onChange={() => field.onChange('20s')}
-                  />
-                  <Radio
-                    label="30대"
-                    value="30s"
-                    error={!!errors.ageRange}
-                    checked={field.value === '30s'}
-                    onChange={() => field.onChange('30s')}
-                  />
-                  <Radio
-                    label="40대 이상"
-                    value="40plus"
-                    error={!!errors.ageRange}
-                    checked={field.value === '40plus'}
-                    onChange={() => field.onChange('40plus')}
-                  />
+                  {AGE_OPTIONS.map((opt) => (
+                    <Radio
+                      key={opt.value}
+                      label={opt.label}
+                      value={opt.value}
+                      error={!!errors.ageRange}
+                      checked={field.value === opt.value}
+                      onChange={() => field.onChange(opt.value)}
+                    />
+                  ))}
                 </>
               )}
             />
@@ -226,20 +238,16 @@ const SignupPage = () => {
               control={control}
               render={({ field }) => (
                 <>
-                  <Radio
-                    label="남성"
-                    value="male"
-                    error={!!errors.gender}
-                    checked={field.value === 'male'}
-                    onChange={() => field.onChange('male')}
-                  />
-                  <Radio
-                    label="여성"
-                    value="female"
-                    error={!!errors.gender}
-                    checked={field.value === 'female'}
-                    onChange={() => field.onChange('female')}
-                  />
+                  {GENDER_OPTIONS.map((opt) => (
+                    <Radio
+                      key={opt.value}
+                      label={opt.label}
+                      value={opt.value}
+                      error={!!errors.gender}
+                      checked={field.value === opt.value}
+                      onChange={() => field.onChange(opt.value)}
+                    />
+                  ))}
                 </>
               )}
             />
@@ -312,6 +320,7 @@ const SignupPage = () => {
             render={({ field }) => (
               <Checkbox
                 label="아래 약관에 모두 동의합니다."
+                name={field.name}
                 checked={field.value}
                 onChange={(e) => field.onChange(e.target.checked)}
               />
@@ -321,39 +330,38 @@ const SignupPage = () => {
             <p className="text-sm text-red-500">{errors.termsAgreed.message}</p>
           )}
 
-          {/* 약관 항목 1 */}
-          <div
-            className={`flex items-center justify-between text-sm ${errors.termsAgreed ? 'text-red-500' : 'text-gray-700'}`}
-          >
-            <div className="flex items-center space-x-1">
-              <Checkbox
-                checked={termsStatus.terms1}
-                onChange={(e) => handleTermChange('terms1', e.target.checked)}
-                variant="checkOnly"
-              />
-              <span>(필수) 링크모아 이용약관 동의</span>
+          {/* 약관 항목 */}
+          {TERMS_ITEMS.map((term) => (
+            <div
+              key={term.name}
+              className={`flex items-center justify-between text-sm ${errors.termsAgreed ? 'text-red-500' : 'text-gray-700'}`}
+            >
+              <div className="flex items-center space-x-1">
+                <Checkbox
+                  checked={termsStatus[term.name as keyof typeof termsStatus]}
+                  onChange={(e) =>
+                    handleTermChange(
+                      term.name as 'terms1' | 'terms2',
+                      e.target.checked
+                    )
+                  }
+                  variant="checkOnly"
+                />
+                <span>{term.label}</span>
+              </div>
+              <button
+                type="button"
+                className="text-gray-500 underline hover:cursor-pointer"
+                onClick={() =>
+                  term.modal === 'terms'
+                    ? setShowTermsModal((prev) => !prev)
+                    : setShowPrivacyModal((prev) => !prev)
+                }
+              >
+                보기
+              </button>
             </div>
-            <button type="button" className="text-gray-500 underline">
-              보기
-            </button>
-          </div>
-
-          {/* 약관 항목 2 */}
-          <div
-            className={`flex items-center justify-between text-sm ${errors.termsAgreed ? 'text-red-500' : 'text-gray-700'}`}
-          >
-            <div className="flex items-center space-x-1">
-              <Checkbox
-                checked={termsStatus.terms2}
-                onChange={(e) => handleTermChange('terms2', e.target.checked)}
-                variant="checkOnly"
-              />
-              <span>(필수) 개인정보 처리방침 동의</span>
-            </div>
-            <button type="button" className="text-gray-500 underline">
-              보기
-            </button>
-          </div>
+          ))}
         </div>
 
         <Button
@@ -364,6 +372,19 @@ const SignupPage = () => {
           {isSubmitting ? '처리 중...' : '회원 가입'}
         </Button>
       </form>
+
+      {showTermsModal && (
+        <TermsModal
+          isOpen={showTermsModal}
+          onClose={() => setShowTermsModal(false)}
+        />
+      )}
+      {showPrivacyModal && (
+        <PrivacyModal
+          isOpen={showPrivacyModal}
+          onClose={() => setShowPrivacyModal(false)}
+        />
+      )}
     </main>
   );
 };
