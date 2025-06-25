@@ -37,14 +37,16 @@ export default function SharedPageHeaderSection({
       pageTitle: title,
     };
 
+    console.log('타이틀업데이트', updateSharedPageTitleData);
+
     updateSharedPageTitle(updateSharedPageTitleData, {
       onSuccess: (response) => {
-        console.log('폴더 업데이트 성공 응답:', response);
+        console.log('타이틀 성공 응답:', response);
         lastUpdateTitle.current = { title };
         lastUpdateDescription.current = { description };
       },
       onError: (error) => {
-        console.error('폴더 업데이트 실패:', error);
+        console.error('설명 업데이트 실패:', error);
       },
     });
   };
@@ -57,21 +59,26 @@ export default function SharedPageHeaderSection({
       pageDescription: description,
     };
 
+    console.log('설명업데이트', updateSharedPageDescriptionData);
+
     updateSharedPageDescription(updateSharedPageDescriptionData, {
       onSuccess: (response) => {
-        console.log('폴더 업데이트 성공 응답:', response);
+        console.log('설명 업데이트 성공 응답:', response);
         lastUpdateTitle.current = { title };
         lastUpdateDescription.current = { description };
       },
       onError: (error) => {
-        console.error('폴더 업데이트 실패:', error);
+        console.error('설명 업데이트 실패:', error);
       },
     });
   };
 
-  const handleDebouncedUpdate = () => {
-    lastUpdateTitle.current = { title };
-    lastUpdateDescription.current = { description };
+  const handleDebouncedUpdate = (data: {
+    title: string;
+    description: string;
+  }) => {
+    lastUpdateTitle.current = { title: data.title };
+    lastUpdateDescription.current = { description: data.description };
   };
 
   const debouncedUpdate = useDebounce(handleDebouncedUpdate, 500);
