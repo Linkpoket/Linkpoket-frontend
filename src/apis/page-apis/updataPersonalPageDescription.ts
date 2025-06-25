@@ -1,0 +1,19 @@
+import { axiosInstance } from '../axiosInstance';
+import { UpdatePageDescriptionData } from '@/types/pages';
+
+export default async function updatePersonalPageDescription(
+  data: UpdatePageDescriptionData
+) {
+  try {
+    const response = await axiosInstance.put(
+      '/api/personal-pages/description',
+      {
+        data,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error updating personal page description:', error);
+    throw error;
+  }
+}

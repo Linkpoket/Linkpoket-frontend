@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  linkrew-server:
+    container_name: linkrew-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - ${SPRING_PORT}:${SPRING_PORT}
+    environment:
+      SPRING_PROFILE: ${SPRING_PROFILE}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILE}
+      DB_URL: ${DB_URL}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      - linkrew-database
