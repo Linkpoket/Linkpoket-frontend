@@ -46,7 +46,20 @@ export default function LinkItem({ item, view, isBookmark }: PageItemProps) {
       onDoubleClick={handleDoubleClick}
       onContextMenu={handleContextMenu}
     >
-      <LinkItemIcon />
+      <div className="flex h-[95px] w-[95px] items-center justify-center rounded-xl">
+        {item.linkUrl ? (
+          <img
+            className="rounded-md"
+            src={`https://www.google.com/s2/favicons?sz=64&domain_url=${item.linkUrl}`}
+            alt="favicon"
+            width={42}
+            height={38}
+          />
+        ) : (
+          <LinkItemIcon />
+        )}
+      </div>
+
       <button
         className="absolute top-4 right-4 cursor-pointer bg-transparent"
         onClick={handleBookmark}
@@ -74,7 +87,17 @@ export default function LinkItem({ item, view, isBookmark }: PageItemProps) {
       onDoubleClick={handleDoubleClick}
     >
       <div className="flex items-center gap-[20px]">
-        <LinkItemIcon width={42} height={38} />
+        {item.linkUrl ? (
+          <img
+            className="block rounded-md"
+            src={`https://www.google.com/s2/favicons?sz=64&domain_url=${item.linkUrl}`}
+            alt="favicon"
+            width={42}
+            height={38}
+          />
+        ) : (
+          <LinkItemIcon width={42} height={38} />
+        )}
         <span className="text-gray-90 text-[14px] font-[400]">
           {item.title}
         </span>
