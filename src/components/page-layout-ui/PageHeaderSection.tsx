@@ -79,6 +79,11 @@ export default function PageHeaderSection({
   }, [pageTitle, pageDescription]);
 
   const handleBlur = () => {
+    const currentPath = window.location.pathname;
+    if (currentPath === '/' || currentPath === '/bookmarks') {
+      return;
+    }
+
     console.log('포커스 아웃:', {
       current: { title, description },
     });
