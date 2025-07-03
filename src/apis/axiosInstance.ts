@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { z } from 'zod';
 
 export const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8080',
+  baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
 });
 
@@ -27,7 +27,7 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
       try {
         const res = await axios.get(
-          'http://localhost:8080/api/jwt/access-token',
+          `${import.meta.env.VITE_API_URL}/api/jwt/access-token`,
           {
             withCredentials: true,
           }

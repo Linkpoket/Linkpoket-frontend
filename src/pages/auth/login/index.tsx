@@ -36,8 +36,7 @@ const LoginPage = () => {
             bgColor="bg-kakao-yellow"
             className="hover:bg-[#F4DC03] active:bg-[#F4DC03]"
             onClick={() =>
-              (window.location.href =
-                'http://localhost:8080/oauth2/authorization/kakao')
+              (window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/kakao`)
             }
           />
 
@@ -47,8 +46,7 @@ const LoginPage = () => {
             bgColor="bg-gray-5"
             className="hover:bg-[#E6E6E6] active:bg-[#E6E6E6]"
             onClick={() =>
-              (window.location.href =
-                'http://localhost:8080/oauth2/authorization/google')
+              (window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/google`)
             }
           />
         </section>
@@ -67,8 +65,7 @@ const LoginPage = () => {
             className="h-[42px] w-[42px] rounded-full p-0 hover:bg-[#2FD057]"
             iconClassName="text-[#06BE34] group-hover:text-white"
             onClick={() =>
-              (window.location.href =
-                'http://localhost:8080/oauth2/authorization/naver')
+              (window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/naver`)
             }
             noMargin={true}
           />
@@ -78,8 +75,7 @@ const LoginPage = () => {
             className="group h-[42px] w-[42px] rounded-full p-0"
             noMargin={true}
             onClick={() =>
-              (window.location.href =
-                'http://localhost:8080/oauth2/authorization/github')
+              (window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/github`)
             }
           />
         </div>

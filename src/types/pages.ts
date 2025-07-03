@@ -39,7 +39,7 @@ export interface DeleteSharedPageData {
 export interface UpdatePageTitleData {
   baseRequest: {
     pageId: number;
-    commandType: 'EDIT';
+    commandType: string;
   };
   pageTitle: string;
 }
@@ -47,7 +47,7 @@ export interface UpdatePageTitleData {
 export interface UpdatePageDescriptionData {
   baseRequest: {
     pageId: number;
-    commandType: 'EDIT';
+    commandType: string;
   };
   pageDescription: string;
 }

@@ -1,96 +1,109 @@
 import { useState, useEffect, useRef } from 'react';
 import { usePageStore } from '@/stores/pageStore';
-import useUpdateFolder from '@/hooks/mutations/useUpdateFolder';
 import { useDebounce } from '@/hooks/useDebounce';
+import useUpdateSharedPageTitle from '@/hooks/mutations/useUpdateSharedPageTitle';
+import useUpdateSharedPageDescription from '@/hooks/mutations/useUpdateSharedPageDescription';
 
 type PageHeaderSectionProps = {
   pageTitle: string;
   pageDescription: string;
-  folderId?: number;
-};
-
-type FolderUpdateData = {
-  title: string;
-  description: string;
 };
 
 const MAX_TITLE_LENGTH = 21;
 const MAX_DESCRIPTION_LENGTH = 500;
 
-export default function PageHeaderSection({
+export default function SharedPageHeaderSection({
   pageTitle,
   pageDescription,
-  folderId,
 }: PageHeaderSectionProps) {
   const [title, setTitle] = useState(pageTitle ?? '');
   const [description, setDescription] = useState(pageDescription ?? '');
   const [isFocused, setIsFocused] = useState<'title' | 'description' | null>(
     null
   );
-  const lastUpdateRef = useRef<FolderUpdateData>({ title, description });
+  const lastUpdateTitle = useRef({ title });
+  const lastUpdateDescription = useRef({ description });
 
   const { pageId } = usePageStore();
-  const { mutate: updateFolder } = useUpdateFolder(pageId);
+  const { mutate: updateSharedPageTitle } = useUpdateSharedPageTitle(pageId);
+  const { mutate: updateSharedPageDescription } =
+    useUpdateSharedPageDescription(pageId);
 
-  const updateFolderImmediately = (data: FolderUpdateData) => {
-    console.log('updateFolderImmediately called with:', data);
-    console.log('folderId:', folderId, 'pageId:', pageId);
+  const updateSharedPageTitleImmediately = () => {
+    if (!pageId) return;
 
-    if (!folderId) return;
-
-    const updateData = {
+    const updateSharedPageTitleData = {
       baseRequest: { pageId, commandType: 'EDIT' },
-      folderId,
-      folderName: title,
-      folderDescription: description,
+      pageTitle: title,
     };
 
-    updateFolder(updateData, {
+    console.log('타이틀업데이트', updateSharedPageTitleData);
+
+    updateSharedPageTitle(updateSharedPageTitleData, {
       onSuccess: (response) => {
-        console.log('폴더 업데이트 성공 응답:', response);
-        lastUpdateRef.current = { title, description };
+        console.log('타이틀 성공 응답:', response);
+        lastUpdateTitle.current = { title };
+        lastUpdateDescription.current = { description };
       },
       onError: (error) => {
-        console.error('폴더 업데이트 실패:', error);
+        console.error('설명 업데이트 실패:', error);
       },
     });
   };
 
-  const handleDebouncedUpdate = (data: FolderUpdateData) => {
-    console.log('디바운스된 업데이트:', data);
-    lastUpdateRef.current = { title, description };
+  const updateSharedPageDescriptionImmediately = () => {
+    if (!pageId) return;
+
+    const updateSharedPageDescriptionData = {
+      baseRequest: { pageId, commandType: 'EDIT' },
+      pageDescription: description,
+    };
+
+    console.log('설명업데이트', updateSharedPageDescriptionData);
+
+    updateSharedPageDescription(updateSharedPageDescriptionData, {
+      onSuccess: (response) => {
+        console.log('설명 업데이트 성공 응답:', response);
+        lastUpdateTitle.current = { title };
+        lastUpdateDescription.current = { description };
+      },
+      onError: (error) => {
+        console.error('설명 업데이트 실패:', error);
+      },
+    });
   };
 
-  const debouncedUpdate = useDebounce<FolderUpdateData>(
-    handleDebouncedUpdate,
-    500
-  );
+  const handleDebouncedUpdate = (data: {
+    title: string;
+    description: string;
+  }) => {
+    lastUpdateTitle.current = { title: data.title };
+    lastUpdateDescription.current = { description: data.description };
+  };
+
+  const debouncedUpdate = useDebounce(handleDebouncedUpdate, 500);
 
   // 초기 마운트 시에만 props로 상태 초기화
   useEffect(() => {
-    console.log('초기 마운트 상태 초기화:', { pageTitle, pageDescription });
     setTitle(pageTitle ?? '');
     setDescription(pageDescription ?? '');
-    const newState = {
+    const newTitleState = {
       title: pageTitle ?? '',
+    };
+    const newDescriptionState = {
       description: pageDescription ?? '',
     };
-    lastUpdateRef.current = newState;
+    lastUpdateTitle.current = newTitleState;
+    lastUpdateDescription.current = newDescriptionState;
   }, [pageTitle, pageDescription]);
 
   const handleBlur = () => {
-    const currentPath = window.location.pathname;
-    if (currentPath === '/' || currentPath === '/bookmarks') {
-      return;
-    }
-
-    console.log('포커스 아웃:', {
-      current: { title, description },
-    });
-
-    const currentState = { title, description };
-    lastUpdateRef.current = currentState;
-    updateFolderImmediately(currentState);
+    const currentTitleState = { title };
+    const currentDescriptionState = { description };
+    lastUpdateTitle.current = currentTitleState;
+    lastUpdateDescription.current = currentDescriptionState;
+    updateSharedPageTitleImmediately();
+    updateSharedPageDescriptionImmediately();
   };
 
   return (

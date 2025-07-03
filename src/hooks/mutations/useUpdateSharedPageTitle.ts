@@ -7,9 +7,14 @@ export default function useUpdateSharedPageTitle(pageId: number) {
   return useMutation({
     mutationFn: updateSharedPageTitle,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['sharedPage', pageId],
-      });
+      Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['sharedPage', pageId],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['joinedPage'],
+        }),
+      ]);
     },
   });
 }

@@ -9,5 +9,7 @@ export default function useFetchSharedPageMember(
     queryKey: ['sharedPageMember', data],
     queryFn: () => fetchSharedPageMember(data),
     enabled: !!data.pageId && !!data.enabled,
+    placeholderData: (prev) => prev,
+    structuralSharing: true,
   });
 }

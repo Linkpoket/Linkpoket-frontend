@@ -4,12 +4,11 @@ import { useMobile } from '@/hooks/useMobile';
 import { useFetchSelectedPage } from '@/hooks/queries/useFetchSharedPage';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import SharedPageContentSection from '@/components/page-layout-ui/SharedPageContentSection';
-import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
-import useFetchSharedPageDashboard from '@/hooks/queries/useFetchSharedPageDashboard';
 import useFetchSharedPageMember from '@/hooks/queries/useFetchSharedPageMember';
 import { usePageSearch } from '@/hooks/usePageSearch';
 import { useBreadcrumbStore } from '@/stores/breadcrumb';
+import SharedPageHeaderSection from '@/components/page-layout-ui/SharedPageHeaderSection';
 
 export default function SharedPage() {
   const { pageId } = useParams();
@@ -30,12 +29,10 @@ export default function SharedPage() {
   );
   const selectedPageQuery = useFetchSelectedPage({
     pageId: resolvedPageId ?? -1,
-    commandType: 'VIEW',
   });
 
   const sharedPageMemberQuery = useFetchSharedPageMember({
     pageId: resolvedPageId ?? -1,
-    commandType: 'VIEW',
   });
 
   console.log('페이지 멤버 정보', sharedPageMemberQuery.data);
@@ -81,10 +78,9 @@ export default function SharedPage() {
       {/* HEADER SECTION*/}
       {selectedPage && (
         <>
-          <PageHeaderSection
+          <SharedPageHeaderSection
             pageTitle={selectedPage.pageTitle}
             pageDescription={selectedPage.pageDescription}
-            folderId={selectedPage.rootFolderId}
           />
           {/* Boundary line */}
           <div className="border-b-gray-30 mb-[40px] w-full border-b" />

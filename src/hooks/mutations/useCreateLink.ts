@@ -5,10 +5,14 @@ import {
 } from '@tanstack/react-query';
 import { createLink } from '@/apis/link-apis/createLink';
 import { CreateLinkData, CreateLinkResponse } from '@/types/links';
+import { useLocation } from 'react-router-dom';
 
 export function useCreateLink(
   options?: UseMutationOptions<CreateLinkResponse, unknown, CreateLinkData>
 ) {
+  const location = useLocation();
+  const isMainPage = location.pathname === '/';
+
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -17,6 +21,12 @@ export function useCreateLink(
       queryClient.invalidateQueries({
         queryKey: ['sharedPage', variables.baseRequest.pageId],
       });
+
+      if (isMainPage) {
+        queryClient.invalidateQueries({
+          queryKey: ['personalPage'],
+        });
+      }
 
       options?.onSuccess?.(data, variables, context);
     },

@@ -20,10 +20,12 @@ export default function useUpdateFolderBookmark({
     ...options,
     mutationFn: updateFolderBookmark,
     onSuccess: (response, variables, context) => {
-      queryClient.invalidateQueries({ queryKey: ['bookmark', folderId] });
-      queryClient.invalidateQueries({ queryKey: ['sharedPage', pageId] });
-      queryClient.invalidateQueries({ queryKey: ['personalPage', pageId] });
-      queryClient.invalidateQueries({ queryKey: ['favorite'] });
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['bookmark', folderId] }),
+        queryClient.invalidateQueries({ queryKey: ['favorite'] }),
+        queryClient.invalidateQueries({ queryKey: ['sharedPage', pageId] }),
+        queryClient.invalidateQueries({ queryKey: ['personalPage'] }),
+      ]);
       if (options?.onSuccess) {
         options.onSuccess(response, variables, context);
       }

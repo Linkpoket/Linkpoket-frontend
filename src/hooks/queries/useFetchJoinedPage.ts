@@ -7,6 +7,8 @@ export default function useFetchJoinedPage() {
     queryFn: fetchJoinedPage,
     select: (response) => response.data,
     staleTime: 1000 * 60,
+    placeholderData: (prev) => prev,
+    structuralSharing: true,
   });
 
   return { joinedPage: data, ...rest };

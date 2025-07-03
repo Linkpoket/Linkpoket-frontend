@@ -14,9 +14,14 @@ export function useUpdateLink(
   return useMutation({
     mutationFn: updateLink,
     onSuccess: (data, variables, context) => {
-      queryClient.invalidateQueries({
-        queryKey: ['sharedPage', variables.baseRequest.pageId],
-      });
+      Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['sharedPage', variables.baseRequest.pageId],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['personalPage'],
+        }),
+      ]);
       options?.onSuccess?.(data, variables, context);
     },
     onError: (error, variables, context) => {
