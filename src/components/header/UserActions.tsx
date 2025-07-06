@@ -2,16 +2,18 @@ import Bell from '@/assets/widget-ui-assets/Bell.svg?react';
 import Menu from '@/assets/widget-ui-assets/Menu.svg?react';
 import { useCallback, useState } from 'react';
 import NotificationModal from '../modal/page/NotificationModal';
-import ModalMenu from '../modal/page/ModalMenu';
+import HeaderMenu from '../modal/page/HeaderMenu';
 import { useFetchNotifications } from '@/hooks/queries/useFetchNotification';
 import { usePatchShareInvitationStatus } from '@/hooks/mutations/usePatchShareInvitationStatus';
 import { usePatchDirectoryTransmissionStatus } from '@/hooks/mutations/usePatchDirectoryTransmissionStatus';
 import { useDeleteDirectoryRequest } from '@/hooks/mutations/useDeleteDirectoryRequest';
+import { useUserStore } from '@/stores/userStore';
 
 export function UserActions() {
   const [isAlarmOpen, setIsAlarmOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: notifications = [] } = useFetchNotifications();
+  const { nickname, colorCode } = useUserStore();
 
   const { mutate: patchShareInvitation, isPending: isShareProcessing } =
     usePatchShareInvitationStatus();
@@ -45,9 +47,10 @@ export function UserActions() {
   );
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center gap-[8px]">
+      {/* 알림 버튼 */}
       <button
-        className={`hover:bg-gray-10 active:bg-gray-10 flex h-[38px] w-[38px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px] ${isAlarmOpen ? 'bg-gray-10 rounded-[8px]' : ''} `}
+        className={`hover:bg-gray-10 active:bg-gray-10 flex h-[32px] w-[32px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px] ${isAlarmOpen ? 'bg-gray-10 rounded-[8px]' : ''} `}
         onClick={(e) => {
           e.stopPropagation();
           setIsMenuOpen(false);
@@ -69,8 +72,19 @@ export function UserActions() {
         />
       )}
 
+      {/* 프로필 버튼 */}
+      <button className="flex h-[32px] w-[32px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px]">
+        <div
+          className="flex h-[32px] w-[32px] items-center justify-center rounded-full"
+          style={{ backgroundColor: colorCode }}
+        >
+          {nickname.charAt(0).toUpperCase()}
+        </div>
+      </button>
+
+      {/* 메뉴 버튼 */}
       <button
-        className={`hover:bg-gray-10 active:bg-gray-10 flex h-[38px] w-[38px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px] ${isMenuOpen ? 'bg-gray-10 rounded-[8px]' : ''} `}
+        className={`hover:bg-gray-10 active:bg-gray-10 flex h-[32px] w-[32px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px] ${isMenuOpen ? 'bg-gray-10 rounded-[8px]' : ''} `}
         onClick={(e) => {
           e.stopPropagation();
           setIsAlarmOpen(false);
@@ -81,7 +95,7 @@ export function UserActions() {
       </button>
 
       {isMenuOpen && (
-        <ModalMenu
+        <HeaderMenu
           isHost={true}
           // isDarkMode={isDarkMode}
           // onToggleDarkMode={handleToggleDarkMode}
