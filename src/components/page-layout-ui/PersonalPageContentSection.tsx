@@ -4,7 +4,6 @@ import LinkItem from './LinkItem';
 import { ContextMenu } from '../common-ui/ContextMenu';
 import { PageContentSectionProps } from '@/types/pageItems';
 import { useModalStore } from '@/stores/modalStore';
-import { useBreadcrumbStore } from '@/stores/breadcrumb';
 import { useProfileModalStore } from '@/stores/profileModalStore';
 import ProfileSettingsModal from '../modal/profile/ProfileSettingsModal';
 
@@ -21,12 +20,6 @@ export default function PersonalPageContentSection({
   const { isProfileModalOpen, closeProfileModal } = useProfileModalStore();
 
   console.log('선택한 페이지 데이터:', pageDetails);
-
-  const { resetBreadcrumbs } = useBreadcrumbStore();
-
-  useEffect(() => {
-    resetBreadcrumbs();
-  }, [resetBreadcrumbs]);
 
   // 실제 사용할 데이터
   const handleContextMenu = (e: React.MouseEvent) => {

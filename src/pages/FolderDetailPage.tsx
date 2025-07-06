@@ -7,7 +7,6 @@ import useFetchFolderDetails from '@/hooks/queries/useFetchFolderDetails';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useParams } from 'react-router-dom';
 import { usePageSearch } from '@/hooks/usePageSearch';
-import { useBreadcrumbStore } from '@/stores/breadcrumb';
 
 export default function FolderDetailPage() {
   const [view, setView] = useState<'grid' | 'list'>('grid');
@@ -34,23 +33,6 @@ export default function FolderDetailPage() {
 
   console.log('폴더 상세 요청 params:', requestParams);
   const folderDetailsQuery = useFetchFolderDetails(requestParams);
-
-  useEffect(() => {
-    setParentsFolderId(folderDetailsQuery.data?.data.targetFolderId);
-  }, [folderDetailsQuery.data, setParentsFolderId]);
-
-  const { addCrumb } = useBreadcrumbStore();
-
-  //BreadCrumb용 폴더 정보 추가
-  useEffect(() => {
-    if (folderDetailsQuery.data?.data) {
-      addCrumb({
-        id: folderDetailsQuery.data.data.targetFolderId.toString(),
-        title: folderDetailsQuery.data.data.targetFolderName,
-        type: 'folder',
-      });
-    }
-  }, [folderDetailsQuery.data, addCrumb]);
 
   console.log('폴더상세 페이지 정보', folderDetailsQuery.data?.data);
 

@@ -13,7 +13,7 @@ import SharedPage from '@/assets/widget-ui-assets/SharedPage.svg?react';
 // import DarkMode from '@/assets/common-ui-assets/DarkMode.svg?react';
 // import ToggleButton from './ToggleButton';
 
-interface ModalMenuProps {
+interface HeaderMenuProps {
   isHost: boolean;
   // isDarkMode?: boolean;
   // onToggleDarkMode?: () => void;
@@ -22,13 +22,13 @@ interface ModalMenuProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function ModalMenu({
+export default function HeaderMenu({
   // isDarkMode = false,
   // onToggleDarkMode,
   isHost,
   onContact,
   setIsOpen,
-}: ModalMenuProps) {
+}: HeaderMenuProps) {
   const [isDeleteSharedPageModalOpen, setIsDeleteSharedPageModalOpen] =
     useState(false);
   const [isWithdrawSharedPageModalOpen, setisWithdrawSharedPageModalOpen] =

@@ -7,7 +7,6 @@ import SharedPageContentSection from '@/components/page-layout-ui/SharedPageCont
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 import useFetchSharedPageMember from '@/hooks/queries/useFetchSharedPageMember';
 import { usePageSearch } from '@/hooks/usePageSearch';
-import { useBreadcrumbStore } from '@/stores/breadcrumb';
 import SharedPageHeaderSection from '@/components/page-layout-ui/SharedPageHeaderSection';
 
 export default function SharedPage() {
@@ -37,8 +36,6 @@ export default function SharedPage() {
 
   console.log('페이지 멤버 정보', sharedPageMemberQuery.data);
 
-  const { addCrumb } = useBreadcrumbStore();
-
   const selectedPage = selectedPageQuery.data?.data;
 
   useEffect(() => {
@@ -60,16 +57,6 @@ export default function SharedPage() {
     setPageInfo,
     setParentsFolderId,
   ]);
-
-  useEffect(() => {
-    if (selectedPage) {
-      addCrumb({
-        id: selectedPage.pageId.toString(),
-        title: selectedPage.pageTitle,
-        type: 'shared',
-      });
-    }
-  }, [selectedPage, addCrumb]);
 
   if (resolvedPageId === null) return <div>잘못된 접근입니다.</div>;
 

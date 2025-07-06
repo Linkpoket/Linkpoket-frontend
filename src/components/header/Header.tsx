@@ -1,11 +1,10 @@
 import Logo from '@/assets/widget-ui-assets/Logo.svg?react';
-import Breadcrumb from './BreadCrumb';
 import { HamburgerButton } from './HamburgerButton';
 import { UserActions } from './UserActions';
 import { AuthButtons } from './AuthButtons';
 import { useMobile } from '@/hooks/useMobile';
 import { Link } from 'react-router-dom';
-import { useBreadcrumbStore } from '@/stores/breadcrumb';
+import { SearchBar } from '../common-ui/SearchBar';
 interface Props {
   isLoggedIn: boolean;
   showDepth: boolean;
@@ -18,17 +17,15 @@ interface Props {
 
 export function Header({
   isLoggedIn = true,
-  showDepth = true,
   setShowSidebar,
   showHeaderButton,
 }: Props) {
   const isMobile = useMobile();
-  const { breadcrumbs, trimToIndex, resetBreadcrumbs } = useBreadcrumbStore();
 
   return (
     // Header 1920기준 w값 1600고정 - 반응형 고려시 해당부분 수정
 
-    <header className="border-b-gray-30 flex justify-between border-b px-[24px] py-[12px]">
+    <header className="border-b-gray-10 flex h-[62px] justify-between border-b px-[24px] py-[12px]">
       <div className="flex items-center gap-[24px]">
         {isMobile && setShowSidebar && (
           <HamburgerButton onClick={() => setShowSidebar(true)} />
@@ -36,15 +33,11 @@ export function Header({
         <Link to="/">
           <Logo className="h-[24px]" />
         </Link>
-        {showDepth && (
-          <Breadcrumb
-            items={breadcrumbs}
-            trimToIndex={trimToIndex}
-            resetBreadcrumbs={resetBreadcrumbs}
-          />
-        )}
       </div>
-      {showHeaderButton && (isLoggedIn ? <UserActions /> : <AuthButtons />)}
+      <div className="flex items-center gap-[24px]">
+        <SearchBar />
+        {showHeaderButton && (isLoggedIn ? <UserActions /> : <AuthButtons />)}
+      </div>
     </header>
   );
 }

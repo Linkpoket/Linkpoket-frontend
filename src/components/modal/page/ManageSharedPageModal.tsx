@@ -6,7 +6,6 @@ import { Input } from '@/components/common-ui/Input';
 import { Radio } from '@/components/common-ui/Radio';
 import { useLocation, useParams } from 'react-router-dom';
 import useFetchSharedPageDashboard from '@/hooks/queries/useFetchSharedPageDashboard';
-import useUpdateSharedPageInvitation from '@/hooks/mutations/updateSharedPageInvitation';
 import InviteUserModal from './InviteUserModal';
 import ModalOptions from '@/components/common-ui/ModalOptions';
 

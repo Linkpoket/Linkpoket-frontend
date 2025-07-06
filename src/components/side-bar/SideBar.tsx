@@ -1,16 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Footer } from '../footer/Footer';
 import BookMark from '@/assets/widget-ui-assets/BookMark.svg?react';
 import PersonalPage from '@/assets/widget-ui-assets/PersonalPage.svg?react';
-import SharedPage from '@/assets/widget-ui-assets/SharedPage.svg?react';
 import PlusIcon from '@/assets/common-ui-assets/PlusIcon.svg?react';
+import SidebarOpen from '@/assets/widget-ui-assets/SidebarOpen.svg?react';
+import SidebarClose from '@/assets/widget-ui-assets/SidebarClose.svg?react';
 import { useMobile } from '@/hooks/useMobile';
-import { useUserStore } from '@/stores/userStore';
-import AddSharedPageModal from '../modal/page/AddSharedPageModal';
-import useFetchJoinedPage from '@/hooks/queries/useFetchJoinedPage';
-import { JoinedPageData } from '@/types/pages';
-import { useProfileModalStore } from '@/stores/profileModalStore';
 
 type MenubarProps = {
   showSidebar: boolean;
@@ -20,9 +15,6 @@ type MenubarProps = {
 const SideBar: React.FC<MenubarProps> = ({ showSidebar, setShowSidebar }) => {
   const sidebarRef = useRef<HTMLElement | null>(null);
   const isMobile = useMobile();
-  const { nickname, email, colorCode } = useUserStore();
-  const [showAddSharedPageModal, setShowAddSharedPageModal] = useState(false);
-  const { openProfileModal } = useProfileModalStore();
 
   //768px 이하의 경우, showSidebar를 false처리, 이외엔 true처리
   useEffect(() => {
@@ -48,135 +40,108 @@ const SideBar: React.FC<MenubarProps> = ({ showSidebar, setShowSidebar }) => {
     };
   }, [isMobile, setShowSidebar, showSidebar]);
 
-  // 현재 참여중인 페이지 호출
-  const { joinedPage } = useFetchJoinedPage();
-  //첫 번째 항목은 항상 개인 페이지이므로 제외합니다
-  const joinedPageData = (joinedPage ?? []).slice(1);
-
-  //추후 지울 코드 (개발중 res값 확인용)
-  useEffect(() => {
-    if (joinedPage) {
-      console.log('참여중인 페이지', joinedPage);
-    }
-  }, [joinedPage]);
-
   return showSidebar ? (
     <aside
       ref={sidebarRef}
-      className={`border-gray-30 flex h-screen w-[260px] flex-col justify-between border-r ${isMobile ? 'bg-gray-0 absolute top-0 left-0 z-50' : 'relative'} `}
+      className={`border-gray-10 flex h-screen w-[220px] flex-col justify-between border-r ${isMobile ? 'bg-gray-0 absolute top-0 left-0 z-50' : 'relative'} `}
     >
-      {/* TODO: 유저 정보쪽 데이터 전달까지 스켈레톤 처리 필요 */}
-      <div className="flex flex-col gap-[16px] px-[12px] pt-[24px] pb-[8px]">
-        <div className="flex flex-col gap-[16px]">
-          <div
-            className="flex gap-[12px] p-[8px] hover:cursor-pointer"
-            onClick={() => openProfileModal()}
+      <div className="flex flex-col gap-[8px] p-[16px]">
+        <div className="flex justify-end">
+          <button
+            onClick={() => setShowSidebar(false)}
+            className="cursor-pointer"
           >
-            <div
-              style={{ backgroundColor: colorCode }}
-              className="flex h-[50px] w-[50px] items-center justify-center rounded-full p-[8px] text-[22px]"
-            >
-              {nickname.charAt(0).toUpperCase()}
-            </div>
-            <div>
-              <p className="text-gray-90 text-[18px] font-semibold">
-                {nickname}
-              </p>
-              <p className="text-[16px] font-[400] text-gray-50">{email}</p>
-            </div>
-          </div>
+            <SidebarClose />
+          </button>
         </div>
-        {/* 메뉴 리스트 */}
         <ul>
           <li>
             <Link
-              to="bookmarks"
-              className="hover:bg-primary-5 group text-gray-90 focus:bg-primary-10 focus:text-primary-50 flex items-center gap-[20px] px-[8px] py-[12px] text-[18px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
-            >
-              <BookMark
-                width={16}
-                height={20}
-                className="text-gray-90 group-focus:text-primary-50 mx-[4px] my-[2px]"
-              />
-              즐겨찾기 / 북마크
-            </Link>
-            <Link
               to="/"
-              className="group hover:bg-primary-5 text-gray-90 focus:bg-primary-10 focus:text-primary-50 flex items-center gap-[20px] px-[8px] py-[14px] text-[18px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
+              className="group hover:bg-primary-5 text-gray-70 focus:bg-primary-10 focus:text-primary-50 flex items-center gap-[12px] p-[8px] text-[14px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
             >
               <PersonalPage
                 width={20}
                 height={20}
-                className="group-focus:text-primary-50 m-[2px]"
+                className="group-focus:text-primary-50 text-gray-70"
               />
               개인 페이지
             </Link>
+
             <Link
-              to="#"
-              className="group hover:bg-primary-5 text-gray-90 focus:bg-primary-10 focus:text-primary-50 flex items-center px-[8px] py-[14px] text-[18px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
+              to="bookmarks"
+              className="hover:bg-primary-5 group text-gray-70 focus:bg-primary-10 focus:text-primary-50 flex items-center gap-[12px] p-[8px] text-[14px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
             >
+              <BookMark
+                width={20}
+                height={20}
+                className="text-gray-70 group-focus:text-primary-50 my-[2px]"
+              />
+              북마크
+            </Link>
+
+            <div className="group hover:bg-primary-5 focus:bg-primary-10 focus:text-primary-50 mt-[16px] flex items-center px-[8px] py-[4px] text-[14px] font-[500] text-gray-50 hover:rounded-[8px] focus:rounded-[8px]">
               <div className="group flex w-full items-center justify-between">
                 <div className="flex gap-[20px]">
-                  <SharedPage
-                    width={20}
-                    height={20}
-                    className="group-focus:text-primary-50 m-[2px]"
-                  />
                   <div>공유 페이지</div>
                 </div>
                 <PlusIcon
-                  className="text-gray-60 hover:text-gray-90 opacity-0 transition-opacity group-hover:opacity-100"
+                  className="text-gray-40 hover:text-gray-90 cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
-                    setShowAddSharedPageModal(true);
                   }}
                 />
               </div>
-            </Link>
-            {showAddSharedPageModal && (
-              <AddSharedPageModal
-                isOpen={showAddSharedPageModal}
-                onClose={() => setShowAddSharedPageModal(false)}
-              />
-            )}
+            </div>
 
-            {joinedPageData.map((page: JoinedPageData) => (
-              <Link
-                to={`shared/${page.pageId}`}
-                key={page.pageId}
-                className="text-gray-70 hover:bg-primary-5 focus:bg-primary-10 focus:text-primary-50 flex py-[12px] pr-[8px] pl-[52px] text-[18px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
-              >
-                {page.pageTitle}
-              </Link>
-            ))}
+            <div className="mt-4 flex items-center px-[8px] py-[4px] text-[14px] font-[500] text-gray-50 hover:rounded-[8px] focus:rounded-[8px]">
+              <div className="group flex w-full items-center justify-between">
+                <div className="flex gap-[20px]">
+                  <div>폴더</div>
+                </div>
+                <PlusIcon
+                  className="text-gray-40 hover:text-gray-90 cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                  }}
+                />
+              </div>
+            </div>
           </li>
         </ul>
       </div>
-
-      <Footer />
     </aside>
-  ) : null;
+  ) : (
+    <aside className="border-gray-10 h-screen w-[80px] border-r p-4">
+      <div className="flex justify-end">
+        <button
+          onClick={() => setShowSidebar(true)}
+          className="mb-2 cursor-pointer"
+        >
+          <SidebarOpen />
+        </button>
+      </div>
+
+      <div className="flex flex-col items-center gap-[8px]">
+        <div className="p-3">
+          <PersonalPage
+            width={20}
+            height={20}
+            className="group-focus:text-primary-50 text-gray-70"
+          />
+        </div>
+        <div className="p-3">
+          <BookMark
+            width={20}
+            height={20}
+            className="text-gray-70 group-focus:text-primary-50 my-[2px]"
+          />
+        </div>
+      </div>
+    </aside>
+  );
 };
 
 export default SideBar;
-
-// 다음과 같이 사용함
-
-// import SideBar from '@/widgets/side-bar/SideBar';
-
-// const sharedPagesData = [
-//   { id: '1', title: '공유 페이지 1' },
-//   { id: '2', title: '공유 페이지 2' },
-// ];
-
-// export default function TEST() {
-//   return (
-//     <div>
-//       <SideBar
-//         sharedPages={sharedPagesData}
-//         showFooter={true}
-//       />
-//     </div>
-//   );
-// }
