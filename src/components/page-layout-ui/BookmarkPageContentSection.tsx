@@ -1,6 +1,4 @@
 import { PageContentSectionProps } from '@/types/pageItems';
-import FolderItem from './FolderItem';
-import LinkItem from './LinkItem';
 export default function BookmarkPageContentSection({
   view,
   contentData,
@@ -21,29 +19,6 @@ export default function BookmarkPageContentSection({
         }`}
       >
         {mergedList.map((item) => {
-          if ('folderId' in item) {
-            return (
-              <FolderItem
-                key={item.folderName}
-                isBookmark={item.isFavorite}
-                item={{ id: item.folderId, title: item.folderName }}
-                view={view}
-              />
-            );
-          } else if ('linkId' in item) {
-            return (
-              <LinkItem
-                key={item.linkName}
-                isBookmark={item.isFavorite}
-                item={{
-                  id: item.linkId,
-                  title: item.linkName,
-                  linkUrl: item.linkUrl,
-                }}
-                view={view}
-              />
-            );
-          }
           return null;
         })}
       </div>

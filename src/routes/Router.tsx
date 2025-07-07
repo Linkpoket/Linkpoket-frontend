@@ -10,6 +10,7 @@ import PersonalPage from '@/pages/PersonalPage';
 import BookmarkPage from '@/pages/BookmarkPage';
 import SharedPage from '@/pages/SharedPage';
 import FolderDetailPage from '@/pages/FolderDetailPage';
+import TextPage from '@/pages/TextPage';
 const router = createBrowserRouter([
   {
     element: <Layout />,
@@ -26,6 +27,7 @@ const router = createBrowserRouter([
             path: '/shared/:pageId',
             element: <SharedPage />,
           },
+          { path: '/text', element: <TextPage /> },
         ],
       },
 

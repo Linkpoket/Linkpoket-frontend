@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import { usePageStore } from '@/stores/pageStore';
 import { useDebounce } from '@/hooks/useDebounce';
 import useUpdateSharedPageTitle from '@/hooks/mutations/useUpdateSharedPageTitle';
-import useUpdateSharedPageDescription from '@/hooks/mutations/useUpdateSharedPageDescription';
 
 type PageHeaderSectionProps = {
   pageTitle: string;
@@ -26,8 +25,6 @@ export default function SharedPageHeaderSection({
 
   const { pageId } = usePageStore();
   const { mutate: updateSharedPageTitle } = useUpdateSharedPageTitle(pageId);
-  const { mutate: updateSharedPageDescription } =
-    useUpdateSharedPageDescription(pageId);
 
   const updateSharedPageTitleImmediately = () => {
     if (!pageId) return;
@@ -42,28 +39,6 @@ export default function SharedPageHeaderSection({
     updateSharedPageTitle(updateSharedPageTitleData, {
       onSuccess: (response) => {
         console.log('타이틀 성공 응답:', response);
-        lastUpdateTitle.current = { title };
-        lastUpdateDescription.current = { description };
-      },
-      onError: (error) => {
-        console.error('설명 업데이트 실패:', error);
-      },
-    });
-  };
-
-  const updateSharedPageDescriptionImmediately = () => {
-    if (!pageId) return;
-
-    const updateSharedPageDescriptionData = {
-      baseRequest: { pageId, commandType: 'EDIT' },
-      pageDescription: description,
-    };
-
-    console.log('설명업데이트', updateSharedPageDescriptionData);
-
-    updateSharedPageDescription(updateSharedPageDescriptionData, {
-      onSuccess: (response) => {
-        console.log('설명 업데이트 성공 응답:', response);
         lastUpdateTitle.current = { title };
         lastUpdateDescription.current = { description };
       },
@@ -103,7 +78,6 @@ export default function SharedPageHeaderSection({
     lastUpdateTitle.current = currentTitleState;
     lastUpdateDescription.current = currentDescriptionState;
     updateSharedPageTitleImmediately();
-    updateSharedPageDescriptionImmediately();
   };
 
   return (

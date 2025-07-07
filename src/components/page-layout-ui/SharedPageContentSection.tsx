@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import FolderItem from './FolderItem';
-import LinkItem from './LinkItem';
 import { ContextMenu } from '../common-ui/ContextMenu';
 import { PageContentSectionProps } from '@/types/pageItems';
 import { useModalStore } from '@/stores/modalStore';
@@ -49,30 +47,6 @@ export default function SharedPageContentSection({
         }`}
       >
         {mergedList.map((item) => {
-          if ('folderId' in item) {
-            return (
-              <FolderItem
-                key={item.folderName}
-                isBookmark={item.isFavorite}
-                item={{ id: item.folderId, title: item.folderName }}
-                pageDescription={contentData?.pageDescription}
-                view={view}
-              />
-            );
-          } else if ('linkId' in item) {
-            return (
-              <LinkItem
-                key={item.linkName}
-                isBookmark={item.isFavorite}
-                item={{
-                  id: item.linkId,
-                  title: item.linkName,
-                  linkUrl: item.linkUrl,
-                }}
-                view={view}
-              />
-            );
-          }
           return null;
         })}
 

@@ -80,7 +80,7 @@ const SideBar: React.FC<MenubarProps> = ({ showSidebar, setShowSidebar }) => {
               북마크
             </Link>
 
-            <div className="group hover:bg-primary-5 focus:bg-primary-10 focus:text-primary-50 mt-[16px] flex items-center px-[8px] py-[4px] text-[14px] font-[500] text-gray-50 hover:rounded-[8px] focus:rounded-[8px]">
+            <div className="mt-[16px] flex items-center px-[8px] py-[4px] text-[14px] font-[500] text-gray-50 hover:rounded-[8px] focus:rounded-[8px]">
               <div className="group flex w-full items-center justify-between">
                 <div className="flex gap-[20px]">
                   <div>공유 페이지</div>
