@@ -1,3 +1,4 @@
+import DropDownInline from '@/components/common-ui/DropDownInline';
 import FolderCard from '@/components/page-layout-ui/FolderCard';
 import LinkCard from '@/components/page-layout-ui/LinkCard';
 import { useState } from 'react';
@@ -8,6 +9,13 @@ export default function TextPage() {
     <div className="flex flex-col gap-4">
       <LinkCard isBookmark={isBookmark} />
       <FolderCard isBookmark={isBookmark} />
+      <DropDownInline
+        id={1}
+        type="folder"
+        initialTitle="폴더"
+        isDropDownInline={false}
+        setIsDropDownInline={() => {}}
+      />
     </div>
   );
 }

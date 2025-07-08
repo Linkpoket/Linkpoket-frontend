@@ -10,7 +10,7 @@ interface SortSelectProps {
   className?: string;
 }
 
-export default function PageSortBox({
+export default function DropDownView({
   options = ['기본순', '최신순', '이름순'],
   onChange,
   className,
@@ -51,7 +51,7 @@ export default function PageSortBox({
       <button
         aria-haspopup="listbox"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="bg-gray-5 text-gray-60 inline-flex h-[48px] min-w-max cursor-pointer items-center justify-between gap-[10px] rounded-[8px] px-[20px] text-[17px] font-[600]"
+        className="bg-gray-5 text-gray-60 inline-flex h-[48px] min-w-max cursor-pointer items-center justify-between gap-[10px] rounded-[8px] px-[20px] text-[16px] font-[600]"
       >
         <span>{selected}</span>
         {isOpen ? <PageSortBoxIconUp /> : <PageSortBoxIcon />}
@@ -60,7 +60,7 @@ export default function PageSortBox({
       {isOpen && (
         <ul
           role="menu"
-          className="border-gray-30 text-gray-90 bg-gray-0 absolute z-10 mt-1 w-full rounded-[10px] border p-[8px] text-[17px] font-[600]"
+          className="border-gray-30 text-gray-90 bg-gray-0 absolute z-10 mt-1 w-full rounded-[10px] border p-[8px] text-[16px] font-[600]"
         >
           {options.map((option) => (
             <li

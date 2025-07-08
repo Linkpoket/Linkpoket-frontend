@@ -3,7 +3,7 @@ import SiteIcon from '@/assets/widget-ui-assets/SiteIcon.svg?react';
 import { Button } from '@/components/common-ui/button';
 import { SearchBar } from '@/components/common-ui/SearchBar';
 import { ViewToggle } from '@/components/common-ui/ViewToggle';
-import PageSortBox from './PageSortBox';
+import PageSortBox from './DropDownView';
 import { PageControllerSectionProps } from '@/types/pageItems';
 import { useCallback, useEffect } from 'react';
 import AddFolderModal from '../modal/folder/AddFolderModal';

@@ -60,13 +60,13 @@ export default function HeaderMenu({
 
   return (
     <div
-      className="border-gray-30 bg-gray-0 absolute top-14 right-6 z-1 inline-flex w-[198px] flex-col justify-center rounded-[10px] border p-[8px] font-[600] shadow-lg"
+      className="border-gray-20 bg-gray-0 absolute top-14 right-6 z-1 inline-flex w-[198px] flex-col justify-center rounded-[10px] border p-[4px] font-[500] shadow-lg"
       ref={modalRef}
     >
       <div className="flex flex-col">
         <button
           onClick={onContact}
-          className="text-gray-90 active:bg-gray-10 hover:bg-gray-10 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[600]"
+          className="text-gray-90 active:bg-gray-10 hover:bg-gray-10 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[500]"
         >
           <Consult /> <span className="text-[14px]">문의하기</span>
         </button>
@@ -84,11 +84,11 @@ export default function HeaderMenu({
       </div>
       {isShared && (
         <>
-          <div className="border-gray-40 m-[8px] w-[166px] border" />
+          <div className="border-gray-20 m-[8px] w-[166px] border" />
           <div className="flex flex-col">
             <button
               onClick={() => setisWithdrawSharedPageModalOpen(true)}
-              className="text-status-danger hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[600]"
+              className="text-status-danger hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[500]"
             >
               <Withdraw /> <span className="text-[14px]">공유 페이지 탈퇴</span>
             </button>
@@ -106,7 +106,7 @@ export default function HeaderMenu({
                 {/*TODO: 이후 삭제 예정 버튼 */}
                 <button
                   onClick={() => setIsManageSharedPageModalOpen(true)}
-                  className="hover:bg-gray-10 active:bg-gray-5 text-gray-90 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[600]"
+                  className="hover:bg-gray-10 active:bg-gray-5 text-gray-90 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[500]"
                 >
                   <SharedPage width={20} height={21} />
                   <span className="text-[14px]">공유 페이지 관리</span>
@@ -114,7 +114,7 @@ export default function HeaderMenu({
 
                 <button
                   onClick={() => setIsDeleteSharedPageModalOpen(true)}
-                  className="text-status-danger hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[600]"
+                  className="text-status-danger hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[500]"
                 >
                   <Deleted />{' '}
                   <span className="text-[14px]">페이지 삭제하기</span>
