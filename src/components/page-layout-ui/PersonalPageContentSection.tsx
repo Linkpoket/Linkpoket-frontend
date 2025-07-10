@@ -1,13 +1,11 @@
-import { useState, useEffect } from 'react';
-
+import { useState } from 'react';
 import { ContextMenu } from '../common-ui/ContextMenu';
 import { PageContentSectionProps } from '@/types/pageItems';
 import { useModalStore } from '@/stores/modalStore';
-import { useProfileModalStore } from '@/stores/profileModalStore';
-import ProfileSettingsModal from '../modal/profile/ProfileSettingsModal';
+import LinkCard from '../common-ui/LinkCard';
+import FolderCard from '../common-ui/FolderCard';
 
 export default function PersonalPageContentSection({
-  view,
   searchResult,
   pageDetails,
 }: PageContentSectionProps) {
@@ -16,7 +14,6 @@ export default function PersonalPageContentSection({
     x: number;
     y: number;
   } | null>(null);
-  const { isProfileModalOpen, closeProfileModal } = useProfileModalStore();
 
   console.log('선택한 페이지 데이터:', pageDetails);
 
@@ -48,12 +45,15 @@ export default function PersonalPageContentSection({
       className={`mx-auto mt-[40px] w-full max-w-[1180px] flex-1 overflow-y-auto text-3xl font-bold`}
     >
       <div
-        className={`w-full max-w-[1180px] min-w-[328px] ${
-          view === 'grid'
-            ? 'grid-cols-custom grid gap-4'
-            : 'flex flex-col gap-4'
-        }`}
+        className={`grid-cols-custom grid w-full max-w-[1180px] min-w-[328px] gap-6`}
       >
+        <LinkCard isBookmark={false} />
+        <LinkCard isBookmark={false} />
+        <LinkCard isBookmark={false} />
+        <LinkCard isBookmark={false} />
+        <LinkCard isBookmark={false} />
+        <LinkCard isBookmark={false} />
+        <FolderCard isBookmark={false} />
         {contextMenu && (
           <ContextMenu
             x={contextMenu.x}
@@ -61,14 +61,6 @@ export default function PersonalPageContentSection({
             onClose={() => setContextMenu(null)}
             onAddFolder={openFolderModal}
             onAddLink={openLinkModal}
-          />
-        )}
-
-        {/* 프로필 세팅 모달 */}
-        {isProfileModalOpen && (
-          <ProfileSettingsModal
-            isOpen={isProfileModalOpen}
-            onClose={() => closeProfileModal()}
           />
         )}
       </div>

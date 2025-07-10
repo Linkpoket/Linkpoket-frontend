@@ -85,7 +85,7 @@ export default function PageHeaderSection({
   };
 
   return (
-    <div className="mx-auto mb-[24px] flex w-full max-w-[1180px] min-w-[328px] items-center justify-between">
+    <div className="mb-[24px] flex w-full min-w-[328px] items-center justify-between">
       <div className="relative w-full">
         <input
           type="text"

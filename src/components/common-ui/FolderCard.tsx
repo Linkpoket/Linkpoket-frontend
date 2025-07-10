@@ -1,15 +1,12 @@
 import InactiveBookmarkIcon from '@/assets/common-ui-assets/FolderBookmarkInactive.svg?react';
 import ActiveBookmarkIcon from '@/assets/common-ui-assets/FolderBookmarkActive.svg?react';
 import CardMenu from '@/assets/widget-ui-assets/CardMenu.svg?react';
-import FolderImage from '@/assets/common-ui-assets/FolderImage.svg?react';
 
 export default function FolderCard({ isBookmark }: { isBookmark: boolean }) {
   // 임시적인 하드코딩이며 데이터 추가시 해당 데이터로 대체 바랍니다 props 혹은 내부 함수 또한 기존 LinkItem 참고하여 수정이 필요합니다다
   return (
-    <div className="border-gray-10 flex h-[242px] w-[208px] flex-col gap-4 rounded-[16px] border p-[16px]">
-      <div className="bg-gray-40 border-gray-19 flex h-[96px] items-center justify-center overflow-hidden rounded-lg">
-        <FolderImage />
-      </div>
+    <div className="border-gray-10 flex h-[242px] min-w-[156px] flex-col gap-4 rounded-[16px] border p-[16px]">
+      <div className="border-gray-10 flex h-[96px] items-center justify-center overflow-hidden rounded-lg bg-[url('src\\\\assets\\\\common-ui-assets\\\\FolderImage.svg')] bg-cover bg-center bg-no-repeat"></div>
 
       <div className="flex flex-1 flex-col justify-between">
         <div className="flex flex-col gap-1">

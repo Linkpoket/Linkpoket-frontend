@@ -37,29 +37,18 @@ export default function FolderDetailPage() {
   console.log('폴더상세 페이지 정보', folderDetailsQuery.data?.data);
 
   return (
-    <div className="flex h-screen flex-col">
-      {/* HEADER SECTION*/}
-      <PageHeaderSection
-        pageTitle={folderDetailsQuery.data?.data.targetFolderName}
-        pageDescription={folderDetailsQuery.data?.data.targetFolderDescription}
-        folderId={folderDetailsQuery.data?.data.targetFolderId}
-      />
+    <div className="flex h-screen min-w-[328px] flex-col px-[64px] py-[56px] xl:px-[102px]">
+      <PageHeaderSection pageTitle="폴더1" folderId={1} />
+      <PageControllerSection />
 
-      {/* Boundary line */}
-      <div className="border-b-gray-30 mb-[40px] w-full border-b" />
-
-      {/* CONTROLLER SECTION*/}
-      <PageControllerSection
-        view={view}
-        setView={setView}
-        searchKeyword={searchKeyword}
-        setSearchKeyword={setSearchKeyword}
-      />
-      {/*CONTENT SECTION*/}
-      <SharedPageContentSection
-        view={view}
-        contentData={folderDetailsQuery.data?.data}
-      />
+      {/* 테스트 영역 */}
+      <div className={`w-full overflow-y-auto`}>
+        <div
+          className={`grid w-full grid-cols-2 justify-center gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5`}
+        >
+          {/* FolderCard혹은 LinkCard렌더링 */}
+        </div>
+      </div>
     </div>
   );
 }
