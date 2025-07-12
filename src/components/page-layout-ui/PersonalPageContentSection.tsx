@@ -1,34 +1,39 @@
-import { PageContentSectionProps } from '@/types/pageItems';
-import { useModalStore } from '@/stores/modalStore';
+import { PageContentSectionProps } from '@/types/pages';
+import LinkCard from '../common-ui/LinkCard';
+import FolderCard from '../common-ui/FolderCard';
 
 export default function PersonalPageContentSection({
-  searchResult,
-  pageDetails,
+  folderData,
+  linkData,
 }: PageContentSectionProps) {
   // const { openLinkModal, openFolderModal } = useModalStore();
 
-  const folderData = pageDetails?.directoryDetailRespons ?? [];
-  const linkData = pageDetails?.siteDetailResponses ?? [];
+  const pageData = [...folderData, ...linkData].sort(
+    (a, b) => a.orderIndex - b.orderIndex
+  );
 
-  const mergedList = searchResult
-    ? [
-        ...(searchResult.directorySimpleResponses ?? []),
-        ...(searchResult.siteSimpleResponses ?? []),
-      ].map((item, index) => ({
-        ...item,
-        orderIndex:
-          'orderIndex' in item && typeof item.orderIndex === 'number'
-            ? item.orderIndex
-            : index,
-      }))
-    : [...folderData, ...linkData].sort((a, b) => a.orderIndex - b.orderIndex);
+  console.log('pageData', pageData);
 
   return (
-    <div className={`w-full overflow-y-auto`}>
+    <div className={`h-screen w-full overflow-y-auto`}>
       <div
         className={`grid w-full grid-cols-2 justify-center gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5`}
       >
-        {/* FolderCard혹은 LinkCard렌더링 */}
+        {pageData.map((item) =>
+          'folderId' in item ? (
+            <FolderCard
+              key={item.folderId}
+              isBookmark={item.isFavorite}
+              item={item}
+            />
+          ) : (
+            <LinkCard
+              key={item.linkId}
+              isBookmark={item.isFavorite}
+              item={item}
+            />
+          )
+        )}
       </div>
     </div>
   );

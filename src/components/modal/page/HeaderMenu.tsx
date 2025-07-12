@@ -1,7 +1,7 @@
-import Consult from '@/assets/common-ui-assets/Consult.svg?react';
+import HelpIcon from '@/assets/common-ui-assets/HelpIcon.svg?react';
 import Withdraw from '@/assets/common-ui-assets/Withdraw.svg?react';
 import Deleted from '@/assets/common-ui-assets/Deleted.svg?react';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useLocation } from 'react-router-dom';
 import { usePageStore } from '@/stores/pageStore';
@@ -9,22 +9,16 @@ import DeleteSharedPageModal from './DeleteSharedPageModal';
 import WithdrawSharedPageModal from './WithdrawlSharedPageModal';
 import ManageSharedPageModal from './ManageSharedPageModal';
 import SharedPage from '@/assets/widget-ui-assets/SharedPage.svg?react';
-
-// import DarkMode from '@/assets/common-ui-assets/DarkMode.svg?react';
-// import ToggleButton from './ToggleButton';
+import SiteIcon from '@/assets/common-ui-assets/SiteIcon.svg?react';
 
 interface HeaderMenuProps {
   isHost: boolean;
-  // isDarkMode?: boolean;
-  // onToggleDarkMode?: () => void;
   onWithDrawPage: () => void;
   onContact: () => void;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function HeaderMenu({
-  // isDarkMode = false,
-  // onToggleDarkMode,
   isHost,
   onContact,
   setIsOpen,
@@ -51,59 +45,27 @@ export default function HeaderMenu({
 
   const location = useLocation();
   const isShared = location.pathname.includes('shared');
+  const isFolder = location.pathname.includes('folder');
 
-  const { pageId: id, commandType: type } = usePageStore();
-
-  useEffect(() => {
-    console.log(id, type);
-  }, [id, type]);
+  const { pageId: id } = usePageStore();
 
   return (
     <div
-      className="border-gray-20 bg-gray-0 absolute top-14 right-6 z-1 inline-flex w-[198px] flex-col justify-center rounded-[10px] border p-[4px] font-[500] shadow-lg"
+      className="border-gray-30 bg-gray-0 absolute top-14 right-6 z-1 inline-flex w-[198px] flex-col justify-center rounded-[10px] border p-2 font-[500] shadow-lg"
       ref={modalRef}
     >
-      <div className="flex flex-col">
-        <button
-          onClick={onContact}
-          className="text-gray-90 active:bg-gray-10 hover:bg-gray-10 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[500]"
-        >
-          <Consult /> <span className="text-[14px]">문의하기</span>
-        </button>
-        {/* <div className="hover:bg-gray-5 active:bg-gray-5 flex items-center justify-between gap-[20px] hover:rounded-[8px]">
-          <button className="flex items-center gap-[10px] p-[12px]">
-            <DarkMode /> <span className="text-[19px]">다크 모드 전환</span>
-          </button>
-          <ToggleButton
-            checked={isDarkMode}
-            onClick={onToggleDarkMode}
-            className="mr-[10px]"
-          />
-        </div> */}
-        <div className="flex"></div>
-      </div>
       {isShared && (
         <>
-          <div className="border-gray-20 m-[8px] w-[166px] border" />
           <div className="flex flex-col">
-            <button
-              onClick={() => setisWithdrawSharedPageModalOpen(true)}
-              className="text-status-danger hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[500]"
-            >
-              <Withdraw /> <span className="text-[14px]">공유 페이지 탈퇴</span>
-            </button>
-
-            {isWithdrawSharedPageModalOpen && (
-              <WithdrawSharedPageModal
-                isOpen={isWithdrawSharedPageModalOpen}
-                onClose={() => setisWithdrawSharedPageModalOpen(false)}
-                pageId={id}
-              />
-            )}
-
-            {isHost && (
-              <>
-                {/*TODO: 이후 삭제 예정 버튼 */}
+            <>
+              <button
+                onClick={() => setIsManageSharedPageModalOpen(true)}
+                className="hover:bg-gray-10 active:bg-gray-5 text-gray-90 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[500]"
+              >
+                <SiteIcon />
+                <span className="text-[14px]">링크 복사</span>
+              </button>
+              {isHost && (
                 <button
                   onClick={() => setIsManageSharedPageModalOpen(true)}
                   className="hover:bg-gray-10 active:bg-gray-5 text-gray-90 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[500]"
@@ -111,15 +73,42 @@ export default function HeaderMenu({
                   <SharedPage width={20} height={21} />
                   <span className="text-[14px]">공유 페이지 관리</span>
                 </button>
+              )}
 
-                <button
-                  onClick={() => setIsDeleteSharedPageModalOpen(true)}
-                  className="text-status-danger hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[500]"
-                >
-                  <Deleted />{' '}
-                  <span className="text-[14px]">페이지 삭제하기</span>
-                </button>
-              </>
+              {/* 탈퇴 버튼 */}
+              <button
+                onClick={() => setisWithdrawSharedPageModalOpen(true)}
+                className="text-status-danger hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[500]"
+              >
+                <Withdraw />{' '}
+                <span className="text-[14px]">공유 페이지 탈퇴</span>
+              </button>
+
+              {isWithdrawSharedPageModalOpen && (
+                <WithdrawSharedPageModal
+                  isOpen={isWithdrawSharedPageModalOpen}
+                  onClose={() => setisWithdrawSharedPageModalOpen(false)}
+                  pageId={id}
+                />
+              )}
+            </>
+            {isShared && isHost && (
+              <button
+                onClick={() => setIsDeleteSharedPageModalOpen(true)}
+                className="text-status-danger hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[500]"
+              >
+                <Deleted />
+                <span className="text-[14px]">공유 페이지 삭제</span>
+              </button>
+            )}
+            {isFolder && isHost && (
+              <button
+                onClick={() => setIsDeleteSharedPageModalOpen(true)}
+                className="text-status-danger hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[500]"
+              >
+                <Deleted />
+                <span className="text-[14px]">폴더 삭제</span>
+              </button>
             )}
 
             {/*TODO: 이후 삭제 예정 조건*/}
@@ -141,6 +130,19 @@ export default function HeaderMenu({
           </div>
         </>
       )}
+
+      <div className="border-gray-20 my-[4px] w-[166px] border" />
+
+      <div className="flex flex-col">
+        <button
+          onClick={onContact}
+          className="text-gray-90 active:bg-gray-10 hover:bg-gray-10 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[500]"
+        >
+          <HelpIcon /> <span className="text-[14px]">도움말</span>
+        </button>
+
+        <div className="flex"></div>
+      </div>
     </div>
   );
 }

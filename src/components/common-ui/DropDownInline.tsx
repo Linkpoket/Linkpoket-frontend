@@ -48,12 +48,14 @@ const DropDownInline = ({
 
   const pageId = usePageStore((state) => state.pageId);
 
+  // TODO: 타이틀 변경은 공유페이지, 폴더에 있는걸 hook으로 만들어 여기서도 사용하면 좋을 것 같아요. 그래서 일단 버튼 제거했습니다
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setTitle(value);
     onTitleChange?.(id, value);
   };
 
+  // TODO: 타이틀 변경은 공유페이지, 폴더에 있는걸 hook으로 만들어 여기서도 사용하면 좋을 것 같아요. 그래서 일단 버튼 제거했습니다
   const handleLinkChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     setLink(value);

@@ -12,6 +12,7 @@ export default function Layout() {
   const location = useLocation();
   const path = location.pathname;
   const [showSidebar, setShowSidebar] = useState(true);
+  const [isFoldSidebar, setIsFoldSidebar] = useState(false);
   const {
     isProfileModalOpen,
     isWithdrawModalOpen,
@@ -46,7 +47,12 @@ export default function Layout() {
 
       <div className="flex">
         {!isHideSidebar ? (
-          <SideBar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
+          <SideBar
+            showSidebar={showSidebar}
+            setShowSidebar={setShowSidebar}
+            isFoldSidebar={isFoldSidebar}
+            setIsFoldSidebar={setIsFoldSidebar}
+          />
         ) : null}
         <main className="flex-1">
           <Outlet context={{ showSidebar }} />

@@ -14,13 +14,16 @@ export function AuthButtons() {
 
   return (
     <div className="flex cursor-pointer items-center gap-[16px] text-[17px]">
-      <Button onClick={handleLogin} className="h-auto px-[16px] py-[12px]">
+      <Button
+        onClick={handleLogin}
+        className="h-auto px-[16px] py-[12px] whitespace-nowrap"
+      >
         로그인
       </Button>
       <Button
         variant="ghost"
         onClick={handleSignup}
-        className="h-auto px-[16px] py-[12px]"
+        className="h-auto px-[16px] py-[12px] whitespace-nowrap"
       >
         회원가입
       </Button>

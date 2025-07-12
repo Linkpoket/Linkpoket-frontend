@@ -15,6 +15,7 @@ export interface LinkDetail {
   createdDate: string;
   providerName: string;
   orderIndex: number;
+  createdDate: string | number;
 }
 
 export type CreateLinkData = {

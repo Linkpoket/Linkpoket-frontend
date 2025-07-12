@@ -5,14 +5,11 @@ import {
 } from '@tanstack/react-query';
 import updateFolder from '@/apis/folder-apis/updateFolder';
 import { UpdateFolderData } from '@/types/folders';
-import { useLocation } from 'react-router-dom';
 
 export default function useUpdateFolder(
   pageId: string,
   options?: UseMutationOptions<any, unknown, UpdateFolderData>
 ) {
-  const location = useLocation();
-  const isMainPage = location.pathname === '/';
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -21,25 +18,18 @@ export default function useUpdateFolder(
     onSuccess: async (response, variables, context) => {
       console.log('폴더 업데이트 성공 응답:', response);
 
-      //폴더 상세, 공유페이지, 개인페이지 캐시 무효화
-      const promises = [
+      // 폴더 상세, 공유페이지, 개인페이지 캐시 무효화
+      await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: ['folderDetails', pageId, variables.folderId],
+          queryKey: ['folderDetails', variables.folderId],
         }),
         queryClient.invalidateQueries({
           queryKey: ['sharedPage', pageId],
         }),
-      ];
-
-      if (isMainPage) {
-        promises.push(
-          queryClient.invalidateQueries({
-            queryKey: ['personalPage'],
-          })
-        );
-      }
-
-      Promise.all(promises);
+        queryClient.invalidateQueries({
+          queryKey: ['personalPage'],
+        }),
+      ]);
 
       if (options?.onSuccess) {
         options.onSuccess(response, variables, context);

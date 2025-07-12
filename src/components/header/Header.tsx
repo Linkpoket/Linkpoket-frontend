@@ -25,25 +25,34 @@ export function Header({
 
   return (
     // Header 1920기준 w값 1600고정 - 반응형 고려시 해당부분 수정
-
-    <header className="border-b-gray-10 flex h-[62px] justify-between border-b px-[24px] py-[12px]">
-      <div className="flex items-center gap-[24px]">
-        {isMobile && setShowSidebar && (
-          <HamburgerButton onClick={() => setShowSidebar(true)} />
-        )}
-        <Link to="/">
-          <Logo className="h-[24px]" />
-        </Link>
-      </div>
-      <div className="flex items-center gap-[24px]">
+    !isMobile ? (
+      <header className="border-b-gray-10 flex h-[62px] justify-between border-b px-[24px] py-[12px]">
+        <div className="flex items-center gap-[24px]">
+          <Link to="/">
+            <Logo className="h-[24px]" />
+          </Link>
+        </div>
+        <div className="flex items-center gap-[24px]">
+          <Search placeholder="폴더 또는 링크 검색" />
+          {showHeaderButton && (isLoggedIn ? <UserActions /> : <AuthButtons />)}
+        </div>
+      </header>
+    ) : (
+      <header className="flex h-[112px] flex-col gap-2 px-2 py-3">
+        <div className="border-b-gray-10 flex w-full flex-1 justify-between border-b">
+          <div className="flex items-center gap-[16px]">
+            <HamburgerButton onClick={() => setShowSidebar?.(true)} />
+            <Link to="/">
+              <Logo className="h-[24px]" />
+            </Link>
+          </div>
+          <div className="flex items-center gap-[24px]">
+            {showHeaderButton &&
+              (isLoggedIn ? <UserActions /> : <AuthButtons />)}
+          </div>
+        </div>
         <Search placeholder="폴더 또는 링크 검색" />
-        {showHeaderButton && (isLoggedIn ? <UserActions /> : <AuthButtons />)}
-      </div>
-    </header>
+      </header>
+    )
   );
 }
-
-// 헤더 컴포넌트는 props를 활용한 조립식으로 사용.
-// BreadCrumb로 전달 할 값은 이후 query 함수를 활용하여 수정 예정
-// 로그인 페이지이센 LeftSidebar, logo가없고 로그인이 안되어있기에
-// <Header hasSidebar={false} showDepth={false} isLoggedIn={false}/>

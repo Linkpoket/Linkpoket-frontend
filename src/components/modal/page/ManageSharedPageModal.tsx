@@ -7,7 +7,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import useFetchSharedPageDashboard from '@/hooks/queries/useFetchSharedPageDashboard';
 import InviteUserModal from './InviteUserModal';
 import ModalOptions from '@/components/common-ui/ModalOptions';
-import ModalClose from '@/assets/common-ui-assets/ModalClose.svg?react';
+import SiteIcon from '@/assets/common-ui-assets/SiteIcon.svg?react';
 
 interface ManageSharedPageModalProps {
   isOpen: boolean;
@@ -30,7 +30,8 @@ const ManageSharedPageModal = ({
     }
   };
 
-  const pathname = useLocation().pathname;
+  const path = useLocation().pathname;
+  const pathname = 'http://linkrew.com' + path;
   const { pageId } = useParams();
   const safePageId = pageId ?? '';
   // const numericId = Number.parseInt(pageId ?? '', 10);
@@ -56,7 +57,7 @@ const ManageSharedPageModal = ({
   const handleCopyLink = async () => {
     try {
       const currentUrl = window.location.href;
-      await navigator.clipboard.writeText(currentUrl);
+      await navigator.clipboard.writeText(`http://linkrew.com${currentUrl}`);
     } catch (error) {
       console.error('링크 복사 실패:', error);
     }
@@ -94,13 +95,20 @@ const ManageSharedPageModal = ({
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      className="p-[24px] md:max-w-[562px]"
+      className="p-[16px] md:max-w-[562px]"
     >
-      <Modal.Header showCloseButton>공유 페이지 관리</Modal.Header>
+      <Modal.Header
+        showCloseButton
+        className="mb-4 text-[18px] font-bold text-gray-100"
+      >
+        공유 페이지 관리
+      </Modal.Header>
 
-      <div className="mb-4">
-        <div className="mb-2 flex items-center justify-between">
-          <span className="text-[16px] font-bold">페이지 공개</span>
+      <div>
+        <div className="mt-4 flex items-center justify-between">
+          <span className="text-gray-90 text-[18px] font-bold">
+            페이지 공개
+          </span>
           <ToggleButton
             checked={isPublic === 'PUBLIC'}
             onClick={() =>
@@ -108,11 +116,11 @@ const ManageSharedPageModal = ({
             }
           />
         </div>
-        <div className="text-gray-70 mb-4 text-[16px]">
+        <div className="text-gray-70 mt-[7px] mb-4 text-[16px] font-[400]">
           페이지를 공개하면, 링크를 가진 모든 사용자가 볼 수 있습니다.
         </div>
 
-        <div className="mb-2 flex gap-4">
+        <div className="mt-4 flex gap-4">
           <div className="flex w-full gap-2">
             <Input
               containerClassName="flex-1 min-w-0"
@@ -120,16 +128,24 @@ const ManageSharedPageModal = ({
               value={pathname}
               readOnly
             />
-            <Button size="sm" variant="secondary" onClick={handleCopyLink}>
+            <Button
+              size="lg"
+              variant="ghost"
+              className="flex gap-2"
+              onClick={handleCopyLink}
+            >
+              <SiteIcon />
               링크 복사
             </Button>
           </div>
         </div>
       </div>
 
-      <div className="mb-2">
-        <div className="mb-2 text-[16px] font-bold">공유 페이지 멤버</div>
-        <div className="mb-2 flex gap-2">
+      <div className="mt-6">
+        <div className="text-gray-90 mb-2 text-[18px] font-bold">
+          공유 페이지 멤버
+        </div>
+        <div className="mt-[7px] flex gap-4">
           <Input
             containerClassName="flex-1 min-w-0"
             className="!w-auto"
@@ -138,7 +154,7 @@ const ManageSharedPageModal = ({
             onChange={(e) => setSearch(e.target.value)}
           />
           <Button
-            size="sm"
+            size="lg"
             variant="primary"
             onClick={() => setIsOpenInviteUserModal(true)}
           >
@@ -192,11 +208,6 @@ const ManageSharedPageModal = ({
           ))}
         </div>
       </div>
-      <Modal.Footer className="pt-4">
-        <Button variant="ghost" onClick={handleClose}>
-          닫기
-        </Button>
-      </Modal.Footer>
     </Modal>
   );
 };

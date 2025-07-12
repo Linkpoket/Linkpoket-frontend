@@ -5,7 +5,7 @@ export default function useFetchJoinedPage() {
   const { data, ...rest } = useQuery({
     queryKey: ['joinedPage'],
     queryFn: fetchJoinedPage,
-    select: (response) => response.data,
+    select: (response) => response.data.slice(1),
     staleTime: 1000 * 60,
     placeholderData: (prev) => prev,
     structuralSharing: true,

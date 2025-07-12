@@ -2,23 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchPersonalPage } from '@/apis/page-apis/fetchPersonalPage';
 
 export function useFetchPersonalPage() {
-  const { data, ...rest } = useQuery({
+  return useQuery({
     queryKey: ['personalPage'],
     queryFn: fetchPersonalPage,
     placeholderData: (prev) => prev,
     structuralSharing: true,
   });
-
-  const member = data?.data?.member;
-  const pageDetails = data?.data?.pageDetails;
-  const folderDetailResponse = data?.data?.directoryDetailRespons;
-  const LinkDetailResponse = data?.data?.pageDetailRespons;
-
-  return {
-    member,
-    pageDetails,
-    folderDetailResponse,
-    LinkDetailResponse,
-    ...rest,
-  };
 }

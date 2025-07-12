@@ -26,14 +26,11 @@ export default function PageHeaderSection({
   const { pageId } = usePageStore();
   const { mutate: updateFolder } = useUpdateFolder(pageId);
 
-  const updateFolderImmediately = (data: FolderUpdateData) => {
-    console.log('updateFolderImmediately called with:', data);
-    console.log('folderId:', folderId, 'pageId:', pageId);
-
+  const updateFolderImmediately = () => {
     if (!folderId) return;
 
     const updateData = {
-      baseRequest: { pageId, commandType: 'EDIT' },
+      baseRequest: { pageId: pageId as string, commandType: 'EDIT' },
       folderId,
       folderName: title,
     };
@@ -81,7 +78,7 @@ export default function PageHeaderSection({
 
     const currentState = { title };
     lastUpdateRef.current = currentState;
-    updateFolderImmediately(currentState);
+    updateFolderImmediately();
   };
 
   return (
