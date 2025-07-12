@@ -1,16 +1,19 @@
 type CommandType = 'CREATE' | 'EDIT' | 'DELETE' | 'VIEW';
 
 export type BaseRequest = {
-  pageId: number;
+  pageId: string;
   commandType: CommandType;
 };
 
 export interface LinkDetail {
-  linkId: number;
+  linkId: string;
   linkName: string;
   linkUrl: string;
   isFavorite: boolean;
   faviconUrl: string;
+  representImageUrl: string;
+  createdDate: string;
+  providerName: string;
   orderIndex: number;
 }
 
@@ -18,20 +21,20 @@ export type CreateLinkData = {
   baseRequest: BaseRequest;
   linkName: string;
   linkUrl: string;
-  directoryId: number;
+  directoryId: string;
   faviconUrl: string;
 };
 
 export type DeleteLinkData = {
   baseRequest: BaseRequest;
-  linkId: number;
+  linkId: string;
 };
 
 export type UpdateLinkData = {
   baseRequest: BaseRequest;
   linkName: string;
   linkUrl: string;
-  linkId: number;
+  linkId: string;
 };
 
 export type CommonApiResponse = {

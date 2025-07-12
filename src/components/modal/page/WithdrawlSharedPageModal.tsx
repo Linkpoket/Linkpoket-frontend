@@ -6,7 +6,7 @@ import { DeleteSharedPageData } from '@/types/pages';
 import { useNavigate } from 'react-router-dom';
 interface WithdrawSharedPageModalProps {
   isOpen: boolean;
-  pageId: number;
+  pageId: string;
   onClose: () => void;
 }
 

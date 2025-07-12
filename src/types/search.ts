@@ -1,7 +1,7 @@
 export type PageItemSearchRequest = {
-  pageId: number;
+  pageId: string;
   keyword: string;
-  searchType: string;
+  searchType: 'TITLE' | 'CONTENT';
 };
 
 export type PageItemSearchResponse = {

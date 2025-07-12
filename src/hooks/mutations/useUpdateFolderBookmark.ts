@@ -10,9 +10,9 @@ export default function useUpdateFolderBookmark({
   pageId,
   options,
 }: {
-  folderId: number;
-  pageId: number;
-  options?: UseMutationOptions<any, Error, number, unknown>;
+  folderId: string;
+  pageId: string;
+  options?: UseMutationOptions<any, Error, string, unknown>;
 }) {
   const queryClient = useQueryClient();
 

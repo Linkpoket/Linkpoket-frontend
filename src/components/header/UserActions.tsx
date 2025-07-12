@@ -23,7 +23,7 @@ export function UserActions() {
 
   const handleStatusChange = useCallback(
     (
-      requestId: number,
+      requestId: string,
       requestStatus: 'ACCEPTED' | 'REJECTED',
       type: 'INVITE_PAGE' | 'TRANSMIT_DIRECTORY'
     ) => {

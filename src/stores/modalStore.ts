@@ -12,11 +12,11 @@ type ModalStore = {
   closeTransferFolderModal: () => void;
 
   // for context menu
-  isFolderContextMenuOpen: number | null;
-  openFolderContextMenu: (id: number) => void;
+  isFolderContextMenuOpen: string | null;
+  openFolderContextMenu: (id: string) => void;
   closeFolderContextMenu: () => void;
-  isLinkContextMenuOpen: number | null;
-  openLinkContextMenu: (id: number) => void;
+  isLinkContextMenuOpen: string | null;
+  openLinkContextMenu: (id: string) => void;
   closeLinkContextMenu: () => void;
 };
 

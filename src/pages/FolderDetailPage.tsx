@@ -11,7 +11,7 @@ export default function FolderDetailPage() {
   const [view, setView] = useState<'grid' | 'list'>('grid');
 
   const { pageId } = usePageStore();
-  const { setParentsFolderId } = useParentsFolderIdStore();
+  // const { setParentsFolderId } = useParentsFolderIdStore();
 
   const isMobile = useMobile();
   const { folderId } = useParams();
@@ -25,7 +25,7 @@ export default function FolderDetailPage() {
   const requestParams = {
     pageId,
     commandType: 'VIEW',
-    folderId: Number(folderId),
+    folderId: String(folderId),
     sortType: 'BASIC',
   };
 

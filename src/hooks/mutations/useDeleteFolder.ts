@@ -7,7 +7,7 @@ import deleteFolder from '@/apis/folder-apis/deleteFolder';
 import { DeleteFolderData } from '@/types/folders';
 
 export default function useDeleteFolder(
-  pageId: number,
+  pageId: string,
   options?: UseMutationOptions<any, unknown, DeleteFolderData>
 ) {
   const queryClient = useQueryClient();

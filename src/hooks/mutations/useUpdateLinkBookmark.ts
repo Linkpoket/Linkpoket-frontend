@@ -10,9 +10,9 @@ export default function useUpdateLinkBookmark({
   pageId,
   options,
 }: {
-  linkId: number;
-  pageId: number;
-  options?: UseMutationOptions<any, Error, number, unknown>;
+  linkId: string;
+  pageId: string;
+  options?: UseMutationOptions<any, Error, string, unknown>;
 }) {
   const queryClient = useQueryClient();
 

@@ -7,11 +7,11 @@ interface ListBookmarkOptionInterface {
   isBookmark: boolean;
   handleBookmark: (e: React.MouseEvent) => void;
   item: {
-    id: number;
+    id: string;
     title: string;
     linkUrl?: string;
   };
-  itemId: number;
+  itemId: string;
   initialTitle: string;
   initialLink?: string;
   type: string;

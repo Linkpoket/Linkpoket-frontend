@@ -1,7 +1,7 @@
 import { axiosInstance } from '../axiosInstance';
 
 export const patchDirectoryTransmissionStatus = async (data: {
-  requestId: number;
+  requestId: string;
   requestStatus: 'ACCEPTED' | 'REJECTED';
   notificationType: 'TRANSMIT_DIRECTORY';
 }) => {
