@@ -58,7 +58,7 @@ export interface UpdateSharedPagePermissionData {
 }
 
 export interface PatchSharedPageInvitationData {
-  requestId: number;
+  requestId: string;
   requestStatus: string;
   notificationType: string;
 }

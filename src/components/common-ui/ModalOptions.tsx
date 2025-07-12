@@ -9,9 +9,9 @@ export default function ModalOptions({
   memberId,
 }: {
   userRole: string;
-  pageId: number;
+  pageId: string;
   email: string;
-  memberId: number;
+  memberId: string;
 }) {
   const [role, setRole] = useState(userRole || '');
 

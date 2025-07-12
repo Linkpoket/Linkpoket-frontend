@@ -1,9 +1,9 @@
 import { create } from 'zustand';
 
 interface PageStoreState {
-  pageId: number;
+  pageId: string;
   commandType: string;
-  setPageInfo: (pageId: number, commandType: string) => void;
+  setPageInfo: (pageId: string, commandType: string) => void;
 }
 
 interface ParentsFolderIdStoreState {
@@ -12,9 +12,9 @@ interface ParentsFolderIdStoreState {
 }
 
 export const usePageStore = create<PageStoreState>((set) => ({
-  pageId: 1,
+  pageId: '',
   commandType: 'VIEW',
-  setPageInfo: (pageId: number, commandType: string) =>
+  setPageInfo: (pageId: string, commandType: string) =>
     set({ pageId, commandType }),
 }));
 

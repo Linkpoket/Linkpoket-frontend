@@ -6,6 +6,7 @@ import PlusIcon from '@/assets/common-ui-assets/PlusIcon.svg?react';
 import SidebarOpen from '@/assets/widget-ui-assets/SidebarOpen.svg?react';
 import SidebarClose from '@/assets/widget-ui-assets/SidebarClose.svg?react';
 import { useMobile } from '@/hooks/useMobile';
+import useFetchJoinedPage from '@/hooks/queries/useFetchJoinedPage';
 
 type MenubarProps = {
   showSidebar: boolean;
@@ -39,6 +40,9 @@ const SideBar: React.FC<MenubarProps> = ({ showSidebar, setShowSidebar }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isMobile, setShowSidebar, showSidebar]);
+
+  const { joinedPage } = useFetchJoinedPage();
+  console.log('joinedPage', joinedPage);
 
   return showSidebar ? (
     <aside

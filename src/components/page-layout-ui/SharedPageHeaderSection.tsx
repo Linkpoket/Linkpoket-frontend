@@ -2,26 +2,20 @@ import { useState, useEffect, useRef } from 'react';
 import { usePageStore } from '@/stores/pageStore';
 import { useDebounce } from '@/hooks/useDebounce';
 import useUpdateSharedPageTitle from '@/hooks/mutations/useUpdateSharedPageTitle';
+import { Button } from '../common-ui/button';
 
 type PageHeaderSectionProps = {
   pageTitle: string;
-  pageDescription: string;
 };
 
-const MAX_TITLE_LENGTH = 21;
-const MAX_DESCRIPTION_LENGTH = 500;
+const MAX_TITLE_LENGTH = 12;
 
 export default function SharedPageHeaderSection({
   pageTitle,
-  pageDescription,
 }: PageHeaderSectionProps) {
   const [title, setTitle] = useState(pageTitle ?? '');
-  const [description, setDescription] = useState(pageDescription ?? '');
-  const [isFocused, setIsFocused] = useState<'title' | 'description' | null>(
-    null
-  );
+  const [isFocused, setIsFocused] = useState<'title' | null>(null);
   const lastUpdateTitle = useRef({ title });
-  const lastUpdateDescription = useRef({ description });
 
   const { pageId } = usePageStore();
   const { mutate: updateSharedPageTitle } = useUpdateSharedPageTitle(pageId);
@@ -40,7 +34,6 @@ export default function SharedPageHeaderSection({
       onSuccess: (response) => {
         console.log('타이틀 성공 응답:', response);
         lastUpdateTitle.current = { title };
-        lastUpdateDescription.current = { description };
       },
       onError: (error) => {
         console.error('설명 업데이트 실패:', error);
@@ -48,12 +41,8 @@ export default function SharedPageHeaderSection({
     });
   };
 
-  const handleDebouncedUpdate = (data: {
-    title: string;
-    description: string;
-  }) => {
+  const handleDebouncedUpdate = (data: { title: string }) => {
     lastUpdateTitle.current = { title: data.title };
-    lastUpdateDescription.current = { description: data.description };
   };
 
   const debouncedUpdate = useDebounce(handleDebouncedUpdate, 500);
@@ -61,27 +50,21 @@ export default function SharedPageHeaderSection({
   // 초기 마운트 시에만 props로 상태 초기화
   useEffect(() => {
     setTitle(pageTitle ?? '');
-    setDescription(pageDescription ?? '');
     const newTitleState = {
       title: pageTitle ?? '',
     };
-    const newDescriptionState = {
-      description: pageDescription ?? '',
-    };
+
     lastUpdateTitle.current = newTitleState;
-    lastUpdateDescription.current = newDescriptionState;
-  }, [pageTitle, pageDescription]);
+  }, [pageTitle]);
 
   const handleBlur = () => {
     const currentTitleState = { title };
-    const currentDescriptionState = { description };
     lastUpdateTitle.current = currentTitleState;
-    lastUpdateDescription.current = currentDescriptionState;
     updateSharedPageTitleImmediately();
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-[1180px] min-w-[328px] flex-col gap-[8px] px-[64px] py-[24px]">
+    <div className="mb-[24px] flex w-full min-w-[328px] items-center justify-between">
       <div className="relative w-full">
         <input
           type="text"
@@ -90,7 +73,7 @@ export default function SharedPageHeaderSection({
             const value = e.target.value;
             if (value.length <= MAX_TITLE_LENGTH) {
               setTitle(value);
-              debouncedUpdate({ title: value, description });
+              debouncedUpdate({ title: value });
             }
           }}
           onFocus={() => {
@@ -102,34 +85,15 @@ export default function SharedPageHeaderSection({
             setIsFocused(null);
             handleBlur();
           }}
-          className={`inline-block text-[24px] font-bold outline-none ${
+          className={`inline-block text-[22px] font-bold outline-none ${
             isFocused === 'title' ? 'text-gray-100' : 'text-gray-90'
           }`}
         />
       </div>
       <div>
-        <textarea
-          value={description}
-          onChange={(e) => {
-            const value = e.target.value;
-            if (value.length <= MAX_DESCRIPTION_LENGTH) {
-              setDescription(value);
-              debouncedUpdate({ title, description: value });
-            }
-          }}
-          onFocus={() => {
-            console.log('description textarea focus');
-            setIsFocused('description');
-          }}
-          onBlur={(e) => {
-            console.log('description textarea blur', e.target.value);
-            setIsFocused(null);
-            handleBlur();
-          }}
-          className={`max-h-[98px] w-full resize-none overflow-y-auto text-[16px] font-[400] outline-none ${
-            isFocused === 'description' ? 'text-gray-100' : 'text-gray-70'
-          }`}
-        />
+        <Button size="sm" className="whitespace-nowrap">
+          + 링크추가
+        </Button>
       </div>
     </div>
   );

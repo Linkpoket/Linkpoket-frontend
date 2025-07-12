@@ -6,7 +6,7 @@ import { Button } from '../common-ui/button';
 
 type PageHeaderSectionProps = {
   pageTitle: string;
-  folderId?: number;
+  folderId?: string;
 };
 
 type FolderUpdateData = {
