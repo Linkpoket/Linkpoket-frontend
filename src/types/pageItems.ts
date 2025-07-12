@@ -5,11 +5,11 @@ export type ViewType = 'grid' | 'list';
 
 export interface ContentData {
   folders?: Array<{
-    id: number;
+    id: string;
     title: string;
   }>;
   links?: Array<{
-    id: number;
+    id: string;
     title: string;
     linkUrl?: string;
   }>;
@@ -17,7 +17,7 @@ export interface ContentData {
 
 export interface PageItemProps {
   item: {
-    id: number;
+    id: string;
     title: string;
     linkUrl?: string;
   };

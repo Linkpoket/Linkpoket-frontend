@@ -1,7 +1,7 @@
 import { axiosInstance } from '../axiosInstance';
 
 export const patchShareInvitationStatus = async (data: {
-  requestId: number;
+  requestId: string;
   requestStatus: 'ACCEPTED' | 'REJECTED';
   notificationType: 'INVITE_PAGE';
 }) => {

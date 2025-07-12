@@ -11,12 +11,12 @@ import DeleteLinkModal from '../modal/link/DeleteLinkModal';
 import { useClickOutsideMultiple } from '@/hooks/useClickOutsideMultiple';
 
 type DropDownInlineProps = {
-  id: number;
+  id: string;
   type: string;
   initialTitle: string;
   initialLink?: string;
-  onTitleChange?: (id: number, title: string) => void;
-  onLinkChange?: (id: number, link: string) => void;
+  onTitleChange?: (id: string, title: string) => void;
+  onLinkChange?: (id: string, link: string) => void;
   className?: string;
   isDropDownInline: boolean;
   setIsDropDownInline: React.Dispatch<React.SetStateAction<boolean>>;
@@ -173,9 +173,9 @@ const DropDownInline = ({
         ref={transferModalRef}
         isOpen={isTransferFolderModalOpen}
         onClose={closeTransferFolderModal}
-        directoryId={Number(id)}
+        directoryId={id}
         folderName={title}
-        onSubmit={async (email) => transferFolder(email, Number(id))}
+        onSubmit={async (email) => transferFolder(email, id)}
       />
     </div>
   );

@@ -32,11 +32,12 @@ const ManageSharedPageModal = ({
 
   const pathname = useLocation().pathname;
   const { pageId } = useParams();
-  const numericId = Number.parseInt(pageId ?? '', 10);
-  const resolvedPageId = Number.isFinite(numericId) ? numericId : null;
+  const safePageId = pageId ?? '';
+  // const numericId = Number.parseInt(pageId ?? '', 10);
+  // const resolvedPageId = Number.isFinite(numericId) ? numericId : null;
 
   const sharedPageDashboardQuery = useFetchSharedPageDashboard({
-    pageId: resolvedPageId ?? -1,
+    pageId: safePageId,
   });
 
   // API 데이터가 로드된 후 state 업데이트
@@ -68,7 +69,7 @@ const ManageSharedPageModal = ({
   );
 
   const MEMBERS: {
-    memberId: number;
+    memberId: string;
     nickName: string;
     email: string;
     colorCode: string;
@@ -147,7 +148,7 @@ const ManageSharedPageModal = ({
             <InviteUserModal
               isOpen={isOpenInviteUserModal}
               onClose={() => setIsOpenInviteUserModal(false)}
-              pageId={resolvedPageId ?? -1}
+              pageId={safePageId}
             />
           )}
         </div>
@@ -174,7 +175,7 @@ const ManageSharedPageModal = ({
                 {m.isWaiting === false ? (
                   <ModalOptions
                     userRole={m.role}
-                    pageId={resolvedPageId ?? -1}
+                    pageId={safePageId}
                     email={m.email}
                     memberId={m.memberId}
                   />

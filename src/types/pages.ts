@@ -13,10 +13,11 @@ export interface JoinedPageData {
 
 export interface PageParamsData {
   pageId: string;
+  pageId: string;
 }
 
 export interface PageDetails {
-  pageId: number;
+  pageId: string;
   pageTitle: string;
   rootFolderId: number;
   directoryDetailRespons: FolderDetail[];
@@ -27,12 +28,14 @@ export interface PageDetails {
 export interface DeleteSharedPageData {
   baseRequest: {
     pageId: string;
+    pageId: string;
     commandType: string;
   };
 }
 
 export interface UpdatePageTitleData {
   baseRequest: {
+    pageId: string;
     pageId: string;
     commandType: string;
   };
@@ -52,6 +55,7 @@ export interface PageContentSectionProps {
 export interface UpdateSharedPageInvitationData {
   baseRequest: {
     pageId: string;
+    pageId: string;
     commandType: 'SHARED_PAGE_INVITATION';
   };
   receiverEmail: string;
@@ -61,6 +65,7 @@ export interface UpdateSharedPageInvitationData {
 export interface UpdateSharedPagePermissionData {
   baseRequest: {
     pageId: string;
+    pageId: string;
     commandType: 'SHARED_PAGE_PERMISSION_CHANGE';
   };
   targetMemberId: string;
@@ -68,6 +73,7 @@ export interface UpdateSharedPagePermissionData {
 }
 
 export interface PatchSharedPageInvitationData {
+  requestId: string;
   requestId: string;
   requestStatus: string;
   notificationType: string;

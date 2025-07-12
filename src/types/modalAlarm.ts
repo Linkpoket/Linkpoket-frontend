@@ -10,7 +10,7 @@ export interface SenderInfo {
 }
 
 export interface NotificationItem {
-  id: number;
+  id: string;
   senderInfo: SenderInfo;
   requestStatus: NotificationRequestStatus;
   notificationType: NotificationType;
@@ -23,7 +23,7 @@ export interface NotificationModalProps {
   notifications: NotificationItem[];
   isProcessing: boolean;
   isShareProcessing: boolean;
-  onAccept?: (params: { id: number; type: NotificationType }) => void;
-  onReject?: (params: { id: number; type: NotificationType }) => void;
-  onDelete?: (id: number) => void;
+  onAccept?: (params: { id: string; type: NotificationType }) => void;
+  onReject?: (params: { id: string; type: NotificationType }) => void;
+  onDelete?: (id: string) => void;
 }
