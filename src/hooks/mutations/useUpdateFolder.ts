@@ -24,10 +24,18 @@ export default function useUpdateFolder(
           queryKey: ['folderDetails', variables.folderId],
         }),
         queryClient.invalidateQueries({
+          queryKey: ['folderList', pageId],
+          refetchType: 'active',
+        }),
+        queryClient.invalidateQueries({
           queryKey: ['sharedPage', pageId],
         }),
         queryClient.invalidateQueries({
           queryKey: ['personalPage'],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['favorite'],
+          refetchType: 'active',
         }),
       ]);
 

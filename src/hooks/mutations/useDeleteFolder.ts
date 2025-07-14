@@ -16,10 +16,20 @@ export default function useDeleteFolder(
     ...options,
     mutationFn: deleteFolder,
     onSuccess: async (response, variables, context) => {
-      await queryClient.invalidateQueries({
-        queryKey: ['sharedPage', pageId],
-        refetchType: 'active',
-      });
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['sharedPage', pageId],
+          refetchType: 'active',
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['folderList', pageId],
+          refetchType: 'active',
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['favorite'],
+          refetchType: 'active',
+        }),
+      ]);
 
       if (options?.onSuccess) {
         options.onSuccess(response, variables, context);

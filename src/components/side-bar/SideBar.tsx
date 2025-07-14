@@ -11,6 +11,7 @@ import { useCreateSharedPage } from '@/hooks/mutations/useCreateSharedPage';
 import { useCreateFolder } from '@/hooks/mutations/useCreateFolder';
 import { toast } from 'react-hot-toast';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
+import useFetchFolderList from '@/hooks/queries/useFetchFolderList';
 
 type MenubarProps = {
   showSidebar: boolean;
@@ -57,6 +58,10 @@ const SideBar: React.FC<MenubarProps> = ({
   //사이드바 페이지 목록 조회
   const { joinedPage } = useFetchJoinedPage();
   console.log('joinedPage', joinedPage);
+
+  //사이드바 폴더 목록 조회
+  const { folderList } = useFetchFolderList(pageId as string);
+  console.log('folderList:', folderList);
 
   //공유페이지 생성
   const { mutate: createSharedPage } = useCreateSharedPage({

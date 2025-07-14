@@ -8,9 +8,9 @@ export default async function fetchFolderDetails(
     const response = await axiosInstance.get('/api/folders/details', {
       params: {
         pageId: data.pageId,
-        commandType: data.commandType,
+        commandType: 'VIEW',
         folderId: data.folderId,
-        sortType: data.sortType,
+        sortType: 'BASIC',
       },
     });
     return response.data;

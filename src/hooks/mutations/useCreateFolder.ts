@@ -30,6 +30,10 @@ export function useCreateFolder(
           queryKey: ['folderDetails', pageId],
           refetchType: 'active',
         }),
+        queryClient.invalidateQueries({
+          queryKey: ['folderList', pageId],
+          refetchType: 'active',
+        }),
         // 메인 페이지에서만 personalPage 캐시 무효화
         isMainPage &&
           queryClient.invalidateQueries({

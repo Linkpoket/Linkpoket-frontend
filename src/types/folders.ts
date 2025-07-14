@@ -1,7 +1,6 @@
 export type CreateFolderData = {
   baseRequest: {
     pageId: string;
-    pageId: string;
     commandType: string;
   };
   folderName: string;
@@ -32,7 +31,6 @@ export type FolderDetail = {
   isFavorite: boolean;
   createdDate: string;
   orderIndex: number;
-  createdDate: string;
 };
 
 export type FolderDetailResponse = Array<FolderDetail>;
@@ -40,11 +38,9 @@ export type FolderDetailResponse = Array<FolderDetail>;
 export type UpdateFolderData = {
   baseRequest: {
     pageId: string;
-    pageId: string;
     commandType: string;
   };
   folderName: string;
-  folderId: string;
   folderId: string;
   folderDescription?: string;
 };
@@ -52,18 +48,14 @@ export type UpdateFolderData = {
 export type DeleteFolderData = {
   baseRequest: {
     pageId: string;
-    pageId: string;
     commandType: string;
   };
-  folderId: string;
   folderId: string;
 };
 
 export interface FetchFolderDetailsProps {
   pageId: string;
-  pageId: string;
   commandType: string;
-  folderId: string;
   folderId: string;
   sortType: string;
 }
