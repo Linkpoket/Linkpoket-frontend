@@ -48,7 +48,7 @@ export default function AddFolderModal({
         commandType: 'CREATE',
       },
       folderName,
-      parentFolderId: parentsFolderId ?? 1,
+      parentFolderId: parentsFolderId ?? '',
       folderDescription,
     };
 

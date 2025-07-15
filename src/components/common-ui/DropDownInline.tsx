@@ -9,6 +9,7 @@ import { useTransferActionStore } from '@/stores/transferActionStore';
 import DeleteFolderModal from '../modal/folder/DeleteFolderModal';
 import DeleteLinkModal from '../modal/link/DeleteLinkModal';
 import { useClickOutsideMultiple } from '@/hooks/useClickOutsideMultiple';
+import { ToastCustom } from './ToastCustom';
 
 type DropDownInlineProps = {
   id: string;
@@ -153,6 +154,21 @@ const DropDownInline = ({
             className="flex cursor-pointer items-center gap-[10px] p-[12px]"
           >
             <Transfer width={18} height={18} /> 전송하기
+          </button>
+          <button
+            onClick={() => {
+              navigator.clipboard
+                .writeText(link)
+                .then(() => {
+                  ToastCustom.success('링크가 복사되었습니다.');
+                })
+                .catch((err) => {
+                  console.error('복사 실패:', err);
+                });
+            }}
+            className="flex cursor-pointer items-center gap-[10px] px-[12px] py-[11px]"
+          >
+            <Copy width={18} height={18} /> 복사하기
           </button>
           <button
             onClick={() => handleLinkDeleteOpen()}

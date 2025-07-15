@@ -12,7 +12,6 @@ export interface LinkDetail {
   isFavorite: boolean;
   faviconUrl: string;
   representImageUrl: string;
-  createdDate: string;
   providerName: string;
   orderIndex: number;
   createdDate: string | number;
@@ -23,7 +22,6 @@ export type CreateLinkData = {
   linkName: string;
   linkUrl: string;
   directoryId: string;
-  faviconUrl: string;
 };
 
 export type DeleteLinkData = {

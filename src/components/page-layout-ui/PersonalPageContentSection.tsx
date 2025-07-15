@@ -1,12 +1,16 @@
 import { PageContentSectionProps } from '@/types/pages';
 import LinkCard from '../common-ui/LinkCard';
 import FolderCard from '../common-ui/FolderCard';
+import AddLinkModal from '../modal/link/AddLinkModal';
+import { useModalStore } from '@/stores/modalStore';
+import ErrorLinkModal from '../modal/link/ErrorLinkModal';
 
 export default function PersonalPageContentSection({
   folderData,
   linkData,
 }: PageContentSectionProps) {
-  // const { openLinkModal, openFolderModal } = useModalStore();
+  const { isLinkModalOpen, closeLinkModal, isErrorModalOpen, closeErrorModal } =
+    useModalStore();
 
   const pageData = [...folderData, ...linkData].sort(
     (a, b) => a.orderIndex - b.orderIndex
@@ -35,6 +39,12 @@ export default function PersonalPageContentSection({
           )
         )}
       </div>
+      {isLinkModalOpen && (
+        <AddLinkModal isOpen={isLinkModalOpen} onClose={closeLinkModal} />
+      )}
+      {isErrorModalOpen && (
+        <ErrorLinkModal isOpen={isErrorModalOpen} onClose={closeErrorModal} />
+      )}
     </div>
   );
 }

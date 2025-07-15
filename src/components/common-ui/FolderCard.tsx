@@ -58,7 +58,7 @@ export default function FolderCard({
               {isBookmark ? <ActiveBookmarkIcon /> : <InactiveBookmarkIcon />}
             </button>
             <button
-              className="cursor-pointer"
+              className="cursor-pointer p-1"
               onClick={() => setIsDropDownInline(true)}
             >
               <CardMenu />

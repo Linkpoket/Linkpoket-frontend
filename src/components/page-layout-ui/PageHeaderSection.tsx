@@ -3,6 +3,8 @@ import { usePageStore } from '@/stores/pageStore';
 import useUpdateFolder from '@/hooks/mutations/useUpdateFolder';
 import { useDebounce } from '@/hooks/useDebounce';
 import { Button } from '../common-ui/button';
+import { useModalStore } from '@/stores/modalStore';
+import { useLocation } from 'react-router-dom';
 
 type PageHeaderSectionProps = {
   pageTitle: string;
@@ -22,6 +24,10 @@ export default function PageHeaderSection({
   const [title, setTitle] = useState(pageTitle ?? '');
   const [isFocused, setIsFocused] = useState<'title' | null>(null);
   const lastUpdateRef = useRef<FolderUpdateData>({ title });
+  const { openLinkModal } = useModalStore();
+  const location = useLocation();
+  const currentLocation = location.pathname;
+  const isLinkButtonVisible = currentLocation !== '/bookmarks';
 
   const { pageId } = usePageStore();
   const { mutate: updateFolder } = useUpdateFolder(pageId);
@@ -109,9 +115,15 @@ export default function PageHeaderSection({
         />
       </div>
       <div>
-        <Button size="sm" className="whitespace-nowrap">
-          + 링크추가
-        </Button>
+        {isLinkButtonVisible && (
+          <Button
+            size="sm"
+            className="whitespace-nowrap"
+            onClick={openLinkModal}
+          >
+            + 링크추가
+          </Button>
+        )}
       </div>
     </div>
   );

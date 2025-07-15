@@ -1,12 +1,14 @@
 import { PageContentSectionProps } from '@/types/pages';
 import LinkCard from '../common-ui/LinkCard';
 import FolderCard from '../common-ui/FolderCard';
+import AddLinkModal from '../modal/link/AddLinkModal';
+import { useModalStore } from '@/stores/modalStore';
 
 export default function SharedPageContentSection({
   folderData,
   linkData,
 }: PageContentSectionProps) {
-  // const { openLinkModal, openFolderModal } = useModalStore();
+  const { isLinkModalOpen, closeLinkModal } = useModalStore();
 
   const pageData = [...folderData, ...linkData].sort(
     (a, b) => a.orderIndex - b.orderIndex
@@ -35,6 +37,9 @@ export default function SharedPageContentSection({
           )
         )}
       </div>
+      {isLinkModalOpen && (
+        <AddLinkModal isOpen={isLinkModalOpen} onClose={closeLinkModal} />
+      )}
     </div>
   );
 }

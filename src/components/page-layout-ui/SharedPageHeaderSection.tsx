@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useDebounce } from '@/hooks/useDebounce';
 import useUpdateSharedPageTitle from '@/hooks/mutations/useUpdateSharedPageTitle';
 import { Button } from '../common-ui/button';
+import { useModalStore } from '@/stores/modalStore';
 
 type PageHeaderSectionProps = {
   pageTitle: string;
@@ -17,6 +18,7 @@ export default function SharedPageHeaderSection({
   const [title, setTitle] = useState(pageTitle ?? '');
   const [isFocused, setIsFocused] = useState<'title' | null>(null);
   const lastUpdateTitle = useRef({ title });
+  const { openLinkModal } = useModalStore();
   const { mutate: updateSharedPageTitle } = useUpdateSharedPageTitle(pageId);
 
   const updateSharedPageTitleImmediately = () => {
@@ -90,7 +92,7 @@ export default function SharedPageHeaderSection({
         />
       </div>
       <div>
-        <Button size="sm" className="whitespace-nowrap">
+        <Button size="sm" className="whitespace-nowrap" onClick={openLinkModal}>
           + 링크추가
         </Button>
       </div>

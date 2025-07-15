@@ -10,6 +10,8 @@ export default function PersonalPage() {
   console.log('pageDetails', data);
   const refinedData = data?.data.pageDetails;
 
+  console.log('refinedData:', refinedData);
+
   const pageId = refinedData?.pageId;
   const rootFolderId = refinedData?.rootFolderId;
 

@@ -8,12 +8,14 @@ import { usePatchShareInvitationStatus } from '@/hooks/mutations/usePatchShareIn
 import { usePatchDirectoryTransmissionStatus } from '@/hooks/mutations/usePatchDirectoryTransmissionStatus';
 import { useDeleteDirectoryRequest } from '@/hooks/mutations/useDeleteDirectoryRequest';
 import { useUserStore } from '@/stores/userStore';
+import { useProfileModalStore } from '@/stores/profileModalStore';
 
 export function UserActions() {
   const [isAlarmOpen, setIsAlarmOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: notifications = [] } = useFetchNotifications();
   const { nickname, colorCode } = useUserStore();
+  const { openProfileModal } = useProfileModalStore();
 
   const { mutate: patchShareInvitation, isPending: isShareProcessing } =
     usePatchShareInvitationStatus();
@@ -73,7 +75,10 @@ export function UserActions() {
       )}
 
       {/* 프로필 버튼 */}
-      <button className="flex h-[32px] w-[32px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px]">
+      <button
+        className="flex h-[32px] w-[32px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px]"
+        onClick={openProfileModal}
+      >
         <div
           className="flex h-[32px] w-[32px] items-center justify-center rounded-full"
           style={{ backgroundColor: colorCode }}
