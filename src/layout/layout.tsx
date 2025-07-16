@@ -5,7 +5,6 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { useUserStore } from '@/stores/userStore';
 import ProfileSettingsModal from '@/components/modal/profile/ProfileSettingsModal';
 import { useProfileModalStore } from '@/stores/profileModalStore';
-import { useNotificationSSE } from '@/hooks/useNotificationSSE';
 import WithdrawAccountModal from '@/components/modal/profile/WithdrawAccountModal';
 
 export default function Layout() {
@@ -20,7 +19,7 @@ export default function Layout() {
     closeWithdrawModal,
   } = useProfileModalStore();
 
-  const isLoggedIn = useUserStore((s) => !s.isLoggedIn);
+  const isLoggedIn = useUserStore((s) => s.isLoggedIn);
 
   const isLoginPage = path === '/login';
   const isSignUpPage = path === '/signup';

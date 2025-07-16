@@ -23,6 +23,8 @@ export function UserActions() {
     usePatchDirectoryTransmissionStatus();
   const { mutate: deleteDirectoryRequest } = useDeleteDirectoryRequest();
 
+  console.log('유저프로필', nickname, colorCode);
+
   const handleStatusChange = useCallback(
     (
       requestId: string,
@@ -83,7 +85,7 @@ export function UserActions() {
           className="flex h-[32px] w-[32px] items-center justify-center rounded-full"
           style={{ backgroundColor: colorCode }}
         >
-          {nickname.charAt(0).toUpperCase()}
+          {nickname?.charAt(0).toUpperCase()}
         </div>
       </button>
 

@@ -111,8 +111,6 @@ export default function HeaderMenu({
               </button>
             )}
 
-            {/*TODO: 이후 삭제 예정 조건*/}
-
             {isManageSharedPageModalOpen && (
               <ManageSharedPageModal
                 isOpen={isManageSharedPageModalOpen}

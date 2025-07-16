@@ -24,7 +24,12 @@ export const useUserStore = create(
       setColorCode: (colorCode: string) => set({ colorCode }),
       setNickname: (nickname: string) => set({ nickname }),
       clearUser: () =>
-        set({ nickname: '', email: '', colorCode: '', isLoggedIn: false }),
+        set({
+          nickname: '',
+          email: '',
+          colorCode: '',
+          isLoggedIn: false,
+        }),
     }),
     {
       name: 'user-store',

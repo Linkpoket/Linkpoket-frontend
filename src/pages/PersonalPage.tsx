@@ -4,6 +4,7 @@ import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PersonalPageContentSection from '@/components/page-layout-ui/PersonalPageContentSection';
 import { useFetchPersonalPage } from '@/hooks/queries/useFetchPersonalPage';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
+import { useUserStore } from '@/stores/userStore';
 
 export default function PersonalPage() {
   const { data } = useFetchPersonalPage();
@@ -21,14 +22,27 @@ export default function PersonalPage() {
   const linkData = refinedData?.siteDetailResponses ?? [];
   const folderDataLength = folderData?.length;
   const linkDataLength = linkData?.length;
+  const memberData = data?.data.member;
+  console.log('memberData', memberData);
 
+  const { setUser } = useUserStore();
   const { setPageInfo } = usePageStore();
   const { setParentsFolderId } = useParentsFolderIdStore();
 
   useEffect(() => {
     setPageInfo(pageId);
     setParentsFolderId(rootFolderId);
-  }, [pageId, setPageInfo, setParentsFolderId, rootFolderId]);
+    setUser(memberData?.nickName, memberData?.email, memberData?.colorCode);
+  }, [
+    pageId,
+    setPageInfo,
+    setParentsFolderId,
+    setUser,
+    rootFolderId,
+    memberData?.nickName,
+    memberData?.email,
+    memberData?.colorCode,
+  ]);
 
   return (
     <div className="flex h-screen min-w-[328px] flex-col px-[64px] py-[56px] xl:px-[102px]">
