@@ -1,46 +1,50 @@
 import { Button } from '@/components/common-ui/button';
-import landingImage1 from '@/assets/common-ui-assets/landingImage1.png';
+import 히어로이미지 from '@/assets/common-ui-assets/히어로 이미지.png';
+import { useMobile } from '@/hooks/useMobile';
 
 const HeroSection: React.FC = () => {
-  const heroTitles = ['링크를 한눈에', '모아두고', '간편하게 관리하세요'];
+  const isMobile = useMobile();
+
+  const heroTitles = [
+    '나만의 링크부터 팀의 자료까지,',
+    '한곳에 모아 쉽고 함께 관리해요',
+  ];
 
   const buttonVariants = [
     {
       text: '시작하기',
-      href: '/signup',
+      href: '/login',
       className: '',
     },
     {
-      text: '구글 확장 프로그램 무료 다운로드',
+      text: '구글 확장 프로그램 다운',
       href: '/extension',
-      className: 'bg-primary-10 text-primary-60',
     },
   ];
 
   return (
-    <section className="bg-primary-5 hero-section-mobile hero-section-tablet hero-section-desktop">
-      <div className="hero-container-mobile hero-container-tablet hero-container-desktop flex">
-        <header className="hero-header-mobile hero-header-tablet hero-header-desktop flex flex-col">
-          {heroTitles.map((title, index) => (
-            <h1
-              key={index}
-              className={`hero-title-mobile hero-title-tablet hero-title-desktop leading-[140%] font-bold tracking-[0.01em] ${
-                index === 0 ? 'text-primary-50' : 'text-gray-100'
-              }`}
-            >
-              {title}
-            </h1>
-          ))}
+    <section className="bg-primary-5 flex py-16">
+      <div className="mx-auto flex max-w-[980px] flex-col place-content-between px-[24px] md:w-full md:flex-row">
+        <header className="flex flex-col justify-center">
+          <div className="mb-6">
+            {heroTitles.map((title, index) => (
+              <h1
+                key={index}
+                className={`text-[24px] leading-[140%] font-bold md:text-[28px]`}
+              >
+                {title}
+              </h1>
+            ))}
+          </div>
 
-          <div className="hero-buttons-mobile hero-buttons-tablet hero-buttons-desktop">
+          <div className="mb-18 flex space-x-4 md:mb-0">
             {buttonVariants.map(({ text, href, className }, index) => (
               <a key={index} href={href}>
                 <Button
-                  size="noPadding"
-                  className={`hero-button-mobile hero-button-tablet hero-button-desktop font-semibold ${className} ${
-                    index === 0
-                      ? 'hover:bg-primary-40 active:bg-primary-60'
-                      : 'hover:bg-primary-20 active:bg-primary-30'
+                  size={isMobile ? 'sm' : 'lg'}
+                  variant={index === 1 ? 'ghost' : 'primary'}
+                  className={`font-semibold ${className} ${
+                    index === 0 && 'hover:bg-primary-40 active:bg-primary-60'
                   }`}
                 >
                   {text}
@@ -52,9 +56,9 @@ const HeroSection: React.FC = () => {
 
         <div className="hero-image-container-tablet hero-image-container-desktop">
           <img
-            src={landingImage1}
+            src={히어로이미지}
             alt="Landing page main illustration"
-            className="hero-image-mobile hero-image-tablet hero-image-desktop"
+            className="w-[454px] rounded-3xl"
           />
         </div>
       </div>
