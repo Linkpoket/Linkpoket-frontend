@@ -1,4 +1,4 @@
-import landing_secondImg from '@/assets/common-ui-assets/landing_secondImg.png';
+import 확장프로그램이미지 from '@/assets/common-ui-assets/확장 프로그램 이미지.png';
 import 폴더별정리이미지 from '@/assets/common-ui-assets/폴더별정리이미지.png';
 import 공유페이지이미지 from '@/assets/common-ui-assets/공유페이지이미지.jpg';
 
@@ -126,7 +126,7 @@ const NewSection = () => {
             })}
           </div>
           <img
-            src={landing_secondImg}
+            src={확장프로그램이미지}
             className="mb-12 w-[312px] rounded-3xl object-cover md:mb-0 md:w-[466px]"
           />
         </div>
