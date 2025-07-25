@@ -43,16 +43,21 @@ export default function PersonalPage() {
         })
       );
     }
+
+    if (memberData) {
+      setUser(memberData.nickName, memberData.email, memberData.colorCode);
+    }
   }, [
     pageId,
+    rootFolderId,
     setPageInfo,
     setParentsFolderId,
     setUser,
-    rootFolderId,
     memberData?.nickName,
     memberData?.email,
     memberData?.colorCode,
     data,
+    memberData,
   ]);
 
   return (

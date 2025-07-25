@@ -16,7 +16,9 @@ const LoginPage = () => {
     <main className="flex min-h-screen flex-col items-center justify-center bg-white">
       <section className="flex w-full max-w-[460px] flex-col items-start">
         <Logo />
-        <div className="mb-[56px] flex flex-col text-left text-[26px] font-bold">
+        {/* Todo 구글 외 플랫폼 소셜 로그인 기능 추가되면 아래의 div 로 변경 */}
+        {/* <div className="mb-[56px] flex flex-col text-left text-[26px] font-bold"> */}
+        <div className="mb-[26px] flex flex-col text-left text-[26px] font-bold">
           {textData.map((text, index) => {
             return (
               <span
@@ -30,7 +32,7 @@ const LoginPage = () => {
         </div>
 
         <section className="w-full space-y-4">
-          <SocialLoginButton
+          {/* <SocialLoginButton
             provider="카카오 로그인"
             icon={Kakao}
             bgColor="bg-kakao-yellow"
@@ -38,7 +40,7 @@ const LoginPage = () => {
             onClick={() =>
               (window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/kakao`)
             }
-          />
+          /> */}
 
           <SocialLoginButton
             provider="Google 로그인"
@@ -51,14 +53,14 @@ const LoginPage = () => {
           />
         </section>
         {/* 구분선 */}
-        <div className="flex w-full items-center justify-center">
+        {/* <div className="flex w-full items-center justify-center">
           <div className="flex-grow border-t-[0.5px] border-gray-50" />
           <div className="mx-4 whitespace-nowrap">또는</div>
           <div className="flex-grow border-t-[0.5px] border-gray-50 text-[14px] font-normal" />
-        </div>
+        </div> */}
 
         {/* 하단 아이콘 */}
-        <div className="mt-4 flex w-full items-center justify-center space-x-4">
+        {/* <div className="mt-4 flex w-full items-center justify-center space-x-4">
           <SocialLoginButton
             icon={NaverIcon}
             bgColor="bg-transparent"
@@ -78,7 +80,7 @@ const LoginPage = () => {
               (window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/github`)
             }
           />
-        </div>
+        </div> */}
       </section>
     </main>
   );

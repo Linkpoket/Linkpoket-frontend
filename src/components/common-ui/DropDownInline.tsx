@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Transfer from '@/assets/common-ui-assets/Transfer.svg?react';
 import Copy from '@/assets/common-ui-assets/Copy.svg?react';
 import Delete from '@/assets/common-ui-assets/Delete.svg?react';
@@ -10,6 +10,7 @@ import DeleteFolderModal from '../modal/folder/DeleteFolderModal';
 import DeleteLinkModal from '../modal/link/DeleteLinkModal';
 import { useClickOutsideMultiple } from '@/hooks/useClickOutsideMultiple';
 import { ToastCustom } from './ToastCustom';
+import { useTransferFolder } from '@/hooks/mutations/useTransferFolder';
 
 type DropDownInlineProps = {
   id: string;
@@ -37,6 +38,8 @@ const DropDownInline = ({
   const [title, setTitle] = useState(initialTitle);
   const [link, setLink] = useState(initialLink);
 
+  const { pageId } = usePageStore();
+
   const [isFolderDeleteOpen, setIsFolderDeleteOpen] = useState(false);
   const [isLinkDeleteOpen, setIsLinkDeleteOpen] = useState(false);
 
@@ -45,9 +48,7 @@ const DropDownInline = ({
   const { isTransferFolderModalOpen, closeTransferFolderModal } =
     useModalStore();
 
-  const transferFolder = useTransferActionStore((s) => s.transferFolder);
-
-  const pageId = usePageStore((state) => state.pageId);
+  const { mutate: transferFolder } = useTransferFolder();
 
   // TODO: 타이틀 변경은 공유페이지, 폴더에 있는걸 hook으로 만들어 여기서도 사용하면 좋을 것 같아요. 그래서 일단 버튼 제거했습니다
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -193,7 +194,16 @@ const DropDownInline = ({
         onClose={closeTransferFolderModal}
         directoryId={id}
         folderName={title}
-        onSubmit={async (email) => transferFolder(email, id)}
+        onSubmit={async (email) =>
+          transferFolder({
+            receiverEmail: email,
+            directoryId: id,
+            baseRequest: {
+              pageId,
+              commandType: 'DIRECTORY_TRANSMISSION',
+            },
+          })
+        }
       />
     </div>
   );

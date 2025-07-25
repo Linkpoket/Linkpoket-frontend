@@ -120,7 +120,6 @@ const SignupPage = () => {
   // 직업 선택값과 커스텀 직업값 감시
   const navigate = useNavigate();
   const selectedJob = watch('job');
-  // const customJobValue = watch('customJob');
 
   // 개별 약관 동의 상태 관리
   const [termsStatus, setTermsStatus] = useState({
@@ -168,21 +167,16 @@ const SignupPage = () => {
         COLOR_OPTIONS[Math.floor(Math.random() * COLOR_OPTIONS.length)],
     };
 
-    // API 호출 시뮬레이션
-    console.log('회원가입 데이터:', submitData);
-
     try {
       const genderValue = data.gender === 'male' ? 1 : 2;
 
-      const response = await axiosInstance.post('/api/member/sign-up', {
+      await axiosInstance.post('/api/member/sign-up', {
         ageRange: data.ageRange,
         gender: genderValue,
         job: submitData.jobText,
         nickName: data.nickname,
         colorCode: submitData.colorCode,
       });
-
-      console.log('응답 성공:', response.data);
 
       navigate('/');
     } catch (error) {

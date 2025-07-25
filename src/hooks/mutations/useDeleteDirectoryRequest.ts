@@ -9,10 +9,10 @@ export const useDeleteDirectoryRequest = () => {
     mutationFn: deleteDirectoryRequest,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
-      ToastCustom.success('폴더 요청을 삭제했습니다.');
+      ToastCustom.success('알람을 삭제했습니다.');
     },
     onError: () => {
-      ToastCustom.error('폴더 요청 삭제에 실패했습니다.');
+      ToastCustom.error('삭제를 실패했습니다.');
     },
   });
 };

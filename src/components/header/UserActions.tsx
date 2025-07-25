@@ -23,8 +23,6 @@ export function UserActions() {
     usePatchDirectoryTransmissionStatus();
   const { mutate: deleteDirectoryRequest } = useDeleteDirectoryRequest();
 
-  console.log('유저프로필', nickname, colorCode);
-
   const handleStatusChange = useCallback(
     (
       requestId: string,

@@ -6,6 +6,7 @@ import { useUserStore } from '@/stores/userStore';
 import ProfileSettingsModal from '@/components/modal/profile/ProfileSettingsModal';
 import { useProfileModalStore } from '@/stores/profileModalStore';
 import WithdrawAccountModal from '@/components/modal/profile/WithdrawAccountModal';
+import { useNotificationSSE } from '@/hooks/useNotificationSSE';
 
 export default function Layout() {
   const location = useLocation();
@@ -30,7 +31,7 @@ export default function Layout() {
   const showHeaderButton = !isSignUpPage; // 회원가입 페이지에서 header의 button 숨김 숨김
   const showDepth = !isLoginPage && !isSignUpPage; // 로그인,회원가입 페이지에서 header의 button 숨김 숨김
 
-  // useNotificationSSE(isLoggedIn);
+  useNotificationSSE(isLoggedIn);
 
   return (
     <div className="flex flex-col">
