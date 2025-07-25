@@ -15,7 +15,14 @@ export function FooterLanding() {
         <div className="text-gray-70 flex gap-[32px] text-[13px]">
           <Link to="#">문의</Link>
           <Link to="#">이용약관</Link>
-          <Link to="#">개인정보처리방침</Link>
+          <a
+            href="https://receptive-point-998.notion.site/Linkrew-206f9c9e9312804db5acd2e518704dff"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-70"
+          >
+            개인정보처리방침
+          </a>
         </div>
       </div>
     </footer>
