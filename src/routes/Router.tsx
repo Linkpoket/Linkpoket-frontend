@@ -10,14 +10,12 @@ import PersonalPage from '@/pages/PersonalPage';
 import BookmarkPage from '@/pages/BookmarkPage';
 import SharedPage from '@/pages/SharedPage';
 import FolderDetailPage from '@/pages/FolderDetailPage';
-import TextPage from '@/pages/TextPage';
 const router = createBrowserRouter([
   {
     element: <Layout />,
     children: [
       // 인증이 필요한 라우트들
       {
-        element: <ProtectedRoute />,
         element: <ProtectedRoute />,
         children: [
           { path: '/', element: <PersonalPage /> },
@@ -28,13 +26,12 @@ const router = createBrowserRouter([
             path: '/shared/:pageId',
             element: <SharedPage />,
           },
-          { path: '/text', element: <TextPage /> },
         ],
       },
 
       // 인증된 사용자는 접근할 필요 없는 라우트들
       {
-        // element: <RedirectIfAuthenticated />,
+        element: <RedirectIfAuthenticated />,
         children: [
           { path: 'login', element: <LoginPage /> },
           { path: 'signup', element: <SignupPage /> },
