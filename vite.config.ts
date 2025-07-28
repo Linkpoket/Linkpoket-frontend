@@ -3,30 +3,10 @@ import { defineConfig } from 'vite';
 import svgr from 'vite-plugin-svgr';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
-// import { copyFileSync, readFileSync, writeFileSync } from 'fs';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss(), svgr()],
-  build: {
-    rollupOptions: {
-      input: {
-        web: resolve(__dirname, 'index.html'),
-      },
-      output: {
-        entryFileNames: '[name].js',
-        chunkFileNames: 'assets/[name].[hash].js',
-        assetFileNames: (assetInfo) => {
-          if (assetInfo.name?.endsWith('.css')) {
-            return 'assets/global.css';
-          }
-          return 'assets/[name].[ext]';
-        },
-      },
-    },
-    outDir: 'dist',
-    assetsDir: 'assets',
-  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
