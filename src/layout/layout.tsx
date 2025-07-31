@@ -7,8 +7,10 @@ import ProfileSettingsModal from '@/components/modal/profile/ProfileSettingsModa
 import { useProfileModalStore } from '@/stores/profileModalStore';
 import WithdrawAccountModal from '@/components/modal/profile/WithdrawAccountModal';
 import { useNotificationSSE } from '@/hooks/useNotificationSSE';
+import useRouteChangeTracker from '@/hooks/useRouteChangeTracker';
 
 export default function Layout() {
+  useRouteChangeTracker();
   const location = useLocation();
   const path = location.pathname;
   const [showSidebar, setShowSidebar] = useState(true);

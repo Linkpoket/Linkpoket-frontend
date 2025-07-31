@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import ReactGA from 'react-ga4';
 
-const RouteChangeTracker = () => {
+const useRouteChangeTracker = () => {
   const location = useLocation();
   const [initialized, setInitialized] = useState(false);
 
   // 로컬에서는 기록하지 않음
   useEffect(() => {
     if (!window.location.href.includes('localhost')) {
-      ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID as string);
+      ReactGA.initialize(import.meta.env.VITE_GA_MEASUREMENT_ID as string);
       setInitialized(true);
     }
   }, []);
@@ -23,4 +23,4 @@ const RouteChangeTracker = () => {
   }, [initialized, location]);
 };
 
-export default RouteChangeTracker;
+export default useRouteChangeTracker;

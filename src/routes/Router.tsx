@@ -41,8 +41,6 @@ const router = createBrowserRouter([
       // 항상 접근 가능한 라우트들
       { path: 'landing', element: <LandingPage /> },
       { path: 'reissue', element: <ReissuePage /> },
-      { path: 'landing', element: <LandingPage /> },
-      { path: 'reissue', element: <ReissuePage /> },
     ],
   },
 ]);
