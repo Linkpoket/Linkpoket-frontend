@@ -5,29 +5,27 @@ export default function ReissuePage() {
   useEffect(() => {
     const handleRedirection = async () => {
       try {
-        const isNewUser = document.cookie.includes('isSignUp=false');
+        const response = await axiosInstance.get('/api/jwt/access-token', {
+          withCredentials: true,
+        });
+
+        const redirectUrl = response?.headers['redirect-url'];
+        const isNewUser = new URL(redirectUrl).pathname === '/signup';
 
         if (isNewUser) {
           window.location.href = '/signup';
         } else {
-          const response = await axiosInstance.get('/api/jwt/access-token', {
-            withCredentials: true,
-          });
-
           const accessToken = response.headers['authorization']?.replace(
             'Bearer ',
             ''
           );
           const sseToken = response.data?.data?.value;
-
           if (accessToken) {
             localStorage.setItem('access_token', accessToken);
           }
-
           if (sseToken) {
             localStorage.setItem('sse_token', sseToken);
           }
-
           window.location.href = '/';
         }
       } catch (error) {
