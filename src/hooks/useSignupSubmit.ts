@@ -22,6 +22,7 @@ export const useSignupSubmit = () => {
     try {
       const genderValue = data.gender === 'male' ? 1 : 2;
 
+      // 회원가입은 axiosInstance 사용 (기존 그대로)
       await axiosInstance.post('/api/member/sign-up', {
         ageRange: data.ageRange,
         gender: genderValue,
@@ -30,7 +31,13 @@ export const useSignupSubmit = () => {
         colorCode: submitData.colorCode,
       });
 
-      const tokenResponse = await axiosInstance.get('/api/jwt/access-token');
+      // Access Token 요청은 일반 axios 사용 (인터셉터 우회)
+      const tokenResponse = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/jwt/access-token`,
+        {
+          withCredentials: true,
+        }
+      );
 
       const authAccessToken = tokenResponse.headers['authorization']?.replace(
         'Bearer ',
@@ -40,6 +47,7 @@ export const useSignupSubmit = () => {
       if (authAccessToken) {
         localStorage.setItem('access_token', authAccessToken);
       } else {
+        console.warn('Access Token이 없습니다.');
         window.location.href = '/login';
         return;
       }
@@ -52,7 +60,8 @@ export const useSignupSubmit = () => {
       }
 
       navigate('/');
-    } catch (error) {
+    } catch (error: any) {
+      console.error('회원가입 에러:', error);
       if (axios.isAxiosError(error)) {
         console.error('응답 상태 코드:', error.response?.status);
         console.error('응답 메시지:', error.response?.data);

@@ -1,13 +1,16 @@
-import { axiosInstance } from '@/apis/axiosInstance';
+import axios from 'axios';
 import { useEffect } from 'react';
 
 export default function ReissuePage() {
   useEffect(() => {
     const handleRedirection = async () => {
       try {
-        const response = await axiosInstance.get('/api/jwt/access-token', {
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/jwt/access-token`,
+          {
+            withCredentials: true,
+          }
+        );
 
         const redirectUrl = response?.headers['redirect-url'];
         const isNewUser = new URL(redirectUrl).pathname === '/signup';
@@ -30,7 +33,7 @@ export default function ReissuePage() {
         }
       } catch (error) {
         console.log(error);
-        // window.location.href = '/login';
+        window.location.href = '/login';
       }
     };
 

@@ -3,7 +3,6 @@ import { z } from 'zod';
 
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  // baseURL: 'http://localhost:8080',
   withCredentials: true,
 });
 
@@ -63,7 +62,7 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest);
       } catch (e) {
         console.log('토큰 재발급 실패:', e);
-        // window.location.href = '/login';
+        window.location.href = '/login';
         return Promise.reject(e);
       }
     }
