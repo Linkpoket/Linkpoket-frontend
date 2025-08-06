@@ -16,7 +16,7 @@ const CtaSection: React.FC = () => {
     },
     {
       text: '구글 확장 프로그램 무료 다운로드',
-      href: '/extension',
+      href: 'https://chromewebstore.google.com/search/linkrew?pli=1',
       className:
         'bg-primary-50 text-gray-0 border-1 border-white active:bg-primary-50 hover:bg-primary-60',
     },
@@ -67,8 +67,14 @@ const CtaSection: React.FC = () => {
             ))}
 
             <div className="cta-buttons-mobile cta-buttons-tablet cta-buttons-desktop mt-10 flex flex-col items-center gap-4 sm:flex-row">
-              {ctaButtons.map(({ text, href, className }) => (
-                <a key={href} href={href} className="w-full sm:w-auto">
+              {ctaButtons.map(({ text, href, className }, idx) => (
+                <a
+                  key={href}
+                  href={href}
+                  target={idx === 1 ? '_blank' : undefined}
+                  rel={idx === 1 ? 'noopener noreferrer' : undefined}
+                  className="w-full sm:w-auto"
+                >
                   <Button
                     className={`cta-button-mobile cta-button-desktop cta-button-tablet ${className}`}
                   >

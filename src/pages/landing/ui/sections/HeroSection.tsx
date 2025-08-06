@@ -18,7 +18,7 @@ const HeroSection: React.FC = () => {
     },
     {
       text: '구글 확장 프로그램 다운',
-      href: '/extension',
+      href: 'https://chromewebstore.google.com/search/linkrew?pli=1',
     },
   ];
 
@@ -39,7 +39,12 @@ const HeroSection: React.FC = () => {
 
           <div className="mb-18 flex space-x-4 md:mb-0">
             {buttonVariants.map(({ text, href, className }, index) => (
-              <a key={index} href={href}>
+              <a
+                key={index}
+                href={href}
+                target={index === 1 ? '_blank' : undefined}
+                rel={index === 1 ? 'noopener noreferrer' : undefined}
+              >
                 <Button
                   size={isMobile ? 'sm' : 'lg'}
                   variant={index === 1 ? 'ghost' : 'primary'}
