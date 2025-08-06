@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { axiosInstance } from '@/apis/axiosInstance';
 import { COLOR_OPTIONS } from '@/styles/tokens';
 import { JOB_OPTIONS } from '@/constants/signup';
 import { FormData } from '@/schemas/signup';
@@ -22,14 +21,19 @@ export const useSignupSubmit = () => {
     try {
       const genderValue = data.gender === 'male' ? 1 : 2;
 
-      // 회원가입은 axiosInstance 사용 (기존 그대로)
-      await axiosInstance.post('/api/member/sign-up', {
-        ageRange: data.ageRange,
-        gender: genderValue,
-        job: submitData.jobText,
-        nickName: data.nickname,
-        colorCode: submitData.colorCode,
-      });
+      await axios.post(
+        '/api/member/sign-up',
+        {
+          ageRange: data.ageRange,
+          gender: genderValue,
+          job: submitData.jobText,
+          nickName: data.nickname,
+          colorCode: submitData.colorCode,
+        },
+        {
+          withCredentials: true,
+        }
+      );
 
       // Access Token 요청은 일반 axios 사용 (인터셉터 우회)
       const tokenResponse = await axios.get(
