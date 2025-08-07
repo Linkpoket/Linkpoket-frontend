@@ -1,4 +1,6 @@
 import FooterLogo from '@/assets/common-ui-assets/FooterLogo.svg?react';
+import { PRIVACY_POLICY } from '@/constants/privacyPolicy';
+import { TERMS_OF_SERVICE } from '@/constants/termsOfService';
 import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
@@ -9,11 +11,11 @@ const Footer: React.FC = () => {
     },
     {
       name: '이용약관',
-      href: 'https://receptive-point-998.notion.site/Linkrew-206f9c9e9312804db5acd2e518704dff',
+      href: TERMS_OF_SERVICE,
     },
     {
       name: '개인정보처리방침',
-      href: 'https://receptive-point-998.notion.site/Linkrew-206f9c9e931280fdbb10e7dc753f4821 ',
+      href: PRIVACY_POLICY,
     },
   ];
   return (

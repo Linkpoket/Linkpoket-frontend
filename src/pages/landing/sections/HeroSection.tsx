@@ -1,6 +1,7 @@
 import { Button } from '@/components/common-ui/button';
 import 히어로이미지 from '@/assets/common-ui-assets/히어로 이미지.png';
 import { useMobile } from '@/hooks/useMobile';
+import { CHROME_EXTENSION_URL } from '@/constants/urls';
 
 const HeroSection: React.FC = () => {
   const isMobile = useMobile();
@@ -18,7 +19,7 @@ const HeroSection: React.FC = () => {
     },
     {
       text: '구글 확장 프로그램 다운',
-      href: 'https://chromewebstore.google.com/search/linkrew?pli=1',
+      href: CHROME_EXTENSION_URL,
     },
   ];
 

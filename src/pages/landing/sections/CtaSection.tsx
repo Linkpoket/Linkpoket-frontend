@@ -1,6 +1,7 @@
 import { Button } from '@/components/common-ui/button';
 import FooterBg from '@/assets/common-ui-assets/FooterBg.svg?react';
 import { useMobile } from '@/hooks/useMobile';
+import { CHROME_EXTENSION_URL } from '@/constants/urls';
 
 const CtaSection: React.FC = () => {
   const isMobile = useMobile();
@@ -16,7 +17,7 @@ const CtaSection: React.FC = () => {
     },
     {
       text: '구글 확장 프로그램 무료 다운로드',
-      href: 'https://chromewebstore.google.com/search/linkrew?pli=1',
+      href: CHROME_EXTENSION_URL,
       className:
         'bg-primary-50 text-gray-0 border-1 border-white active:bg-primary-50 hover:bg-primary-60',
     },
