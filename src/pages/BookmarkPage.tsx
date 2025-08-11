@@ -18,7 +18,7 @@ export default function BookmarkPage() {
   console.log('linkData', linkData);
 
   return (
-    <div className="flex h-screen min-w-[328px] flex-col px-[64px] py-[56px] xl:px-[102px]">
+    <div className="bg-gray-5 flex h-screen min-w-[328px] flex-col px-[64px] py-[56px] xl:px-[102px]">
       <PageHeaderSection pageTitle="북마크" />
       <PageControllerSection
         folderDataLength={folderDataLength}
