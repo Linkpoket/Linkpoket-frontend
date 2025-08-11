@@ -13,11 +13,11 @@ export function useUpdateLink(
 
   return useMutation({
     mutationFn: updateLink,
-    onSuccess: async (response, variables, context) => {
+    onSuccess: (response, variables, context) => {
       console.log('폴더 업데이트 성공 응답:', response);
 
       // 폴더 상세, 공유페이지, 개인페이지 캐시 무효화
-      await Promise.all([
+      Promise.all([
         queryClient.invalidateQueries({
           queryKey: ['folderDetails', variables.baseRequest.pageId],
         }),

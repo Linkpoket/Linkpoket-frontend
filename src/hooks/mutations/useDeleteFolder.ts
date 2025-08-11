@@ -18,9 +18,9 @@ export default function useDeleteFolder(
   return useMutation({
     ...options,
     mutationFn: deleteFolder,
-    onSuccess: async (response, variables, context) => {
+    onSuccess: (response, variables, context) => {
       // 현재 페이지의 모든 관련 쿼리 무효화
-      await Promise.all([
+      Promise.all([
         // 일반 페이지 쿼리 무효화
         queryClient.invalidateQueries({
           queryKey: ['sharedPage', pageId],
