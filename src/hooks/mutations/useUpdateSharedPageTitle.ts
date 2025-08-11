@@ -7,7 +7,7 @@ export default function useUpdateSharedPageTitle(pageId: string) {
   return useMutation({
     mutationFn: updateSharedPageTitle,
     onSuccess: () => {
-      Promise.all([
+      Promise.allSettled([
         queryClient.invalidateQueries({
           queryKey: ['sharedPage', pageId],
         }),

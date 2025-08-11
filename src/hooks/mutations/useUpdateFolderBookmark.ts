@@ -13,7 +13,7 @@ export default function useUpdateFolderBookmark({
   return useMutation({
     mutationFn: () => updateFolderBookmark(folderId),
     onSuccess: () => {
-      Promise.all([
+      Promise.allSettled([
         queryClient.invalidateQueries({
           queryKey: ['bookmark', folderId],
           refetchType: 'active',

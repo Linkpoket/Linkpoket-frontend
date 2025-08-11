@@ -20,7 +20,7 @@ export default function useUpdateLinkBookmark({
     ...options,
     mutationFn: updateLinkBookmark,
     onSuccess: (response, variables, context) => {
-      Promise.all([
+      Promise.allSettled([
         queryClient.invalidateQueries({
           queryKey: ['favorite'],
           refetchType: 'active',

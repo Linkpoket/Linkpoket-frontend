@@ -19,7 +19,7 @@ export function useCreateFolder(
     mutationFn: createFolder,
     onSuccess: (response, variables, context) => {
       // 현재 페이지의 모든 관련 쿼리 무효화
-      Promise.all([
+      Promise.allSettled([
         // 일반 페이지 쿼리 무효화
         queryClient.invalidateQueries({
           queryKey: ['sharedPage', pageId],
