@@ -33,7 +33,7 @@ export default function FolderDetailPage() {
   }, [targetFolderId, setParentsFolderId]);
 
   return (
-    <div className="flex h-screen min-w-[328px] flex-col px-[64px] py-[56px] xl:px-[102px]">
+    <div className="bg-gray-5 flex h-screen min-w-[328px] flex-col px-[64px] py-[56px] xl:px-[102px]">
       <PageHeaderSection pageTitle={folderName} folderId={folderId} />
       <PageControllerSection
         folderDataLength={folderDataLength}

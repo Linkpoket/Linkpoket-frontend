@@ -3,6 +3,7 @@ import Modal from '@/components/common-ui/Modal';
 import { Button } from '@/components/common-ui/button';
 import useUpdateSharedPageInvitation from '@/hooks/mutations/updateSharedPageInvitation';
 import { UpdateSharedPageInvitationData } from '@/types/pages';
+import toast from 'react-hot-toast';
 
 interface EmailInputWithRoleProps {
   email: string;
@@ -56,6 +57,13 @@ const InviteUserModal = ({ isOpen, onClose, pageId }: InviteUserModalProps) => {
 
   const updateSharedPageInvitation = useUpdateSharedPageInvitation({
     pageId,
+    onSuccess: () => {
+      toast.success('초대 요청이 완료되었습니다.');
+      onClose();
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
   });
 
   const handleInvite = () => {

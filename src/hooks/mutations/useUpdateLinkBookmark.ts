@@ -20,11 +20,27 @@ export default function useUpdateLinkBookmark({
     ...options,
     mutationFn: updateLinkBookmark,
     onSuccess: (response, variables, context) => {
-      Promise.all([
-        queryClient.invalidateQueries({ queryKey: ['favorite'] }),
-        queryClient.invalidateQueries({ queryKey: ['bookmark', linkId] }),
-        queryClient.invalidateQueries({ queryKey: ['sharedPage', pageId] }),
-        queryClient.invalidateQueries({ queryKey: ['personalPage'] }),
+      Promise.allSettled([
+        queryClient.invalidateQueries({
+          queryKey: ['favorite'],
+          refetchType: 'active',
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['bookmark', linkId],
+          refetchType: 'active',
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['sharedPage', pageId],
+          refetchType: 'active',
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['folderDetails', pageId],
+          refetchType: 'active',
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['personalPage'],
+          refetchType: 'active',
+        }),
       ]);
       if (options?.onSuccess) {
         options.onSuccess(response, variables, context);

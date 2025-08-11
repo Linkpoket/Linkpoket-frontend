@@ -30,6 +30,7 @@ export type FolderDetail = {
   folderName: string;
   isFavorite: boolean;
   orderIndex: number;
+  createdDate: string;
 };
 
 export type FolderDetailResponse = Array<FolderDetail>;

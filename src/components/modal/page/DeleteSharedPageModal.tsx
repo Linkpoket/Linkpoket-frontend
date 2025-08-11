@@ -4,6 +4,7 @@ import { forwardRef } from 'react';
 import { useDeleteSharedPage } from '@/hooks/mutations/useDeleteSharedPage';
 import { DeleteSharedPageData } from '@/types/pages';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 interface DeleteSharedPageModalProps {
   isOpen: boolean;
   pageId: string;
@@ -29,9 +30,11 @@ const DeleteSharedPageModal = forwardRef<
       onSuccess: () => {
         onClose();
         navigate('/');
+        toast.success('공유 페이지 삭제 완료');
       },
       onError: (error) => {
         console.error('공유 페이지 삭제 실패:', error);
+        toast.error('공유 페이지 삭제 실패');
       },
     });
   };

@@ -4,6 +4,7 @@ import { forwardRef } from 'react';
 import { useWithdrawSharedPage } from '@/hooks/mutations/useWithdrawSharedPage';
 import { DeleteSharedPageData } from '@/types/pages';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 interface WithdrawSharedPageModalProps {
   isOpen: boolean;
   pageId: string;
@@ -29,9 +30,10 @@ const WithdrawSharedPageModal = forwardRef<
       onSuccess: () => {
         onClose();
         navigate('/');
+        toast.success('공유 페이지 탈퇴 완료');
       },
       onError: (error) => {
-        console.error('공유 페이지 탈퇴 실패:', error);
+        toast.error('공유 페이지 탈퇴 실패');
       },
     });
 

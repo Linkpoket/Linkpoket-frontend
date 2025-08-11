@@ -30,7 +30,7 @@ export default function SharedPage() {
   }, [pageId, setPageInfo, setParentsFolderId, rootFolderId]);
 
   return (
-    <div className="flex h-screen min-w-[328px] flex-col px-[64px] py-[56px] xl:px-[102px]">
+    <div className="bg-gray-5 flex h-screen min-w-[328px] flex-col px-[64px] py-[56px] xl:px-[102px]">
       <SharedPageHeaderSection
         pageTitle={pageTitle}
         pageId={pageId as string}

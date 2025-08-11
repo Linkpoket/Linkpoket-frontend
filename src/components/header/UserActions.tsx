@@ -2,7 +2,7 @@ import Bell from '@/assets/widget-ui-assets/Bell.svg?react';
 import Menu from '@/assets/widget-ui-assets/Menu.svg?react';
 import { useCallback, useState } from 'react';
 import NotificationModal from '../modal/page/NotificationModal';
-import HeaderMenu from '../modal/page/HeaderMenu';
+import HeaderMenu from './HeaderMenu';
 import { useFetchNotifications } from '@/hooks/queries/useFetchNotification';
 import { usePatchShareInvitationStatus } from '@/hooks/mutations/usePatchShareInvitationStatus';
 import { usePatchDirectoryTransmissionStatus } from '@/hooks/mutations/usePatchDirectoryTransmissionStatus';

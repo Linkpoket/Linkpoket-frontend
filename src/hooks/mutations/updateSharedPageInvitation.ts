@@ -4,7 +4,7 @@ import { PageParamsData } from '@/types/pages';
 
 interface UseUpdateSharedPageInvitationProps extends PageParamsData {
   onSuccess?: () => void;
-  onError?: (error: unknown) => void;
+  onError?: (error: any) => void;
 }
 
 export default function useUpdateSharedPageInvitation({

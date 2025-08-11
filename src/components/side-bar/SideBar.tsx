@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import BookMark from '@/assets/widget-ui-assets/BookMark.svg?react';
 import PersonalPage from '@/assets/widget-ui-assets/PersonalPage.svg?react';
@@ -61,7 +61,7 @@ const SideBar: React.FC<MenubarProps> = ({
   const { joinedPage } = useFetchJoinedPage();
 
   //사이드바 폴더 목록 조회
-  const { folderList } = useFetchFolderList(pageId as string);
+  const { folderList } = useFetchFolderList(pageId);
   const refinedFolderList = folderList?.data?.directories;
 
   //공유페이지 생성

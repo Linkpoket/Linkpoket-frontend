@@ -13,16 +13,33 @@ export function useUpdateLink(
 
   return useMutation({
     mutationFn: updateLink,
-    onSuccess: (data, variables, context) => {
-      Promise.all([
+    onSuccess: (response, variables, context) => {
+      console.log('폴더 업데이트 성공 응답:', response);
+
+      // 폴더 상세, 공유페이지, 개인페이지 캐시 무효화
+      Promise.allSettled([
+        queryClient.invalidateQueries({
+          queryKey: ['folderDetails', variables.baseRequest.pageId],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['folderList', variables.baseRequest.pageId],
+          refetchType: 'active',
+        }),
         queryClient.invalidateQueries({
           queryKey: ['sharedPage', variables.baseRequest.pageId],
         }),
         queryClient.invalidateQueries({
           queryKey: ['personalPage'],
         }),
+        queryClient.invalidateQueries({
+          queryKey: ['favorite'],
+          refetchType: 'active',
+        }),
       ]);
-      options?.onSuccess?.(data, variables, context);
+
+      if (options?.onSuccess) {
+        options.onSuccess(response, variables, context);
+      }
     },
     onError: (error, variables, context) => {
       options?.onError?.(error, variables, context);

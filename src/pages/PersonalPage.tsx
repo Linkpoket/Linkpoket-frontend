@@ -61,7 +61,7 @@ export default function PersonalPage() {
   ]);
 
   return (
-    <div className="flex h-screen min-w-[328px] flex-col px-[64px] py-[56px] xl:px-[102px]">
+    <div className="bg-gray-5 flex h-screen min-w-[328px] flex-col px-[64px] py-[56px] xl:px-[102px]">
       <PageHeaderSection pageTitle={pageTitle} />
       <PageControllerSection
         folderDataLength={folderDataLength}

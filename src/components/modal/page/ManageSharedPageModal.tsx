@@ -57,7 +57,7 @@ const ManageSharedPageModal = ({
   const handleCopyLink = async () => {
     try {
       const currentUrl = window.location.href;
-      await navigator.clipboard.writeText(`http://linkrew.com${currentUrl}`);
+      await navigator.clipboard.writeText(`${currentUrl}`);
     } catch (error) {
       console.error('링크 복사 실패:', error);
     }
