@@ -5,30 +5,42 @@ import {
 } from '@tanstack/react-query';
 import deleteFolder from '@/apis/folder-apis/deleteFolder';
 import { DeleteFolderData } from '@/types/folders';
+import { useLocation } from 'react-router-dom';
 
 export default function useDeleteFolder(
   pageId: string,
   options?: UseMutationOptions<any, unknown, DeleteFolderData>
 ) {
   const queryClient = useQueryClient();
+  const location = useLocation();
+  const isMainPage = location.pathname === '/';
 
   return useMutation({
     ...options,
     mutationFn: deleteFolder,
     onSuccess: async (response, variables, context) => {
+      // 현재 페이지의 모든 관련 쿼리 무효화
       await Promise.all([
+        // 일반 페이지 쿼리 무효화
         queryClient.invalidateQueries({
           queryKey: ['sharedPage', pageId],
+          refetchType: 'active',
+        }),
+        // 폴더 상세 페이지 쿼리 무효화 (모든 폴더 ID에 대해)
+        queryClient.invalidateQueries({
+          queryKey: ['folderDetails', pageId],
           refetchType: 'active',
         }),
         queryClient.invalidateQueries({
           queryKey: ['folderList', pageId],
           refetchType: 'active',
         }),
-        queryClient.invalidateQueries({
-          queryKey: ['favorite'],
-          refetchType: 'active',
-        }),
+        // 메인 페이지에서만 personalPage 캐시 무효화
+        isMainPage &&
+          queryClient.invalidateQueries({
+            queryKey: ['personalPage'],
+            refetchType: 'active',
+          }),
       ]);
 
       if (options?.onSuccess) {

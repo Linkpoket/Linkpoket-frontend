@@ -21,7 +21,7 @@ export default function useUpdateFolder(
       // 폴더 상세, 공유페이지, 개인페이지 캐시 무효화
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: ['folderDetails', variables.folderId],
+          queryKey: ['folderDetails', variables.baseRequest.pageId],
         }),
         queryClient.invalidateQueries({
           queryKey: ['folderList', pageId],
