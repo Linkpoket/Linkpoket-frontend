@@ -132,7 +132,7 @@ export const useAddLinkForm = (isOpen: boolean, onClose: () => void) => {
         clearTimeout(debounceTimeoutRef.current);
       }
     };
-  }, [linkUrl, previewLinkMutate, pageId, isFirstInput]);
+  }, [linkUrl, previewLinkMutate, pageId]);
 
   // 모달 초기화 useEffect에도 isFirstInput 리셋 추가
   useEffect(() => {
