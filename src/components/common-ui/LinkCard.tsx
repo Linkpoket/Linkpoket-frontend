@@ -32,9 +32,18 @@ export default function LinkCard({
   };
 
   const imageUrl = (() => {
-    const url = item.representImageUrl?.toLowerCase();
-    if (url?.endsWith('.png') || url?.endsWith('.jpg')) {
-      return item.representImageUrl;
+    const url = item.representImageUrl;
+
+    // URL에서 쿼리 파라미터 제거 후 확장자 체크
+    if (url) {
+      const urlWithoutQuery = url.split('?')[0].toLowerCase();
+      if (
+        urlWithoutQuery.endsWith('.png') ||
+        urlWithoutQuery.endsWith('.jpg') ||
+        urlWithoutQuery.endsWith('.jpeg')
+      ) {
+        return item.representImageUrl;
+      }
     }
 
     if (item.faviconUrl) {
@@ -44,6 +53,8 @@ export default function LinkCard({
     return defaultImage;
   })();
 
+  const isFaviconOnly = !item.representImageUrl && item.faviconUrl;
+
   console.log('링크 카드 아이템:', item);
 
   return (
@@ -52,12 +63,15 @@ export default function LinkCard({
         className="border-gray-10 flex h-[242px] min-w-[156px] flex-col gap-4 rounded-[16px] border p-[16px]"
         onDoubleClick={handleDoubleClick}
       >
-        <div className="bg-gray-40 flex h-[96px] w-full items-center justify-center overflow-hidden rounded-lg">
+        <div className="bg-gray-10 flex h-[96px] w-full items-center justify-center overflow-hidden rounded-lg">
           <img
             loading="lazy"
             src={imageUrl}
             alt={item.linkName || '링크 이미지'}
-            className={`${imageUrl.endsWith('png') || (imageUrl.endsWith('jpg') && `h-full w-full object-cover`)} h-10`}
+            onError={(e) => {
+              e.currentTarget.src = defaultImage;
+            }}
+            className={isFaviconOnly ? 'h-10' : 'h-full w-full object-cover'}
           />
         </div>
         <div className="flex flex-1 flex-col justify-between">
