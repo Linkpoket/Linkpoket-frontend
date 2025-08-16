@@ -48,7 +48,28 @@ const DropDownInline = ({
   const { isTransferFolderModalOpen, closeTransferFolderModal } =
     useModalStore();
 
-  const { mutate: transferFolder } = useTransferFolder();
+  const { mutate: transferFolder, isPending: isTransferring } =
+    useTransferFolder({
+      onSuccess: (data) => {
+        console.log('🟢 React Query onSuccess 호출됨:', data);
+        ToastCustom.success(
+          `${data.data.receiverEmail}에게 전송이 완료되었습니다.`
+        );
+        closeTransferFolderModal();
+        setIsDropDownInline(false);
+      },
+      onError: (error) => {
+        console.log('🔴 React Query onError 호출됨:', error);
+
+        switch (error.errorCode) {
+          case 'TRANSMIT_DIRECTORY_REQUEST_ACCEPTED_EXIST':
+            ToastCustom.error('이미 해당 디렉토리 전송 요청을 수락하였습니다.');
+            break;
+          default:
+            ToastCustom.error(error.detail || '전송 중 오류가 발생했습니다.');
+        }
+      },
+    });
 
   // TODO: 타이틀 변경은 공유페이지, 폴더에 있는걸 hook으로 만들어 여기서도 사용하면 좋을 것 같아요. 그래서 일단 버튼 제거했습니다
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -149,14 +170,6 @@ const DropDownInline = ({
               className="text-gray-60 resize-none p-[12px] text-[13px] font-[400] outline-none"
             />
           </div>
-
-          {/* 피그마에는 링크는 전송 기능이 있지만 POSTMAN에는 없어서 일단 주석처리 했습니다. */}
-          {/* <button
-            onClick={() => console.log('전송')}
-            className="flex cursor-pointer items-center gap-[10px] p-[12px]"
-          >
-            <Transfer width={18} height={18} /> 전송하기
-          </button> */}
 
           <button
             onClick={() => {

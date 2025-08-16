@@ -8,7 +8,7 @@ type Props = {
   isOpen: boolean;
   onClose: () => void;
   folderName: string;
-  onSubmit: (email: string, directoryId: string) => Promise<void>;
+  onSubmit: (email: string, directoryId: string) => void;
   directoryId: string;
 };
 
@@ -30,10 +30,8 @@ const FolderTransferModal = forwardRef<HTMLDivElement, Props>((props, ref) => {
     try {
       await onSubmit(email, directoryId);
       setEmail('');
-      ToastCustom.success('폴더를 성공적으로 전송했습니다.');
       onClose();
     } catch (error) {
-      ToastCustom.error('폴더 전송 중 오류가 발생했습니다.');
       console.error('폴더 전송 오류:', error);
     } finally {
       setIsSubmitting(false);
