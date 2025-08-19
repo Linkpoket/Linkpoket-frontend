@@ -18,7 +18,7 @@ export default function PersonalPage() {
 
   const pageTitle = refinedData?.pageTitle;
 
-  const folderData = refinedData?.directoryDetailRespons ?? [];
+  const folderData = refinedData?.directoryDetailResponses ?? [];
   const linkData = refinedData?.siteDetailResponses ?? [];
   const folderDataLength = folderData?.length;
   const linkDataLength = linkData?.length;

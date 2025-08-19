@@ -18,19 +18,40 @@ export default function FolderDetailPage() {
     sortType: 'BASIC',
   };
 
-  const folderDetailsQuery = useFetchFolderDetails(requestParams);
-  const refinedData = folderDetailsQuery.data?.data;
+  const { data, isLoading, isError } = useFetchFolderDetails(requestParams);
+
+  const refinedData = data?.data;
   const folderName = refinedData?.targetFolderName;
   const folderData = refinedData?.directoryDetailResponses ?? [];
   const linkData = refinedData?.siteDetailResponses ?? [];
   const folderDataLength = folderData?.length;
   const linkDataLength = linkData?.length;
-
   const targetFolderId = refinedData?.targetFolderId;
 
   useEffect(() => {
-    setParentsFolderId(targetFolderId);
+    if (targetFolderId) {
+      setParentsFolderId(targetFolderId);
+    }
   }, [targetFolderId, setParentsFolderId]);
+
+  if (isError) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="text-center">
+          <p className="mb-2 text-red-500">폴더를 불러올 수 없습니다.</p>
+          <p className="text-sm text-gray-500">잠시 후 다시 시도해주세요.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div>로딩 중...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gray-5 flex h-screen min-w-[328px] flex-col px-[64px] py-[56px] xl:px-[102px]">
@@ -39,7 +60,6 @@ export default function FolderDetailPage() {
         folderDataLength={folderDataLength}
         linkDataLength={linkDataLength}
       />
-
       <SharedPageContentSection folderData={folderData} linkData={linkData} />
     </div>
   );

@@ -6,13 +6,15 @@ import { useModalStore } from '@/stores/modalStore';
 import ErrorLinkModal from '../modal/link/ErrorLinkModal';
 
 export default function PersonalPageContentSection({
-  folderData,
-  linkData,
+  folderData = [],
+  linkData = [],
 }: PageContentSectionProps) {
   const { isLinkModalOpen, closeLinkModal, isErrorModalOpen, closeErrorModal } =
     useModalStore();
 
-  const pageData = [...folderData, ...linkData].sort(
+  const safeFolderData = Array.isArray(folderData) ? folderData : [];
+  const safeLinkData = Array.isArray(linkData) ? linkData : [];
+  const pageData = [...safeFolderData, ...safeLinkData].sort(
     (a, b) => a.orderIndex - b.orderIndex
   );
 
