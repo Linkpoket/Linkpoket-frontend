@@ -8,12 +8,24 @@ export default function useUpdateDragandDrop(data: UpdateDragandDropProps) {
   return useMutation({
     mutationFn: (data: UpdateDragandDropProps) => updateDragandDrop(data),
     onSuccess: () => {
-      Promise.all([
-        queryClient.invalidateQueries({ queryKey: ['favorite'] }),
+      Promise.allSettled([
+        queryClient.invalidateQueries({
+          queryKey: ['folderDetails', data.baseRequest.pageId],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['folderList', data.baseRequest.pageId],
+          refetchType: 'active',
+        }),
         queryClient.invalidateQueries({
           queryKey: ['sharedPage', data.baseRequest.pageId],
         }),
-        queryClient.invalidateQueries({ queryKey: ['personalPage'] }),
+        queryClient.invalidateQueries({
+          queryKey: ['personalPage'],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['favorite'],
+          refetchType: 'active',
+        }),
       ]);
     },
   });
