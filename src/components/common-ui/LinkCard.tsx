@@ -1,5 +1,5 @@
-import InactiveBookmarkIcon from '@/assets/common-ui-assets/FolderBookmarkInactive.svg?react';
-import ActiveBookmarkIcon from '@/assets/common-ui-assets/FolderBookmarkActive.svg?react';
+import InactiveBookmarkIcon from '@/assets/common-ui-assets/InactiveBookmark.svg?react';
+import ActiveBookmarkIcon from '@/assets/common-ui-assets/ActiveBookmark.svg?react';
 import CardMenu from '@/assets/widget-ui-assets/CardMenu.svg?react';
 import { LinkDetail } from '@/types/links';
 import useUpdateLinkBookmark from '@/hooks/mutations/useUpdateLinkBookmark';
@@ -55,9 +55,9 @@ export default function LinkCard({
   console.log('링크 카드 아이템:', item);
 
   return (
-    <div>
+    <>
       <div
-        className="border-gray-10 flex h-[242px] min-w-[156px] flex-col gap-4 rounded-[16px] border p-[16px]"
+        className="bg-gray-0 border-gray-10 flex h-[242px] min-w-[156px] flex-col gap-4 rounded-[16px] border p-[16px] hover:cursor-pointer"
         onDoubleClick={handleDoubleClick}
       >
         <div className="bg-gray-10 flex h-[96px] w-full items-center justify-center overflow-hidden rounded-lg">
@@ -77,7 +77,7 @@ export default function LinkCard({
               <p className="text-[15px] font-bold">{item.linkName}</p>
             </div>
             <p className="text-[13px] font-[400] text-gray-50">
-              {item.createdDate} · 링크
+              {item.createdDate} · {item.providerName}
             </p>
           </div>
           <div className="mt-2 flex items-center justify-between">
@@ -103,6 +103,6 @@ export default function LinkCard({
           setIsDropDownInline={setIsDropDownInline}
         />
       )}
-    </div>
+    </>
   );
 }
