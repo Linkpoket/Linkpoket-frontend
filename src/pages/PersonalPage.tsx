@@ -32,7 +32,10 @@ export default function PersonalPage() {
   useEffect(() => {
     setPageInfo(pageId);
     setParentsFolderId(rootFolderId);
-    setUser(memberData?.nickName, memberData?.email, memberData?.colorCode);
+
+    if (memberData) {
+      setUser(memberData.nickName, memberData.email, memberData.colorCode);
+    }
 
     if (data?.data.pageDetails) {
       localStorage.setItem(
@@ -42,10 +45,6 @@ export default function PersonalPage() {
           lastUpdated: new Date().toISOString(),
         })
       );
-    }
-
-    if (memberData) {
-      setUser(memberData.nickName, memberData.email, memberData.colorCode);
     }
   }, [
     pageId,
