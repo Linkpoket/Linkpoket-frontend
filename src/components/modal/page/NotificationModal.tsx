@@ -4,6 +4,8 @@ import { useClickOutside } from '@/hooks/useClickOutside';
 import profile from '@/assets/common-ui-assets/Profile.webp';
 import Close from '@/assets/common-ui-assets/AlarmModalClose.svg?react';
 
+type Tab = 'all' | 'invite' | 'directory';
+
 export default function NotificationModal({
   setIsOpen,
   notifications,
@@ -13,68 +15,86 @@ export default function NotificationModal({
   onReject,
   onDelete,
 }: NotificationModalProps) {
-  const [selectedTab, setSelectedTab] = useState<'time' | 'type'>('time');
+  const [selectedTab, setSelectedTab] = useState<Tab>('all');
   const modalRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(modalRef, setIsOpen);
 
-  const sortedNotifications = useMemo(() => {
-    if (!notifications.length) return [];
+  // 탭별 카운트 (뱃지용)
+  const inviteCount = useMemo(
+    () =>
+      notifications.filter((n) => n.notificationType === 'INVITE_PAGE').length,
+    [notifications]
+  );
+  const directoryCount = useMemo(
+    () =>
+      notifications.filter((n) => n.notificationType === 'TRANSMIT_DIRECTORY')
+        .length,
+    [notifications]
+  );
 
-    if (selectedTab === 'time') {
-      return [...notifications].sort(
-        (a, b) =>
-          new Date(b.senderInfo.sentAt).getTime() -
-          new Date(a.senderInfo.sentAt).getTime()
-      );
-    }
+  // 탭 필터 → 시간 내림차순 정렬
+  const shown = useMemo(() => {
+    const filtered =
+      selectedTab === 'all'
+        ? notifications
+        : selectedTab === 'invite'
+          ? notifications.filter((n) => n.notificationType === 'INVITE_PAGE')
+          : notifications.filter(
+              (n) => n.notificationType === 'TRANSMIT_DIRECTORY'
+            );
 
-    if (selectedTab === 'type') {
-      return [...notifications].sort((a, b) =>
-        a.notificationType.localeCompare(b.notificationType)
-      );
-    }
-
-    return notifications;
+    return [...filtered].sort(
+      (a, b) =>
+        new Date(b.senderInfo.sentAt).getTime() -
+        new Date(a.senderInfo.sentAt).getTime()
+    );
   }, [selectedTab, notifications]);
 
   return (
-    <div className="absolute top-14 right-16 z-1" ref={modalRef}>
+    <div className="absolute top-14 right-16 z-20" ref={modalRef}>
       <div
         className="border-gray-30 bg-gray-0 max-h-[590px] w-[434px] rounded-2xl border p-[24px] pt-[8px]"
         style={{ boxShadow: '0px 4px 8px 0px rgba(0, 0, 0, 0.08)' }}
       >
-        {/* 탭 */}
-        <div className="border-gray-30 flex border-b">
+        {/* 탭: 전체 / 페이지 초대 / 받은 폴더 */}
+        <div className="border-gray-30 mb-1 flex gap-1 border-b">
           <button
-            className={`cursor-pointer px-4 py-[14px] text-[13px] leading-[18px] font-semibold ${
-              selectedTab === 'time'
-                ? 'border-primary-50 text-primary-60 border-b-2'
-                : 'text-gray-70 border-b-2 border-transparent'
-            }`}
-            onClick={() => setSelectedTab('time')}
+            className={`relative cursor-pointer px-4 py-[14px] text-[13px] leading-[18px] font-semibold ${selectedTab === 'all' ? 'border-primary-50 text-primary-60 border-b-2' : 'text-gray-70 border-b-2 border-transparent'}`}
+            onClick={() => setSelectedTab('all')}
           >
-            시간순
+            전체
+            <span className="text-gray-60 ml-1 text-xs">
+              ({notifications.length})
+            </span>
           </button>
+
           <button
-            className={`cursor-pointer px-4 py-[14px] text-[13px] leading-[18px] font-semibold ${
-              selectedTab === 'type'
-                ? 'border-primary-50 text-primary-60 border-b-2'
-                : 'text-gray-70 border-b-2 border-transparent'
-            }`}
-            onClick={() => setSelectedTab('type')}
+            className={`relative cursor-pointer px-4 py-[14px] text-[13px] leading-[18px] font-semibold ${selectedTab === 'invite' ? 'border-primary-50 text-primary-60 border-b-2' : 'text-gray-70 border-b-2 border-transparent'}`}
+            onClick={() => setSelectedTab('invite')}
           >
-            종류순
+            페이지 초대
+            <span className="text-gray-60 ml-1 text-xs">({inviteCount})</span>
+          </button>
+
+          <button
+            className={`relative cursor-pointer px-4 py-[14px] text-[13px] leading-[18px] font-semibold ${selectedTab === 'directory' ? 'border-primary-50 text-primary-60 border-b-2' : 'text-gray-70 border-b-2 border-transparent'}`}
+            onClick={() => setSelectedTab('directory')}
+          >
+            받은 폴더
+            <span className="text-gray-60 ml-1 text-xs">
+              ({directoryCount})
+            </span>
           </button>
         </div>
 
         {/* 알림 리스트 */}
         <ul>
-          {sortedNotifications.length !== 0 ? (
-            sortedNotifications.map((item, idx) => (
+          {shown.length !== 0 ? (
+            shown.map((item, idx) => (
               <li
                 key={`${item.notificationType}-${item.id}`}
-                className={`py-4 ${notifications.length - 1 === idx ? '' : 'border-b-gray-30 border-b'}`}
+                className={`py-4 ${shown.length - 1 === idx ? '' : 'border-b-gray-30 border-b'}`}
               >
                 <div className="flex items-start gap-[10px]">
                   {/* 프로필 */}
@@ -100,7 +120,7 @@ export default function NotificationModal({
                   </button>
                 </div>
 
-                {/* 수락/거절 버튼 (초대일 경우만) */}
+                {/* 수락/거절 버튼 (대기 상태만) */}
                 {item.requestStatus === 'WAITING' && (
                   <div className="mt-2 flex justify-end gap-2">
                     <button
@@ -127,7 +147,11 @@ export default function NotificationModal({
             ))
           ) : (
             <div className="text-gray-70 mt-4 flex justify-center text-[13px] leading-[18px] font-semibold">
-              도착한 알람이 없습니다.
+              {selectedTab === 'all'
+                ? '도착한 알람이 없습니다.'
+                : selectedTab === 'invite'
+                  ? '페이지 초대 알람이 없습니다.'
+                  : '받은 폴더 알람이 없습니다.'}
             </div>
           )}
         </ul>
