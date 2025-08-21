@@ -31,6 +31,7 @@ const SideBar: React.FC<MenubarProps> = ({
   const { pageId } = usePageStore();
   const { parentsFolderId } = useParentsFolderIdStore();
   const isBookmarks = useLocation().pathname === '/bookmarks';
+  const location = useLocation();
 
   //768px 이하의 경우, showSidebar를 false처리, 이외엔 true처리
   useEffect(() => {
@@ -126,29 +127,45 @@ const SideBar: React.FC<MenubarProps> = ({
             <li>
               <Link
                 to="/"
-                className="group hover:bg-primary-5 text-gray-70 focus:bg-primary-10 focus:text-primary-50 flex items-center gap-[12px] p-[8px] text-[14px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
+                className={`group flex items-center gap-[12px] rounded-[8px] p-[8px] text-[14px] font-[600] ${
+                  location.pathname === '/'
+                    ? 'bg-primary-10 text-primary-50'
+                    : 'text-gray-70 hover:bg-primary-5 hover:text-primary-50 hover:rounded-[8px]'
+                }`}
               >
                 <PersonalPage
                   width={20}
                   height={20}
-                  className="group-focus:text-primary-50 text-gray-70"
+                  className={`${
+                    location.pathname === '/'
+                      ? 'text-primary-50'
+                      : 'text-gray-70'
+                  }`}
                 />
                 개인 페이지
               </Link>
 
               <Link
                 to="bookmarks"
-                className="hover:bg-primary-5 group text-gray-70 focus:bg-primary-10 focus:text-primary-50 flex items-center gap-[12px] p-[8px] text-[14px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
+                className={`group flex items-center gap-[12px] rounded-[8px] p-[8px] text-[14px] font-[600] ${
+                  location.pathname === '/bookmarks'
+                    ? 'bg-primary-10 text-primary-50'
+                    : 'text-gray-70 hover:bg-primary-5 hover:text-primary-50 hover:rounded-[8px]'
+                }`}
               >
                 <BookMark
                   width={20}
                   height={20}
-                  className="text-gray-70 group-focus:text-primary-50 my-[2px]"
+                  className={`my-[2px] ${
+                    location.pathname === '/bookmarks'
+                      ? 'text-primary-50'
+                      : 'text-gray-70'
+                  }`}
                 />
                 북마크
               </Link>
 
-              <div className="mt-4 flex items-center px-[8px] py-[4px] text-[14px] font-[500] text-gray-50 hover:rounded-[8px] focus:rounded-[8px]">
+              <div className="mt-4 flex items-center px-[8px] py-[4px] text-[14px] font-[500] text-gray-50 hover:rounded-[8px] active:rounded-[8px]">
                 <div className="group flex w-full items-center justify-between">
                   <div className="flex gap-[20px]">
                     <div>공유 페이지</div>
@@ -170,7 +187,11 @@ const SideBar: React.FC<MenubarProps> = ({
                   <Link
                     key={page.pageId}
                     to={`/shared/${page.pageId}`}
-                    className="text-gray-70 hover:bg-gray-5 focus:bg-gray-5 py-2 pr-3 pl-2 text-[14px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
+                    className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
+                      location.pathname === `/shared/${page.pageId}`
+                        ? 'bg-gray-10 text-gray-90'
+                        : 'text-gray-70 hover:bg-gray-5 hover:rounded-[8px]'
+                    }`}
                   >
                     {page.pageTitle}
                   </Link>
@@ -178,7 +199,7 @@ const SideBar: React.FC<MenubarProps> = ({
               </div>
 
               {/* 공유페이지에 따른 폴더 생성  */}
-              <div className="mt-4 flex items-center px-[8px] py-[4px] text-[14px] font-[500] text-gray-50 hover:rounded-[8px] focus:rounded-[8px]">
+              <div className="mt-4 flex items-center px-[8px] py-[4px] text-[14px] font-[500] text-gray-50 hover:rounded-[8px] active:rounded-[8px]">
                 <div className="group flex w-full items-center justify-between">
                   <div className="flex gap-[20px]">
                     <div>폴더</div>
@@ -197,20 +218,29 @@ const SideBar: React.FC<MenubarProps> = ({
               {/* 폴더 뎁스1  리스트 */}
               <div className="mt-2 flex flex-col gap-[2px]">
                 {refinedFolderList?.map((folder: any) => (
-                  <Link
-                    key={folder.folderId}
-                    to={`/folder/${folder.folderId}`}
-                    className="text-gray-70 hover:text-primary-50 focus:text-primary-50 hover:bg-primary-5 focus:bg-primary-5 py-2 pr-3 pl-2 text-[14px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
-                  >
-                    {folder.folderTitle}
+                  <div key={folder.folderId}>
+                    <Link
+                      to={`/folder/${folder.folderId}`}
+                      className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
+                        location.pathname === `/folder/${folder.folderId}`
+                          ? 'bg-primary-10 text-primary-50'
+                          : 'text-gray-70 hover:bg-primary-5 hover:text-primary-50 hover:rounded-[8px]'
+                      }`}
+                    >
+                      {folder.folderTitle}
+                    </Link>
                     {/* 폴더 뎁스2  리스트 */}
                     {folder.children && (
-                      <div className="mt-2 flex flex-col gap-[2px]">
+                      <div className="mt-1 ml-4 flex flex-col gap-[2px]">
                         {folder.children.map((child: any) => (
                           <Link
                             key={child.folderId}
                             to={`/folder/${child.folderId}`}
-                            className="text-gray-70 hover:text-primary-50 focus:text-primary-50 hover:bg-primary-5 focus:bg-primary-5 py-2 pr-3 pl-2 text-[14px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
+                            className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
+                              location.pathname === `/folder/${child.folderId}`
+                                ? 'bg-primary-10 text-primary-50'
+                                : 'text-gray-70 hover:bg-primary-5 hover:text-primary-50 hover:rounded-[8px]'
+                            }`}
                           >
                             <span className="pr-2">•</span>
                             <span>{child.folderTitle}</span>
@@ -218,7 +248,7 @@ const SideBar: React.FC<MenubarProps> = ({
                         ))}
                       </div>
                     )}
-                  </Link>
+                  </div>
                 ))}
               </div>
             </li>
@@ -243,24 +273,36 @@ const SideBar: React.FC<MenubarProps> = ({
 
         <div className="flex flex-col items-center gap-[8px]">
           <button
-            className={`cursor-pointer p-3 ${!isBookmarks && 'text-gray-70 bg-gray-5 rounded-[8px] text-[14px] font-[600]'}`}
+            className={`cursor-pointer rounded-[8px] p-3 text-[14px] font-[600] ${
+              location.pathname === '/' && !isBookmarks
+                ? 'bg-gray-5 text-gray-70'
+                : 'text-gray-70'
+            }`}
           >
             <Link to="/">
               <PersonalPage
                 width={20}
                 height={20}
-                className="group-focus:text-primary-50 text-gray-70"
+                className={`${
+                  location.pathname === '/' ? 'text-primary-50' : 'text-gray-70'
+                }`}
               />
             </Link>
           </button>
           <button
-            className={`cursor-pointer p-3 ${isBookmarks && 'text-gray-70 bg-gray-5 rounded-[8px] text-[14px] font-[600]'}`}
+            className={`cursor-pointer rounded-[8px] p-3 text-[14px] font-[600] ${
+              isBookmarks ? 'bg-gray-5 text-gray-70' : 'text-gray-70'
+            }`}
           >
             <Link to="/bookmarks">
               <BookMark
                 width={20}
                 height={20}
-                className="text-gray-70 group-focus:text-primary-50 my-[2px]"
+                className={`my-[2px] ${
+                  location.pathname === '/bookmarks'
+                    ? 'text-primary-50'
+                    : 'text-gray-70'
+                }`}
               />
             </Link>
           </button>
