@@ -77,6 +77,21 @@ const DropDownInline = ({
   const handleFolderDeleteOpen = () => setIsFolderDeleteOpen(true);
   const handleLinkDeleteOpen = () => setIsLinkDeleteOpen(true);
 
+  const handleTransferClick = () => {
+    openTransferFolderModal();
+  };
+
+  const handleCopyClick = () => {
+    if (type === 'folder') {
+      console.log('복사');
+    } else {
+      navigator.clipboard
+        .writeText(link)
+        .then(() => toast.success('링크가 복사되었습니다.'))
+        .catch((err) => console.error('복사 실패:', err));
+    }
+  };
+
   const isAnyModalOpen =
     isFolderDeleteOpen || isLinkDeleteOpen || isTransferFolderModalOpen;
 
@@ -103,7 +118,8 @@ const DropDownInline = ({
   return (
     <div
       ref={dropdownRef}
-      className={`border-gray-20 focus:bg-gray-30 focus:border-gray-30 bg-gray-0 absolute top-full right-0 z-[999] mt-2 inline-flex w-[214px] flex-col rounded-[10px] border p-[4px] text-[14px] font-[500] shadow ${className}`}
+      data-dropdown
+      className={`border-gray-20 focus:bg-gray-30 focus:border-gray-30 bg-gray-0 absolute top-full right-0 z-[1000] mt-2 inline-flex w-[214px] flex-col rounded-[10px] border p-[4px] text-[14px] font-[500] shadow ${className}`}
     >
       {type === 'folder' && (
         <div className="flex flex-col">
@@ -115,13 +131,13 @@ const DropDownInline = ({
           />
 
           <button
-            onClick={() => openTransferFolderModal()}
+            onClick={handleTransferClick}
             className="flex cursor-pointer items-center gap-[10px] px-[8px] py-[11px]"
           >
             <Transfer width={18} height={18} /> 전송하기
           </button>
           <button
-            onClick={() => console.log('복사')}
+            onClick={handleCopyClick}
             className="flex cursor-pointer items-center gap-[10px] px-[8px] py-[11px]"
           >
             <Copy width={18} height={18} /> 복사하기
@@ -163,12 +179,7 @@ const DropDownInline = ({
           </div>
 
           <button
-            onClick={() => {
-              navigator.clipboard
-                .writeText(link)
-                .then(() => toast.success('링크가 복사되었습니다.'))
-                .catch((err) => console.error('복사 실패:', err));
-            }}
+            onClick={handleCopyClick}
             className="flex cursor-pointer items-center gap-[10px] px-[12px] py-[11px]"
           >
             <Copy width={18} height={18} /> 복사하기
