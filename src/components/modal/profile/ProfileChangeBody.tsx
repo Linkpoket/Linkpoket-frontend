@@ -4,8 +4,8 @@ import { useState } from 'react';
 import ChevronLeft from '@/assets/common-ui-assets/ChevronLeft.svg?react';
 import Check from '@/assets/common-ui-assets/Check.svg?react';
 import { useUpdateProfileColor } from '@/hooks/mutations/useUpdateProfileColor';
-import { ToastCustom } from '@/components/common-ui/ToastCustom';
 import { COLOR_OPTIONS } from '@/styles/tokens';
+import toast from 'react-hot-toast';
 
 const ProfileChangeBody = ({ onBack }: { onBack: () => void }) => {
   const { nickname, colorCode } = useUserStore();
@@ -16,14 +16,14 @@ const ProfileChangeBody = ({ onBack }: { onBack: () => void }) => {
     if (profileColor !== colorCode) {
       updateColor(profileColor, {
         onSuccess: () => {
-          ToastCustom.success('프로필 색상이 변경되었습니다.');
+          toast.success('프로필 색상이 변경되었습니다.');
           onBack();
         },
         onError: (error) => {
           if (error instanceof Error) {
-            ToastCustom.error(error.message);
+            toast.error(error.message);
           } else {
-            ToastCustom.error('알 수 없는 오류가 발생했습니다.');
+            toast.error('알 수 없는 오류가 발생했습니다.');
           }
         },
       });

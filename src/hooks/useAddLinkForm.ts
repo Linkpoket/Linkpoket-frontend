@@ -3,7 +3,7 @@ import { useCreateLink } from '@/hooks/mutations/useCreateLink';
 import { usePreviewLink } from '@/hooks/mutations/usePreviewLink';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useModalStore } from '@/stores/modalStore';
-import { ToastCustom } from '@/components/common-ui/ToastCustom';
+import toast from 'react-hot-toast';
 
 export const useAddLinkForm = (isOpen: boolean, onClose: () => void) => {
   const LINK_NAME_MAX_LENGTH = 30;
@@ -47,7 +47,7 @@ export const useAddLinkForm = (isOpen: boolean, onClose: () => void) => {
 
         // 빈 문자열이나 공백만 있는 경우
         if (!title || !title.trim()) {
-          ToastCustom.info(
+          toast.error(
             '해당 링크의 제목을 가져올 수 없습니다. 직접 입력해주세요.'
           );
           setIsPreviewing(false);
@@ -67,7 +67,7 @@ export const useAddLinkForm = (isOpen: boolean, onClose: () => void) => {
       setIsPreviewing(false);
     },
     onError: (err) => {
-      ToastCustom.error('링크명을 가져올 수 없습니다.');
+      toast.error('링크명을 가져올 수 없습니다.');
       console.error('링크 프리뷰 실패:', err);
       setIsPreviewing(false);
     },
@@ -75,9 +75,7 @@ export const useAddLinkForm = (isOpen: boolean, onClose: () => void) => {
 
   const handleSubmit = async () => {
     if (!isValidUrl(linkUrl)) {
-      ToastCustom.error(
-        '올바른 URL 형식을 입력해주세요.\n예: https://example.com'
-      );
+      toast.error('올바른 URL 형식을 입력해주세요.\n예: https://example.com');
       return;
     }
 

@@ -34,8 +34,6 @@ const ManageSharedPageModal = ({
   const pathname = 'http://linkrew.com' + path;
   const { pageId } = useParams();
   const safePageId = pageId ?? '';
-  // const numericId = Number.parseInt(pageId ?? '', 10);
-  // const resolvedPageId = Number.isFinite(numericId) ? numericId : null;
 
   const sharedPageDashboardQuery = useFetchSharedPageDashboard({
     pageId: safePageId,
@@ -121,10 +119,10 @@ const ManageSharedPageModal = ({
         </div>
 
         <div className="mt-4 flex gap-4">
-          <div className="flex w-full gap-2">
+          <div className="flex w-full items-center gap-4">
             <Input
               containerClassName="flex-1 min-w-0"
-              className="!w-auto"
+              className="w-full"
               value={pathname}
               readOnly
             />
@@ -145,10 +143,10 @@ const ManageSharedPageModal = ({
         <div className="text-gray-90 mb-2 text-[18px] font-bold">
           공유 페이지 멤버
         </div>
-        <div className="mt-[7px] flex gap-4">
+        <div className="mt-[7px] flex items-center gap-4">
           <Input
             containerClassName="flex-1 min-w-0"
-            className="!w-auto"
+            className="w-full"
             placeholder="멤버 닉네임/이메일로 검색"
             value={search}
             onChange={(e) => setSearch(e.target.value)}

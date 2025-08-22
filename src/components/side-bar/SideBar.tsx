@@ -160,6 +160,8 @@ const SideBar: React.FC<MenubarProps> = ({
                       e.preventDefault();
                       handleCreateSharedPage();
                     }}
+                    height={18}
+                    width={18}
                   />
                 </div>
               </div>
@@ -170,7 +172,7 @@ const SideBar: React.FC<MenubarProps> = ({
                   <Link
                     key={page.pageId}
                     to={`/shared/${page.pageId}`}
-                    className="text-gray-70 hover:bg-gray-5 focus:bg-gray-5 py-2 pr-3 pl-2 text-[14px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
+                    className="text-gray-70 hover:bg-gray-5 focus:bg-gray-5 flex py-2 pr-3 pl-2 text-[14px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
                   >
                     {page.pageTitle}
                   </Link>
@@ -190,36 +192,47 @@ const SideBar: React.FC<MenubarProps> = ({
                       e.preventDefault();
                       handleCreateFolder();
                     }}
+                    height={18}
+                    width={18}
                   />
                 </div>
               </div>
 
               {/* 폴더 뎁스1  리스트 */}
               <div className="mt-2 flex flex-col gap-[2px]">
-                {refinedFolderList?.map((folder: any) => (
-                  <Link
-                    key={folder.folderId}
-                    to={`/folder/${folder.folderId}`}
-                    className="text-gray-70 hover:text-primary-50 focus:text-primary-50 hover:bg-primary-5 focus:bg-primary-5 py-2 pr-3 pl-2 text-[14px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
-                  >
-                    {folder.folderTitle}
-                    {/* 폴더 뎁스2  리스트 */}
-                    {folder.children && (
-                      <div className="mt-2 flex flex-col gap-[2px]">
-                        {folder.children.map((child: any) => (
-                          <Link
-                            key={child.folderId}
-                            to={`/folder/${child.folderId}`}
-                            className="text-gray-70 hover:text-primary-50 focus:text-primary-50 hover:bg-primary-5 focus:bg-primary-5 py-2 pr-3 pl-2 text-[14px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
-                          >
-                            <span className="pr-2">•</span>
-                            <span>{child.folderTitle}</span>
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </Link>
-                ))}
+                {refinedFolderList?.map((folder: any) => {
+                  const hasChildren =
+                    Array.isArray(folder.children) &&
+                    folder.children.length > 0;
+
+                  return (
+                    <div key={folder.folderId} className="flex flex-col">
+                      <Link
+                        to={`/folder/${folder.folderId}`}
+                        className="text-gray-70 hover:text-primary-50 focus:text-primary-50 hover:bg-primary-5 focus:bg-primary-5 block flex items-center py-2 pr-3 pl-2 text-[14px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
+                      >
+                        <span className="truncate">{folder.folderTitle}</span>
+                      </Link>
+
+                      {hasChildren && (
+                        <div className="mt-2 flex flex-col gap-[2px] pl-4">
+                          {folder.children.map((child: any) => (
+                            <Link
+                              key={child.folderId}
+                              to={`/folder/${child.folderId}`}
+                              className="text-gray-70 hover:text-primary-50 focus:text-primary-50 hover:bg-primary-5 focus:bg-primary-5 block flex items-center py-2 pr-3 pl-2 text-[14px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
+                            >
+                              <span className="pr-2">•</span>
+                              <span className="truncate">
+                                {child.folderTitle}
+                              </span>
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </li>
           </ul>

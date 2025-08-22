@@ -86,7 +86,7 @@ export function UserActions() {
             {/* 하이브리드 카운트 사용 */}
             {rawCount > 0 && (
               <span
-                className="bg-status-danger absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-xs text-white"
+                className="bg-status-danger absolute -top-1 -right-1 flex h-4 min-w-[16px] items-center justify-center rounded-full px-[4px] text-xs leading-none text-white"
                 aria-label={`안읽은 알림 ${displayCountText}`}
               >
                 {displayCountText}

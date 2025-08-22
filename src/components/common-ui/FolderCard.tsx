@@ -33,48 +33,53 @@ export default function FolderCard({
 
   const handleBookmarkClick = () => {
     updateFolderBookmark();
-    console.log('isBookmark', isBookmark);
   };
 
   return (
-    <div>
-      <div
-        className="border-gray-10 flex h-[242px] min-w-[156px] flex-col gap-4 rounded-[16px] border p-[16px]"
-        onDoubleClick={handleDoubleClick}
-      >
-        <div className="border-gray-10 flex h-[96px] items-center justify-center overflow-hidden rounded-lg bg-[url('@/assets/common-ui-assets/FolderImage.svg')] bg-cover bg-center bg-no-repeat"></div>
+    <div
+      className="bg-gray-0 border-gray-10 relative flex h-[242px] min-w-[156px] flex-col gap-4 rounded-[16px] border p-[16px] hover:cursor-pointer"
+      onDoubleClick={handleDoubleClick}
+      onMouseDown={(e) => e.stopPropagation()}
+    >
+      <div className="bg-gray-10 flex h-[96px] w-full items-center justify-center overflow-hidden rounded-lg">
+        <div className="h-full w-full rounded-lg bg-[url('@/assets/common-ui-assets/FolderImage.svg')] bg-cover bg-center bg-no-repeat" />
+      </div>
 
-        <div className="flex flex-1 flex-col justify-between">
-          <div className="flex flex-col gap-1">
-            <div>
-              <p className="text-[15px] font-bold">{item.folderName}</p>
-            </div>
-            <p className="text-[13px] font-[400] text-gray-50">
-              {item.createdDate} · 폴더
-            </p>
+      <div className="flex flex-1 flex-col justify-between">
+        <div className="flex flex-col gap-1">
+          <div>
+            <p className="text-[15px] font-bold">{item.folderName}</p>
           </div>
-          <div className="mt-2 flex items-center justify-between">
-            <button className="cursor-pointer" onClick={handleBookmarkClick}>
-              {isBookmark ? <ActiveBookmarkIcon /> : <InactiveBookmarkIcon />}
-            </button>
+          <p className="text-[13px] font-[400] text-gray-50">
+            {item.createdDate} · 폴더
+          </p>
+        </div>
+
+        <div className="mt-2 flex items-center justify-between">
+          <button className="cursor-pointer" onClick={handleBookmarkClick}>
+            {isBookmark ? <ActiveBookmarkIcon /> : <InactiveBookmarkIcon />}
+          </button>
+
+          <div className="relative">
             <button
               className="cursor-pointer p-1"
-              onClick={() => setIsDropDownInline(true)}
+              onClick={() => setIsDropDownInline((v) => !v)}
             >
               <CardMenu />
             </button>
+
+            {isDropDownInline && (
+              <DropDownInline
+                id={folderId}
+                type="folder"
+                initialTitle={item.folderName}
+                isDropDownInline={isDropDownInline}
+                setIsDropDownInline={setIsDropDownInline}
+              />
+            )}
           </div>
         </div>
       </div>
-      {isDropDownInline && (
-        <DropDownInline
-          id={folderId}
-          type="folder"
-          initialTitle={item.folderName}
-          isDropDownInline={isDropDownInline}
-          setIsDropDownInline={setIsDropDownInline}
-        />
-      )}
     </div>
   );
 }

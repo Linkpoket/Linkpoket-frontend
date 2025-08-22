@@ -2,7 +2,7 @@ import { useState, forwardRef } from 'react';
 import { Input } from '@/components/common-ui/Input';
 import Modal from '@/components/common-ui/Modal';
 import FolderItemIcon from '@/assets/common-ui-assets/FolderItemIcon.svg?react';
-import { ToastCustom } from '@/components/common-ui/ToastCustom';
+import toast from 'react-hot-toast';
 
 type Props = {
   isOpen: boolean;
@@ -22,7 +22,7 @@ const FolderTransferModal = forwardRef<HTMLDivElement, Props>((props, ref) => {
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      ToastCustom.error('유효한 이메일 주소를 입력해 주세요.');
+      toast.error('유효한 이메일 주소를 입력해 주세요.');
       return;
     }
 

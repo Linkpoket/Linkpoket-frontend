@@ -52,13 +52,12 @@ export default function LinkCard({
 
   const isFaviconOnly = !item.representImageUrl && item.faviconUrl;
 
-  console.log('링크 카드 아이템:', item);
-
   return (
     <>
       <div
-        className="bg-gray-0 border-gray-10 flex h-[242px] min-w-[156px] flex-col gap-4 rounded-[16px] border p-[16px] hover:cursor-pointer"
+        className="bg-gray-0 border-gray-10 relative flex h-[242px] min-w-[156px] flex-col gap-4 rounded-[16px] border p-[16px] hover:cursor-pointer"
         onDoubleClick={handleDoubleClick}
+        onMouseDown={(e) => e.stopPropagation()}
       >
         <div className="bg-gray-10 flex h-[96px] w-full items-center justify-center overflow-hidden rounded-lg">
           <img
@@ -71,6 +70,7 @@ export default function LinkCard({
             className={isFaviconOnly ? 'h-10' : 'h-full w-full object-cover'}
           />
         </div>
+
         <div className="flex flex-1 flex-col justify-between">
           <div className="flex flex-col gap-1">
             <div>
@@ -80,29 +80,34 @@ export default function LinkCard({
               {item.createdDate} · {item.providerName}
             </p>
           </div>
+
           <div className="mt-2 flex items-center justify-between">
             <button className="cursor-pointer" onClick={handleBookmarkClick}>
               {isBookmark ? <ActiveBookmarkIcon /> : <InactiveBookmarkIcon />}
             </button>
-            <button
-              className="cursor-pointer p-1"
-              onClick={() => setIsDropDownInline(true)}
-            >
-              <CardMenu />
-            </button>
+
+            <div className="relative">
+              <button
+                className="cursor-pointer p-1"
+                onClick={() => setIsDropDownInline((v) => !v)}
+              >
+                <CardMenu />
+              </button>
+
+              {isDropDownInline && (
+                <DropDownInline
+                  id={item.linkId}
+                  type="link"
+                  initialTitle={item.linkName}
+                  initialLink={item.linkUrl}
+                  isDropDownInline={isDropDownInline}
+                  setIsDropDownInline={setIsDropDownInline}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>
-      {isDropDownInline && (
-        <DropDownInline
-          id={item.linkId}
-          type="link"
-          initialTitle={item.linkName}
-          initialLink={item.linkUrl}
-          isDropDownInline={isDropDownInline}
-          setIsDropDownInline={setIsDropDownInline}
-        />
-      )}
     </>
   );
 }
