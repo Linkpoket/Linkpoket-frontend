@@ -26,25 +26,32 @@ export default function FolderCard({
     pageId: pageId as string,
   });
 
-  const handleClick = () => {
+  const handleCardClick = (e: React.MouseEvent) => {
+    // 드롭다운이나 버튼 영역인지 확인
+    const target = e.target as HTMLElement;
+    const isDropdownArea = target.closest('[data-dropdown]');
+    const isButtonArea = target.closest('[data-card-button]');
+    const isModalArea = target.closest('[data-ignore-outside-click]');
+
+    if (isDropdownArea || isButtonArea || isModalArea) return;
+
+    // 카드 클릭 시 폴더로 이동
     navigate(`/folder/${item.folderId}`);
     setParentsFolderId(pageId as string);
   };
 
-  const handleBookmarkClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleBookmarkClick = () => {
     updateFolderBookmark();
   };
 
-  const handleMenuClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleMenuClick = () => {
     setIsDropDownInline((v) => !v);
   };
 
   return (
     <div
       className="bg-gray-0 border-gray-10 group relative flex h-[242px] min-w-[156px] flex-col gap-4 rounded-[16px] border p-[16px] hover:cursor-pointer"
-      onClick={handleClick}
+      onClick={handleCardClick}
       onMouseDown={(e) => e.stopPropagation()}
     >
       <div className="bg-gray-10 flex h-[96px] w-full items-center justify-center overflow-hidden rounded-lg">
@@ -62,12 +69,20 @@ export default function FolderCard({
         </div>
 
         <div className="mt-2 flex items-center justify-between">
-          <button className="cursor-pointer" onClick={handleBookmarkClick}>
+          <button
+            data-card-button
+            className="cursor-pointer"
+            onClick={handleBookmarkClick}
+          >
             {isBookmark ? <ActiveBookmarkIcon /> : <InactiveBookmarkIcon />}
           </button>
 
           <div className="relative">
-            <button className="cursor-pointer p-1" onClick={handleMenuClick}>
+            <button
+              data-card-button
+              className="cursor-pointer p-1"
+              onClick={handleMenuClick}
+            >
               <CardMenu />
             </button>
 

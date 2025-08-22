@@ -66,7 +66,7 @@ const BaseModal = forwardRef<
 
   return createPortal(
     <ModalContext.Provider value={{ isOpen, onClose }}>
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50">
         <div
           className={cn(
             'relative flex w-full max-w-[70%] flex-col overflow-hidden rounded-2xl bg-white p-[24px] md:max-w-[530px]',
