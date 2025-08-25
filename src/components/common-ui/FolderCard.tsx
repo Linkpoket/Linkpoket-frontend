@@ -36,8 +36,8 @@ export default function FolderCard({
     if (isDropdownArea || isButtonArea || isModalArea) return;
 
     // 카드 클릭 시 폴더로 이동
-    navigate(`/folder/${item.folderId}`);
     setParentsFolderId(pageId as string);
+    navigate(`/folder/${item.folderId}`);
   };
 
   const handleBookmarkClick = () => {

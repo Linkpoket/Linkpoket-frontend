@@ -1,12 +1,17 @@
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { useState } from 'react';
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from '@hello-pangea/dnd';
 import { PageContentSectionProps } from '@/types/pages';
 import LinkCard from '../common-ui/LinkCard';
 import FolderCard from '../common-ui/FolderCard';
 import AddLinkModal from '../modal/link/AddLinkModal';
 import { useModalStore } from '@/stores/modalStore';
 import useUpdateDragandDrop from '@/hooks/mutations/useUpdateDragandDrop';
-import { usePageStore } from '@/stores/pageStore';
+import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 
 export default function SharedPageContentSection({
   folderData,
@@ -14,8 +19,8 @@ export default function SharedPageContentSection({
 }: PageContentSectionProps) {
   const { isLinkModalOpen, closeLinkModal } = useModalStore();
   const { pageId } = usePageStore();
+  const { parentsFolderId } = useParentsFolderIdStore();
 
-  // useUpdateDragandDrop 훅을 컴포넌트 레벨에서 선언
   const updateDragAndDropMutation = useUpdateDragandDrop({
     baseRequest: {
       pageId: pageId,
@@ -23,7 +28,7 @@ export default function SharedPageContentSection({
     },
     targetId: '',
     itemType: '',
-    targetOrderIndex: 0, // 기본값 설정
+    targetOrderIndex: 0,
     parentFolderId: '',
   });
 
@@ -33,30 +38,34 @@ export default function SharedPageContentSection({
 
   const [pageData, setPageData] = useState(initialData);
 
-  const onDragEnd = async (result: any) => {
+  const onDragEnd = async (result: DropResult) => {
     const { destination, source } = result;
     if (!destination) return;
     if (destination.index === source.index) return;
 
-    // 드래그 앤 드롭 완료 후 API 호출
+    const movedItem = pageData[source.index];
+    const targetId =
+      'folderId' in movedItem ? movedItem.folderId : movedItem.linkId;
+    const itemType = 'folderId' in movedItem ? 'FOLDER' : 'LINK';
+
+    const newData = Array.from(pageData);
+    const [removed] = newData.splice(source.index, 1);
+    newData.splice(destination.index, 0, removed);
+    setPageData(newData);
+
     try {
-      await updateDragAndDropMutation.mutate({
-        baseRequest: {
-          pageId: pageId,
-          commandType: 'EDIT',
-        },
-        targetId: '현재 폴더 아이디',
-        itemType: '링크인지 폴더인지',
-        targetOrderIndex: destination.index + 1, // 1부터 시작하는 인덱스
-        parentFolderId: '부모 폴더 ID',
+      await updateDragAndDropMutation.mutateAsync({
+        baseRequest: { pageId, commandType: 'EDIT' },
+        targetId,
+        itemType,
+        targetOrderIndex: destination.index + 1,
+        parentFolderId: parentsFolderId ?? '',
       });
     } catch (error) {
       console.error('드래그 앤 드롭 업데이트 실패:', error);
-      // 에러 발생 시 원래 상태로 되돌리기
-      setPageData(initialData);
+      setPageData(initialData); // 실패 시 원상복구
     }
   };
-
   return (
     <div className="h-screen w-full overflow-y-auto">
       <DragDropContext onDragEnd={onDragEnd}>

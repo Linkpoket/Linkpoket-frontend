@@ -18,12 +18,11 @@ export default function PersonalPage() {
 
   const pageTitle = refinedData?.pageTitle;
 
-  const folderData = refinedData?.directoryDetailResponses ?? [];
+  const folderData = refinedData?.directoryDetailRespons ?? [];
   const linkData = refinedData?.siteDetailResponses ?? [];
   const folderDataLength = folderData?.length;
   const linkDataLength = linkData?.length;
   const memberData = data?.data.member;
-  console.log('memberData', memberData);
 
   const { setUser } = useUserStore();
   const { setPageInfo } = usePageStore();
@@ -31,6 +30,9 @@ export default function PersonalPage() {
 
   useEffect(() => {
     setPageInfo(pageId);
+    if (rootFolderId) {
+      setParentsFolderId(rootFolderId);
+    }
 
     if (memberData) {
       setUser(memberData.nickName, memberData.email, memberData.colorCode);
@@ -45,12 +47,6 @@ export default function PersonalPage() {
         })
       );
     }
-
-    return () => {
-      if (rootFolderId) {
-        setParentsFolderId(rootFolderId);
-      }
-    };
   }, [
     pageId,
     rootFolderId,
