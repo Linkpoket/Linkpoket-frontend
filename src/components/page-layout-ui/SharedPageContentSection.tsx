@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   DndContext,
   DragEndEvent,
@@ -22,6 +22,8 @@ import AddLinkModal from '../modal/link/AddLinkModal';
 import { useModalStore } from '@/stores/modalStore';
 import useUpdateDragandDrop from '@/hooks/mutations/useUpdateDragandDrop';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
+import { LinkDetail } from '@/types/links';
+import { FolderDetail } from '@/types/folders';
 
 function SortableItem({ item }: { item: any; index: number }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -67,16 +69,22 @@ export default function SharedPageContentSection({
     },
     targetId: '',
     itemType: '',
-    targetOrderIndex: 0,
+    newOrderIndex: 1,
     parentFolderId: '',
   });
 
-  const initialData = [...folderData, ...linkData].sort(
-    (a, b) => a.orderIndex - b.orderIndex
+  useEffect(() => {
+    const safeFolderData = Array.isArray(folderData) ? folderData : [];
+    const safeLinkData = Array.isArray(linkData) ? linkData : [];
+    const newInitialData = [...safeFolderData, ...safeLinkData].sort(
+      (a, b) => a.orderIndex - b.orderIndex
+    );
+    setPageData(newInitialData);
+  }, [folderData, linkData]);
+
+  const [pageData, setPageData] = useState<(FolderDetail | LinkDetail)[] | []>(
+    []
   );
-
-  const [pageData, setPageData] = useState(initialData);
-
   const sensors = useSensors(
     useSensor(MouseSensor, {
       activationConstraint: {
@@ -116,12 +124,12 @@ export default function SharedPageContentSection({
         baseRequest: { pageId, commandType: 'EDIT' },
         targetId,
         itemType,
-        targetOrderIndex: newIndex + 1,
+        newOrderIndex: newIndex + 1,
         parentFolderId: parentsFolderId ?? '',
       });
     } catch (error) {
       console.error('드래그 앤 드롭 업데이트 실패:', error);
-      setPageData(initialData); // 실패 시 원상복구
+      setPageData(pageData); // 실패 시 원상복구
     }
   };
 

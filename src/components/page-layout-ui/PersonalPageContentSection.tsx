@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PageContentSectionProps } from '@/types/pages';
 import LinkCard from '../common-ui/LinkCard';
 import FolderCard from '../common-ui/FolderCard';
@@ -84,17 +84,22 @@ export default function PersonalPageContentSection({
     },
     targetId: '',
     itemType: '',
-    targetOrderIndex: 0,
+    newOrderIndex: 1,
     parentFolderId: '',
   });
 
-  const safeFolderData = Array.isArray(folderData) ? folderData : [];
-  const safeLinkData = Array.isArray(linkData) ? linkData : [];
-  const initialData = [...safeFolderData, ...safeLinkData].sort(
-    (a, b) => a.orderIndex - b.orderIndex
-  );
+  useEffect(() => {
+    const safeFolderData = Array.isArray(folderData) ? folderData : [];
+    const safeLinkData = Array.isArray(linkData) ? linkData : [];
+    const newInitialData = [...safeFolderData, ...safeLinkData].sort(
+      (a, b) => a.orderIndex - b.orderIndex
+    );
+    setPageData(newInitialData);
+  }, [folderData, linkData]);
 
-  const [pageData, setPageData] = useState(initialData);
+  const [pageData, setPageData] = useState<(FolderDetail | LinkDetail)[] | []>(
+    []
+  );
   const [activeId, setActiveId] = useState<string | number | null>(null);
 
   const sensors = useSensors(
@@ -142,12 +147,12 @@ export default function PersonalPageContentSection({
         baseRequest: { pageId, commandType: 'EDIT' },
         targetId,
         itemType,
-        targetOrderIndex: newIndex + 1,
+        newOrderIndex: newIndex + 1,
         parentFolderId: parentsFolderId ?? '',
       });
     } catch (error) {
       console.error('드래그 앤 드롭 업데이트 실패:', error);
-      setPageData(initialData); // 실패 시 원상복구
+      setPageData(pageData); // 실패 시 원상복구
     }
   };
 

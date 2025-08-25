@@ -67,6 +67,6 @@ export interface UpdateDragandDropProps {
   };
   targetId: string;
   itemType: string;
-  targetOrderIndex: number;
+  newOrderIndex: number;
   parentFolderId: string;
 }
