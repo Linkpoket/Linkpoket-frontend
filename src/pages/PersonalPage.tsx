@@ -23,7 +23,6 @@ export default function PersonalPage() {
   const folderDataLength = folderData?.length;
   const linkDataLength = linkData?.length;
   const memberData = data?.data.member;
-  console.log('memberData', memberData);
 
   const { setUser } = useUserStore();
   const { setPageInfo } = usePageStore();
@@ -31,7 +30,9 @@ export default function PersonalPage() {
 
   useEffect(() => {
     setPageInfo(pageId);
-    setParentsFolderId(rootFolderId);
+    if (rootFolderId) {
+      setParentsFolderId(rootFolderId);
+    }
 
     if (memberData) {
       setUser(memberData.nickName, memberData.email, memberData.colorCode);
@@ -58,6 +59,8 @@ export default function PersonalPage() {
     data,
     memberData,
   ]);
+
+  console.log('folderData:', folderData);
 
   return (
     <div className="bg-gray-5 flex h-screen min-w-[328px] flex-col px-[64px] py-[56px] xl:px-[102px]">

@@ -1,12 +1,58 @@
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import {
+  DndContext,
+  DragEndEvent,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  closestCenter,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  arrayMove,
+  rectSwappingStrategy,
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { PageContentSectionProps } from '@/types/pages';
 import LinkCard from '../common-ui/LinkCard';
 import FolderCard from '../common-ui/FolderCard';
 import AddLinkModal from '../modal/link/AddLinkModal';
 import { useModalStore } from '@/stores/modalStore';
 import useUpdateDragandDrop from '@/hooks/mutations/useUpdateDragandDrop';
-import { usePageStore } from '@/stores/pageStore';
+import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
+import { LinkDetail } from '@/types/links';
+import { FolderDetail } from '@/types/folders';
+
+function SortableItem({ item }: { item: any; index: number }) {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({
+      id: 'folderId' in item ? item.folderId : item.linkId,
+    });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style as React.CSSProperties}
+      {...attributes}
+      {...listeners}
+    >
+      {'folderId' in item ? (
+        <FolderCard isBookmark={item.isFavorite} item={item} />
+      ) : (
+        <LinkCard isBookmark={item.isFavorite} item={item} />
+      )}
+    </div>
+  );
+}
+
+//콘텐츠 카드 컴포넌트
 
 export default function SharedPageContentSection({
   folderData,
@@ -14,8 +60,8 @@ export default function SharedPageContentSection({
 }: PageContentSectionProps) {
   const { isLinkModalOpen, closeLinkModal } = useModalStore();
   const { pageId } = usePageStore();
+  const { parentsFolderId } = useParentsFolderIdStore();
 
-  // useUpdateDragandDrop 훅을 컴포넌트 레벨에서 선언
   const updateDragAndDropMutation = useUpdateDragandDrop({
     baseRequest: {
       pageId: pageId,
@@ -23,78 +69,94 @@ export default function SharedPageContentSection({
     },
     targetId: '',
     itemType: '',
-    targetOrderIndex: 0, // 기본값 설정
+    newOrderIndex: 1,
     parentFolderId: '',
   });
 
-  const initialData = [...folderData, ...linkData].sort(
-    (a, b) => a.orderIndex - b.orderIndex
+  useEffect(() => {
+    const safeFolderData = Array.isArray(folderData) ? folderData : [];
+    const safeLinkData = Array.isArray(linkData) ? linkData : [];
+    const newInitialData = [...safeFolderData, ...safeLinkData].sort(
+      (a, b) => a.orderIndex - b.orderIndex
+    );
+    setPageData(newInitialData);
+  }, [folderData, linkData]);
+
+  const [pageData, setPageData] = useState<(FolderDetail | LinkDetail)[] | []>(
+    []
+  );
+  const sensors = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 50,
+        tolerance: 5,
+      },
+    })
   );
 
-  const [pageData, setPageData] = useState(initialData);
+  const onDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over) return;
+    if (active.id === over.id) return;
 
-  const onDragEnd = async (result: any) => {
-    const { destination, source } = result;
-    if (!destination) return;
-    if (destination.index === source.index) return;
+    const oldIndex = pageData.findIndex(
+      (item) => ('folderId' in item ? item.folderId : item.linkId) === active.id
+    );
+    const newIndex = pageData.findIndex(
+      (item) => ('folderId' in item ? item.folderId : item.linkId) === over.id
+    );
 
-    // 드래그 앤 드롭 완료 후 API 호출
+    const movedItem = pageData[oldIndex];
+    const targetId =
+      'folderId' in movedItem ? movedItem.folderId : movedItem.linkId;
+    const itemType = 'folderId' in movedItem ? 'FOLDER' : 'LINK';
+
+    const newData = arrayMove(pageData, oldIndex, newIndex);
+    setPageData(newData);
+
     try {
-      await updateDragAndDropMutation.mutate({
-        baseRequest: {
-          pageId: pageId,
-          commandType: 'EDIT',
-        },
-        targetId: '현재 폴더 아이디',
-        itemType: '링크인지 폴더인지',
-        targetOrderIndex: destination.index + 1, // 1부터 시작하는 인덱스
-        parentFolderId: '부모 폴더 ID',
+      await updateDragAndDropMutation.mutateAsync({
+        baseRequest: { pageId, commandType: 'EDIT' },
+        targetId,
+        itemType,
+        newOrderIndex: newIndex + 1,
+        parentFolderId: parentsFolderId ?? '',
       });
     } catch (error) {
       console.error('드래그 앤 드롭 업데이트 실패:', error);
-      // 에러 발생 시 원래 상태로 되돌리기
-      setPageData(initialData);
+      setPageData(pageData); // 실패 시 원상복구
     }
   };
 
   return (
     <div className="h-screen w-full overflow-y-auto">
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="grid" direction="horizontal">
-          {(provided) => (
-            <div
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              className="grid w-full grid-cols-2 gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
-            >
-              {pageData.map((item, index) => (
-                <Draggable
-                  key={'folderId' in item ? item.folderId : item.linkId}
-                  draggableId={String(
-                    'folderId' in item ? item.folderId : item.linkId
-                  )}
-                  index={index}
-                >
-                  {(provided) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                    >
-                      {'folderId' in item ? (
-                        <FolderCard isBookmark={item.isFavorite} item={item} />
-                      ) : (
-                        <LinkCard isBookmark={item.isFavorite} item={item} />
-                      )}
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={onDragEnd}
+      >
+        <SortableContext
+          items={pageData.map((item) =>
+            'folderId' in item ? item.folderId : item.linkId
           )}
-        </Droppable>
-      </DragDropContext>
+          strategy={rectSwappingStrategy}
+        >
+          <div className="grid w-full grid-cols-2 gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+            {pageData.map((item, index) => (
+              <SortableItem
+                key={'folderId' in item ? item.folderId : item.linkId}
+                item={item}
+                index={index}
+              />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
 
       {isLinkModalOpen && (
         <AddLinkModal isOpen={isLinkModalOpen} onClose={closeLinkModal} />

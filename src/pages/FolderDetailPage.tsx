@@ -29,9 +29,11 @@ export default function FolderDetailPage() {
   const targetFolderId = refinedData?.targetFolderId;
 
   useEffect(() => {
-    if (targetFolderId) {
-      setParentsFolderId(targetFolderId);
-    }
+    return () => {
+      if (targetFolderId) {
+        setParentsFolderId(targetFolderId);
+      }
+    };
   }, [targetFolderId, setParentsFolderId]);
 
   if (isError) {

@@ -70,7 +70,6 @@ export default function LinkCard({
       <div
         className="bg-gray-0 border-gray-10 group relative flex h-[242px] min-w-[156px] flex-col gap-4 rounded-[16px] border p-[16px] hover:cursor-pointer"
         onClick={handleCardClick}
-        onMouseDown={(e) => e.stopPropagation()}
       >
         <div className="bg-gray-10 flex h-[96px] w-full items-center justify-center overflow-hidden rounded-lg">
           <img
