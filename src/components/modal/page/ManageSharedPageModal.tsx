@@ -93,7 +93,7 @@ const ManageSharedPageModal = ({
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      className="p-[16px] md:max-w-[562px]"
+      className="p-6 md:max-w-[562px]"
     >
       <Modal.Header
         showCloseButton
@@ -167,7 +167,7 @@ const ManageSharedPageModal = ({
           )}
         </div>
 
-        <div className="max-h-[220px] overflow-y-auto">
+        <div className="mt-2 max-h-[220px] overflow-y-auto">
           {filteredMembers.map((m) => (
             <div
               key={m.memberId}
