@@ -2,10 +2,12 @@ import { useNavigate } from 'react-router-dom';
 import { COLOR_OPTIONS } from '@/styles/tokens';
 import { JOB_OPTIONS } from '@/constants/signup';
 import { FormData } from '@/schemas/signup';
+import { useUserStore } from '@/stores/userStore';
 import axios from 'axios';
 
 export const useSignupSubmit = () => {
   const navigate = useNavigate();
+  const setIsLoggedIn = useUserStore((state) => state.setIsLoggedIn);
 
   const onSubmit = async (data: FormData) => {
     const submitData = {
@@ -54,6 +56,9 @@ export const useSignupSubmit = () => {
         localStorage.setItem('sse_token', tempSseToken);
         localStorage.removeItem('temp_sse_token');
       }
+
+      // userStore 상태 수동 업데이트
+      setIsLoggedIn(true);
 
       navigate('/');
     } catch (error: any) {

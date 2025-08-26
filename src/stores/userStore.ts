@@ -5,11 +5,13 @@ interface UserState {
   nickname: string;
   email: string;
   colorCode: string;
+  isLoggedIn: boolean;
+
   setUser: (nickname: string, email: string, colorCode: string) => void;
   setColorCode: (colorCode: string) => void;
   setNickname: (nickname: string) => void;
+  setIsLoggedIn: (isLoggedIn: boolean) => void;
   clearUser: () => void;
-  isLoggedIn: boolean;
 }
 
 export const useUserStore = create(
@@ -23,6 +25,7 @@ export const useUserStore = create(
         set({ nickname, email, colorCode, isLoggedIn: true }),
       setColorCode: (colorCode: string) => set({ colorCode }),
       setNickname: (nickname: string) => set({ nickname }),
+      setIsLoggedIn: (isLoggedIn: boolean) => set({ isLoggedIn }),
       clearUser: () =>
         set({
           nickname: '',
