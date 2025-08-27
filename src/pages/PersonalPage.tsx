@@ -8,6 +8,7 @@ import { useUserStore } from '@/stores/userStore';
 
 export default function PersonalPage() {
   const { data } = useFetchPersonalPage();
+  console.log('useFetchPersonalPage의 응답', data);
   console.log('pageDetails', data);
   const refinedData = data?.data.pageDetails;
 
@@ -23,7 +24,7 @@ export default function PersonalPage() {
   const linkDataLength = linkData?.length;
   const memberData = data?.data.member;
 
-  const [sortType, setSortType] = useState('기본순');
+  const [sortType, setSortType] = useState<string>('기본순');
 
   const { setUser } = useUserStore();
   const { setPageInfo } = usePageStore();

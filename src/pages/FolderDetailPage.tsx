@@ -1,14 +1,16 @@
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
+import { usePageStore } from '@/stores/pageStore';
 import SharedPageContentSection from '@/components/page-layout-ui/SharedPageContentSection';
 import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 import useFetchFolderDetails from '@/hooks/queries/useFetchFolderDetails';
 
 export default function FolderDetailPage() {
+  const [sortType, setSortType] = useState<string>('기본순');
+
   const { pageId } = usePageStore();
-  const { setParentsFolderId } = useParentsFolderIdStore();
+
   const { folderId } = useParams();
 
   const requestParams = {
@@ -26,15 +28,10 @@ export default function FolderDetailPage() {
   const linkData = refinedData?.siteDetailResponses ?? [];
   const folderDataLength = folderData?.length;
   const linkDataLength = linkData?.length;
-  const targetFolderId = refinedData?.targetFolderId;
 
-  useEffect(() => {
-    return () => {
-      if (targetFolderId) {
-        setParentsFolderId(targetFolderId);
-      }
-    };
-  }, [targetFolderId, setParentsFolderId]);
+  const handleSort = (selectedSortType: string) => {
+    setSortType(selectedSortType);
+  };
 
   if (isError) {
     return (
@@ -61,8 +58,13 @@ export default function FolderDetailPage() {
       <PageControllerSection
         folderDataLength={folderDataLength}
         linkDataLength={linkDataLength}
+        onSortChange={handleSort}
       />
-      <SharedPageContentSection folderData={folderData} linkData={linkData} />
+      <SharedPageContentSection
+        folderData={folderData}
+        linkData={linkData}
+        sortType={sortType}
+      />
     </div>
   );
 }

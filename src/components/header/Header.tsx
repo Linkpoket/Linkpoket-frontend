@@ -1,10 +1,15 @@
+import { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import Logo from '@/assets/widget-ui-assets/Logo.svg?react';
 import { HamburgerButton } from './HamburgerButton';
 import { UserActions } from './UserActions';
 import { AuthButtons } from './AuthButtons';
 import { useMobile } from '@/hooks/useMobile';
-import { Link, useLocation } from 'react-router-dom';
 import { Search } from '../common-ui/Search';
+import { useSearchStore } from '@/stores/searchStore';
+import { usePageStore } from '@/stores/pageStore';
+import { useSearchPageItems } from '@/hooks/queries/useSearchPageItems';
+import { useDebounceValue } from '@/hooks/useDebounceValue';
 
 interface Props {
   isLoggedIn: boolean;
@@ -14,8 +19,6 @@ interface Props {
   showHeaderButton: boolean;
 }
 
-//Todo: 해당 데이터는 useQuery 활용하여 대체.
-
 export function Header({
   isLoggedIn = true,
   setShowSidebar,
@@ -23,6 +26,47 @@ export function Header({
 }: Props) {
   const isMobile = useMobile();
   const pathName = useLocation().pathname;
+
+  const { pageId } = usePageStore();
+  const {
+    searchKeyword,
+    setSearchKeyword,
+    setSearchResult,
+    setIsSearching,
+    clearSearch,
+  } = useSearchStore();
+
+  const debouncedKeyword = useDebounceValue(searchKeyword, 300);
+
+  // API 호출
+  const { pageItems: searchResult, isLoading } = useSearchPageItems({
+    pageId: pageId ?? '',
+    keyword: debouncedKeyword,
+    searchType: 'TITLE',
+  });
+
+  // 검색 결과 상태 업데이트
+  useEffect(() => {
+    setIsSearching(isLoading);
+    if (searchResult) {
+      console.log('Header: 검색 결과를 스토어에 저장', searchResult);
+      setSearchResult(searchResult);
+    }
+  }, [searchResult, isLoading, setSearchResult, setIsSearching]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchKeyword(e.target.value);
+  };
+
+  const handleClear = () => {
+    clearSearch();
+  };
+
+  useEffect(() => {
+    clearSearch();
+  }, [pathName, clearSearch]);
+
+  const showSearch = pathName !== '/signup' && pathName !== '/login';
 
   return !isMobile ? (
     <header className="border-b-gray-10 flex h-[62px] justify-between border-b px-[24px] py-[12px]">
@@ -32,7 +76,14 @@ export function Header({
         </Link>
       </div>
       <div className="flex items-center gap-[24px]">
-        {pathName !== '/signup' && <Search placeholder="폴더 또는 링크 검색" />}
+        {showSearch && (
+          <Search
+            placeholder="폴더 또는 링크 검색"
+            value={searchKeyword}
+            onChange={handleSearchChange}
+            onClear={handleClear}
+          />
+        )}
         {showHeaderButton && (isLoggedIn ? <UserActions /> : <AuthButtons />)}
       </div>
     </header>
@@ -49,7 +100,14 @@ export function Header({
           {showHeaderButton && (isLoggedIn ? <UserActions /> : <AuthButtons />)}
         </div>
       </div>
-      {pathName !== '/signup' && <Search placeholder="폴더 또는 링크 검색" />}
+      {showSearch && (
+        <Search
+          placeholder="폴더 또는 링크 검색"
+          value={searchKeyword}
+          onChange={handleSearchChange}
+          onClear={handleClear}
+        />
+      )}
     </header>
   );
 }

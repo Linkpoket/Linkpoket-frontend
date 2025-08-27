@@ -14,7 +14,7 @@ export default function BookmarkPage() {
   const folderDataLength = folderData?.length;
   const linkDataLength = linkData?.length;
 
-  const [sortType, setSortType] = useState('기본순');
+  const [sortType, setSortType] = useState<string>('기본순');
 
   console.log('refinedData', refinedData);
   console.log('folderData', folderData);

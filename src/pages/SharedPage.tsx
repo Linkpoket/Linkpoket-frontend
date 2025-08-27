@@ -21,7 +21,7 @@ export default function SharedPage() {
   const folderDataLength = folderData?.length;
   const linkDataLength = linkData?.length;
 
-  const [sortType, setSortType] = useState('기본순');
+  const [sortType, setSortType] = useState<string>('기본순');
 
   const { setPageInfo } = usePageStore();
   const { setParentsFolderId } = useParentsFolderIdStore();

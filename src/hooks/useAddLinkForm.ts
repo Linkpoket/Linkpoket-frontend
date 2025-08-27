@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 export const useAddLinkForm = (isOpen: boolean, onClose: () => void) => {
   const LINK_NAME_MAX_LENGTH = 30;
 
-  const [isFirstInput, setIsFirstInput] = useState(true);
+  const [isFirstInput, setIsFirstInput] = useState<boolean>(true);
   const [linkUrl, setLinkUrl] = useState<string>('');
   const [linkName, setLinkName] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -33,9 +33,11 @@ export const useAddLinkForm = (isOpen: boolean, onClose: () => void) => {
       setLinkUrl('');
       setLinkName('');
       onClose();
+      toast.success('링크를 추가했습니다.');
     },
     onError: (err) => {
-      console.error('링크 생성 실패:', err);
+      toast.error('링크 추가를 실패했습니다.');
+      console.error('링크 추가 실패:', err);
       openErrorModal();
     },
   });
