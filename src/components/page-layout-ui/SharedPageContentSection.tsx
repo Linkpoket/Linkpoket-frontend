@@ -27,14 +27,23 @@ import { LinkDetail } from '@/types/links';
 import { FolderDetail } from '@/types/folders';
 
 function SortableItem({ item }: { item: any; index: number }) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({
-      id: 'folderId' in item ? item.folderId : item.linkId,
-    });
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: 'folderId' in item ? item.folderId : item.linkId,
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+    zIndex: isDragging ? 50 : 'auto',
+    touchAction: 'none',
+    opacity: isDragging ? 0.3 : 1,
   };
 
   return (

@@ -45,8 +45,8 @@ function SortableItem({ item }: { item: any; index: number }) {
     transform: CSS.Transform.toString(transform),
     transition,
     zIndex: isDragging ? 50 : 'auto',
-    position: 'relative',
     touchAction: 'none',
+    opacity: isDragging ? 0.3 : 1,
   };
 
   return (
