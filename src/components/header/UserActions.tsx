@@ -10,6 +10,7 @@ import { useDeleteDirectoryRequest } from '@/hooks/mutations/useDeleteDirectoryR
 import { useUserStore } from '@/stores/userStore';
 import { useProfileModalStore } from '@/stores/profileModalStore';
 import { useNotificationStore } from '@/stores/notification';
+import { useDeleteInvitation } from '@/hooks/mutations/useDeleteInvitation';
 
 export function UserActions() {
   const [isAlarmOpen, setIsAlarmOpen] = useState<boolean>(false);
@@ -32,6 +33,7 @@ export function UserActions() {
   const { mutate: patchDirectoryTransmission, isPending: isProcessing } =
     usePatchDirectoryTransmissionStatus();
   const { mutate: deleteDirectoryRequest } = useDeleteDirectoryRequest();
+  const { mutate: deleteInvitation } = useDeleteInvitation();
 
   const handleAlarmClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -72,6 +74,17 @@ export function UserActions() {
     [patchShareInvitation, patchDirectoryTransmission]
   );
 
+  const handleDelete = useCallback(
+    (dispatchId: string, type: 'INVITE_PAGE' | 'TRANSMIT_DIRECTORY') => {
+      if (type === 'INVITE_PAGE') {
+        deleteInvitation({ dispatchId });
+      } else {
+        deleteDirectoryRequest({ dispatchId });
+      }
+    },
+    [deleteInvitation, deleteDirectoryRequest]
+  );
+
   return (
     <>
       <div className="flex items-center gap-[8px]">
@@ -108,7 +121,7 @@ export function UserActions() {
             onReject={({ id, type }) =>
               handleStatusChange(id, 'REJECTED', type)
             }
-            onDelete={(dispatchId) => deleteDirectoryRequest({ dispatchId })}
+            onDelete={handleDelete}
           />
         )}
 
