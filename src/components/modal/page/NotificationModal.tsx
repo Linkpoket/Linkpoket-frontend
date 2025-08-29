@@ -113,7 +113,7 @@ export default function NotificationModal({
                   </div>
 
                   <button
-                    onClick={() => onDelete?.(item.id)}
+                    onClick={() => onDelete?.(item.id, item.notificationType)}
                     className="cursor-pointer"
                   >
                     <Close className="text-gray-40" width={14} height={14} />

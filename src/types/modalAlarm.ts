@@ -25,5 +25,8 @@ export interface NotificationModalProps {
   isShareProcessing: boolean;
   onAccept?: (params: { id: string; type: NotificationType }) => void;
   onReject?: (params: { id: string; type: NotificationType }) => void;
-  onDelete?: (id: string) => void;
+  onDelete?: (
+    dispatch: string,
+    type: 'INVITE_PAGE' | 'TRANSMIT_DIRECTORY'
+  ) => void;
 }
