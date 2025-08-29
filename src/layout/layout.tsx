@@ -36,7 +36,7 @@ export default function Layout() {
   useNotificationSSE(isLoggedIn);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex h-screen flex-col">
       {!isHideHeader ? (
         <Header
           showSidebar={showSidebar}
@@ -47,7 +47,7 @@ export default function Layout() {
         />
       ) : null}
 
-      <div className="flex">
+      <div className="flex flex-1 overflow-hidden">
         {!isHideSidebar ? (
           <SideBar
             showSidebar={showSidebar}
@@ -56,7 +56,7 @@ export default function Layout() {
             setIsFoldSidebar={setIsFoldSidebar}
           />
         ) : null}
-        <main className="flex-1">
+        <main className="flex-1 overflow-auto">
           <Outlet context={{ showSidebar }} />
 
           {isProfileModalOpen && (
