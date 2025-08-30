@@ -1,5 +1,5 @@
 import { Button } from '@/components/common-ui/button';
-import 히어로이미지 from '@/assets/common-ui-assets/히어로 이미지.png';
+import 히어로이미지 from '@/assets/common-ui-assets/히어로 이미지.webp';
 import { useMobile } from '@/hooks/useMobile';
 import { CHROME_EXTENSION_URL } from '@/constants/urls';
 

@@ -1,6 +1,6 @@
-import 확장프로그램이미지 from '@/assets/common-ui-assets/확장 프로그램 이미지.png';
-import 폴더별정리이미지 from '@/assets/common-ui-assets/폴더별정리이미지.png';
-import 공유페이지이미지 from '@/assets/common-ui-assets/공유페이지이미지.jpg';
+import 확장프로그램이미지 from '@/assets/common-ui-assets/확장 프로그램 이미지.webp';
+import 폴더별정리이미지 from '@/assets/common-ui-assets/폴더별정리이미지.webp';
+import 공유페이지이미지 from '@/assets/common-ui-assets/공유페이지이미지.webp';
 
 const NewSection = () => {
   const featureData = [
