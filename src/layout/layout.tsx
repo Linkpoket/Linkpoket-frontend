@@ -1,6 +1,6 @@
 import { Header } from '@/components/header/Header';
 import SideBar from '@/components/side-bar/SideBar';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { useUserStore } from '@/stores/userStore';
 import ProfileSettingsModal from '@/components/modal/profile/ProfileSettingsModal';
@@ -57,7 +57,15 @@ export default function Layout() {
           />
         ) : null}
         <main className="flex-1 overflow-auto">
-          <Outlet context={{ showSidebar }} />
+          <Suspense
+            fallback={
+              <div className="flex h-screen items-center justify-center">
+                <div>로딩 중...</div>
+              </div>
+            }
+          >
+            <Outlet context={{ showSidebar }} />
+          </Suspense>
 
           {isProfileModalOpen && (
             <ProfileSettingsModal
