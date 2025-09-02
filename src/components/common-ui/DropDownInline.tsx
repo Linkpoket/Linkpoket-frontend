@@ -1,15 +1,20 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, useEffect, useRef, useState } from 'react';
 import Transfer from '@/assets/common-ui-assets/Transfer.svg?react';
 import Copy from '@/assets/common-ui-assets/Copy.svg?react';
 import Delete from '@/assets/common-ui-assets/Delete.svg?react';
 import { usePageStore } from '@/stores/pageStore';
 import { useModalStore } from '@/stores/modalStore';
-import FolderTransferModal from '../modal/folder/FolderTransferModal';
-import DeleteFolderModal from '../modal/folder/DeleteFolderModal';
-import DeleteLinkModal from '../modal/link/DeleteLinkModal';
 import { useClickOutsideMultiple } from '@/hooks/useClickOutsideMultiple';
 import { useTransferFolder } from '@/hooks/mutations/useTransferFolder';
 import toast from 'react-hot-toast';
+
+const FolderTransferModal = lazy(
+  () => import('../modal/folder/FolderTransferModal')
+);
+const DeleteFolderModal = lazy(
+  () => import('../modal/folder/DeleteFolderModal')
+);
+const DeleteLinkModal = lazy(() => import('../modal/link/DeleteLinkModal'));
 
 type DropDownInlineProps = {
   id: string;

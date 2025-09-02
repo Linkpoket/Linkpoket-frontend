@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import SharedPageContentSection from '@/components/page-layout-ui/SharedPageContentSection';
-import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 import SharedPageHeaderSection from '@/components/page-layout-ui/SharedPageHeaderSection';
 import { useFetchSharedPage } from '@/hooks/queries/useFetchSharedPage';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
+import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
+
+const SharedPageContentSection = lazy(
+  () => import('@/components/page-layout-ui/SharedPageContentSection')
+);
 
 export default function SharedPage() {
   const { pageId } = useParams();

@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import LinkCard from '../common-ui/LinkCard';
 import FolderCard from '../common-ui/FolderCard';
-import AddLinkModal from '../modal/link/AddLinkModal';
 import { useModalStore } from '@/stores/modalStore';
 import { useSearchStore } from '@/stores/searchStore';
-import ErrorLinkModal from '../modal/link/ErrorLinkModal';
 import { PageContentSectionProps } from '@/types/pages';
 import {
   DndContext,
@@ -28,6 +26,9 @@ import useUpdateDragandDrop from '@/hooks/mutations/useUpdateDragandDrop';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { FolderDetail } from '@/types/folders';
 import { LinkDetail } from '@/types/links';
+
+const AddLinkModal = lazy(() => import('../modal/link/AddLinkModal'));
+const ErrorLinkModal = lazy(() => import('../modal/link/ErrorLinkModal'));
 
 function SortableItem({ item }: { item: any; index: number }) {
   const {

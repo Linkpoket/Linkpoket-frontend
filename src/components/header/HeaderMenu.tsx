@@ -1,18 +1,25 @@
 import HelpIcon from '@/assets/common-ui-assets/CircleQuestion.svg?react';
 import Withdraw from '@/assets/common-ui-assets/Out(M).svg?react';
 import Deleted from '@/assets/common-ui-assets/Trash.svg?react';
-import { useRef, useState } from 'react';
+import { lazy, useRef, useState } from 'react';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useLocation } from 'react-router-dom';
 import { usePageStore } from '@/stores/pageStore';
-import DeleteSharedPageModal from '../modal/page/DeleteSharedPageModal';
-import WithdrawSharedPageModal from '../modal/page/WithdrawlSharedPageModal';
-import ManageSharedPageModal from '../modal/page/ManageSharedPageModal';
 import SharedPage from '@/assets/common-ui-assets/Setting.svg?react';
 import SiteIcon from '@/assets/common-ui-assets/Link.svg?react';
 import useFetchSharedPageDashboard from '@/hooks/queries/useFetchSharedPageDashboard';
 import toast from 'react-hot-toast';
 import { ContactDetail } from './ContactDetail';
+
+const DeleteSharedPageModal = lazy(
+  () => import('../modal/page/DeleteSharedPageModal')
+);
+const WithdrawSharedPageModal = lazy(
+  () => import('../modal/page/WithdrawlSharedPageModal')
+);
+const ManageSharedPageModal = lazy(
+  () => import('../modal/page/ManageSharedPageModal')
+);
 
 interface HeaderMenuProps {
   isHost: boolean;

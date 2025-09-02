@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
-import PersonalPageContentSection from '@/components/page-layout-ui/PersonalPageContentSection';
 import { useFetchPersonalPage } from '@/hooks/queries/useFetchPersonalPage';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useUserStore } from '@/stores/userStore';
+
+const PersonalPageContentSection = lazy(
+  () => import('@/components/page-layout-ui/PersonalPageContentSection')
+);
 
 export default function PersonalPage() {
   const { data } = useFetchPersonalPage();
