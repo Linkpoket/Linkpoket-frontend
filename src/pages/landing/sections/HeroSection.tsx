@@ -45,6 +45,11 @@ const HeroSection: React.FC = () => {
                 href={href}
                 target={index === 1 ? '_blank' : undefined}
                 rel={index === 1 ? 'noopener noreferrer' : undefined}
+                aria-label={
+                  index === 1
+                    ? '구글 확장 프로그램 다운로드 (새 창)'
+                    : '링크루 시작하기'
+                }
               >
                 <Button
                   size={isMobile ? 'sm' : 'lg'}

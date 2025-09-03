@@ -102,6 +102,7 @@ export default function LinkCard({
               data-card-button
               className="cursor-pointer"
               onClick={handleBookmarkClick}
+              aria-label={isBookmark ? '북마크 제거' : '북마크 추가'}
             >
               {isBookmark ? <ActiveBookmarkIcon /> : <InactiveBookmarkIcon />}
             </button>
@@ -111,6 +112,7 @@ export default function LinkCard({
                 data-card-button
                 className="cursor-pointer p-1"
                 onClick={handleMenuClick}
+                aria-label="메뉴 열기"
               >
                 <CardMenu />
               </button>

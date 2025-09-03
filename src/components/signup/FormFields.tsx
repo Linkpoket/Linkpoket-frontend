@@ -18,8 +18,8 @@ export const FormFields = ({
   return (
     <>
       {/* 연령대 */}
-      <div>
-        <label className="text-gray-70 mb-2 block font-medium">연령대</label>
+      <fieldset>
+        <legend className="text-gray-70 mb-2 block font-medium">연령대</legend>
         <div className="flex flex-row space-x-4">
           <Controller
             name="ageRange"
@@ -35,6 +35,7 @@ export const FormFields = ({
                     error={!!errors.ageRange}
                     checked={field.value === opt.value}
                     onChange={() => field.onChange(opt.value)}
+                    name="ageRange"
                   />
                 ))}
               </>
@@ -44,11 +45,11 @@ export const FormFields = ({
         {errors.ageRange && (
           <p className="mt-1 text-sm text-red-500">{errors.ageRange.message}</p>
         )}
-      </div>
+      </fieldset>
 
       {/* 성별 */}
-      <div>
-        <label className="text-gray-70 mb-2 block font-medium">성별</label>
+      <fieldset>
+        <legend className="text-gray-70 mb-2 block font-medium">성별</legend>
         <div className="flex flex-row space-x-4">
           <Controller
             name="gender"
@@ -64,6 +65,7 @@ export const FormFields = ({
                     error={!!errors.gender}
                     checked={field.value === opt.value}
                     onChange={() => field.onChange(opt.value)}
+                    name="gender"
                   />
                 ))}
               </>
@@ -73,11 +75,11 @@ export const FormFields = ({
         {errors.gender && (
           <p className="mt-1 text-sm text-red-500">{errors.gender.message}</p>
         )}
-      </div>
+      </fieldset>
 
       {/* 직업 */}
-      <div>
-        <label className="text-gray-70 mb-2 block font-medium">직업</label>
+      <fieldset>
+        <legend className="text-gray-70 mb-2 block font-medium">직업</legend>
         <Controller
           name="job"
           control={control}
@@ -90,6 +92,7 @@ export const FormFields = ({
               error={!!errors.job}
               errorMessage={errors.job?.message}
               maxHeight="370px"
+              name="job"
             />
           )}
         />
@@ -102,6 +105,7 @@ export const FormFields = ({
               render={({ field }) => (
                 <Input
                   {...field}
+                  name="customJob"
                   placeholder="현재 활동 중인 직업 분야를 입력해 주세요"
                   variant={errors.customJob ? 'error' : 'default'}
                   errorMessage={errors.customJob?.message}
@@ -110,7 +114,7 @@ export const FormFields = ({
             />
           </div>
         )}
-      </div>
+      </fieldset>
 
       {/* 닉네임 */}
       <div>
@@ -121,6 +125,7 @@ export const FormFields = ({
           render={({ field }) => (
             <Input
               {...field}
+              name="nickname"
               placeholder="사용하실 닉네임을 입력해주세요."
               variant={errors.nickname ? 'error' : 'default'}
               errorMessage={errors.nickname?.message}

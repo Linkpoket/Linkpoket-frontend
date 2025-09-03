@@ -8,7 +8,6 @@ export async function previewLink(
     const response = await axiosInstance.post('/api/links/title-preview', data);
     return response.data;
   } catch (error) {
-    console.log('Error Preview Link', error);
     throw error;
   }
 }

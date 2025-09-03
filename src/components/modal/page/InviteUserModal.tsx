@@ -24,6 +24,7 @@ const EmailInputWithRole = ({
   return (
     <div className={`relative ${className}`}>
       <input
+        id="invite-email"
         value={email}
         onChange={onEmailChange}
         placeholder="초대할 사용자의 이메일을 입력해 주세요"
@@ -31,6 +32,7 @@ const EmailInputWithRole = ({
       />
       <div className="absolute top-1/2 right-1 -translate-y-1/2">
         <select
+          id="user-role"
           value={role}
           onChange={onRoleChange}
           className="border-gray-5 text-gray-60 bg-gray-5 h-[42px] w-[87px] rounded-lg border px-3 text-[14px] font-[600] focus:outline-none"
@@ -62,7 +64,7 @@ const InviteUserModal = ({ isOpen, onClose, pageId }: InviteUserModalProps) => {
       onClose();
     },
     onError: (error) => {
-      toast.error(error);
+      toast.error('초대 요청이 실패했습니다.');
     },
   });
 

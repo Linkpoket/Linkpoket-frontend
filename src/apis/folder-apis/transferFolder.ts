@@ -21,11 +21,8 @@ export async function transferFolder(data: TransferFolderData) {
       data
     );
 
-    console.log('🟢 API 응답 성공:', res.status, res.data);
-
     // 응답 데이터에 에러 정보가 있는지 확인
     if (res.data?.errorCode) {
-      console.log('🔴 응답은 성공했지만 에러 데이터 포함:', res.data);
       throw new TransferFolderError(
         res.data.errorCode,
         res.data.status || res.status,
@@ -37,10 +34,6 @@ export async function transferFolder(data: TransferFolderData) {
     return res.data;
   } catch (e: any) {
     if (axios.isAxiosError(e)) {
-      console.log('[TX][ERR] status:', e.response?.status);
-      console.log('[TX][ERR] body:', e.response?.data);
-      console.log('[TX][ERR] sent:', e.config?.data);
-
       // 서버에서 온 에러 정보를 구조화된 형태로 던지기
       const errorData = e.response?.data;
       if (errorData?.errorCode) {

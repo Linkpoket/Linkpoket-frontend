@@ -119,6 +119,7 @@ const SideBar: React.FC<MenubarProps> = ({
                 setIsFoldSidebar(true);
               }}
               className="cursor-pointer"
+              aria-label="사이드바 닫기"
             >
               <SidebarClose />
             </button>
@@ -177,6 +178,7 @@ const SideBar: React.FC<MenubarProps> = ({
                       e.preventDefault();
                       handleCreateSharedPage();
                     }}
+                    aria-label="공유페이지 추가"
                     height={18}
                     width={18}
                   />
@@ -213,6 +215,7 @@ const SideBar: React.FC<MenubarProps> = ({
                       e.preventDefault();
                       handleCreateFolder();
                     }}
+                    aria-label="폴더 추가"
                     height={18}
                     width={18}
                   />
@@ -270,6 +273,7 @@ const SideBar: React.FC<MenubarProps> = ({
               setIsFoldSidebar(false);
             }}
             className="mb-2 cursor-pointer"
+            aria-label="사이드바 열기"
           >
             <SidebarOpen />
           </button>

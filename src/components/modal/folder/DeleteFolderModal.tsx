@@ -22,7 +22,6 @@ const DeleteFolderModal = forwardRef<
       },
       folderId: folderId,
     };
-    console.log('폴더 삭제 요청 데이터:', requestBody);
     deleteFolder(requestBody);
     onClose();
   };

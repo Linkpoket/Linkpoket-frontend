@@ -91,6 +91,7 @@ export default function PageHeaderSection({
     <div className="mb-[24px] flex w-full min-w-[328px] items-center justify-between">
       <div className="relative w-full">
         <input
+          id="page-title"
           type="text"
           value={title}
           onChange={(e) => {

@@ -50,6 +50,7 @@ const LoginPage = () => {
             onClick={() =>
               (window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/google`)
             }
+            aria-label="Google 로그인"
           />
         </section>
         {/* 구분선 */}

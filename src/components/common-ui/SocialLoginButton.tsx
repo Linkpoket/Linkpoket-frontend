@@ -20,6 +20,7 @@ export const SocialLoginButton = ({
 }) => (
   <Button
     onClick={onClick}
+    aria-label={provider || '소셜 로그인'}
     className={cn(
       `flex w-full items-center justify-center rounded-lg ${bgColor} text-gray-90 group h-[63px] py-3 text-[21px] font-semibold`,
       className

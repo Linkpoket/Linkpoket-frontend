@@ -68,7 +68,7 @@ export default function HeaderMenu({
       await navigator.clipboard.writeText(`${currentUrl}`);
       toast.success('링크가 복사되었습니다.');
     } catch (error) {
-      console.error('링크 복사 실패:', error);
+      toast.error('링크 복사를 실패했습니다.');
     }
   };
 

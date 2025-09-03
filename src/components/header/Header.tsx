@@ -49,7 +49,6 @@ export function Header({
   useEffect(() => {
     setIsSearching(isLoading);
     if (searchResult) {
-      console.log('Header: 검색 결과를 스토어에 저장', searchResult);
       setSearchResult(searchResult);
     }
   }, [searchResult, isLoading, setSearchResult, setIsSearching]);
@@ -103,6 +102,7 @@ export function Header({
       {showSearch && (
         <Search
           placeholder="폴더 또는 링크 검색"
+          aria-label="폴더 또는 링크 검색"
           value={searchKeyword}
           onChange={handleSearchChange}
           onClear={handleClear}

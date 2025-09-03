@@ -74,6 +74,11 @@ const CtaSection: React.FC = () => {
                   href={href}
                   target={idx === 1 ? '_blank' : undefined}
                   rel={idx === 1 ? 'noopener noreferrer' : undefined}
+                  aria-label={
+                    idx === 1
+                      ? '구글 확장 프로그램 무료 다운로드 (새 창)'
+                      : '링크루 시작하기'
+                  }
                   className="w-full sm:w-auto"
                 >
                   <Button
@@ -106,6 +111,7 @@ const CtaSection: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block w-fit"
+                aria-label="개선을 위한 의견 남기기 (새 창)"
               >
                 <Button
                   className="w-auto bg-none"

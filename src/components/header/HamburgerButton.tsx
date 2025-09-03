@@ -6,6 +6,7 @@ export function HamburgerButton({ onClick }: { onClick: () => void }) {
       <button
         onClick={onClick}
         className="cursor-pointer px-[2px] pt-[5px] pb-[4px]"
+        aria-label="메뉴 열기"
       >
         <Hamburger />
       </button>

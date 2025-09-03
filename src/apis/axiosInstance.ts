@@ -61,7 +61,6 @@ axiosInstance.interceptors.response.use(
 
         return axiosInstance(originalRequest);
       } catch (e) {
-        console.log('토큰 재발급 실패:', e);
         window.location.href = '/login';
         return Promise.reject(e);
       }

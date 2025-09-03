@@ -13,14 +13,6 @@ type ModalStore = {
   isErrorModalOpen: boolean;
   openErrorModal: () => void;
   closeErrorModal: () => void;
-
-  // for context menu
-  isFolderContextMenuOpen: string | null;
-  openFolderContextMenu: (id: string) => void;
-  closeFolderContextMenu: () => void;
-  isLinkContextMenuOpen: string | null;
-  openLinkContextMenu: (id: string) => void;
-  closeLinkContextMenu: () => void;
 };
 
 export const useModalStore = create<ModalStore>((set) => ({
@@ -37,14 +29,4 @@ export const useModalStore = create<ModalStore>((set) => ({
   isErrorModalOpen: false,
   openErrorModal: () => set({ isErrorModalOpen: true }),
   closeErrorModal: () => set({ isErrorModalOpen: false }),
-
-  // for context menu
-  isFolderContextMenuOpen: null,
-  openFolderContextMenu: (id) => set({ isFolderContextMenuOpen: id }),
-  closeFolderContextMenu: () => set({ isFolderContextMenuOpen: null }),
-
-  isLinkContextMenuOpen: null,
-  openLinkContextMenu: (id) =>
-    set({ isLinkContextMenuOpen: id, isFolderContextMenuOpen: null }),
-  closeLinkContextMenu: () => set({ isLinkContextMenuOpen: null }),
 }));

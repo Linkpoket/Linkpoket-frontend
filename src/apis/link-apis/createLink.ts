@@ -8,7 +8,6 @@ export async function createLink(
     const response = await axiosInstance.post('/api/links', data);
     return response.data;
   } catch (error) {
-    console.log('Error creating link', error);
     throw error;
   }
 }

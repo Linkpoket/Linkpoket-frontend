@@ -4,6 +4,7 @@ import Modal from '@/components/common-ui/Modal';
 import FolderItemIcon from '@/assets/common-ui-assets/FolderItemIcon.svg?react';
 import { useCreateFolder } from '@/hooks/mutations/useCreateFolder';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
+import toast from 'react-hot-toast';
 
 interface AddFolderModalProps {
   isOpen: boolean;
@@ -28,9 +29,10 @@ export default function AddFolderModal({
       setFolderDescription('');
       setError('');
       onClose();
-      console.log('폴더 생성 성공');
+      toast.success('폴더 생성에 성공했습니다.');
     },
     onError: () => {
+      toast.error('폴더 생성에 실패했습니다.');
       setError('폴더 생성에 실패했습니다.');
     },
   });
@@ -51,8 +53,6 @@ export default function AddFolderModal({
       parentFolderId: parentsFolderId ?? '',
       folderDescription,
     };
-
-    console.log('폴더 생성 요청 데이터:', requestBody);
     createFolderMutation.mutate(requestBody);
   };
 
