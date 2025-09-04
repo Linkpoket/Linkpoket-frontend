@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import BookMark from '@/assets/widget-ui-assets/BookMark.svg?react';
+import BookMarkActive from '@/assets/widget-ui-assets/BookMarkActive.svg?react';
 import PersonalPage from '@/assets/widget-ui-assets/PersonalPage.svg?react';
+import PersonalPageActive from '@/assets/widget-ui-assets/PersonalPageActive.svg?react';
 import PlusIcon from '@/assets/common-ui-assets/PlusIcon.svg?react';
 import SidebarOpen from '@/assets/widget-ui-assets/SidebarOpen.svg?react';
 import SidebarClose from '@/assets/widget-ui-assets/SidebarClose.svg?react';
@@ -177,13 +179,23 @@ const SideBar: React.FC<MenubarProps> = ({
                     : 'text-gray-70 hover:bg-gray-5 hover:text-gray-70 hover:rounded-[8px]'
                 }`}
               >
-                <PersonalPage
-                  width={20}
-                  height={20}
-                  className={`${
-                    isPersonalActive ? 'text-primary-50' : 'text-gray-70'
-                  }`}
-                />
+                {isPersonalActive ? (
+                  <PersonalPageActive
+                    width={20}
+                    height={20}
+                    className={`${
+                      isPersonalActive ? 'text-primary-50' : 'text-gray-70'
+                    }`}
+                  />
+                ) : (
+                  <PersonalPage
+                    width={20}
+                    height={20}
+                    className={`${
+                      isPersonalActive ? 'text-primary-50' : 'text-gray-70'
+                    }`}
+                  />
+                )}
                 개인 페이지
               </Link>
 
@@ -195,13 +207,11 @@ const SideBar: React.FC<MenubarProps> = ({
                     : 'text-gray-70 hover:bg-gray-5 hover:text-gray-70 hover:rounded-[8px]'
                 }`}
               >
-                <BookMark
-                  width={20}
-                  height={20}
-                  className={`my-[2px] ${
-                    isBookmarksActive ? 'text-gray-10' : 'text-gray-70'
-                  }`}
-                />
+                {isBookmarksActive ? (
+                  <BookMarkActive width={20} height={20} />
+                ) : (
+                  <BookMark width={20} height={20} />
+                )}
                 북마크
               </Link>
 
@@ -386,32 +396,28 @@ const SideBar: React.FC<MenubarProps> = ({
         <div className="flex flex-col items-center gap-[8px]">
           <button
             className={`cursor-pointer rounded-[8px] p-3 text-[14px] font-[600] ${
-              isPersonalActive ? 'bg-gray-5 text-gray-90' : 'text-gray-70'
+              isPersonalActive ? 'bg-gray-5' : 'hover:bg-gray-5'
             }`}
           >
             <Link to="/">
-              <PersonalPage
-                width={20}
-                height={20}
-                className={`${
-                  isPersonalActive ? 'text-primary-50' : 'text-gray-70'
-                }`}
-              />
+              {isPersonalActive ? (
+                <PersonalPageActive width={20} height={20} />
+              ) : (
+                <PersonalPage width={20} height={20} />
+              )}
             </Link>
           </button>
           <button
             className={`cursor-pointer rounded-[8px] p-3 text-[14px] font-[600] ${
-              isBookmarksActive ? 'bg-gray-5 text-gray-70' : 'text-gray-70'
+              isBookmarksActive ? 'bg-gray-5' : 'hover:bg-gray-5'
             }`}
           >
             <Link to="/bookmarks">
-              <BookMark
-                width={20}
-                height={20}
-                className={`my-[2px] ${
-                  isBookmarksActive ? 'text-primary-50' : 'text-gray-70'
-                }`}
-              />
+              {isBookmarksActive ? (
+                <BookMarkActive width={20} height={20} />
+              ) : (
+                <BookMark width={20} height={20} />
+              )}
             </Link>
           </button>
         </div>
