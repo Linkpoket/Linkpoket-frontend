@@ -71,8 +71,7 @@ export default function PersonalPageContentSection({
   linkData = [],
   sortType,
 }: PageContentSectionProps) {
-  const { isLinkModalOpen, closeLinkModal, isErrorModalOpen, closeErrorModal } =
-    useModalStore();
+  const { isLinkModalOpen, closeLinkModal } = useModalStore();
 
   const searchKeyword = useSearchStore((state) => state.searchKeyword);
   const searchResult = useSearchStore((state) => state.searchResult);
@@ -271,9 +270,6 @@ export default function PersonalPageContentSection({
       </DndContext>
       {isLinkModalOpen && (
         <AddLinkModal isOpen={isLinkModalOpen} onClose={closeLinkModal} />
-      )}
-      {isErrorModalOpen && (
-        <ErrorLinkModal isOpen={isErrorModalOpen} onClose={closeErrorModal} />
       )}
     </div>
   );

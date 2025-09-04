@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from 'react';
 import { useCreateLink } from '@/hooks/mutations/useCreateLink';
 import { usePreviewLink } from '@/hooks/mutations/usePreviewLink';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
-import { useModalStore } from '@/stores/modalStore';
 import toast from 'react-hot-toast';
 
 export const useAddLinkForm = (isOpen: boolean, onClose: () => void) => {
@@ -17,7 +16,6 @@ export const useAddLinkForm = (isOpen: boolean, onClose: () => void) => {
 
   const { pageId } = usePageStore();
   const { parentsFolderId } = useParentsFolderIdStore();
-  const { openErrorModal } = useModalStore();
 
   const isValidUrl = (urlString: string) => {
     try {
@@ -38,7 +36,6 @@ export const useAddLinkForm = (isOpen: boolean, onClose: () => void) => {
     onError: (err) => {
       toast.error('링크 추가를 실패했습니다.');
       console.error('링크 추가 실패:', err);
-      openErrorModal();
     },
   });
 

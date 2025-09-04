@@ -18,13 +18,28 @@ const router = createBrowserRouter([
       {
         element: <ProtectedRoute />,
         children: [
+          // 개인페이지
           { path: '/', element: <PersonalPage /> },
-          { path: '/personal', element: <PersonalPage /> },
-          { path: '/folder/:folderId', element: <FolderDetailPage /> },
-          { path: '/bookmarks', element: <BookmarkPage /> },
+          { path: '/personal/folder/:folderId', element: <FolderDetailPage /> },
+
+          // 공유페이지
           {
             path: '/shared/:pageId',
             element: <SharedPage />,
+          },
+          {
+            path: '/shared/:pageId/folder/:folderId',
+            element: <FolderDetailPage />,
+          },
+
+          // 북마크
+          {
+            path: '/bookmarks',
+            element: <BookmarkPage />,
+          },
+          {
+            path: '/bookmarks/folder/:folderId',
+            element: <FolderDetailPage />,
           },
         ],
       },

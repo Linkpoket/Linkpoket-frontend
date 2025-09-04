@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import useUpdateFolderBookmark from '@/hooks/mutations/useUpdateFolderBookmark';
 import InactiveBookmarkIcon from '@/assets/common-ui-assets/InactiveBookmark.svg?react';
@@ -17,6 +17,7 @@ export default function FolderCard({
 }) {
   const [isDropDownInline, setIsDropDownInline] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { pageId } = usePageStore();
   const { setParentsFolderId } = useParentsFolderIdStore();
   const folderId = item.folderId?.toString();
@@ -25,6 +26,26 @@ export default function FolderCard({
     folderId: folderId,
     pageId: pageId as string,
   });
+
+  // 현재 컨텍스트에 맞는 폴더 링크 생성
+  const getFolderLink = (folderId: string) => {
+    const currentPath = location.pathname;
+
+    if (currentPath.startsWith('/shared/')) {
+      // 공유페이지인 경우: /shared/:pageId에서 pageId 추출
+      const pathParts = currentPath.split('/');
+      const sharedPageId = pathParts[2]; // /shared/pageId/... 에서 pageId 추출
+      return `/shared/${sharedPageId}/folder/${folderId}`;
+    }
+
+    if (currentPath.startsWith('/bookmarks')) {
+      // 북마크 페이지인 경우
+      return `/bookmarks/folder/${folderId}`;
+    }
+
+    // 개인페이지인 경우 (기본값)
+    return `/personal/folder/${folderId}`;
+  };
 
   const handleCardClick = (e: React.MouseEvent) => {
     // 드롭다운이나 버튼 영역인지 확인
@@ -35,9 +56,10 @@ export default function FolderCard({
 
     if (isDropdownArea || isButtonArea || isModalArea) return;
 
-    // 카드 클릭 시 폴더로 이동
-    setParentsFolderId(pageId as string);
-    navigate(`/folder/${item.folderId}`);
+    // 카드 클릭 시 폴더로 이동 - 컨텍스트에 맞는 링크 사용
+    setParentsFolderId(folderId);
+    const folderLink = getFolderLink(item.folderId);
+    navigate(folderLink);
   };
 
   const handleBookmarkClick = () => {
