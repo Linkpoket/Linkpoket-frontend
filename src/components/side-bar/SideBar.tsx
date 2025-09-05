@@ -1,10 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import BookMark from '@/assets/widget-ui-assets/BookMark.svg?react';
 import BookMarkActive from '@/assets/widget-ui-assets/BookMarkActive.svg?react';
 import PersonalPage from '@/assets/widget-ui-assets/PersonalPage.svg?react';
 import PersonalPageActive from '@/assets/widget-ui-assets/PersonalPageActive.svg?react';
 import PlusIcon from '@/assets/common-ui-assets/PlusIcon.svg?react';
+import ColorUp from '@/assets/common-ui-assets/ColorUp.svg?react';
+import ColorDown from '@/assets/common-ui-assets/ColorDown.svg?react';
+import NoColorUp from '@/assets/common-ui-assets/NoColorUp.svg?react';
+import NoColorDown from '@/assets/common-ui-assets/NoColorDown.svg?react';
 import SidebarOpen from '@/assets/widget-ui-assets/SidebarOpen.svg?react';
 import SidebarClose from '@/assets/widget-ui-assets/SidebarClose.svg?react';
 import { useMobile } from '@/hooks/useMobile';
@@ -34,6 +38,24 @@ const SideBar: React.FC<MenubarProps> = ({
   const { parentsFolderId } = useParentsFolderIdStore();
   const location = useLocation();
   const params = useParams();
+
+  // 펼쳐진 폴더들의 ID를 저장 (초기값: 빈 Set = 모든 폴더 접힌 상태)
+  const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
+    new Set()
+  );
+
+  // 폴더 토글 함수
+  const toggleFolder = (folderId: string) => {
+    setExpandedFolders((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(folderId)) {
+        newSet.delete(folderId);
+      } else {
+        newSet.add(folderId);
+      }
+      return newSet;
+    });
+  };
 
   // 현재 컨텍스트 파악
   const getCurrentContext = () => {
@@ -145,6 +167,30 @@ const SideBar: React.FC<MenubarProps> = ({
       folderName: '새 폴더',
       parentFolderId: parentsFolderId as string,
     });
+  };
+
+  const FolderToggleIcon = ({
+    isCollapsed,
+    folderId,
+  }: {
+    isCollapsed: boolean;
+    folderId: string;
+  }) => {
+    const isActive = isFolderActive(folderId);
+
+    if (isActive) {
+      return isCollapsed ? (
+        <ColorDown width={16} height={16} />
+      ) : (
+        <ColorUp width={16} height={16} />
+      );
+    } else {
+      return isCollapsed ? (
+        <NoColorDown width={16} height={16} />
+      ) : (
+        <NoColorUp width={16} height={16} />
+      );
+    }
   };
 
   if (
@@ -266,35 +312,58 @@ const SideBar: React.FC<MenubarProps> = ({
                   <div className="mt-2 flex flex-col gap-[2px]">
                     {refinedFolderList?.map((folder: any) => (
                       <div key={folder.folderId}>
-                        <Link
-                          to={getFolderLink(folder.folderId)}
-                          className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
-                            isFolderActive(folder.folderId)
-                              ? 'bg-primary-5 text-primary-50'
-                              : 'text-gray-70 hover:bg-primary-5'
-                          }`}
-                        >
-                          {folder.folderTitle}
-                        </Link>
-                        {/* 폴더 뎁스2 리스트 */}
-                        {folder.children && (
-                          <div className="mt-1 ml-4 flex flex-col gap-[2px]">
-                            {folder.children.map((child: any) => (
-                              <Link
-                                key={child.folderId}
-                                to={getFolderLink(child.folderId)}
-                                className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
-                                  isFolderActive(child.folderId)
-                                    ? 'bg-primary-5 text-primary-50'
-                                    : 'text-gray-70 hover:bg-primary-5'
-                                }`}
+                        <div className="flex items-center">
+                          {/* 하위 폴더가 있는 경우 화살표 표시 */}
+
+                          <Link
+                            to={getFolderLink(folder.folderId)}
+                            className={`flex w-full items-center justify-between rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
+                              isFolderActive(folder.folderId)
+                                ? 'bg-primary-5 text-primary-50'
+                                : 'text-gray-70 hover:bg-primary-5'
+                            }`}
+                          >
+                            {folder.folderTitle}
+                            {folder.children && folder.children.length > 0 ? (
+                              <button
+                                onClick={() => toggleFolder(folder.folderId)}
+                                className="hover:text-gray-70 mr-1 flex h-4 w-4 cursor-pointer items-center justify-center text-gray-50"
+                                aria-label={`${folder.folderTitle} 폴더 ${expandedFolders.has(folder.folderId) ? '접기' : '펼치기'}`}
                               >
-                                <span className="pr-2">•</span>
-                                <span>{child.folderTitle}</span>
-                              </Link>
-                            ))}
-                          </div>
-                        )}
+                                <FolderToggleIcon
+                                  isCollapsed={
+                                    !expandedFolders.has(folder.folderId)
+                                  }
+                                  folderId={folder.folderId}
+                                />
+                              </button>
+                            ) : (
+                              <div className="mr-1 h-4 w-4" />
+                            )}
+                          </Link>
+                        </div>
+
+                        {/* 폴더 뎁스2 리스트 - 펼쳐져 있을 때만 표시 */}
+                        {folder.children &&
+                          folder.children.length > 0 &&
+                          expandedFolders.has(folder.folderId) && (
+                            <div className="mt-1 ml-5 flex flex-col gap-[2px]">
+                              {folder.children.map((child: any) => (
+                                <Link
+                                  key={child.folderId}
+                                  to={getFolderLink(child.folderId)}
+                                  className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
+                                    isFolderActive(child.folderId)
+                                      ? 'bg-primary-5 text-primary-50'
+                                      : 'text-gray-70 hover:bg-primary-5'
+                                  }`}
+                                >
+                                  <span className="pr-2">•</span>
+                                  <span>{child.folderTitle}</span>
+                                </Link>
+                              ))}
+                            </div>
+                          )}
                       </div>
                     ))}
                   </div>
@@ -325,36 +394,60 @@ const SideBar: React.FC<MenubarProps> = ({
                   <div className="mt-2 flex flex-col gap-[2px]">
                     {refinedFolderList?.map((folder: any) => (
                       <div key={folder.folderId}>
-                        <Link
-                          to={`/shared/${params.pageId}/folder/${folder.folderId}`}
-                          className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
-                            location.pathname ===
-                            `/shared/${params.pageId}/folder/${folder.folderId}`
-                              ? 'bg-primary-5 text-primary-50'
-                              : 'text-gray-70 hover:bg-primary-5'
-                          }`}
-                        >
-                          {folder.folderTitle}
-                        </Link>
-                        {folder.children && (
-                          <div className="mt-1 ml-4 flex flex-col gap-[2px]">
-                            {folder.children.map((child: any) => (
-                              <Link
-                                key={child.folderId}
-                                to={`/shared/${params.pageId}/folder/${child.folderId}`}
-                                className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
-                                  location.pathname ===
-                                  `/shared/${params.pageId}/folder/${child.folderId}`
-                                    ? 'bg-primary-5 text-primary-50'
-                                    : 'text-gray-70 hover:bg-primary-5'
-                                }`}
+                        <div className="flex items-center">
+                          {/* 하위 폴더가 있는 경우 화살표 표시 */}
+
+                          <Link
+                            to={`/shared/${params.pageId}/folder/${folder.folderId}`}
+                            className={`flex w-full items-center justify-between rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
+                              location.pathname ===
+                              `/shared/${params.pageId}/folder/${folder.folderId}`
+                                ? 'bg-primary-5 text-primary-50'
+                                : 'text-gray-70 hover:bg-primary-5'
+                            }`}
+                          >
+                            {folder.folderTitle}
+                            {folder.children && folder.children.length > 0 ? (
+                              <button
+                                onClick={() => toggleFolder(folder.folderId)}
+                                className="hover:text-gray-70 mr-1 flex h-4 w-4 cursor-pointer items-center justify-center text-gray-50"
+                                aria-label={`${folder.folderTitle} 폴더 ${expandedFolders.has(folder.folderId) ? '접기' : '펼치기'}`}
                               >
-                                <span className="pr-2">•</span>
-                                <span>{child.folderTitle}</span>
-                              </Link>
-                            ))}
-                          </div>
-                        )}
+                                <FolderToggleIcon
+                                  isCollapsed={
+                                    !expandedFolders.has(folder.folderId)
+                                  }
+                                  folderId={folder.folderId}
+                                />
+                              </button>
+                            ) : (
+                              <div className="mr-1 h-4 w-4" />
+                            )}
+                          </Link>
+                        </div>
+
+                        {/* 폴더 뎁스2 리스트 - 펼쳐져 있을 때만 표시 */}
+                        {folder.children &&
+                          folder.children.length > 0 &&
+                          expandedFolders.has(folder.folderId) && (
+                            <div className="mt-1 ml-5 flex flex-col gap-[2px]">
+                              {folder.children.map((child: any) => (
+                                <Link
+                                  key={child.folderId}
+                                  to={`/shared/${params.pageId}/folder/${child.folderId}`}
+                                  className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
+                                    location.pathname ===
+                                    `/shared/${params.pageId}/folder/${child.folderId}`
+                                      ? 'bg-primary-5 text-primary-50'
+                                      : 'text-gray-70 hover:bg-primary-5'
+                                  }`}
+                                >
+                                  <span className="pr-2">•</span>
+                                  <span>{child.folderTitle}</span>
+                                </Link>
+                              ))}
+                            </div>
+                          )}
                       </div>
                     ))}
                   </div>
