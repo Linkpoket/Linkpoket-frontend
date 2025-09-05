@@ -175,26 +175,14 @@ const SideBar: React.FC<MenubarProps> = ({
                 to="/"
                 className={`group flex items-center gap-[12px] rounded-[8px] p-[8px] text-[14px] font-[600] ${
                   isPersonalActive
-                    ? 'bg-gray-10 text-gray-90'
-                    : 'text-gray-70 hover:bg-gray-5 hover:text-gray-70 hover:rounded-[8px]'
+                    ? 'bg-gray-5 text-gray-90'
+                    : 'text-gray-70 hover:bg-gray-5'
                 }`}
               >
                 {isPersonalActive ? (
-                  <PersonalPageActive
-                    width={20}
-                    height={20}
-                    className={`${
-                      isPersonalActive ? 'text-primary-50' : 'text-gray-70'
-                    }`}
-                  />
+                  <PersonalPageActive width={20} height={20} />
                 ) : (
-                  <PersonalPage
-                    width={20}
-                    height={20}
-                    className={`${
-                      isPersonalActive ? 'text-primary-50' : 'text-gray-70'
-                    }`}
-                  />
+                  <PersonalPage width={20} height={20} />
                 )}
                 개인 페이지
               </Link>
@@ -203,8 +191,8 @@ const SideBar: React.FC<MenubarProps> = ({
                 to="/bookmarks"
                 className={`group flex items-center gap-[12px] rounded-[8px] p-[8px] text-[14px] font-[600] ${
                   isBookmarksActive
-                    ? 'bg-gray-10 text-gray-90'
-                    : 'text-gray-70 hover:bg-gray-5 hover:text-gray-70 hover:rounded-[8px]'
+                    ? 'bg-gray-5 text-gray-90'
+                    : 'text-gray-70 hover:bg-gray-5'
                 }`}
               >
                 {isBookmarksActive ? (
@@ -242,8 +230,8 @@ const SideBar: React.FC<MenubarProps> = ({
                     to={`/shared/${page.pageId}`}
                     className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
                       isSharedPageActive(page.pageId)
-                        ? 'bg-gray-10 text-gray-90'
-                        : 'text-gray-70 hover:bg-gray-5 hover:text-gray-70 hover:rounded-[8px]'
+                        ? 'bg-gray-5 text-gray-90'
+                        : 'text-gray-70 hover:bg-gray-5'
                     }`}
                   >
                     {page.pageTitle}
@@ -283,7 +271,7 @@ const SideBar: React.FC<MenubarProps> = ({
                           className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
                             isFolderActive(folder.folderId)
                               ? 'bg-primary-5 text-primary-50'
-                              : 'text-gray-70 hover:bg-primary-5 hover:text-gray-70 hover:rounded-[8px]'
+                              : 'text-gray-70 hover:bg-primary-5'
                           }`}
                         >
                           {folder.folderTitle}
@@ -298,7 +286,7 @@ const SideBar: React.FC<MenubarProps> = ({
                                 className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
                                   isFolderActive(child.folderId)
                                     ? 'bg-primary-5 text-primary-50'
-                                    : 'text-gray-70 hover:bg-primary-5 hover:text-gray-70 hover:rounded-[8px]'
+                                    : 'text-gray-70 hover:bg-primary-5'
                                 }`}
                               >
                                 <span className="pr-2">•</span>
@@ -343,7 +331,7 @@ const SideBar: React.FC<MenubarProps> = ({
                             location.pathname ===
                             `/shared/${params.pageId}/folder/${folder.folderId}`
                               ? 'bg-primary-5 text-primary-50'
-                              : 'text-gray-70 hover:bg-primary-5 hover:text-gray-70 hover:rounded-[8px]'
+                              : 'text-gray-70 hover:bg-primary-5'
                           }`}
                         >
                           {folder.folderTitle}
@@ -358,7 +346,7 @@ const SideBar: React.FC<MenubarProps> = ({
                                   location.pathname ===
                                   `/shared/${params.pageId}/folder/${child.folderId}`
                                     ? 'bg-primary-5 text-primary-50'
-                                    : 'text-gray-70 hover:bg-primary-5 hover:text-gray-70 hover:rounded-[8px]'
+                                    : 'text-gray-70 hover:bg-primary-5'
                                 }`}
                               >
                                 <span className="pr-2">•</span>
@@ -396,7 +384,9 @@ const SideBar: React.FC<MenubarProps> = ({
         <div className="flex flex-col items-center gap-[8px]">
           <button
             className={`cursor-pointer rounded-[8px] p-3 text-[14px] font-[600] ${
-              isPersonalActive ? 'bg-gray-5' : 'hover:bg-gray-5'
+              isPersonalActive
+                ? 'bg-gray-5 text-gray-90'
+                : 'text-gray-70 hover:bg-gray-5'
             }`}
           >
             <Link to="/">
@@ -409,7 +399,9 @@ const SideBar: React.FC<MenubarProps> = ({
           </button>
           <button
             className={`cursor-pointer rounded-[8px] p-3 text-[14px] font-[600] ${
-              isBookmarksActive ? 'bg-gray-5' : 'hover:bg-gray-5'
+              isBookmarksActive
+                ? 'bg-gray-5 text-gray-90'
+                : 'text-gray-70 hover:bg-gray-5'
             }`}
           >
             <Link to="/bookmarks">
