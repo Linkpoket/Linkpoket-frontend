@@ -1,6 +1,10 @@
+import { lazy } from 'react';
 import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
-import BookmarkPageContentSection from '@/components/page-layout-ui/BookmarkPageContentSection';
+
+const BookmarkPageContentSection = lazy(
+  () => import('@/components/page-layout-ui/BookmarkPageContentSection')
+);
 
 import useFetchFavorite from '@/hooks/queries/useFetchFavorite';
 import { useState } from 'react';
