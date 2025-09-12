@@ -1,48 +1,49 @@
-import { lazy, useEffect, useState } from 'react';
+import { lazy, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+
 import SharedPageHeaderSection from '@/components/page-layout-ui/SharedPageHeaderSection';
+import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 import { useFetchSharedPage } from '@/hooks/queries/useFetchSharedPage';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
-import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
+import { usePageLayout } from '@/hooks/usePageLayout';
+import { usePageData } from '@/hooks/usePageData';
+import { PageLayout } from '@/components/common-ui/PageLayout';
 
 const SharedPageContentSection = lazy(
   () => import('@/components/page-layout-ui/SharedPageContentSection')
 );
 
 export default function SharedPage() {
-  const { pageId } = useParams();
-
+  const { pageId } = useParams<{ pageId: string }>();
   const { data } = useFetchSharedPage(pageId as string);
-  console.log('data', data);
-
-  const refinedData = data?.data;
-  const rootFolderId = refinedData?.rootFolderId;
-  const pageTitle = refinedData?.pageTitle;
-
-  const folderData = refinedData?.directoryDetailResponses ?? [];
-  const linkData = refinedData?.siteDetailResponses ?? [];
-  const folderDataLength = folderData?.length;
-  const linkDataLength = linkData?.length;
-
-  const [sortType, setSortType] = useState<string>('기본순');
 
   const { setPageInfo } = usePageStore();
   const { setParentsFolderId } = useParentsFolderIdStore();
+  const { sortType, handleSort } = usePageLayout();
+
+  const refinedData = data?.data;
+  const folderData = refinedData?.directoryDetailResponses ?? [];
+  const linkData = refinedData?.siteDetailResponses ?? [];
+  const { folderDataLength, linkDataLength } = usePageData(
+    folderData,
+    linkData
+  );
+
+  const rootFolderId = refinedData?.rootFolderId;
+  const pageTitle = refinedData?.pageTitle;
 
   useEffect(() => {
-    setPageInfo(pageId as string);
+    if (!pageId) return;
+
+    setPageInfo(pageId);
 
     if (rootFolderId) {
       setParentsFolderId(rootFolderId);
     }
-  }, [pageId, setPageInfo, setParentsFolderId, rootFolderId]);
-
-  const handleSort = (selectedSortType: string) => {
-    setSortType(selectedSortType);
-  };
+  }, [pageId, rootFolderId, setPageInfo, setParentsFolderId]);
 
   return (
-    <div className="bg-gray-5 flex h-screen min-w-[328px] flex-col px-[64px] py-[56px] xl:px-[102px]">
+    <PageLayout>
       <SharedPageHeaderSection
         pageTitle={pageTitle}
         pageId={pageId as string}
@@ -57,6 +58,6 @@ export default function SharedPage() {
         linkData={linkData}
         sortType={sortType}
       />
-    </div>
+    </PageLayout>
   );
 }
