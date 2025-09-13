@@ -1,19 +1,25 @@
-import { lazy, useEffect, useState } from 'react';
+import { lazy, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 import useFetchFolderDetails from '@/hooks/queries/useFetchFolderDetails';
+import { usePageLayout } from '@/hooks/usePageLayout';
+import { usePageData } from '@/hooks/usePageData';
+import { ErrorState } from '@/components/common-ui/ErrorState';
+import { LoadingState } from '@/components/common-ui/LoadingState';
+import { PageLayout } from '@/components/common-ui/PageLayout';
 
 const SharedPageContentSection = lazy(
   () => import('@/components/page-layout-ui/SharedPageContentSection')
 );
 
 export default function FolderDetailPage() {
-  const [sortType, setSortType] = useState<string>('기본순');
+  const { folderId } = useParams<{ folderId: string }>();
   const { pageId } = usePageStore();
-  const { folderId } = useParams();
   const { setParentsFolderId } = useParentsFolderIdStore();
+  const { sortType, handleSort } = usePageLayout();
 
   useEffect(() => {
     if (folderId) {
@@ -23,45 +29,33 @@ export default function FolderDetailPage() {
 
   const requestParams = {
     pageId,
-    commandType: 'VIEW',
+    commandType: 'VIEW' as const,
     folderId: folderId as string,
-    sortType: 'BASIC',
+    sortType: 'BASIC' as const,
   };
 
   const { data, isLoading, isError } = useFetchFolderDetails(requestParams);
 
   const refinedData = data?.data;
-  const folderName = refinedData?.targetFolderName;
   const folderData = refinedData?.directoryDetailResponses ?? [];
   const linkData = refinedData?.siteDetailResponses ?? [];
-  const folderDataLength = folderData?.length;
-  const linkDataLength = linkData?.length;
+  const { folderDataLength, linkDataLength } = usePageData(
+    folderData,
+    linkData
+  );
 
-  const handleSort = (selectedSortType: string) => {
-    setSortType(selectedSortType);
-  };
+  const folderName = refinedData?.targetFolderName;
 
   if (isError) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="text-center">
-          <p className="mb-2 text-red-500">폴더를 불러올 수 없습니다.</p>
-          <p className="text-sm text-gray-500">잠시 후 다시 시도해주세요.</p>
-        </div>
-      </div>
-    );
+    return <ErrorState message="폴더를 불러올 수 없습니다." />;
   }
 
   if (isLoading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <div>로딩 중...</div>
-      </div>
-    );
+    return <LoadingState />;
   }
 
   return (
-    <div className="bg-gray-5 flex h-screen min-w-[328px] flex-col px-[64px] py-[56px] xl:px-[102px]">
+    <PageLayout>
       <PageHeaderSection pageTitle={folderName} folderId={folderId} />
       <PageControllerSection
         folderDataLength={folderDataLength}
@@ -73,6 +67,6 @@ export default function FolderDetailPage() {
         linkData={linkData}
         sortType={sortType}
       />
-    </div>
+    </PageLayout>
   );
 }

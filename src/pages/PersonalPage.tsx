@@ -1,9 +1,13 @@
-import { lazy, useEffect, useState } from 'react';
-import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
+import { lazy, useEffect } from 'react';
+
 import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
+import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 import { useFetchPersonalPage } from '@/hooks/queries/useFetchPersonalPage';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useUserStore } from '@/stores/userStore';
+import { usePageLayout } from '@/hooks/usePageLayout';
+import { usePageData } from '@/hooks/usePageData';
+import { PageLayout } from '@/components/common-ui/PageLayout';
 
 const PersonalPageContentSection = lazy(
   () => import('@/components/page-layout-ui/PersonalPageContentSection')
@@ -11,30 +15,30 @@ const PersonalPageContentSection = lazy(
 
 export default function PersonalPage() {
   const { data } = useFetchPersonalPage();
-  console.log('useFetchPersonalPage의 응답', data);
-  console.log('pageDetails', data);
   const refinedData = data?.data.pageDetails;
-
-  console.log('refinedData:', refinedData);
-
-  const pageId = refinedData?.pageId;
-  const rootFolderId = refinedData?.rootFolderId;
-  const pageTitle = refinedData?.pageTitle;
-
-  const folderData = refinedData?.directoryDetailResponses ?? [];
-  const linkData = refinedData?.siteDetailResponses ?? [];
-  const folderDataLength = folderData?.length;
-  const linkDataLength = linkData?.length;
-  const memberData = data?.data.member;
-
-  const [sortType, setSortType] = useState<string>('기본순');
 
   const { setUser } = useUserStore();
   const { setPageInfo } = usePageStore();
   const { setParentsFolderId } = useParentsFolderIdStore();
+  const { sortType, handleSort } = usePageLayout();
+
+  const folderData = refinedData?.directoryDetailResponses ?? [];
+  const linkData = refinedData?.siteDetailResponses ?? [];
+  const { folderDataLength, linkDataLength } = usePageData(
+    folderData,
+    linkData
+  );
+
+  const pageId = refinedData?.pageId;
+  const rootFolderId = refinedData?.rootFolderId;
+  const pageTitle = refinedData?.pageTitle;
+  const memberData = data?.data.member;
 
   useEffect(() => {
+    if (!pageId) return;
+
     setPageInfo(pageId);
+
     if (rootFolderId) {
       setParentsFolderId(rootFolderId);
     }
@@ -55,24 +59,15 @@ export default function PersonalPage() {
   }, [
     pageId,
     rootFolderId,
+    memberData,
+    data,
     setPageInfo,
     setParentsFolderId,
     setUser,
-    memberData?.nickName,
-    memberData?.email,
-    memberData?.colorCode,
-    data,
-    memberData,
   ]);
 
-  const handleSort = (selectedSortType: string) => {
-    setSortType(selectedSortType);
-  };
-
-  console.log('folderData:', folderData);
-
   return (
-    <div className="bg-gray-5 flex h-screen min-w-[328px] flex-col px-[64px] py-[56px] xl:px-[102px]">
+    <PageLayout>
       <PageHeaderSection pageTitle={pageTitle} />
       <PageControllerSection
         folderDataLength={folderDataLength}
@@ -84,6 +79,6 @@ export default function PersonalPage() {
         linkData={linkData}
         sortType={sortType}
       />
-    </div>
+    </PageLayout>
   );
 }
