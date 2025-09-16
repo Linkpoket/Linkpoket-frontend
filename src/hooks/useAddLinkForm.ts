@@ -84,6 +84,7 @@ export const useAddLinkForm = (isOpen: boolean, onClose: () => void) => {
         linkUrl,
         linkName,
         directoryId: parentsFolderId ?? '',
+        description: '',
         baseRequest: { pageId, commandType: 'CREATE' },
       },
       { onSettled: () => setIsSubmitting(false) }

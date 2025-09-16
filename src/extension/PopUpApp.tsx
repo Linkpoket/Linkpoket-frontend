@@ -5,7 +5,7 @@ interface PageDetails {
   pageId: string;
   pageTitle: string;
   rootFolderId: string;
-  directoryDetailRespons: Array<{
+  directoryDetailResponses: Array<{
     folderId: string;
     folderName: string;
     isFavorite: boolean;
@@ -97,7 +97,8 @@ const PopUpApp: React.FC = () => {
           },
           linkName,
           linkUrl,
-          directoryId: selectedFolderId,
+          folderId: selectedFolderId,
+          description: '',
         }),
       });
 
@@ -109,7 +110,7 @@ const PopUpApp: React.FC = () => {
       toast.success('저장에 성공했습니다.');
     } catch (error) {
       console.error('링크 생성 실패:', error);
-      toast.error('저장에 실패했습니다. : ' + error);
+      toast.error('저장에 실패했습니다. :' + (error as any).detail);
     }
   };
 
@@ -144,6 +145,7 @@ const PopUpApp: React.FC = () => {
           >
             {linkName}
           </div>
+
           <div
             contentEditable
             className="line-clamp-3 resize-none overflow-hidden text-[13px] font-[400] break-all whitespace-pre-wrap text-[#8E8E8E] placeholder:text-gray-50 empty:before:text-gray-50 empty:before:content-[attr(data-placeholder)] focus:outline-none"
@@ -174,8 +176,8 @@ const PopUpApp: React.FC = () => {
             value={selectedFolderId}
             onChange={(e) => setSelectedFolderId(e.target.value)}
           >
-            <option value={pageDetails?.rootFolderId}>선택 안 함</option>
-            {pageDetails?.directoryDetailRespons?.map((folder) => (
+            <option value={pageDetails?.rootFolderId ?? ''}>선택 안 함</option>
+            {(pageDetails?.directoryDetailResponses || []).map((folder) => (
               <option key={folder.folderId} value={folder.folderId}>
                 {folder.folderName}
               </option>
@@ -211,7 +213,7 @@ const PopUpApp: React.FC = () => {
       </div>
       {/* 버튼 */}
       <button
-        className="mt-6 flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-[#F2F2F2] px-[16px] py-[10px] text-center text-[14px] font-[600]"
+        className="bg-primary-50 text-primary-0 mt-[10px] cursor-pointer items-center justify-center rounded-[8px] px-[16px] py-[10px] text-center text-[16px] font-[600]"
         onClick={handleLogin}
       >
         로그인

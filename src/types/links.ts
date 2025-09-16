@@ -22,6 +22,7 @@ export type CreateLinkData = {
   linkName: string;
   linkUrl: string;
   directoryId: string;
+  description: string;
 };
 
 export type DeleteLinkData = {
