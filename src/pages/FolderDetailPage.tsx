@@ -38,7 +38,7 @@ export default function FolderDetailPage() {
 
   const refinedData = data?.data;
   const folderData = refinedData?.directoryDetailResponses ?? [];
-  const linkData = refinedData?.siteDetailResponses ?? [];
+  const linkData = refinedData?.linkDetailResponses ?? [];
   const { folderDataLength, linkDataLength } = usePageData(
     folderData,
     linkData
