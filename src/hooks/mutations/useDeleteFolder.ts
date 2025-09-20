@@ -92,8 +92,8 @@ export default function useDeleteFolder(
               ...old.data,
               pageDetails: {
                 ...old.data.pageDetails,
-                siteDetailResponses:
-                  old.data.pageDetails.siteDetailResponses.filter(
+                directoryDetailResponses:
+                  old.data.pageDetails.directoryDetailResponses.filter(
                     (f: any) => f.folderId !== variables.folderId
                   ),
               },
@@ -106,6 +106,12 @@ export default function useDeleteFolder(
     },
 
     onSuccess: () => {
+      //사이드바 폴더 리스트 업데이트
+      queryClient.invalidateQueries({
+        queryKey: ['folderList', pageId],
+        refetchType: 'active',
+      });
+
       if (isSharedPage) {
         queryClient.invalidateQueries({
           queryKey: ['sharedPage', pageId],
@@ -120,12 +126,6 @@ export default function useDeleteFolder(
         });
       }
 
-      if (isFolderPage) {
-        queryClient.invalidateQueries({
-          queryKey: ['folderList', pageId],
-          refetchType: 'active',
-        });
-      }
       // 메인 페이지에서만 personalPage 캐시 무효화
       if (isMainPage) {
         queryClient.invalidateQueries({
