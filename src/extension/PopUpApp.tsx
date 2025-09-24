@@ -30,7 +30,10 @@ const PopUpApp: React.FC = () => {
       const title = tab?.title;
 
       if (url) setLinkUrl(url);
-      if (title) setLinkName(title);
+      if (title) {
+        const truncatedTitle = title.length > 29 ? title.slice(0, 29) : title;
+        setLinkName(truncatedTitle);
+      }
     });
   }, []);
 
@@ -133,18 +136,18 @@ const PopUpApp: React.FC = () => {
       {/* 컨텐츠 */}
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
-          <div
-            contentEditable
-            className="bg-gray-5 border-gray-5 text-gray-90 line-clamp-3 rounded-[8px] border p-4 text-[15px] font-semibold break-all whitespace-pre-wrap placeholder:text-gray-50 empty:before:text-gray-50 empty:before:content-[attr(data-placeholder)] focus:outline-none"
-            data-placeholder="링크 이름을 입력해주세요"
-            onInput={(e) => {
-              const content = e.currentTarget.textContent || '';
+          <textarea
+            className="bg-gray-5 border-gray-5 text-gray-90 line-clamp-3 h-[72px] resize-none rounded-[8px] border p-4 text-[15px] font-semibold break-all whitespace-pre-wrap placeholder:text-gray-50 focus:outline-none"
+            placeholder="링크 이름을 입력해주세요"
+            value={linkName}
+            maxLength={29}
+            onChange={(e) => {
+              const content = e.target.value;
               setLinkName(content);
             }}
-            suppressContentEditableWarning={true}
           >
             {linkName}
-          </div>
+          </textarea>
 
           <div
             contentEditable

@@ -110,7 +110,7 @@ export function useCreateFolder(
       return context;
     },
 
-    onError: (error, context: any) => {
+    onError: (error, variables, context: any) => {
       // rollback
       if (context?.sharedPage)
         queryClient.setQueryData(['sharedPage', pageId], context.sharedPage);
@@ -122,9 +122,10 @@ export function useCreateFolder(
       if (context?.personalPage)
         queryClient.setQueryData(['personalPage'], context.personalPage);
       console.error('폴더 생성 에러:', error);
+      options?.onError?.(error, variables, context);
     },
 
-    onSuccess: () => {
+    onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: ['folderList', pageId],
         refetchType: 'active',
@@ -144,6 +145,7 @@ export function useCreateFolder(
           queryKey: ['personalPage'],
           refetchType: 'active',
         });
+      options?.onSuccess?.(data, variables, context);
     },
   });
 }

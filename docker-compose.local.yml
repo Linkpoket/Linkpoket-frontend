@@ -3,16 +3,44 @@ version: '3.8'
 services:
   linkrew-server:
     container_name: linkrew-server
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - ${SPRING_PORT}:${SPRING_PORT}
+    image: parkjihyeon/linkrew-server:latest # ← build 제거하고 image만 사용
     environment:
       SPRING_PROFILE: ${SPRING_PROFILE}
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILE}
       DB_URL: ${DB_URL}
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - ${SPRING_PORT}:${SPRING_PORT}
     depends_on:
       - linkrew-database
+
+  linkrew-database:
+    image: mysql:8.0
+    container_name: linkrew-database
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
+    command:
+      [
+        '--port=${DB_PORT}',
+        '--max_allowed_packet=32M',
+        '--character-set-server=utf8mb4',
+        '--collation-server=utf8mb4_unicode_ci',
+        '--default-authentication-plugin=mysql_native_password',
+      ]
+    expose:
+      - ${DB_PORT}
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    restart: always
+    volumes:
+      - linkrew-database:/var/lib/mysql
+      - ./src/main/resources/db/schema/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+volumes:
+  linkrew-database:

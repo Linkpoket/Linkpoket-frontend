@@ -32,8 +32,8 @@ export default function ModalOptions({
     updateMemberRole.mutate(requestBody);
     setRole(e.target.value as 'VIEWER' | 'EDITOR' | 'HOST' | 'null');
 
-    console.log('권한 변경 데이터', requestBody);
-    console.log('권한변경', pageId, email, e.target.value);
+    // console.log('권한 변경 데이터', requestBody);
+    // console.log('권한변경', pageId, email, e.target.value);
   };
 
   return (

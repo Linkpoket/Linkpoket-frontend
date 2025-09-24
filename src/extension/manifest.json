@@ -11,9 +11,8 @@
       "128": "LinkrewForExtension.png"
     }
   },
-  "permissions": ["storage", "scripting"],
+  "permissions": ["storage"],
   "host_permissions": ["<all_urls>"],
-
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
@@ -23,5 +22,8 @@
   ],
   "background": {
     "service_worker": "background.js"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://api.linkrew.com;"
   }
 }

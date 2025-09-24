@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 import { ContactDetail } from './ContactDetail';
 import { ManageSharedPageModalSkeleton } from '../skeleton/ManageSharedPageModalSkeleton';
 import { DeleteModalSkeleton } from '../skeleton/DeleteModalSkeleton';
+import { useMobile } from '@/hooks/useMobile';
 
 const DeleteSharedPageModal = lazy(
   () => import('../modal/page/DeleteSharedPageModal')
@@ -45,6 +46,7 @@ export default function HeaderMenu({
     useState(false);
 
   const modalRef = useRef<HTMLDivElement>(null);
+  const isMobile = useMobile();
 
   useClickOutside(modalRef, () => {
     // 모달이 열려있지 않을 때만 메뉴 닫기
@@ -99,7 +101,13 @@ export default function HeaderMenu({
               </button>
               {isHost && (
                 <button
-                  onClick={() => setIsManageSharedPageModalOpen(true)}
+                  onClick={() =>
+                    !isMobile
+                      ? setIsManageSharedPageModalOpen(true)
+                      : toast.error(
+                          '현재 모바일에서 공유 페이지 관리 기능은 개선중에 있습니다.'
+                        )
+                  }
                   className="hover:bg-gray-10 active:bg-gray-5 text-gray-90 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[500]"
                 >
                   <SharedPage width={18} height={18} />

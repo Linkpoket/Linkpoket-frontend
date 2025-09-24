@@ -19,7 +19,6 @@ export default function useUpdateLinkBookmark({
   const location = useLocation();
   const locationSplit = location.pathname.split('/');
   const isMainPage = location.pathname === '/';
-  const isBookmarksPage = location.pathname === '/bookmarks';
   const isSharedPage = locationSplit.includes('shared');
   const isFolderPage = locationSplit.includes('folder');
 
@@ -28,12 +27,10 @@ export default function useUpdateLinkBookmark({
     mutationFn: updateLinkBookmark,
 
     onSuccess: (response, variables, context) => {
-      if (isBookmarksPage) {
-        queryClient.invalidateQueries({
-          queryKey: ['favorite'],
-          refetchType: 'active',
-        });
-      }
+      queryClient.invalidateQueries({
+        queryKey: ['favorite'],
+        refetchType: 'active',
+      });
       queryClient.invalidateQueries({
         queryKey: ['bookmark', linkId],
         refetchType: 'active',

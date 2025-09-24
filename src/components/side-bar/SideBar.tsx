@@ -133,8 +133,8 @@ const SideBar: React.FC<MenubarProps> = ({
     onSuccess: () => {
       toast.success('폴더 생성 완료');
     },
-    onError: () => {
-      toast.error('폴더 생성 실패');
+    onError: (error: any) => {
+      toast.error((error as any).response.data.detail);
     },
   });
 

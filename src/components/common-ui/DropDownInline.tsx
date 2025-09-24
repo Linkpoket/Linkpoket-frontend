@@ -1,4 +1,4 @@
-import { lazy, useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import Transfer from '@/assets/common-ui-assets/Transfer.svg?react';
 import Copy from '@/assets/common-ui-assets/Copy.svg?react';
 import Delete from '@/assets/common-ui-assets/Delete.svg?react';
@@ -7,6 +7,7 @@ import { useModalStore } from '@/stores/modalStore';
 import { useClickOutsideMultiple } from '@/hooks/useClickOutsideMultiple';
 import { useTransferFolder } from '@/hooks/mutations/useTransferFolder';
 import toast from 'react-hot-toast';
+import { DeleteModalSkeleton } from '../skeleton/DeleteModalSkeleton';
 
 const FolderTransferModal = lazy(
   () => import('../modal/folder/FolderTransferModal')
@@ -88,7 +89,7 @@ const DropDownInline = ({
 
   const handleCopyClick = () => {
     if (type === 'folder') {
-      console.log('복사');
+      // console.log('복사');
     } else {
       navigator.clipboard
         .writeText(link)
@@ -155,13 +156,15 @@ const DropDownInline = ({
           </button>
 
           {isFolderDeleteOpen && (
-            <DeleteFolderModal
-              ref={folderModalRef}
-              isOpen={isFolderDeleteOpen}
-              onClose={() => setIsFolderDeleteOpen(false)}
-              folderId={id}
-              pageId={pageId}
-            />
+            <Suspense fallback={<DeleteModalSkeleton />}>
+              <DeleteFolderModal
+                ref={folderModalRef}
+                isOpen={isFolderDeleteOpen}
+                onClose={() => setIsFolderDeleteOpen(false)}
+                folderId={id}
+                pageId={pageId}
+              />
+            </Suspense>
           )}
         </div>
       )}
@@ -198,13 +201,15 @@ const DropDownInline = ({
           </button>
 
           {isLinkDeleteOpen && (
-            <DeleteLinkModal
-              ref={linkModalRef}
-              isOpen={isLinkDeleteOpen}
-              onClose={() => setIsLinkDeleteOpen(false)}
-              linkId={id}
-              pageId={pageId}
-            />
+            <Suspense fallback={<DeleteModalSkeleton />}>
+              <DeleteLinkModal
+                ref={linkModalRef}
+                isOpen={isLinkDeleteOpen}
+                onClose={() => setIsLinkDeleteOpen(false)}
+                linkId={id}
+                pageId={pageId}
+              />
+            </Suspense>
           )}
         </div>
       )}

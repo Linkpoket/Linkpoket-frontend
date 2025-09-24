@@ -83,9 +83,6 @@ const InviteUserModal = ({ isOpen, onClose, pageId }: InviteUserModalProps) => {
     updateSharedPageInvitation.mutate(requestBody);
 
     setButtonStatus('완료');
-    console.log('초대 요청 데이터', requestBody);
-    console.log('초대 완료');
-    console.log(pageId, email, role);
   };
 
   return (

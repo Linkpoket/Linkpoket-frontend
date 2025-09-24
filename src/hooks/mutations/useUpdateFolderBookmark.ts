@@ -13,7 +13,6 @@ export default function useUpdateFolderBookmark({
   const location = useLocation();
   const locationSplit = location.pathname.split('/');
   const isMainPage = location.pathname === '/';
-  const isBookmarksPage = location.pathname === '/bookmarks';
   const isSharedPage = locationSplit.includes('shared');
   const isFolderPage = locationSplit.includes('folder');
 
@@ -21,18 +20,14 @@ export default function useUpdateFolderBookmark({
     mutationFn: () => updateFolderBookmark(folderId),
 
     onSuccess: () => {
-      if (isBookmarksPage) {
-        queryClient.invalidateQueries({
-          queryKey: ['bookmark', folderId],
-          refetchType: 'active',
-        });
-      }
-      if (isBookmarksPage) {
-        queryClient.invalidateQueries({
-          queryKey: ['favorite'],
-          refetchType: 'active',
-        });
-      }
+      queryClient.invalidateQueries({
+        queryKey: ['favorite'],
+        refetchType: 'active',
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['bookmark', folderId],
+        refetchType: 'active',
+      });
       if (isSharedPage) {
         queryClient.invalidateQueries({
           queryKey: ['sharedPage', pageId],

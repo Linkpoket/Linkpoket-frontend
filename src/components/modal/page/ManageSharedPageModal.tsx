@@ -61,12 +61,6 @@ const ManageSharedPageModal = ({
     }
   };
 
-  console.log('페이지 대쉬보드 정보', sharedPageDashboardQuery.data);
-  console.log(
-    '페이지 대쉬보드 정보',
-    sharedPageDashboardQuery.data?.data.pageType
-  );
-
   const MEMBERS: {
     memberId: string;
     nickName: string;

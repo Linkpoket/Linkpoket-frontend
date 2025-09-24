@@ -22,7 +22,7 @@ export function useAuth() {
 
       const currentTime = Date.now() / 1000;
       if (decoded.exp < currentTime) {
-        console.log('토큰이 만료되었습니다.');
+        // console.log('토큰이 만료되었습니다.');
         return false;
       }
 

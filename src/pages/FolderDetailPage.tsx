@@ -37,7 +37,7 @@ export default function FolderDetailPage() {
   const { data, isLoading, isError } = useFetchFolderDetails(requestParams);
 
   const refinedData = data?.data;
-  const folderData = refinedData?.directoryDetailResponses ?? [];
+  const folderData = refinedData?.folderDetailResponses ?? [];
   const linkData = refinedData?.linkDetailResponses ?? [];
   const { folderDataLength, linkDataLength } = usePageData(
     folderData,

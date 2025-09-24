@@ -15,6 +15,7 @@ export default function useDeleteFolder(
   const location = useLocation();
   const locationSplit = location.pathname.split('/');
   const isMainPage = location.pathname === '/';
+  const isBookmarksPage = location.pathname === '/bookmarks';
   const isSharedPage = locationSplit.includes('shared');
   const isFolderPage = locationSplit.includes('folder');
 
@@ -34,6 +35,8 @@ export default function useDeleteFolder(
         });
       if (isMainPage)
         await queryClient.cancelQueries({ queryKey: ['personalPage'] });
+      if (isBookmarksPage)
+        await queryClient.cancelQueries({ queryKey: ['favorite'] });
 
       // 기존 데이터 저장
       if (isSharedPage) {
@@ -47,6 +50,9 @@ export default function useDeleteFolder(
       }
       if (isMainPage) {
         context.personalPage = queryClient.getQueryData(['personalPage']);
+      }
+      if (isBookmarksPage) {
+        context.favorite = queryClient.getQueryData(['favorite']);
       }
 
       //임시 UI 업데이트
@@ -92,11 +98,27 @@ export default function useDeleteFolder(
               ...old.data,
               pageDetails: {
                 ...old.data.pageDetails,
-                siteDetailResponses:
-                  old.data.pageDetails.siteDetailResponses.filter(
+                directoryDetailResponses:
+                  old.data.pageDetails.directoryDetailResponses.filter(
                     (f: any) => f.folderId !== variables.folderId
                   ),
               },
+            },
+          };
+        });
+      }
+
+      if (isBookmarksPage) {
+        queryClient.setQueryData(['favorite'], (old: any) => {
+          if (!old) return old;
+          return {
+            ...old,
+            data: {
+              ...old.data,
+              directorySimpleResponses:
+                old.data.directorySimpleResponses.filter(
+                  (f: any) => f.folderId !== variables.folderId
+                ),
             },
           };
         });
@@ -106,6 +128,12 @@ export default function useDeleteFolder(
     },
 
     onSuccess: () => {
+      //사이드바 폴더 리스트 업데이트
+      queryClient.invalidateQueries({
+        queryKey: ['folderList', pageId],
+        refetchType: 'active',
+      });
+
       if (isSharedPage) {
         queryClient.invalidateQueries({
           queryKey: ['sharedPage', pageId],
@@ -120,14 +148,31 @@ export default function useDeleteFolder(
         });
       }
 
-      if (isFolderPage) {
+      // 메인 페이지에서만 personalPage 캐시 무효화
+      if (isMainPage) {
+        queryClient.invalidateQueries({
+          queryKey: ['personalPage'],
+          refetchType: 'active',
+        });
+      }
+
+      if (isBookmarksPage) {
+        queryClient.invalidateQueries({
+          queryKey: ['favorite'],
+          refetchType: 'active',
+        });
         queryClient.invalidateQueries({
           queryKey: ['folderList', pageId],
           refetchType: 'active',
         });
-      }
-      // 메인 페이지에서만 personalPage 캐시 무효화
-      if (isMainPage) {
+        queryClient.invalidateQueries({
+          queryKey: ['sharedPage', pageId],
+          refetchType: 'active',
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['folderDetails', pageId],
+          refetchType: 'active',
+        });
         queryClient.invalidateQueries({
           queryKey: ['personalPage'],
           refetchType: 'active',

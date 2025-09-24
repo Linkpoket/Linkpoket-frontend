@@ -1,12 +1,14 @@
+import { Suspense, lazy, useState } from 'react';
 import InactiveBookmarkIcon from '@/assets/common-ui-assets/InactiveBookmark.svg?react';
 import ActiveBookmarkIcon from '@/assets/common-ui-assets/ActiveBookmark.svg?react';
 import CardMenu from '@/assets/widget-ui-assets/CardMenu.svg?react';
 import { LinkDetail } from '@/types/links';
 import useUpdateLinkBookmark from '@/hooks/mutations/useUpdateLinkBookmark';
 import { usePageStore } from '@/stores/pageStore';
-import { useState } from 'react';
-import DropDownInline from './DropDownInline';
 import defaultImage from '@assets/common-ui-assets/defaultImage.png';
+import { DropDownInlineSkeleton } from '../skeleton/DropdownInlineSkeleton';
+
+const DropDownInline = lazy(() => import('./DropDownInline'));
 
 export default function LinkCard({
   isBookmark,
@@ -107,7 +109,7 @@ export default function LinkCard({
               {isBookmark ? <ActiveBookmarkIcon /> : <InactiveBookmarkIcon />}
             </button>
 
-            <div className="relative">
+            <div className="relative hidden md:block">
               <button
                 data-card-button
                 className="cursor-pointer p-1"
@@ -118,14 +120,16 @@ export default function LinkCard({
               </button>
 
               {isDropDownInline && (
-                <DropDownInline
-                  id={item.linkId}
-                  type="link"
-                  initialTitle={item.linkName}
-                  initialLink={item.linkUrl}
-                  isDropDownInline={isDropDownInline}
-                  setIsDropDownInline={setIsDropDownInline}
-                />
+                <Suspense fallback={<DropDownInlineSkeleton />}>
+                  <DropDownInline
+                    id={item.linkId}
+                    type="link"
+                    initialTitle={item.linkName}
+                    initialLink={item.linkUrl}
+                    isDropDownInline={isDropDownInline}
+                    setIsDropDownInline={setIsDropDownInline}
+                  />
+                </Suspense>
               )}
             </div>
           </div>
