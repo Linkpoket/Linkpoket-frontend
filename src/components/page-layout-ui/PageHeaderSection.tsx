@@ -42,8 +42,7 @@ export default function PageHeaderSection({
     };
 
     updateFolder(updateData, {
-      onSuccess: (response) => {
-        // console.log('폴더 업데이트 성공 응답:', response);
+      onSuccess: () => {
         lastUpdateRef.current = { title };
       },
       onError: (error) => {
@@ -53,7 +52,6 @@ export default function PageHeaderSection({
   };
 
   const handleDebouncedUpdate = (data: FolderUpdateData) => {
-    // console.log('디바운스된 업데이트:', data);
     lastUpdateRef.current = { title };
   };
 
@@ -62,9 +60,7 @@ export default function PageHeaderSection({
     500
   );
 
-  // 초기 마운트 시에만 props로 상태 초기화
   useEffect(() => {
-    // console.log('초기 마운트 상태 초기화:', { pageTitle });
     setTitle(pageTitle ?? '');
     const newState = {
       title: pageTitle ?? '',
@@ -77,10 +73,6 @@ export default function PageHeaderSection({
     if (currentPath === '/' || currentPath === '/bookmarks') {
       return;
     }
-
-    // console.log('포커스 아웃:', {
-    //   current: { title },
-    // });
 
     const currentState = { title };
     lastUpdateRef.current = currentState;
@@ -115,7 +107,7 @@ export default function PageHeaderSection({
           }`}
         />
       </div>
-      <div>
+      <div className="hidden md:block">
         {isLinkButtonVisible && (
           <Button
             size="sm"

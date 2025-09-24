@@ -29,11 +29,8 @@ export default function SharedPageHeaderSection({
       pageTitle: title,
     };
 
-    // console.log('타이틀업데이트', updateSharedPageTitleData);
-
     updateSharedPageTitle(updateSharedPageTitleData, {
       onSuccess: (response) => {
-        // console.log('타이틀 성공 응답:', response);
         lastUpdateTitle.current = { title };
       },
       onError: (error) => {
@@ -48,7 +45,6 @@ export default function SharedPageHeaderSection({
 
   const debouncedUpdate = useDebounce(handleDebouncedUpdate, 500);
 
-  // 초기 마운트 시에만 props로 상태 초기화
   useEffect(() => {
     setTitle(pageTitle ?? '');
     const newTitleState = {
@@ -78,11 +74,9 @@ export default function SharedPageHeaderSection({
             }
           }}
           onFocus={() => {
-            // console.log('title input focus');
             setIsFocused('title');
           }}
           onBlur={(e) => {
-            // console.log('title input blur', e.target.value);
             setIsFocused(null);
             handleBlur();
           }}
@@ -91,7 +85,7 @@ export default function SharedPageHeaderSection({
           }`}
         />
       </div>
-      <div>
+      <div className="hidden md:block">
         <Button size="sm" className="whitespace-nowrap" onClick={openLinkModal}>
           + 링크추가
         </Button>
