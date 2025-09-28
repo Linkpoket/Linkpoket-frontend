@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Modal from '@/components/common-ui/Modal';
 import { Button } from '@/components/common-ui/button';
 import ToggleButton from '@/components/common-ui/ToggleButton';
@@ -8,6 +8,9 @@ import useFetchSharedPageDashboard from '@/hooks/queries/useFetchSharedPageDashb
 import InviteUserModal from './InviteUserModal';
 import ModalOptions from '@/components/common-ui/ModalOptions';
 import SiteIcon from '@/assets/common-ui-assets/SiteIcon.svg?react';
+import useUpdateSharedPageVisibility from '@/hooks/mutations/useUpdateSharedPageVisibility';
+import { useFetchSharedPage } from '@/hooks/queries/useFetchSharedPage';
+import { toast } from 'react-hot-toast';
 
 interface ManageSharedPageModalProps {
   isOpen: boolean;
@@ -18,9 +21,6 @@ const ManageSharedPageModal = ({
   isOpen,
   onClose,
 }: ManageSharedPageModalProps) => {
-  const [isPublic, setIsPublic] = useState<'RESTRICTED' | 'PUBLIC'>(
-    'RESTRICTED'
-  );
   const [search, setSearch] = useState('');
   const [isOpenInviteUserModal, setIsOpenInviteUserModal] = useState(false);
 
@@ -39,25 +39,40 @@ const ManageSharedPageModal = ({
     pageId: safePageId,
   });
 
-  // API 데이터가 로드된 후 state 업데이트
-  useEffect(() => {
-    if (sharedPageDashboardQuery.data?.data.pageType) {
-      // pageType에 따라 isPublic 설정
-      setIsPublic(
-        sharedPageDashboardQuery.data.data.pageType === 'PUBLIC'
-          ? 'PUBLIC'
-          : 'RESTRICTED'
-      );
+  //페이지 공개 여부 업데이트
+  const updateSharedPageVisibility = useUpdateSharedPageVisibility(safePageId);
+  const { data: sharedPageData } = useFetchSharedPage(safePageId);
+  const isPublic = sharedPageData.data.pageVisibility;
+
+  const handleUpdateSharedPageVisibility = () => {
+    if (isPublic === 'PUBLIC') {
+      updateSharedPageVisibility.mutate({
+        baseRequest: {
+          pageId: safePageId,
+          commandType: 'EDIT',
+        },
+        pageVisibility: 'RESTRICTED',
+      });
+    } else {
+      updateSharedPageVisibility.mutate({
+        baseRequest: {
+          pageId: safePageId,
+          commandType: 'EDIT',
+        },
+        pageVisibility: 'PUBLIC',
+      });
     }
-  }, [sharedPageDashboardQuery.data]);
+  };
+
+  const publicPathName =
+    'http://linkrew.com/api/public/pages?pageId=' + safePageId;
 
   // 링크 복사 함수
-  const handleCopyLink = async () => {
-    try {
-      const currentUrl = window.location.href;
-      await navigator.clipboard.writeText(`${currentUrl}`);
-    } catch (error) {
-      console.error('링크 복사 실패:', error);
+  const handleCopyLink = () => {
+    if (isPublic === 'PUBLIC') {
+      navigator.clipboard.writeText(publicPathName);
+    } else {
+      navigator.clipboard.writeText(pathname);
     }
   };
 
@@ -103,9 +118,10 @@ const ManageSharedPageModal = ({
           </span>
           <ToggleButton
             checked={isPublic === 'PUBLIC'}
-            onClick={() =>
-              setIsPublic((v) => (v === 'PUBLIC' ? 'RESTRICTED' : 'PUBLIC'))
-            }
+            onClick={() => {
+              handleUpdateSharedPageVisibility();
+              toast.success('링크 복사 주소가 변경되었습니다');
+            }}
           />
         </div>
         <div className="text-gray-70 mt-[7px] mb-4 text-[16px] font-[400]">
@@ -117,7 +133,7 @@ const ManageSharedPageModal = ({
             <Input
               containerClassName="flex-1 min-w-0"
               className="w-full"
-              value={pathname}
+              value={isPublic === 'PUBLIC' ? publicPathName : pathname}
               readOnly
             />
             <Button
