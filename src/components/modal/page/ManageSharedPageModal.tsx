@@ -10,6 +10,7 @@ import ModalOptions from '@/components/common-ui/ModalOptions';
 import SiteIcon from '@/assets/common-ui-assets/SiteIcon.svg?react';
 import useUpdateSharedPageVisibility from '@/hooks/mutations/useUpdateSharedPageVisibility';
 import { useFetchSharedPage } from '@/hooks/queries/useFetchSharedPage';
+import { toast } from 'react-hot-toast';
 
 interface ManageSharedPageModalProps {
   isOpen: boolean;
@@ -38,7 +39,7 @@ const ManageSharedPageModal = ({
     pageId: safePageId,
   });
 
-  //페이지 공개 여부 업데이트7
+  //페이지 공개 여부 업데이트
   const updateSharedPageVisibility = useUpdateSharedPageVisibility(safePageId);
   const { data: sharedPageData } = useFetchSharedPage(safePageId);
   const isPublic = sharedPageData.data.pageVisibility;
@@ -62,6 +63,9 @@ const ManageSharedPageModal = ({
       });
     }
   };
+
+  const publicPathName =
+    'http://linkrew.com/api/public/pages?pageId=' + safePageId;
 
   // 링크 복사 함수
   const handleCopyLink = async () => {
@@ -117,6 +121,7 @@ const ManageSharedPageModal = ({
             checked={isPublic === 'PUBLIC'}
             onClick={() => {
               handleUpdateSharedPageVisibility();
+              toast.success('링크 복사 주소가 변경되었습니다');
             }}
           />
         </div>
@@ -129,7 +134,7 @@ const ManageSharedPageModal = ({
             <Input
               containerClassName="flex-1 min-w-0"
               className="w-full"
-              value={pathname}
+              value={isPublic === 'PUBLIC' ? publicPathName : pathname}
               readOnly
             />
             <Button
