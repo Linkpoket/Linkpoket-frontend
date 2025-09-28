@@ -3,9 +3,27 @@ import { defineConfig } from 'vite';
 import svgr from 'vite-plugin-svgr';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
+import imagemin from 'vite-plugin-imagemin';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
-  plugins: [react(), tailwindcss(), svgr()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    svgr(),
+    imagemin({
+      gifsicle: { optimizationLevel: 7 },
+      mozjpeg: { quality: 80 },
+      pngquant: { quality: [0.8, 0.9] },
+      webp: { quality: 80 },
+      svgo: false,
+    }),
+    visualizer({
+      filename: './dist/stats.html',
+      gzipSize: true,
+      brotliSize: true,
+    }),
+  ],
   build: {
     rollupOptions: {
       output: {
@@ -24,11 +42,37 @@ export default defineConfig({
           return 'assets/[name].[hash][extname]';
         },
         manualChunks: {
-          vendor: [
+          'react-vendor': [
             'react',
             'react-dom',
             'react-router-dom',
+            'react-error-boundary',
+          ],
+
+          'data-vendor': [
             '@tanstack/react-query',
+            'zustand',
+            'axios',
+            'react-hook-form',
+          ],
+          'dnd-vendor': [
+            '@dnd-kit/core',
+            '@dnd-kit/sortable',
+            '@dnd-kit/utilities',
+          ],
+          'utils-vendor': [
+            'react-hot-toast',
+            'jwt-decode',
+            'react-ga4',
+            'uuid',
+            'zod',
+            '@hookform/resolvers',
+          ],
+          'ui-vendor': [
+            'class-variance-authority',
+            'clsx',
+            'tailwind-merge',
+            'tailwindcss-animate',
           ],
         },
       },
