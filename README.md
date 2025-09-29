@@ -1,13 +1,18 @@
-# Linkrew
+# 🔗 Linkrew
 
-## 링크
+[🍀 Linkrew 페이지](https://linkrew.com)
 
-- **배포 URL**: https://linkrew.com/
-- **Organization**: https://github.com/LinkrewProject
+## 서비스 소개
 
-**소개**
+<img src="./src/assets/common-ui-assets/FooterLogo.svg" width="6500px">
+<p style="text-align:center; with:100%; font-weight:bolder"> 
+✨ Linkrew는 나만의 링크부터 팀의 자료까지, 한 곳에서 쉽고 함께 관리하기 위한 서비스 입니다.</p>
 
-- Linkrew는 흩어진 링크를 폴더별로 정리하고, 팀원들과 공유할 수 있는 웹 서비스입니다.
+**기획배경**
+
+- 기존에 개인 노트북이나 데스크탑에서 즐겨찾기를 설정하면, 다른 OS나 기기에서 접근이 어려운 문제
+- 또한 , 프로젝트나 스터디 등 협업 상황에서 링크를 편리하게 모아 관리하고 공유할 수 있는 적절한 플랫폼의 부재
+- 노션과 같은 협업 툴이 존재하지만, URL을 공유 시 사용하기 불편하다는 단점
 
 **주요 기능과 목적**
 
@@ -16,37 +21,18 @@
 - 북마크 기능으로 중요한 링크를 빠르게 접근할 수 있습니다.
 - 실시간 알림을 통해 페이지 공유 요청 및 변경사항을 즉시 확인할 수 있습니다.
 
-## 기술 스택
+### 🔍 Linkrew 미리 보기
 
-- React 19
-- TypeScript
-- Vite
-- TailwindCSS
-- Zustand (전역 상태 관리)
-- TanStack Query (서버 상태 관리)
-- Axios (HTTP 클라이언트)
+## 프로젝트 소개
 
-## 주요 구현 사항
+**[🔧 기술 스택]**
 
-**[성능 최적화]**
+![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 
-- React lazy/Suspense를 활용한 코드 분할 (초기 번들 21.5% 감소)
-- TanStack Query 캐싱 전략으로 API 요청 65% 감소
-- SSE 기반 실시간 알림으로 폴링 대비 API 요청 99% 감소
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-**[상태 관리]**
+![React](https://img.shields.io/badge/zustand-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)![React Query](https://img.shields.io/badge/-React%20Query-FF4154?style=for-the-badge&logo=react%20query&logoColor=white)
 
-- Zustand로 8개 도메인별 전역 상태 관리
-- Redux 대비 70% 적은 코드량, 번들 크기 91% 감소
+![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white) ![Prettier](https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=prettier&logoColor=white)
 
-**[인증 및 보안]**
-
-- 구글 OAuth 2.0 소셜 로그인
-- JWT 기반 인증 (AccessToken + RefreshToken)
-- HttpOnly Cookie와 LocalStorage 하이브리드 보안 전략
-
-**[사용자 경험]**
-
-- Drag & Drop으로 폴더/링크 순서 변경
-- Optimistic UI로 빠른 응답성 제공
-- Skeleton UI로 자연스러운 로딩 경험
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
