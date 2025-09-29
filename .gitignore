@@ -13,10 +13,6 @@
 # testing
 /coverage
 
-# shell scripts
-deploy.sh
-build.sh
-
 # production
 /build
 dist/
