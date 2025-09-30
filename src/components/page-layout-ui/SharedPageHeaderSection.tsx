@@ -16,7 +16,6 @@ export default function SharedPageHeaderSection({
   pageId,
 }: PageHeaderSectionProps) {
   const [title, setTitle] = useState(pageTitle ?? '');
-  const [isFocused, setIsFocused] = useState<'title' | null>(null);
   const lastUpdateTitle = useRef({ title });
   const { openLinkModal } = useModalStore();
   const { mutate: updateSharedPageTitle } = useUpdateSharedPageTitle(pageId);
@@ -30,7 +29,7 @@ export default function SharedPageHeaderSection({
     };
 
     updateSharedPageTitle(updateSharedPageTitleData, {
-      onSuccess: (response) => {
+      onSuccess: () => {
         lastUpdateTitle.current = { title };
       },
       onError: (error) => {
@@ -73,16 +72,10 @@ export default function SharedPageHeaderSection({
               debouncedUpdate({ title: value });
             }
           }}
-          onFocus={() => {
-            setIsFocused('title');
-          }}
-          onBlur={(e) => {
-            setIsFocused(null);
+          onBlur={() => {
             handleBlur();
           }}
-          className={`inline-block text-[22px] font-bold outline-none ${
-            isFocused === 'title' ? 'text-gray-100' : 'text-gray-90'
-          }`}
+          className={`outline-nonetext-gray-90' } inline-block text-[22px] font-bold`}
         />
       </div>
       <div className="hidden md:block">

@@ -51,7 +51,7 @@ export default function PageHeaderSection({
     });
   };
 
-  const handleDebouncedUpdate = (data: FolderUpdateData) => {
+  const handleDebouncedUpdate = () => {
     lastUpdateRef.current = { title };
   };
 
