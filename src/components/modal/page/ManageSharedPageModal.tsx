@@ -70,7 +70,8 @@ const ManageSharedPageModal = ({
   // 링크 복사 함수
   const handleCopyLink = () => {
     if (isPublic === 'PUBLIC') {
-      navigator.clipboard.writeText(publicPathName);
+      // navigator.clipboard.writeText(publicPathName);
+      toast.success('공개 페이지를 준비중입니다..');
     } else {
       navigator.clipboard.writeText(pathname);
     }
