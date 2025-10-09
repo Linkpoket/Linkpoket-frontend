@@ -102,7 +102,7 @@ const ManageSharedPageModal = ({
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      className="p-6 md:max-w-[562px]"
+      className="w-[calc(100vw-32px)] max-w-[562px] p-4 md:w-auto md:p-6"
     >
       <Modal.Header
         showCloseButton
@@ -129,8 +129,8 @@ const ManageSharedPageModal = ({
           페이지를 공개하면, 링크를 가진 모든 사용자가 볼 수 있습니다.
         </div>
 
-        <div className="mt-4 flex gap-4">
-          <div className="flex w-full items-center gap-4">
+        <div className="mt-4 flex flex-col gap-4 sm:flex-row">
+          <div className="flex w-full flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:gap-4">
             <Input
               containerClassName="flex-1 min-w-0"
               className="w-full"
@@ -141,7 +141,7 @@ const ManageSharedPageModal = ({
             <Button
               size="lg"
               variant="ghost"
-              className="flex gap-2"
+              className="flex w-full gap-2 sm:w-auto"
               onClick={handleCopyLink}
             >
               <SiteIcon />
@@ -155,7 +155,7 @@ const ManageSharedPageModal = ({
         <div className="text-gray-90 mb-2 text-[18px] font-bold">
           공유 페이지 멤버
         </div>
-        <div className="mt-[7px] flex items-center gap-4">
+        <div className="mt-[7px] flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:gap-4">
           <Input
             containerClassName="flex-1 min-w-0"
             className="w-full"
@@ -166,6 +166,7 @@ const ManageSharedPageModal = ({
           <Button
             size="lg"
             variant="primary"
+            className="w-full sm:w-auto"
             onClick={() => setIsOpenInviteUserModal(true)}
           >
             멤버 초대
@@ -183,10 +184,10 @@ const ManageSharedPageModal = ({
           {filteredMembers.map((m) => (
             <div
               key={m.memberId}
-              className="border-gray-10 flex items-center gap-3 border-b py-2 last:border-b-0"
+              className="border-gray-10 flex items-center gap-2 border-b py-2 last:border-b-0 sm:gap-3"
             >
               <div
-                className="text-primary-0 flex h-[32px] w-[32px] items-center justify-center rounded-full px-[16px] py-[10px] text-[22px] font-[500]"
+                className="text-primary-0 flex h-[28px] w-[28px] items-center justify-center rounded-full px-[12px] py-[8px] text-[18px] font-[500] sm:h-[32px] sm:w-[32px] sm:px-[16px] sm:py-[10px] sm:text-[22px]"
                 style={{ backgroundColor: m.colorCode }}
               >
                 {m.nickName[0]}
@@ -208,7 +209,7 @@ const ManageSharedPageModal = ({
                 ) : (
                   <Button
                     variant="ghost"
-                    className="bg-gray-20 h-[42px] w-[87px] text-[14px] text-gray-50"
+                    className="bg-gray-20 h-[36px] w-[80px] text-[12px] text-gray-50 sm:h-[42px] sm:w-[87px] sm:text-[14px]"
                   >
                     수락 대기
                   </Button>

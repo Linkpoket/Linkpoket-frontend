@@ -101,13 +101,7 @@ export default function HeaderMenu({
               </button>
               {isHost && (
                 <button
-                  onClick={() =>
-                    !isMobile
-                      ? setIsManageSharedPageModalOpen(true)
-                      : toast.error(
-                          '현재 모바일에서 공유 페이지 관리 기능은 개선중에 있습니다.'
-                        )
-                  }
+                  onClick={() => setIsManageSharedPageModalOpen(true)}
                   className="hover:bg-gray-10 active:bg-gray-5 text-gray-90 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[500]"
                 >
                   <SharedPage width={18} height={18} />
