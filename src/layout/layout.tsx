@@ -5,7 +5,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { useUserStore } from '@/stores/userStore';
 import { useProfileModalStore } from '@/stores/profileModalStore';
 import { useNotificationSSE } from '@/hooks/useNotificationSSE';
-import useRouteChangeTracker from '@/hooks/useRouteChangeTracker';
+// import useRouteChangeTracker from '@/hooks/useRouteChangeTracker'; // GA4 임시 비활성화
 import { ProfileSettingsModalSkeleton } from '@/components/skeleton/ProfileSettingModal';
 import { DeleteModalSkeleton } from '@/components/skeleton/DeleteModalSkeleton';
 
@@ -18,7 +18,7 @@ const WithdrawAccountModal = lazy(
 );
 
 export default function Layout() {
-  useRouteChangeTracker();
+  // useRouteChangeTracker(); // GA4 임시 비활성화
   const location = useLocation();
   const path = location.pathname;
   const [showSidebar, setShowSidebar] = useState(true);

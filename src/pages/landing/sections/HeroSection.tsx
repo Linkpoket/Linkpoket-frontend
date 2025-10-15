@@ -2,6 +2,7 @@ import { Button } from '@/components/common-ui/button';
 import 히어로이미지 from '@/assets/common-ui-assets/히어로 이미지.webp';
 import { useMobile } from '@/hooks/useMobile';
 import { CHROME_EXTENSION_URL } from '@/constants/urls';
+import toast from 'react-hot-toast';
 
 const HeroSection: React.FC = () => {
   const isMobile = useMobile();
@@ -19,7 +20,6 @@ const HeroSection: React.FC = () => {
     },
     {
       text: '구글 확장 프로그램 다운',
-      href: CHROME_EXTENSION_URL,
     },
   ];
 
@@ -54,6 +54,13 @@ const HeroSection: React.FC = () => {
                 <Button
                   size={isMobile ? 'sm' : 'lg'}
                   variant={index === 1 ? 'ghost' : 'primary'}
+                  onClick={
+                    index === 1
+                      ? () => {
+                          toast.success('상표 문제로 인해 점검 중입니다.');
+                        }
+                      : undefined
+                  }
                   className={`font-semibold ${className} ${
                     index === 0 && 'hover:bg-primary-40 active:bg-primary-60'
                   }`}
