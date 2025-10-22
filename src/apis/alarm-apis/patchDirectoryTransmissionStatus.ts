@@ -6,7 +6,7 @@ export const patchDirectoryTransmissionStatus = async (data: {
   notificationType: 'TRANSMIT_DIRECTORY';
 }) => {
   const response = await axiosInstance.patch(
-    '/api/dispatch/directory-transmissions/status',
+    '/api/folder/directory-transmissions/status',
     data
   );
   return response.data;

@@ -13,15 +13,15 @@ export type TransferFolderData = {
     commandType: 'DIRECTORY_TRANSMISSION';
   };
   receiverEmail: string;
-  directoryId: string;
+  folderId: string;
 };
 
 export type TransferFolderResponse = {
   data: {
     receiverEmail: string;
     senderEmail: string;
-    directoryName: string;
-    directoryTransmissionId: string;
+    folderName: string;
+    folderTransmissionId: string;
   };
 };
 

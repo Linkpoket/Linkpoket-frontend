@@ -17,7 +17,7 @@ export class TransferFolderError extends Error {
 export async function transferFolder(data: TransferFolderData) {
   try {
     const res = await axiosInstance.post(
-      '/api/dispatch/directory-transmissions',
+      '/api/dispatch/folder-transmissions',
       data
     );
 

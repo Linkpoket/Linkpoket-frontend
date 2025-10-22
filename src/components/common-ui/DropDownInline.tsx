@@ -237,7 +237,7 @@ const DropDownInline = ({
           }
           transferFolder({
             receiverEmail: email,
-            directoryId: id,
+            folderId: id,
             baseRequest: {
               pageId,
               commandType: 'DIRECTORY_TRANSMISSION',
