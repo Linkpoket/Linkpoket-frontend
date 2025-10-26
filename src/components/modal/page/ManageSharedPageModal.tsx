@@ -31,7 +31,7 @@ const ManageSharedPageModal = ({
   };
 
   const path = useLocation().pathname;
-  const pathname = 'http://linkrew.com' + path;
+  const pathname = 'http://linkpoket.com' + path;
   const { pageId } = useParams();
   const safePageId = pageId ?? '';
 
@@ -65,7 +65,7 @@ const ManageSharedPageModal = ({
   };
 
   const publicPathName =
-    'http://linkrew.com/api/public/pages?pageId=' + safePageId;
+    'http://Linkpoket.com/api/public/pages?pageId=' + safePageId;
 
   // 링크 복사 함수
   const handleCopyLink = () => {

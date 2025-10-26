@@ -23,7 +23,7 @@ const Footer: React.FC = () => {
       <div className="footer-logo-container-mobile footer-logo-container-desktop footer-logo-container-tablet flex items-center space-x-8">
         <FooterLogo />
         <p className="text-gray-90 footer-copyright-mobile footer-copyright-tablet footer-copyright-desktop text-[21px] font-medium">
-          © 2025 linkrew
+          © 2025 Linkpoket
         </p>
       </div>
       <div className="text-gray-70 footer-links-mobile footer-links-tablet footer-links-desktop flex text-[19px] leading-[150%] font-medium">
