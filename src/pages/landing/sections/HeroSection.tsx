@@ -48,7 +48,7 @@ const HeroSection: React.FC = () => {
                 aria-label={
                   index === 1
                     ? '구글 확장 프로그램 다운로드 (새 창)'
-                    : '링크루 시작하기'
+                    : '링크포켓 시작하기'
                 }
               >
                 <Button

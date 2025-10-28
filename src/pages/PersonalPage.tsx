@@ -8,6 +8,7 @@ import { useUserStore } from '@/stores/userStore';
 import { usePageLayout } from '@/hooks/usePageLayout';
 import { getPageDataLength } from '@/utils/pageData';
 import { PageLayout } from '@/components/common-ui/PageLayout';
+import MobilePageBackground from '@/components/page-layout-ui/MobilePageBackground';
 
 const PersonalPageContentSection = lazy(
   () => import('@/components/page-layout-ui/PersonalPageContentSection')
@@ -32,9 +33,6 @@ export default function PersonalPage() {
   const rootFolderId = data?.data.rootFolderId;
   const pageTitle = data?.data.pageTitle;
 
-  console.log(data);
-  console.log(data?.data.pageTitle);
-
   useEffect(() => {
     if (!pageId) return;
 
@@ -56,18 +54,21 @@ export default function PersonalPage() {
   }, [pageId, rootFolderId, data, setPageInfo, setParentsFolderId, setUser]);
 
   return (
-    <PageLayout>
-      <PageHeaderSection pageTitle={pageTitle} />
-      <PageControllerSection
-        folderDataLength={folderDataLength}
-        linkDataLength={linkDataLength}
-        onSortChange={handleSort}
-      />
-      <PersonalPageContentSection
-        folderData={folderData}
-        linkData={linkData}
-        sortType={sortType}
-      />
-    </PageLayout>
+    <>
+      {/* <MobilePageBackground /> */}
+      <PageLayout>
+        <PageHeaderSection pageTitle={pageTitle} />
+        <PageControllerSection
+          folderDataLength={folderDataLength}
+          linkDataLength={linkDataLength}
+          onSortChange={handleSort}
+        />
+        <PersonalPageContentSection
+          folderData={folderData}
+          linkData={linkData}
+          sortType={sortType}
+        />
+      </PageLayout>
+    </>
   );
 }
