@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { Header } from '@/components/header/Header';
 import SideBar from '@/components/side-bar/SideBar';
 import { Outlet, useLocation } from 'react-router-dom';
@@ -29,8 +29,14 @@ export default function Layout() {
     closeProfileModal,
     closeWithdrawModal,
   } = useProfileModalStore();
+  const { setIsLoggedIn, isLoggedIn } = useUserStore();
 
-  const isLoggedIn = useUserStore((s) => s.isLoggedIn);
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    if (token && !isLoggedIn) {
+      setIsLoggedIn(true);
+    }
+  }, [isLoggedIn, setIsLoggedIn]);
 
   const isLoginPage = path === '/login';
   const isSignUpPage = path === '/signup';

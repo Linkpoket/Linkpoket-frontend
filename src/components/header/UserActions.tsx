@@ -52,10 +52,6 @@ export function UserActions() {
     }
   }, [userInfo, setUser]);
 
-  console.log(
-    !JSON.parse(localStorage.getItem('user-store') || '{}').state?.colorCode
-  );
-
   const unreadCount = useNotificationStore((state) => state.unreadCount);
 
   const rawCount = Math.max(unreadCount, notifications.length);
