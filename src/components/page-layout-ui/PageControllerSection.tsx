@@ -17,7 +17,10 @@ export default function PageControllerSection({
   const showSearch = pathName !== '/signup' && pathName !== '/login';
 
   return (
-    <div className="mb-2 flex h-[42px] items-center justify-between">
+    <div
+      className="mb-2 flex h-[42px] items-center justify-between"
+      style={isMobile ? { marginBottom: '24px' } : undefined}
+    >
       {!isMobile && (
         <div className="text-[14px] font-[500] text-gray-50">
           {folderDataLength}개의 폴더 | {linkDataLength}개의 링크

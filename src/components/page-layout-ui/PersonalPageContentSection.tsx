@@ -4,6 +4,7 @@ import LinkCard from '../link-card/LinkCard';
 import FolderCard from '../folder-card/FolderCard';
 import { useModalStore } from '@/stores/modalStore';
 import { useSearchStore } from '@/stores/searchStore';
+import { useMobile } from '@/hooks/useMobile';
 import { PageContentSectionProps } from '@/types/pages';
 import { DndContext, closestCenter, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, rectSwappingStrategy } from '@dnd-kit/sortable';
@@ -15,6 +16,8 @@ import { AddLinkModalSkeleton } from '../skeleton/AddLinkModalSkeleton';
 import { sortPageData } from '@/utils/pageData';
 import { usePageDragAndDrop } from '@/hooks/usePageDragAndDrop';
 import { useDragAndDropSensors } from '@/utils/dragAndDrop';
+import MobileFolderCard from '../folder-card/mobile/MobileFolderCard';
+import MobileFolderCardAddButton from '../folder-card/mobile/MobileFolderCardAddButton';
 
 const AddLinkModal = lazy(() => import('../modal/link/AddLinkModal'));
 const AddFolderModal = lazy(() => import('../modal/folder/AddFolderModal'));
@@ -33,6 +36,7 @@ export default function PersonalPageContentSection({
 
   const searchKeyword = useSearchStore((state) => state.searchKeyword);
   const searchResult = useSearchStore((state) => state.searchResult);
+  const isMobile = useMobile();
 
   const { pageId } = usePageStore();
   const { parentsFolderId } = useParentsFolderIdStore();
@@ -104,20 +108,48 @@ export default function PersonalPageContentSection({
           )}
           strategy={rectSwappingStrategy}
         >
-          <div className="relative grid w-full grid-cols-2 justify-center gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-            {pageData.length === 0 ? (
-              <div className="col-span-full py-8 text-center text-gray-50">
-                {searchKeyword ? '검색 결과가 없습니다.' : '데이터가 없습니다.'}
+          {isMobile ? (
+            <>
+              <div className="text-gray-90 mb-4 px-4 text-lg font-semibold">
+                폴더 ({folderData.length})
               </div>
-            ) : (
-              pageData.map((item) => (
-                <SortablePageItem
-                  key={'folderId' in item ? item.folderId : item.linkId}
-                  item={item}
-                />
-              ))
-            )}
-          </div>
+              <div className="relative mb-10 grid w-full grid-cols-2 justify-center gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+                <MobileFolderCardAddButton />
+                {folderData.map((item: FolderDetail, index: number) => (
+                  <MobileFolderCard
+                    folder={item}
+                    index={index}
+                    folderDataLength={folderData.length}
+                  />
+                ))}
+              </div>
+              <div className="text-gray-90 mb-4 px-4 text-lg font-semibold">
+                링크 ({linkData.length})
+              </div>
+              <div className="relative grid w-full grid-cols-2 justify-center gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+                {linkData.map((item: LinkDetail) => (
+                  <SortablePageItem key={item.linkId} item={item} />
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="relative grid w-full grid-cols-2 justify-center gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+              {pageData.length === 0 ? (
+                <div className="col-span-full py-8 text-center text-gray-50">
+                  {searchKeyword
+                    ? '검색 결과가 없습니다.'
+                    : '데이터가 없습니다.'}
+                </div>
+              ) : (
+                pageData.map((item) => (
+                  <SortablePageItem
+                    key={'folderId' in item ? item.folderId : item.linkId}
+                    item={item}
+                  />
+                ))
+              )}
+            </div>
+          )}
         </SortableContext>
         <DragOverlay>
           {activeId && getActiveItem() ? (
