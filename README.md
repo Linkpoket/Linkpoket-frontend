@@ -4,7 +4,6 @@
 
 ## 서비스 소개
 
-<img src="./src/assets/common-ui-assets/FooterLogo.svg" width="4000px">
 <p style="text-align:center; with:100%; font-weight:bolder"> 
 ✨ Linkpoket은 나만의 링크부터 팀의 자료까지, 한 곳에서 쉽고 함께 관리하기 위한 서비스 입니다.</p>
 
@@ -23,25 +22,17 @@
 
 ## 🔍 Linkpoket 미리 보기
 
-### 랜딩 페이지
-
-<img width="900" height="450" alt="Image" src="https://github.com/user-attachments/assets/662b4aa3-41a7-4c7f-bca7-cf8843c6283f" />
-
 ### 기본 페이지
 
-<img width="900" height="450" alt="Image" src="https://github.com/user-attachments/assets/a22e79c0-f2e3-4799-85b6-cefee715a662" />
+<img width="900" height="450" alt="Image" src="https://github.com/user-attachments/assets/74243098-af5e-448d-a884-819e80a02a6d" />
 
 ### 공유 페이지 관리
 
-<img width="900" height="450" alt="Image" src="https://github.com/user-attachments/assets/8bce9fda-9ad4-4eb3-929e-a521947bdef5" />
-
-### 공유 페이지 초대
-
-<img width="900" height="450" alt="Image" src="https://github.com/user-attachments/assets/90d35d2e-4dff-46a9-89e2-6202513697cd" />
+<img width="900" height="450" alt="Image" src="https://github.com/user-attachments/assets/db3fcc36-f4bf-462a-92d0-194dc76730f1" />
 
 ### 크롬 익스텐션 활용
 
-<img width="900" height="600" alt="Image" src="https://github.com/user-attachments/assets/6fecdb1a-de52-4b0c-ace2-a55310904fc3" />
+<img width="900" height="450" alt="Image" src="https://github.com/user-attachments/assets/6a76a219-d5a0-4bfe-9f0e-71253dfc4e22" />
 
 ## 프로젝트 소개
 
