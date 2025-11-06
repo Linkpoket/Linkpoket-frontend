@@ -5,9 +5,9 @@ const termsData = [
     title: '제1조(목적)',
     content: (
       <p>
-        본 약관은 프로젝트 팀 "링크루"(이하 "운영팀")가 제공하는 링크 관리 및
-        공유 서비스 "Linkrew"(이하 "서비스")의 이용과 관련하여, 운영팀과 이용자
-        간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.
+        본 약관은 프로젝트 팀 "링크포켓"(이하 "운영팀")가 제공하는 링크 관리 및
+        공유 서비스 "Linkpoket"(이하 "서비스")의 이용과 관련하여, 운영팀과
+        이용자 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.
       </p>
     ),
   },
@@ -302,7 +302,7 @@ export const TermsModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <Modal.Header>
-        <p className="text-lg font-bold">Linkrew 서비스 이용약관</p>
+        <p className="text-lg font-bold">Linkpoket 서비스 이용약관</p>
       </Modal.Header>
       <Modal.Body className="max-h-[70vh] space-y-4 overflow-y-auto text-sm text-gray-700">
         {termsData.map(({ title, content }) => (

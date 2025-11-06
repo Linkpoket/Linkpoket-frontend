@@ -23,7 +23,7 @@ export function useCreateFolder(
     ...options,
     mutationFn: createFolder,
 
-    onMutate: async () => {
+    onMutate: async (variables) => {
       const context: Record<string, any> = {};
 
       // 관련 쿼리 취소
@@ -50,7 +50,7 @@ export function useCreateFolder(
       // 임시 UI 업데이트
       const tempFolder = {
         folderId: uuid(),
-        folderName: '새폴더',
+        folderName: variables.folderName,
         orderIndex: 9999,
         createdDate: new Date().toISOString().split('T')[0],
         isFavorite: false,

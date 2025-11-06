@@ -10,7 +10,9 @@ export function Footer() {
             <Link to="#">이용약관</Link>
             <Link to="#">개인정보처리방침</Link>
           </div>
-          <p className="text-[13px] font-[400] text-gray-50">© 2025 linkmoa</p>
+          <p className="text-[13px] font-[400] text-gray-50">
+            © 2025 linkpoket
+          </p>
         </div>
       </div>
     </footer>

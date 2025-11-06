@@ -15,24 +15,22 @@ const PersonalPageContentSection = lazy(
 
 export default function PersonalPage() {
   const { data } = useFetchPersonalPage('');
-  const refinedData = data?.data.pageDetails;
 
   const { setUser } = useUserStore();
   const { setPageInfo } = usePageStore();
   const { setParentsFolderId } = useParentsFolderIdStore();
   const { sortType, handleSort } = usePageLayout();
 
-  const folderData = refinedData?.directoryDetailResponses ?? [];
-  const linkData = refinedData?.linkDetailResponses ?? [];
+  const folderData = data?.data.directoryDetailResponses ?? [];
+  const linkData = data?.data.linkDetailResponses ?? [];
   const { folderDataLength, linkDataLength } = getPageDataLength(
     folderData,
     linkData
   );
 
-  const pageId = refinedData?.pageId;
-  const rootFolderId = refinedData?.rootFolderId;
-  const pageTitle = refinedData?.pageTitle;
-  const memberData = data?.data.member;
+  const pageId = data?.data.pageId;
+  const rootFolderId = data?.data.rootFolderId;
+  const pageTitle = data?.data.pageTitle;
 
   useEffect(() => {
     if (!pageId) return;
@@ -41,10 +39,6 @@ export default function PersonalPage() {
 
     if (rootFolderId) {
       setParentsFolderId(rootFolderId);
-    }
-
-    if (memberData) {
-      setUser(memberData.nickName, memberData.email, memberData.colorCode);
     }
 
     if (data?.data.pageDetails) {
@@ -56,29 +50,23 @@ export default function PersonalPage() {
         })
       );
     }
-  }, [
-    pageId,
-    rootFolderId,
-    memberData,
-    data,
-    setPageInfo,
-    setParentsFolderId,
-    setUser,
-  ]);
+  }, [pageId, rootFolderId, data, setPageInfo, setParentsFolderId, setUser]);
 
   return (
-    <PageLayout>
-      <PageHeaderSection pageTitle={pageTitle} />
-      <PageControllerSection
-        folderDataLength={folderDataLength}
-        linkDataLength={linkDataLength}
-        onSortChange={handleSort}
-      />
-      <PersonalPageContentSection
-        folderData={folderData}
-        linkData={linkData}
-        sortType={sortType}
-      />
-    </PageLayout>
+    <>
+      <PageLayout>
+        <PageHeaderSection pageTitle={pageTitle} />
+        <PageControllerSection
+          folderDataLength={folderDataLength}
+          linkDataLength={linkDataLength}
+          onSortChange={handleSort}
+        />
+        <PersonalPageContentSection
+          folderData={folderData}
+          linkData={linkData}
+          sortType={sortType}
+        />
+      </PageLayout>
+    </>
   );
 }

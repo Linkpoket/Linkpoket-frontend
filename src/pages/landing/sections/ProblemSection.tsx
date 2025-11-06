@@ -14,11 +14,11 @@ const ProblemSection: React.FC = () => {
           className="hero-image-mobile hero-image-tablet hero-image-desktop"
         />
 
-        {/* LINKREW 소개 */}
-        <div className="linkrew-intro-mobile linkrew-intro-tablet linkrew-intro-desktop mt-[152px] flex flex-col items-center">
-          <Logo className="linkrew-logo-mobile linkrew-logo-tablet linkrew-logo-desktop h-[122px] w-[122px] object-contain" />
-          <p className="linkrew-title-mobile linkrew-title-tablet linkrew-title-desktop">
-            그럴 땐, <span className="text-primary-50">LINKREW</span> 하나면
+        {/* Linkpoket 소개 */}
+        <div className="Linkpoket-intro-mobile Linkpoket-intro-tablet Linkpoket-intro-desktop mt-[152px] flex flex-col items-center">
+          <Logo className="Linkpoket-logo-mobile Linkpoket-logo-tablet Linkpoket-logo-desktop h-[122px] w-[122px] object-contain" />
+          <p className="Linkpoket-title-mobile Linkpoket-title-tablet Linkpoket-title-desktop">
+            그럴 땐, <span className="text-primary-50">LINKPOKET</span> 하나면
             충분해요
           </p>
         </div>

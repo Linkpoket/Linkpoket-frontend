@@ -1,4 +1,6 @@
+import MobileNavigation from '@/navigation/mobileNavigation';
 import React, { ReactNode } from 'react';
+import MobilePageBackground from '../page-layout-ui/MobilePageBackground';
 
 interface PageLayoutProps {
   children: ReactNode;
@@ -9,9 +11,13 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
   children,
   className = '',
 }) => (
-  <div
-    className={`bg-gray-5 flex h-screen min-w-[328px] flex-col px-[24px] py-[20px] md:px-[64px] md:py-[56px] xl:px-[102px] ${className}`}
-  >
-    {children}
-  </div>
+  <>
+    <MobilePageBackground />
+    <div
+      className={`bg-gray-5 flex h-screen min-w-[328px] flex-col px-[24px] py-[20px] md:px-[64px] md:py-[56px] xl:px-[102px] ${className}`}
+    >
+      {children}
+      <MobileNavigation />
+    </div>
+  </>
 );

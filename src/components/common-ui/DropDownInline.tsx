@@ -124,7 +124,7 @@ const DropDownInline = ({
     <div
       ref={dropdownRef}
       data-dropdown
-      className={`border-gray-20 bg-gray-0 absolute top-[15px] right-[-6px] z-[1000] mt-2 inline-flex w-[140px] flex-col rounded-[10px] border p-[4px] text-[14px] font-[500] shadow sm:w-[214px] ${className}`}
+      className={`border-gray-20 bg-gray-0 absolute top-[220px] z-[1000] mt-2 inline-flex w-[140px] flex-col rounded-[10px] border p-[4px] text-[14px] font-[500] shadow sm:w-[214px] md:top-[248px] md:right-[-8px] xl:top-[250px] ${className}`}
     >
       {type === 'folder' && (
         <div className="flex flex-col">

@@ -20,6 +20,7 @@ const HeroSection: React.FC = () => {
     },
     {
       text: '구글 확장 프로그램 다운',
+      href: CHROME_EXTENSION_URL,
     },
   ];
 
@@ -48,19 +49,12 @@ const HeroSection: React.FC = () => {
                 aria-label={
                   index === 1
                     ? '구글 확장 프로그램 다운로드 (새 창)'
-                    : '링크루 시작하기'
+                    : '링크포켓 시작하기'
                 }
               >
                 <Button
                   size={isMobile ? 'sm' : 'lg'}
                   variant={index === 1 ? 'ghost' : 'primary'}
-                  onClick={
-                    index === 1
-                      ? () => {
-                          toast.success('상표 문제로 인해 점검 중입니다.');
-                        }
-                      : undefined
-                  }
                   className={`font-semibold ${className} ${
                     index === 0 && 'hover:bg-primary-40 active:bg-primary-60'
                   }`}

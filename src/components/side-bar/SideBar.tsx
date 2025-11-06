@@ -10,9 +10,8 @@ import SidebarClose from '@/assets/widget-ui-assets/SidebarClose.svg?react';
 import { useMobile } from '@/hooks/useMobile';
 import useFetchJoinedPage from '@/hooks/queries/useFetchJoinedPage';
 import { useCreateSharedPage } from '@/hooks/mutations/useCreateSharedPage';
-import { useCreateFolder } from '@/hooks/mutations/useCreateFolder';
 import { toast } from 'react-hot-toast';
-import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
+import { usePageStore } from '@/stores/pageStore';
 import useFetchFolderList from '@/hooks/queries/useFetchFolderList';
 import FolderList from './FolderList';
 
@@ -29,10 +28,10 @@ const SideBar: React.FC<MenubarProps> = ({
   isFoldSidebar,
   setIsFoldSidebar,
 }) => {
+  const [isFolderListOpen, setIsFolderListOpen] = useState(true);
   const sidebarRef = useRef<HTMLElement | null>(null);
   const isMobile = useMobile();
   const { pageId } = usePageStore();
-  const { parentsFolderId } = useParentsFolderIdStore();
   const location = useLocation();
   const params = useParams();
 
@@ -247,22 +246,41 @@ const SideBar: React.FC<MenubarProps> = ({
                       <div className="flex gap-[20px]">
                         <div>폴더</div>
                       </div>
-                      <PlusIcon
-                        className="text-gray-40 hover:text-gray-90 cursor-pointer"
-                        onClick={(e) => {
-                          if (location.pathname === '/bookmarks') {
-                            toast.error(
-                              '북마크에서는 폴더를 생성할 수 없습니다.'
-                            );
-                          }
-                          e.stopPropagation();
-                          e.preventDefault();
-                          handleCreateFolder();
-                        }}
-                        aria-label="폴더 추가"
-                        height={18}
-                        width={18}
-                      />
+                      {isFolderListOpen ? (
+                        <NoColorUp
+                          className="text-gray-40 hover:text-gray-90 cursor-pointer"
+                          onClick={(e) => {
+                            if (location.pathname === '/bookmarks') {
+                              toast.error(
+                                '북마크에서는 폴더를 생성할 수 없습니다.'
+                              );
+                            }
+                            e.stopPropagation();
+                            e.preventDefault();
+                            handleToggleFolderList();
+                          }}
+                          aria-label="폴더 추가"
+                          height={18}
+                          width={18}
+                        />
+                      ) : (
+                        <NoColorDown
+                          className="text-gray-40 hover:text-gray-90 cursor-pointer"
+                          onClick={(e) => {
+                            if (location.pathname === '/bookmarks') {
+                              toast.error(
+                                '북마크에서는 폴더를 생성할 수 없습니다.'
+                              );
+                            }
+                            e.stopPropagation();
+                            e.preventDefault();
+                            handleToggleFolderList();
+                          }}
+                          aria-label="폴더 추가"
+                          height={18}
+                          width={18}
+                        />
+                      )}
                     </div>
                   </div>
 

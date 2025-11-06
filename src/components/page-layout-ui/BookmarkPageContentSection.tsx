@@ -1,68 +1,22 @@
 import { useEffect, useState } from 'react';
 import { PageContentSectionProps } from '@/types/pages';
-import LinkCard from '../common-ui/LinkCard';
-import FolderCard from '../common-ui/FolderCard';
+import LinkCard from '../link-card/LinkCard';
+import FolderCard from '../folder-card/FolderCard';
+import { SortablePageItem } from '../common-ui/SortablePageItem';
 import { useSearchStore } from '@/stores/searchStore';
 import { FolderDetail } from '@/types/folders';
 import { LinkDetail } from '@/types/links';
-import {
-  DndContext,
-  DragEndEvent,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-  closestCenter,
-  DragOverlay,
-  DragStartEvent,
-} from '@dnd-kit/core';
-import {
-  SortableContext,
-  arrayMove,
-  rectSwappingStrategy,
-  useSortable,
-} from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { toast } from 'react-hot-toast';
+import { DndContext, closestCenter, DragOverlay } from '@dnd-kit/core';
+import { SortableContext, rectSwappingStrategy } from '@dnd-kit/sortable';
 import useUpdateDragandDrop from '@/hooks/mutations/useUpdateDragandDrop';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
-
-function SortableItem({ item }: { item: any; index: number }) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({
-    id: 'folderId' in item ? item.folderId : item.linkId,
-  });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    zIndex: isDragging ? 50 : 'auto',
-    touchAction: 'none',
-    opacity: isDragging ? 0.3 : 1,
-  };
-
-  return (
-    <div
-      ref={setNodeRef}
-      style={style as React.CSSProperties}
-      {...attributes}
-      {...listeners}
-      className="touch-none"
-    >
-      {'folderId' in item ? (
-        <FolderCard isBookmark={item.isFavorite} item={item} />
-      ) : (
-        <LinkCard isBookmark={item.isFavorite} item={item} />
-      )}
-    </div>
-  );
-}
+import { sortPageData } from '@/utils/pageData';
+import { usePageDragAndDrop } from '@/hooks/usePageDragAndDrop';
+import { useDragAndDropSensors } from '@/utils/dragAndDrop';
+import { useMobile } from '@/hooks/useMobile';
+import MobileFolderCard from '../folder-card/mobile/MobileFolderCard';
+import MobileFolderCardAddButton from '../folder-card/mobile/MobileFolderCardAddButton';
+import MobileLinkCardButton from '../link-card/mobile/MobileLinkCardButton';
 
 export default function BookmarkPageContentSection({
   folderData = [],
@@ -73,8 +27,8 @@ export default function BookmarkPageContentSection({
   const searchResult = useSearchStore((state) => state.searchResult);
 
   const [pageData, setPageData] = useState<(FolderDetail | LinkDetail)[]>([]);
-  const [activeId, setActiveId] = useState<string | number | null>(null);
 
+  const isMobile = useMobile();
   const { pageId } = usePageStore();
   const { parentsFolderId } = useParentsFolderIdStore();
 
@@ -86,45 +40,9 @@ export default function BookmarkPageContentSection({
     targetId: 0,
     itemType: '',
     newOrderIndex: 1,
-    toFolderId: 0,
-    fromFolderId: 0,
+    toFolderId: '',
+    fromFolderId: '',
   });
-
-  const sortData = (data: (FolderDetail | LinkDetail)[], sortType: string) => {
-    if (!data || data.length === 0) return [];
-
-    const sortedData = [...data];
-
-    switch (sortType) {
-      case '최신순':
-        return sortedData.sort((a, b) => {
-          if (a.orderIndex !== undefined && b.orderIndex !== undefined) {
-            return (b.orderIndex || 0) - (a.orderIndex || 0);
-          }
-          const dateA = new Date(a.createdDate || '').getTime();
-          const dateB = new Date(b.createdDate || '').getTime();
-          return dateB - dateA;
-        });
-
-      case '이름순':
-        return sortedData.sort((a, b) => {
-          const nameA = ('folderId' in a ? a.folderName : a.linkName) || '';
-          const nameB = ('folderId' in b ? b.folderName : b.linkName) || '';
-          return nameA.localeCompare(nameB);
-        });
-
-      case '기본순':
-      default:
-        return sortedData.sort((a, b) => {
-          if (a.orderIndex !== undefined && b.orderIndex !== undefined) {
-            return (a.orderIndex || 0) - (b.orderIndex || 0);
-          }
-          const dateA = new Date(a.createdDate || '').getTime();
-          const dateB = new Date(b.createdDate || '').getTime();
-          return dateA - dateB;
-        });
-    }
-  };
 
   useEffect(() => {
     if (searchKeyword && searchResult) {
@@ -132,81 +50,27 @@ export default function BookmarkPageContentSection({
       const searchFolders = searchResult.directorySimpleResponses || [];
       const searchLinks = searchResult.siteSimpleResponses || [];
       const combinedSearchData = [...searchFolders, ...searchLinks];
-      const sortedData = sortData(combinedSearchData, sortType);
+      const sortedData = sortPageData(combinedSearchData, sortType);
       setPageData(sortedData);
     } else {
       // 일반 모드
       const combinedData = [...folderData, ...linkData];
-      const sortedData = sortData(combinedData, sortType);
+      const sortedData = sortPageData(combinedData, sortType);
       setPageData(sortedData);
     }
   }, [folderData, linkData, sortType, searchKeyword, searchResult]);
 
-  const sensors = useSensors(
-    useSensor(MouseSensor, {
-      activationConstraint: {
-        distance: 5,
-      },
-    }),
-    useSensor(TouchSensor, {
-      activationConstraint: {
-        delay: 50,
-        tolerance: 5,
-      },
-    })
-  );
+  const sensors = useDragAndDropSensors();
 
-  const onDragStart = (event: DragStartEvent) => {
-    setActiveId(event.active.id);
-  };
-
-  const onDragEnd = async (event: DragEndEvent) => {
-    const { active, over } = event;
-    setActiveId(null);
-
-    if (!over) return;
-    if (active.id === over.id) return;
-
-    // 검색 중일 때는 드래그 비활성화
-    if (searchKeyword) return;
-
-    const oldIndex = pageData.findIndex(
-      (item) => ('folderId' in item ? item.folderId : item.linkId) === active.id
-    );
-    const newIndex = pageData.findIndex(
-      (item) => ('folderId' in item ? item.folderId : item.linkId) === over.id
-    );
-
-    const movedItem = pageData[oldIndex];
-    const targetId =
-      'folderId' in movedItem ? movedItem.folderId : movedItem.linkId;
-    const itemType = 'folderId' in movedItem ? 'FOLDER' : 'LINK';
-
-    const newData = arrayMove(pageData, oldIndex, newIndex);
-    setPageData(newData);
-
-    try {
-      await updateDragAndDropMutation.mutateAsync({
-        baseRequest: { pageId, commandType: 'EDIT' },
-        targetId,
-        itemType,
-        newOrderIndex: newIndex + 1,
-        toFolderId: parentsFolderId as number,
-        fromFolderId: parentsFolderId as number,
-      });
-    } catch (error) {
-      console.error('드래그 앤 드롭 업데이트 실패:', error);
-      toast.error('순서 변경에 실패했습니다.');
-      setPageData(pageData);
-    }
-  };
-
-  const getActiveItem = () => {
-    if (!activeId) return null;
-    return pageData.find(
-      (item) => ('folderId' in item ? item.folderId : item.linkId) === activeId
-    );
-  };
+  const { activeId, onDragStart, onDragEnd, getActiveItem } =
+    usePageDragAndDrop({
+      pageData,
+      searchKeyword,
+      pageId,
+      parentsFolderId: parentsFolderId ?? '',
+      onMutation: updateDragAndDropMutation.mutateAsync,
+      onDataChange: setPageData,
+    });
 
   return (
     <div className="h-screen w-full overflow-y-auto">
@@ -228,21 +92,50 @@ export default function BookmarkPageContentSection({
           )}
           strategy={rectSwappingStrategy}
         >
-          <div className="grid w-full grid-cols-2 justify-center gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-            {pageData.length === 0 ? (
-              <div className="col-span-full py-8 text-center text-gray-50">
-                {searchKeyword ? '검색 결과가 없습니다.' : '북마크가 없습니다.'}
+          {isMobile ? (
+            <>
+              <div className="text-gray-90 mb-4 px-4 text-lg font-semibold">
+                폴더 ({folderData.length})
               </div>
-            ) : (
-              pageData.map((item, index) => (
-                <SortableItem
-                  key={'folderId' in item ? item.folderId : item.linkId}
-                  item={item}
-                  index={index}
-                />
-              ))
-            )}
-          </div>
+              <div className="relative mb-10 grid w-full grid-cols-2 gap-x-2 gap-y-8 sm:grid-cols-3">
+                <MobileFolderCardAddButton />
+                {folderData.map((item: FolderDetail, index: number) => (
+                  <MobileFolderCard
+                    key={item.folderId}
+                    folder={item}
+                    index={index}
+                    folderDataLength={folderData.length}
+                  />
+                ))}
+              </div>
+              <div className="text-gray-90 mb-4 px-4 text-lg font-semibold">
+                링크 ({linkData.length})
+              </div>
+              <div className="relative grid w-full grid-cols-2 justify-center gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+                <MobileLinkCardButton />
+                {linkData.map((item: LinkDetail) => (
+                  <SortablePageItem key={item.linkId} item={item} />
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="relative grid w-full grid-cols-2 justify-center gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+              {pageData.length === 0 ? (
+                <div className="col-span-full py-8 text-center text-gray-50">
+                  {searchKeyword
+                    ? '검색 결과가 없습니다.'
+                    : '데이터가 없습니다.'}
+                </div>
+              ) : (
+                pageData.map((item) => (
+                  <SortablePageItem
+                    key={'folderId' in item ? item.folderId : item.linkId}
+                    item={item}
+                  />
+                ))
+              )}
+            </div>
+          )}
         </SortableContext>
         <DragOverlay>
           {activeId && getActiveItem() ? (

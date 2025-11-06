@@ -1,16 +1,24 @@
 import Bell from '@/assets/widget-ui-assets/Bell.svg?react';
 import Menu from '@/assets/widget-ui-assets/Menu.svg?react';
-import { lazy, Suspense, useCallback, useMemo, useState } from 'react';
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import HeaderMenu from './HeaderMenu';
 import { useFetchNotifications } from '@/hooks/queries/useFetchNotification';
 import { usePatchShareInvitationStatus } from '@/hooks/mutations/usePatchShareInvitationStatus';
 import { usePatchDirectoryTransmissionStatus } from '@/hooks/mutations/usePatchDirectoryTransmissionStatus';
 import { useDeleteDirectoryRequest } from '@/hooks/mutations/useDeleteDirectoryRequest';
-import { useUserStore } from '@/stores/userStore';
 import { useProfileModalStore } from '@/stores/profileModalStore';
 import { useNotificationStore } from '@/stores/notification';
 import { useDeleteInvitation } from '@/hooks/mutations/useDeleteInvitation';
 import { NotificationModalSkeleton } from '../skeleton/NotificationModalSkeleton';
+import useUserInfo from '@/hooks/queries/useUserInfo';
+import { useUserStore } from '@/stores/userStore';
 
 const NotificationModal = lazy(() => import('../modal/page/NotificationModal'));
 
@@ -19,8 +27,30 @@ export function UserActions() {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isContactOpen, setIsContactOpen] = useState<boolean>(false);
   const { data: notifications = [], refetch } = useFetchNotifications();
-  const { nickname, colorCode } = useUserStore();
+  const { data: userInfo } = useUserInfo();
   const { openProfileModal } = useProfileModalStore();
+  const { setUser, colorCode, nickname } = useUserStore();
+
+  useEffect(() => {
+    if (
+      !JSON.parse(localStorage.getItem('user-store') || '{}').state?.colorCode
+    ) {
+      setUser(
+        userInfo?.data?.nickName || '',
+        userInfo?.data?.email || '',
+        userInfo?.data?.colorCode || ''
+      );
+    } else {
+      setUser(
+        JSON.parse(localStorage.getItem('user-store') || '{}').state
+          ?.nickname || '',
+        JSON.parse(localStorage.getItem('user-store') || '{}').state?.email ||
+          '',
+        JSON.parse(localStorage.getItem('user-store') || '{}').state
+          ?.colorCode || ''
+      );
+    }
+  }, [userInfo, setUser]);
 
   const unreadCount = useNotificationStore((state) => state.unreadCount);
 
@@ -140,7 +170,7 @@ export function UserActions() {
             className="flex h-[32px] w-[32px] items-center justify-center rounded-full"
             style={{ backgroundColor: colorCode }}
           >
-            {nickname?.charAt(0).toUpperCase()}
+            {nickname.charAt(0).toUpperCase()}
           </div>
         </button>
 

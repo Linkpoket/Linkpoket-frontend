@@ -1,8 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDebounce } from '@/hooks/useDebounce';
 import useUpdateSharedPageTitle from '@/hooks/mutations/useUpdateSharedPageTitle';
-import { Button } from '../common-ui/button';
 import { useModalStore } from '@/stores/modalStore';
+import { useLocation } from 'react-router-dom';
+import { useMobile } from '@/hooks/useMobile';
+import { useFolderColorStore } from '@/stores/folderColorStore';
+import { Button } from '../common-ui/button';
 
 type PageHeaderSectionProps = {
   pageTitle: string;
@@ -17,7 +20,16 @@ export default function SharedPageHeaderSection({
 }: PageHeaderSectionProps) {
   const [title, setTitle] = useState(pageTitle ?? '');
   const lastUpdateTitle = useRef({ title });
-  const { openLinkModal } = useModalStore();
+
+  const location = useLocation();
+  const currentLocation = location.pathname;
+  const isLinkButtonVisible = currentLocation !== '/bookmarks';
+  const isMobile = useMobile();
+
+  const { openLinkModal, openFolderModal } = useModalStore();
+  const { getCurrentColor } = useFolderColorStore();
+  const currentFolderColor = getCurrentColor();
+
   const { mutate: updateSharedPageTitle } = useUpdateSharedPageTitle(pageId);
 
   const updateSharedPageTitleImmediately = () => {
@@ -77,9 +89,58 @@ export default function SharedPageHeaderSection({
           }}
           className={`outline-nonetext-gray-90' } inline-block w-full text-[22px] font-bold`}
         />
-        <Button size="sm" className="whitespace-nowrap" onClick={openLinkModal}>
-          + 링크추가
-        </Button>
+        {isLinkButtonVisible && (
+          <div
+            className={`flex items-center gap-[8px] ${isMobile ? 'hidden' : ''}`}
+          >
+            <Button
+              size="sm"
+              style={{
+                borderColor: currentFolderColor.previewColor,
+                color: currentFolderColor.previewColor,
+              }}
+              className="rounded-lg border-2 bg-white text-sm font-medium whitespace-nowrap transition-colors"
+              onClick={openLinkModal}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}15`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'white';
+              }}
+              onMouseDown={(e) => {
+                e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}25`;
+              }}
+              onMouseUp={(e) => {
+                e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}15`;
+              }}
+            >
+              + 링크추가
+            </Button>
+            <Button
+              size="sm"
+              style={{
+                borderColor: currentFolderColor.previewColor,
+                color: currentFolderColor.previewColor,
+              }}
+              className="rounded-lg border-2 bg-white text-sm font-medium whitespace-nowrap transition-colors"
+              onClick={openFolderModal}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}15`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'white';
+              }}
+              onMouseDown={(e) => {
+                e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}25`;
+              }}
+              onMouseUp={(e) => {
+                e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}15`;
+              }}
+            >
+              + 폴더추가
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

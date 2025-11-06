@@ -1,13 +1,14 @@
+import { useState } from 'react';
+import { useUserStore } from '@/stores/userStore';
+import { useProfileModalStore } from '@/stores/profileModalStore';
+import { useLogoutMutation } from '@/hooks/mutations/auth/useLogoutMutation';
+import { useUpdateProfileNickname } from '@/hooks/mutations/useUpdateProfileNickname';
+import useUserInfo from '@/hooks/queries/useUserInfo';
 import { Input } from '@/components/common-ui/Input';
 import Modal from '@/components/common-ui/Modal';
-import { useUserStore } from '@/stores/userStore';
-import { useState } from 'react';
 import ChevronRight from '@/assets/common-ui-assets/ChevronRight.svg?react';
-import { useProfileModalStore } from '@/stores/profileModalStore';
 import ProfileChangeBody from './ProfileChangeBody';
-import { useLogoutMutation } from '@/hooks/mutations/auth/useLogoutMutation';
 import { Button } from '@/components/common-ui/button';
-import { useUpdateProfileNickname } from '@/hooks/mutations/useUpdateProfileNickname';
 
 export const ProfileSettingsModal = ({
   isOpen,

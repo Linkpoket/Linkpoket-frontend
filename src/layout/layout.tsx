@@ -1,11 +1,11 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { Header } from '@/components/header/Header';
 import SideBar from '@/components/side-bar/SideBar';
 import { Outlet, useLocation } from 'react-router-dom';
 import { useUserStore } from '@/stores/userStore';
 import { useProfileModalStore } from '@/stores/profileModalStore';
 import { useNotificationSSE } from '@/hooks/useNotificationSSE';
-// import useRouteChangeTracker from '@/hooks/useRouteChangeTracker'; // GA4 임시 비활성화
+import useRouteChangeTracker from '@/hooks/useRouteChangeTracker';
 import { ProfileSettingsModalSkeleton } from '@/components/skeleton/ProfileSettingModal';
 import { DeleteModalSkeleton } from '@/components/skeleton/DeleteModalSkeleton';
 
@@ -18,7 +18,7 @@ const WithdrawAccountModal = lazy(
 );
 
 export default function Layout() {
-  // useRouteChangeTracker(); // GA4 임시 비활성화
+  useRouteChangeTracker();
   const location = useLocation();
   const path = location.pathname;
   const [showSidebar, setShowSidebar] = useState(true);
@@ -29,8 +29,14 @@ export default function Layout() {
     closeProfileModal,
     closeWithdrawModal,
   } = useProfileModalStore();
+  const { setIsLoggedIn, isLoggedIn } = useUserStore();
 
-  const isLoggedIn = useUserStore((s) => s.isLoggedIn);
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    if (token && !isLoggedIn) {
+      setIsLoggedIn(true);
+    }
+  }, [isLoggedIn, setIsLoggedIn]);
 
   const isLoginPage = path === '/login';
   const isSignUpPage = path === '/signup';

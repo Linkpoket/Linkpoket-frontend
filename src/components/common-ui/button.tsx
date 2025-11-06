@@ -11,6 +11,8 @@ const buttonVariants = cva(
           'bg-primary-50 text-primary-0 font-semibold hover:bg-primary-40 active:bg-primary-60 disabled:bg-gray-20 disabled:text-gray-50',
         ghost:
           'bg-primary-0 text-gray-90 font-semibold border border-gray-30 hover:bg-gray-5 active:bg-gray-10 disabled:bg-primary-0 disabled:text-gray-50',
+        forHeader:
+          'bg-gray-0 text-primary-40 border-[2px] border-primary-30 font-semibold hover:bg-primary-10 active:bg-primary-5 disabled:bg-gray-20 disabled:text-gray-50',
       },
       size: {
         sm: 'px-[16px] py-[10px] rounded-[6px] text-[14px] font-[600]',

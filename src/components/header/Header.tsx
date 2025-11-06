@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Logo from '@/assets/widget-ui-assets/Logo.svg?react';
 import { HamburgerButton } from './HamburgerButton';
@@ -6,10 +5,7 @@ import { UserActions } from './UserActions';
 import { AuthButtons } from './AuthButtons';
 import { useMobile } from '@/hooks/useMobile';
 import { Search } from '../common-ui/Search';
-import { useSearchStore } from '@/stores/searchStore';
-import { usePageStore } from '@/stores/pageStore';
-import { useSearchPageItems } from '@/hooks/queries/useSearchPageItems';
-import { useDebounce } from '@/hooks/useDebounce';
+import { usePageSearch } from '@/hooks/usePageSearch';
 
 interface Props {
   isLoggedIn: boolean;
@@ -27,59 +23,16 @@ export function Header({
   const isMobile = useMobile();
   const pathName = useLocation().pathname;
 
-  const { pageId } = usePageStore();
-  const {
-    searchKeyword,
-    setSearchKeyword,
-    setSearchResult,
-    setIsSearching,
-    clearSearch,
-  } = useSearchStore();
-
-  const [debouncedKeyword, setDebouncedKeyword] = useState(searchKeyword);
-
-  const debouncedSetKeyword = useDebounce((value: string) => {
-    setDebouncedKeyword(value);
-  }, 300);
-
-  useEffect(() => {
-    debouncedSetKeyword(searchKeyword);
-  }, [searchKeyword, debouncedSetKeyword]);
-
-  // API 호출
-  const { pageItems: searchResult, isLoading } = useSearchPageItems({
-    pageId: pageId ?? 0,
-    keyword: debouncedKeyword,
-    searchType: 'TITLE',
-  });
-
-  // 검색 결과 상태 업데이트
-  useEffect(() => {
-    setIsSearching(isLoading);
-    if (searchResult) {
-      setSearchResult(searchResult);
-    }
-  }, [searchResult, isLoading, setSearchResult, setIsSearching]);
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchKeyword(e.target.value);
-  };
-
-  const handleClear = () => {
-    clearSearch();
-  };
-
-  useEffect(() => {
-    clearSearch();
-  }, [pathName, clearSearch]);
+  const { searchKeyword, handleSearchChange, handleClear } = usePageSearch();
 
   const showSearch = pathName !== '/signup' && pathName !== '/login';
 
   return !isMobile ? (
     <header className="border-b-gray-10 flex h-[62px] justify-between border-b px-[24px] py-[12px]">
       <div className="flex items-center gap-[24px]">
-        <Link to="/">
-          <Logo className="h-[24px]" />
+        <Link to="/" className="flex items-center">
+          <Logo className="h-[36px]" />
+          <span className="text-[24px] font-[800]">LINKPOKET</span>
         </Link>
       </div>
       <div className="flex items-center gap-[24px]">
@@ -95,27 +48,19 @@ export function Header({
       </div>
     </header>
   ) : (
-    <header className="flex h-[112px] flex-col gap-2 px-2 py-3">
+    <header className="flex h-[56px] flex-col gap-2 px-2">
       <div className="border-b-gray-10 flex w-full flex-1 justify-between border-b">
         <div className="flex items-center gap-[16px]">
           <HamburgerButton onClick={() => setShowSidebar?.(true)} />
-          <Link to="/">
-            <Logo className="h-[24px]" />
+          <Link to="/" className="flex items-center">
+            <Logo className="h-[36px]" />
+            <span className="text-[24px] font-[800]">LINKPOKET</span>
           </Link>
         </div>
         <div className="flex items-center gap-[24px]">
           {showHeaderButton && (isLoggedIn ? <UserActions /> : <AuthButtons />)}
         </div>
       </div>
-      {showSearch && (
-        <Search
-          placeholder="폴더 또는 링크 검색"
-          aria-label="폴더 또는 링크 검색"
-          value={searchKeyword}
-          onChange={handleSearchChange}
-          onClear={handleClear}
-        />
-      )}
     </header>
   );
 }

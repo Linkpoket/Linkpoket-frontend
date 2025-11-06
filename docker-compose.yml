@@ -1,11 +1,15 @@
 version: '3.8'
 
 services:
-  linkrew-server:
-    container_name: linkrew-server
-    image: parkjihyeon/linkrew-server:latest # ← build 제거하고 image만 사용
+  linkpoket-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - SPRING_PROFILE=${SPRING_PROFILE}
+    container_name: linkpoket-server
     env_file:
-      - ${ENV_FILE} # 예: .env.local
+      - ${ENV_FILE}
     ports:
       - ${SPRING_PORT}:${SPRING_PORT}
     restart: always

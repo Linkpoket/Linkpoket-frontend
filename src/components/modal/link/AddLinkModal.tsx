@@ -1,4 +1,3 @@
-// components/AddLinkModal.tsx (간소화된 버전)
 import { Input } from '@/components/common-ui/Input';
 import Modal from '@/components/common-ui/Modal';
 import { useAddLinkForm } from '@/hooks/useAddLinkForm';

@@ -1,28 +1,29 @@
 version: '3.8'
 
 services:
-  linkrew-server:
-    container_name: linkrew-server
-    image: parkjihyeon/linkrew-server:latest # ← build 제거하고 image만 사용
+  linkpoket-server:
+    container_name: linkpoket-server
+    image: parkjihyeon/linkpoket-server:latest
+    ports:
+      - ${SPRING_PORT}:${SPRING_PORT}
     environment:
       SPRING_PROFILE: ${SPRING_PROFILE}
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILE}
       DB_URL: ${DB_URL}
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - ${SPRING_PORT}:${SPRING_PORT}
-    depends_on:
-      - linkrew-database
 
-  linkrew-database:
+    depends_on:
+      - linkpoket-database
+
+  linkpoket-database:
     image: mysql:8.0
-    container_name: linkrew-database
+    container_name: linkpoket-database
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD} # MySQL 루트 비밀번호
+      MYSQL_DATABASE: ${DB_DATABASE} # 생성할 데이터베이스 이름
+      MYSQL_USER: ${DB_USERNAME} # MySQL 사용자 이름
+      MYSQL_PASSWORD: ${DB_PASSWORD} # MySQL 사용자 비밀번호
       MYSQL_CHARSET: utf8mb4
       MYSQL_COLLATION: utf8mb4_unicode_ci
     command:
@@ -34,13 +35,13 @@ services:
         '--default-authentication-plugin=mysql_native_password',
       ]
     expose:
-      - ${DB_PORT}
+      - ${DB_PORT} # 내부에서 사용하는 MySQL 포트
     ports:
-      - ${DB_PORT}:${DB_PORT}
+      - ${DB_PORT}:${DB_PORT} # MySQL 포트 매핑
     restart: always
     volumes:
-      - linkrew-database:/var/lib/mysql
+      - linkpoket-database:/var/lib/mysql # 데이터베이스 볼륨 설정
       - ./src/main/resources/db/schema/schema.sql:/docker-entrypoint-initdb.d/schema.sql
 
 volumes:
-  linkrew-database:
+  linkpoket-database:

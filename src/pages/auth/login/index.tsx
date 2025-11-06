@@ -1,4 +1,4 @@
-import Logo from '@/assets/common-ui-assets/Logo.svg?react';
+import Logo from '@/assets/widget-ui-assets/Logo.svg?react';
 import Kakao from '@/assets/common-ui-assets/Kakao.svg?react';
 import Google from '@/assets/common-ui-assets/Google.svg?react';
 import { SocialLoginButton } from '@/components/common-ui/SocialLoginButton';

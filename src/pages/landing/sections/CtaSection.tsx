@@ -10,7 +10,7 @@ const CtaSection: React.FC = () => {
 
   const ctaButtons = [
     {
-      text: '링크루 시작하기',
+      text: '링크포켓 시작하기',
       href: '/login',
       className:
         'bg-primary-0 text-primary-60 active:bg-primary-0 hover:bg-gray-5',
@@ -27,7 +27,7 @@ const CtaSection: React.FC = () => {
     {
       description: (
         <>
-          링크루 팀은
+          링크포켓 팀은
           <br />
           여러분들의 피드백을 적극 반영하고 싶어요!
         </>
@@ -37,7 +37,7 @@ const CtaSection: React.FC = () => {
     {
       description: (
         <>
-          궁금한 점, 불편한 점, 제안하고 싶은 점 등 링크루에 관련한 질문이
+          궁금한 점, 불편한 점, 제안하고 싶은 점 등 링크포켓에 관련한 질문이
           있으시다면,
           <br /> 아래 버튼을 클릭해서 자유롭게 작성해주세요 :)
         </>
@@ -74,7 +74,7 @@ const CtaSection: React.FC = () => {
                   aria-label={
                     idx === 1
                       ? '구글 확장 프로그램 무료 다운로드 (새 창)'
-                      : '링크루 시작하기'
+                      : '링크포켓 시작하기'
                   }
                   className="w-full sm:w-auto"
                 >

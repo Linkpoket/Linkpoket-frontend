@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
-import Logo from '@/assets/widget-ui-assets/Logo.svg?react';
+import Logo from '@/public/LinkLogo.svg?react';
 
 export function FooterLanding() {
   return (
     <footer>
       <div className="flex w-full items-center justify-between px-[22px] py-[32px]">
         <div className="flex items-center gap-[32px]">
-          <Logo />
+          {/* <Logo /> */}
           <span className="text-gray-90 text-[13px] font-[500]">
             © 2025 linkmoa
           </span>
