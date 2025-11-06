@@ -626,6 +626,43 @@ html {
   }
 }
 
+/* 2000px 미만에서 버튼 크기 제한 */
+@media (max-width: 1440px) {
+  .responsive-button {
+    width: 90px !important;
+    height: 36px !important;
+    font-size: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+  }
+}
+
+@media (max-width: 1280px) {
+  .responsive-button {
+    width: 80px !important;
+    height: 32px !important;
+    font-size: 11px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .responsive-button {
+    width: 70px !important;
+    height: 29x !important;
+    font-size: 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+  }
+}
+
 body {
   @apply font-sans antialiased;
 }

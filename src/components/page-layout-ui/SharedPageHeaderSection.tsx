@@ -99,7 +99,7 @@ export default function SharedPageHeaderSection({
                 borderColor: currentFolderColor.previewColor,
                 color: currentFolderColor.previewColor,
               }}
-              className="rounded-lg border-2 bg-white text-sm font-medium whitespace-nowrap transition-colors"
+              className="responsive-button rounded-lg border-2 bg-white text-sm font-medium whitespace-nowrap transition-colors"
               onClick={openLinkModal}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}15`;
@@ -122,7 +122,7 @@ export default function SharedPageHeaderSection({
                 borderColor: currentFolderColor.previewColor,
                 color: currentFolderColor.previewColor,
               }}
-              className="rounded-lg border-2 bg-white text-sm font-medium whitespace-nowrap transition-colors"
+              className="responsive-button rounded-lg border-2 bg-white text-sm font-medium whitespace-nowrap transition-colors"
               onClick={openFolderModal}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}15`;
