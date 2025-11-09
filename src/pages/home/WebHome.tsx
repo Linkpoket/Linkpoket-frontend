@@ -176,12 +176,12 @@ export default function WebHome() {
       <main className="scrollbar-hide flex min-h-[calc(100vh-200px)] items-center justify-center px-8">
         <div
           ref={listRef}
-          className="scrollbar-hide flex w-full max-w-7xl snap-x gap-8 overflow-x-auto pt-12 pb-6 pl-4"
+          className="home-card-list scrollbar-hide flex w-full max-w-7xl snap-x overflow-x-auto pt-12 pb-6 pl-4"
         >
           {cards.slice(0, visibleCount).map((card, index) => (
             <div
               key={card.id}
-              className="group relative h-64 w-64 flex-shrink-0 cursor-pointer snap-start overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+              className="home-card group relative flex-shrink-0 cursor-pointer snap-start overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
               onClick={() => handleCardClick(card)}
               onMouseEnter={() => setHoveredCard(card)}
             >

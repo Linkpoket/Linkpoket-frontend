@@ -1037,7 +1037,6 @@ html {
       font-size: 13px;
     }
 
-      
     /* 80% 비율 */
     .group.relative.flex[class*="h-[242px]"] {
       height: 193.6px !important;
@@ -1146,6 +1145,8 @@ html {
     .grid-cols-custom {
       grid-template-columns: repeat(6, minmax(120px, max-content));
     }
+
+    
 
     /* 90% 비율 */
     .group.relative.flex[class*="h-[242px]"] {
@@ -1261,6 +1262,8 @@ html {
   display: none;
 }
 
+
+
 @theme {
   --font-sans: 'Pretendard', sans-serif;
 }
@@ -1272,3 +1275,55 @@ body {
 }
 
 
+.home-card-list {
+  gap: 1.5rem;
+}
+
+@media (max-width: 1023px) {
+  .home-card-list { gap: 1rem; }
+}
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .home-card-list { gap: 1rem; }
+}
+
+@media (min-width: 1440px) and (max-width: 1919px) {
+  .home-card-list { gap: 1.2rem; }
+}
+
+@media (min-width: 1920px) {
+  .home-card-list { gap: 1.4rem; }
+}
+
+:root {
+  --home-card-size: 256px;
+}
+
+.home-card {
+  width: var(--home-card-size);
+  height: var(--home-card-size);
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --home-card-size: calc(256px * 0.7);
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+  :root {
+    --home-card-size: calc(256px * 0.7);
+  }
+}
+
+@media (min-width: 1440px) and (max-width: 1919px) {
+  :root {
+    --home-card-size: calc(256px * 0.8);
+  }
+}
+
+@media (min-width: 1920px) {
+  :root {
+    --home-card-size: calc(256px * 0.9);
+  }
+}
