@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import BookMark from '@/assets/widget-ui-assets/BookMark.svg?react';
 import BookMarkActive from '@/assets/widget-ui-assets/BookMarkActive.svg?react';
 import PersonalPage from '@/assets/widget-ui-assets/PersonalPage.svg?react';
@@ -36,6 +36,7 @@ const SideBar: React.FC<MenubarProps> = ({
   const isMobile = useMobile();
   const { pageId } = usePageStore();
   const location = useLocation();
+  const navigate = useNavigate();
   const params = useParams();
 
   //768px 이하의 경우, showSidebar를 false처리, 이외엔 true처리
@@ -113,8 +114,13 @@ const SideBar: React.FC<MenubarProps> = ({
 
   //공유페이지 생성
   const { mutate: createSharedPage } = useCreateSharedPage({
-    onSuccess: () => {
+    onSuccess: (response) => {
       toast.success('공유페이지 생성 완료');
+
+      const createdPageId = response?.data?.pageId;
+      if (createdPageId) {
+        navigate(`/shared/${createdPageId}`);
+      }
     },
     onError: () => {
       toast.error('공유페이지 생성 실패');
