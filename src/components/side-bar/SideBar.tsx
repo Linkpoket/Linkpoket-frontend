@@ -554,7 +554,10 @@ const SideBar: React.FC<MenubarProps> = ({
     );
   } else if (!showSidebar && isFoldSidebar && !isMobile) {
     return (
-      <aside className="border-gray-10 h-screen w-[80px] border-r p-4">
+      <aside
+        className="border-gray-10 h-screen border-r p-4"
+        style={{ width: 'clamp(64px, 4.5vw, 100px)' }}
+      >
         <div className="flex justify-end">
           <button
             onClick={() => {
@@ -570,11 +573,12 @@ const SideBar: React.FC<MenubarProps> = ({
 
         <div className="flex flex-col items-center gap-[8px]">
           <button
-            className={`sidebar-text cursor-pointer rounded-[8px] p-3 text-[14px] font-[600] ${
+            className={`sidebar-text flex w-full items-center justify-center rounded-[8px] p-3 text-[14px] font-[600] ${
               isPersonalActive
                 ? 'bg-gray-5 text-gray-90'
                 : 'text-gray-70 hover:bg-gray-5'
             }`}
+            style={{ minHeight: '48px' }}
           >
             <Link to="/">
               {isPersonalActive ? (
@@ -585,11 +589,12 @@ const SideBar: React.FC<MenubarProps> = ({
             </Link>
           </button>
           <button
-            className={`sidebar-text cursor-pointer rounded-[8px] p-3 text-[14px] font-[600] ${
+            className={`sidebar-text flex w-full items-center justify-center rounded-[8px] p-3 text-[14px] font-[600] ${
               isBookmarksActive
                 ? 'bg-gray-5 text-gray-90'
                 : 'text-gray-70 hover:bg-gray-5'
             }`}
+            style={{ minHeight: '48px' }}
           >
             <Link to="/bookmarks">
               {isBookmarksActive ? (
