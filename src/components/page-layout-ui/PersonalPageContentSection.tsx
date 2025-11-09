@@ -89,7 +89,7 @@ export default function PersonalPageContentSection({
     });
 
   return (
-    <div className="h-screen w-full overflow-y-auto">
+    <div className="w-full">
       {/* 검색 상태 표시 */}
       {searchKeyword && (
         <div className="text-gray-60 mb-4 text-sm">

@@ -73,7 +73,7 @@ export default function BookmarkPageContentSection({
     });
 
   return (
-    <div className="h-screen w-full overflow-y-auto">
+    <div className="w-full">
       {searchKeyword && (
         <div className="text-gray-60 mb-4 text-sm">
           "{searchKeyword}" 검색 결과 {pageData.length}개
