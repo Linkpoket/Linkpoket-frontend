@@ -10,6 +10,7 @@ import {
   DEFAULT_SHARED_PAGE_IMAGE,
   HomeCard,
 } from '@/constants/homeCards';
+import { resolvePageImageUrl } from '@/utils/resolvePageImageUrl';
 
 export default function MobileHome() {
   const isMobile = useMobile();
@@ -31,7 +32,10 @@ export default function MobileHome() {
         category: 'shared',
         tags: ['collaboration', 'team', 'project'],
         interestedCount: page.memberCount || 0,
-        backgroundImage: page.pageImageUrl || DEFAULT_SHARED_PAGE_IMAGE,
+        backgroundImage: resolvePageImageUrl(
+          page.pageImageUrl,
+          DEFAULT_SHARED_PAGE_IMAGE
+        ),
         pageId: page.pageId,
         isSharedPage: true,
       })

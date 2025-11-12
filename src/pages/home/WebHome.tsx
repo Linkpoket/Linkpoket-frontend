@@ -9,6 +9,7 @@ import {
   DEFAULT_SHARED_PAGE_IMAGE,
   HomeCard,
 } from '@/constants/homeCards';
+import { resolvePageImageUrl } from '@/utils/resolvePageImageUrl';
 
 export default function WebHome() {
   const { isLoggedIn } = useUserStore();
@@ -87,8 +88,10 @@ export default function WebHome() {
                 folderId: folder.folderId,
                 folderTitle: folder.folderName,
               })) || [];
-            backgroundImage =
-              personalPage?.pageImageUrl || card.backgroundImage;
+            backgroundImage = resolvePageImageUrl(
+              personalPage?.pageImageUrl,
+              card.backgroundImage
+            );
             break;
           case 'ocean-life': // 북마크
             folders =
@@ -109,7 +112,10 @@ export default function WebHome() {
         category: 'shared',
         tags: ['collaboration', 'team'],
         interestedCount: 0,
-        backgroundImage: page.pageImageUrl || DEFAULT_SHARED_PAGE_IMAGE,
+        backgroundImage: resolvePageImageUrl(
+          page.pageImageUrl,
+          DEFAULT_SHARED_PAGE_IMAGE
+        ),
         pageId: page.pageId,
         isSharedPage: true,
         folders:
