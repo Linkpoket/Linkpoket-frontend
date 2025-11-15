@@ -5,10 +5,20 @@ export type BaseRequest = {
   commandType: CommandType;
 };
 
-export interface LinkDetail {
-  linkId: string;
+export type LinkBaseFields = {
   linkName: string;
   linkUrl: string;
+};
+
+export type LinkIdentity = {
+  linkId: string;
+};
+
+type WithBaseRequest<T> = T & {
+  baseRequest: BaseRequest;
+};
+
+export interface LinkDetail extends LinkBaseFields, LinkIdentity {
   isFavorite: boolean;
   faviconUrl: string;
   representImageUrl: string;
@@ -17,30 +27,19 @@ export interface LinkDetail {
   createdDate: string | number;
 }
 
-export type CreateLinkData = {
-  baseRequest: BaseRequest;
-  linkName: string;
-  linkUrl: string;
-  folderId: string;
-  description: string;
-};
+// 요청 데이터 타입들
+export type CreateLinkData = WithBaseRequest<
+  LinkBaseFields & {
+    folderId: string;
+    description: string;
+  }
+>;
 
-export type DeleteLinkData = {
-  baseRequest: BaseRequest;
-  linkId: string;
-};
+export type UpdateLinkData = WithBaseRequest<LinkBaseFields & LinkIdentity>;
 
-export type UpdateLinkData = {
-  baseRequest: BaseRequest;
-  linkName: string;
-  linkUrl: string;
-  linkId: string;
-};
+export type DeleteLinkData = WithBaseRequest<LinkIdentity>;
 
-export type PreviewLinkData = {
-  baseRequest: BaseRequest;
-  linkUrl: string;
-};
+export type PreviewLinkData = WithBaseRequest<Pick<LinkBaseFields, 'linkUrl'>>;
 
 export type CommonApiResponse = {
   status: number;
