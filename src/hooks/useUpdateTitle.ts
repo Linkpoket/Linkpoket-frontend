@@ -20,13 +20,9 @@ type UseUpdateTitleOptions = {
 export function useUpdateTitle(
   id?: string,
   initialTitle: string = '',
-  options?: UseUpdateTitleOptions | string,
-  link?: string
+  options?: UseUpdateTitleOptions
 ) {
-  // 옵션 파라미터 처리
-  const opts: UseUpdateTitleOptions =
-    typeof options === 'string' ? { type: options, link } : options || {};
-
+  const opts = options || {};
   const lastUpdateRef = useRef({ title: initialTitle });
   const { pageId: storePageId } = usePageStore();
   const pageId = opts.pageId || storePageId;
@@ -36,6 +32,7 @@ export function useUpdateTitle(
     pageId || ''
   );
 
+  //폴더 제목 변경 함수수
   const updateFolderImmediately = (title: string) => {
     if (!id) return;
 
@@ -55,6 +52,7 @@ export function useUpdateTitle(
     });
   };
 
+  //페이지 제목 변경 함수수
   const updatePageTitleImmediately = (title: string) => {
     if (!pageId || !opts.isPageTitle) return;
 
@@ -73,16 +71,7 @@ export function useUpdateTitle(
     });
   };
 
-  const handleDebouncedUpdate = (update: TitleUpdate) => {
-    lastUpdateRef.current = update;
-    if (opts.isPageTitle) {
-      updatePageTitleImmediately(update.title);
-    } else if (id) {
-      // folderId나 linkId가 있으면 폴더/링크 업데이트
-      updateFolderImmediately(update.title);
-    }
-  };
-
+  //링크 제목 변경 함수수
   const updateLinkImmediately = (title: string) => {
     if (!id) return;
 
@@ -106,17 +95,19 @@ export function useUpdateTitle(
     });
   };
 
-  const handleDebouncedUpdateLink = (update: TitleUpdate) => {
+  const handleDebouncedUpdate = (update: TitleUpdate) => {
     lastUpdateRef.current = update;
-    if (opts.type !== null && opts.type !== undefined) {
+
+    if (opts.isPageTitle) {
+      updatePageTitleImmediately(update.title);
+    } else if (opts.type === 'link') {
       updateLinkImmediately(update.title);
+    } else if (id) {
+      updateFolderImmediately(update.title);
     }
   };
+
   const debouncedUpdate = useDebounce<TitleUpdate>(handleDebouncedUpdate, 500);
-  const debouncedUpdateLink = useDebounce<TitleUpdate>(
-    handleDebouncedUpdateLink,
-    500
-  );
 
   const handleBlur = (title: string) => {
     if (opts.isPageTitle) {
@@ -125,8 +116,13 @@ export function useUpdateTitle(
       return;
     }
 
+    if (opts.type === 'link') {
+      lastUpdateRef.current = { title };
+      updateLinkImmediately(title);
+      return;
+    }
+
     if (id) {
-      // folderId나 linkId가 있으면 폴더/링크 업데이트
       lastUpdateRef.current = { title };
       updateFolderImmediately(title);
       return;
@@ -147,6 +143,5 @@ export function useUpdateTitle(
   return {
     debouncedUpdate,
     handleBlur,
-    debouncedUpdateLink,
   };
 }

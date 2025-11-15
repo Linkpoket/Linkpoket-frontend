@@ -41,12 +41,10 @@ const DropDownInline = ({
 }: DropDownInlineProps) => {
   const [title, setTitle] = useState(initialTitle);
   const [link, setLink] = useState(initialLink);
-  const { debouncedUpdate, debouncedUpdateLink, handleBlur } = useUpdateTitle(
-    id,
-    title,
+  const { debouncedUpdate, handleBlur } = useUpdateTitle(id, title, {
     type,
-    link
-  );
+    link,
+  });
 
   const { pageId } = usePageStore();
 
@@ -183,7 +181,7 @@ const DropDownInline = ({
               onChange={(e) => {
                 const value = e.target.value;
                 setTitle(value);
-                debouncedUpdateLink({ title: value });
+                debouncedUpdate({ title: value });
               }}
               placeholder="사이트명 입력"
               className="border-gray-20 border-b p-[12px] outline-none"
