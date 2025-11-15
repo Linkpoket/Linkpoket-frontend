@@ -47,11 +47,11 @@ export default function PersonalPageContentSection({
       pageId: pageId,
       commandType: 'EDIT',
     },
-    targetId: 0,
+    targetId: '',
     itemType: '',
     newOrderIndex: 1,
-    toFolderId: 0,
-    fromFolderId: 0,
+    toFolderId: '',
+    fromFolderId: '',
   });
 
   const [pageData, setPageData] = useState<(FolderDetail | LinkDetail)[] | []>(

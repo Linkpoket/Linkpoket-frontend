@@ -47,11 +47,11 @@ export default function SharedPageContentSection({
       pageId: pageId,
       commandType: 'EDIT',
     },
-    targetId: 0,
+    targetId: '',
     itemType: '',
     newOrderIndex: 1,
-    toFolderId: 0,
-    fromFolderId: 0,
+    toFolderId: '',
+    fromFolderId: '',
   });
 
   const [pageData, setPageData] = useState<(FolderDetail | LinkDetail)[]>([]);
@@ -80,7 +80,7 @@ export default function SharedPageContentSection({
     pageData,
     searchKeyword,
     pageId,
-    parentsFolderId: parentsFolderId ?? 0,
+    parentsFolderId: parentsFolderId ?? '',
     onMutation: updateDragAndDropMutation.mutateAsync,
     onDataChange: setPageData,
   });

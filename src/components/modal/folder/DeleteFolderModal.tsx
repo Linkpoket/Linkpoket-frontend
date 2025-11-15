@@ -12,7 +12,11 @@ const DeleteFolderModal = forwardRef<
     pageId: string;
   }
 >(({ isOpen, onClose, folderId, pageId }, ref) => {
-  const { mutate: deleteFolder } = useDeleteFolder(pageId);
+  const { mutate: deleteFolder } = useDeleteFolder(pageId, {
+    onSuccess: () => {
+      onClose();
+    },
+  });
 
   const handleDelete = () => {
     const requestBody = {
@@ -23,7 +27,8 @@ const DeleteFolderModal = forwardRef<
       folderId: folderId,
     };
     deleteFolder(requestBody);
-    onClose();
+
+    console.log('삭제');
   };
 
   return (
@@ -45,7 +50,13 @@ const DeleteFolderModal = forwardRef<
 
       <Modal.Footer className="pt-0">
         <Modal.CancelButton />
-        <Modal.ConfirmButton onClick={handleDelete}>삭제</Modal.ConfirmButton>
+        <Modal.ConfirmButton
+          onClick={() => {
+            handleDelete();
+          }}
+        >
+          삭제
+        </Modal.ConfirmButton>
       </Modal.Footer>
     </Modal>
   );

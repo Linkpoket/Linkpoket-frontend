@@ -37,7 +37,7 @@ export default function BookmarkPageContentSection({
       pageId: pageId,
       commandType: 'EDIT',
     },
-    targetId: 0,
+    targetId: '',
     itemType: '',
     newOrderIndex: 1,
     toFolderId: '',

@@ -49,7 +49,7 @@ export default function AddFolderModal({
         commandType: 'CREATE',
       },
       folderName,
-      parentFolderId: parentsFolderId ?? 0,
+      parentFolderId: parentsFolderId ?? '',
       folderDescription,
     };
     createFolderMutation.mutate(requestBody);

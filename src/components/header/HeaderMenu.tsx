@@ -13,6 +13,7 @@ import { ContactDetail } from './ContactDetail';
 import { ManageSharedPageModalSkeleton } from '../skeleton/ManageSharedPageModalSkeleton';
 import { DeleteModalSkeleton } from '../skeleton/DeleteModalSkeleton';
 import FolderColorModal from '../modal/folder/FolderColorModal';
+import DeleteFolderModal from '../modal/folder/DeleteFolderModal';
 
 const DeleteSharedPageModal = lazy(
   () => import('../modal/page/DeleteSharedPageModal')
@@ -42,6 +43,7 @@ export default function HeaderMenu({
     useState(false);
   const [isWithdrawSharedPageModalOpen, setisWithdrawSharedPageModalOpen] =
     useState(false);
+  const [isDeleteFolderModalOpen, setIsDeleteFolderModalOpen] = useState(false);
   const [isManageSharedPageModalOpen, setIsManageSharedPageModalOpen] =
     useState(false);
   const [isFolderColorModalOpen, setIsFolderColorModalOpen] = useState(false);
@@ -142,7 +144,7 @@ export default function HeaderMenu({
             )}
             {isFolder && isHost && (
               <button
-                onClick={() => setIsDeleteSharedPageModalOpen(true)}
+                onClick={() => setIsDeleteFolderModalOpen(true)}
                 className="text-status-danger hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[500]"
               >
                 <Deleted />
@@ -164,6 +166,17 @@ export default function HeaderMenu({
                 <DeleteSharedPageModal
                   isOpen={isDeleteSharedPageModalOpen}
                   onClose={() => setIsDeleteSharedPageModalOpen(false)}
+                  pageId={id}
+                />
+              </Suspense>
+            )}
+
+            {isDeleteFolderModalOpen && (
+              <Suspense fallback={<DeleteModalSkeleton />}>
+                <DeleteFolderModal
+                  isOpen={isDeleteFolderModalOpen}
+                  onClose={() => setIsDeleteFolderModalOpen(false)}
+                  folderId={id}
                   pageId={id}
                 />
               </Suspense>

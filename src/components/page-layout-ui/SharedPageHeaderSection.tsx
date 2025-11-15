@@ -36,7 +36,7 @@ export default function SharedPageHeaderSection({
     if (!pageId) return;
 
     const updateSharedPageTitleData = {
-      baseRequest: { pageId, commandType: 'EDIT' },
+      baseRequest: { pageId, commandType: 'EDIT' as const },
       pageTitle: title,
     };
 

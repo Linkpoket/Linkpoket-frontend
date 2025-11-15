@@ -1,6 +1,6 @@
 export type SidebarContext = 'personal' | 'shared' | 'bookmarks';
 
-//현재 경로를 기반으로 사이드바 컨텍스트를 반환
+//현재 경로를 기반으로 사이드바 경로로 반환
 export const getCurrentContext = (pathname: string): SidebarContext => {
   if (pathname === '/') return 'personal';
   if (pathname.startsWith('/shared/')) return 'shared';
@@ -9,7 +9,7 @@ export const getCurrentContext = (pathname: string): SidebarContext => {
   return 'personal'; // 기본값
 };
 
-//개인 페이지가 활성화되어 있는지 확인합니다.
+//개인 페이지가 활성화되어 있는지 확인
 export const isPersonalActive = (pathname: string): boolean => {
   return pathname === '/' || pathname.startsWith('/personal/');
 };

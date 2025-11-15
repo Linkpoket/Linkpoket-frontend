@@ -2,11 +2,7 @@ version: '3.8'
 
 services:
   linkpoket-server:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        - SPRING_PROFILE=${SPRING_PROFILE}
+    image: parkjihyeon/linkpoket-server:latest
     container_name: linkpoket-server
     env_file:
       - ${ENV_FILE}

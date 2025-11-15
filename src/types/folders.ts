@@ -1,8 +1,6 @@
-export type CommandType = 'CREATE' | 'EDIT' | 'DELETE' | 'VIEW';
-
 export interface BaseRequest {
   pageId: string;
-  commandType: 'CREATE' | 'EDIT' | 'DELETE' | 'VIEW';
+  commandType: string;
 }
 
 interface FolderBaseFields {
@@ -53,7 +51,7 @@ export interface DeleteFolderData {
 
 export interface FetchFolderDetailsProps {
   pageId: string;
-  commandType: CommandType;
+  commandType: string;
   folderId: string;
   sortType: string;
 }

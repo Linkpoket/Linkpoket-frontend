@@ -64,10 +64,9 @@ export default function useDeleteFolder(
             ...old,
             data: {
               ...old.data,
-              directoryDetailResponses:
-                old.data.directoryDetailResponses.filter(
-                  (f: any) => f.folderId !== variables.folderId
-                ),
+              foldeDetailResponses: old.data.folderDetailResponses.filter(
+                (f: any) => f.folderId !== variables.folderId
+              ),
             },
           };
         });
@@ -80,10 +79,9 @@ export default function useDeleteFolder(
             ...old,
             data: {
               ...old.data,
-              directoryDetailResponses:
-                old.data.directoryDetailResponses.filter(
-                  (f: any) => f.folderId !== variables.folderId
-                ),
+              folderDetailResponses: old.data.folderDetailResponses.filter(
+                (f: any) => f.folderId !== variables.folderId
+              ),
             },
           };
         });
@@ -98,8 +96,8 @@ export default function useDeleteFolder(
               ...old.data,
               pageDetails: {
                 ...old.data.pageDetails,
-                directoryDetailResponses:
-                  old.data.pageDetails.directoryDetailResponses.filter(
+                folderDetailResponses:
+                  old.data.pageDetails.folderDetailResponses.filter(
                     (f: any) => f.folderId !== variables.folderId
                   ),
               },

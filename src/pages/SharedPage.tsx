@@ -22,13 +22,15 @@ export default function SharedPage() {
   const { sortType, handleSort } = usePageLayout();
 
   const refinedData = data?.data;
-  const folderData = refinedData?.directoryDetailResponses ?? [];
+  const folderData = refinedData?.folderDetailResponses ?? [];
   const linkData = refinedData?.linkDetailResponses ?? [];
 
   const { folderDataLength, linkDataLength } = getPageDataLength(
     folderData,
     linkData
   );
+
+  console.log('refinedData', refinedData);
 
   const rootFolderId = refinedData?.rootFolderId;
   const pageTitle = refinedData?.pageTitle;
