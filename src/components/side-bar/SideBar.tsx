@@ -1,33 +1,31 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import BookMark from '@/assets/widget-ui-assets/BookMark.svg?react';
+import BookMarkActive from '@/assets/widget-ui-assets/BookMarkActive.svg?react';
+import PersonalPage from '@/assets/widget-ui-assets/PersonalPage.svg?react';
+import PersonalPageActive from '@/assets/widget-ui-assets/PersonalPageActive.svg?react';
+import PlusIcon from '@/assets/common-ui-assets/PlusIcon.svg?react';
+import SidebarSharedPageIcon from '@/assets/common-ui-assets/SidebarSharedPageIcon.svg?react';
+import SidebarFolderIcon from '@/assets/common-ui-assets/SidebarFolderIcon.svg?react';
+import ColorUp from '@/assets/common-ui-assets/ColorUp.svg?react';
+import ColorDown from '@/assets/common-ui-assets/ColorDown.svg?react';
+import NoColorUp from '@/assets/common-ui-assets/NoColorUp.svg?react';
+import NoColorDown from '@/assets/common-ui-assets/NoColorDown.svg?react';
+import SidebarOpen from '@/assets/widget-ui-assets/SidebarOpen.svg?react';
+import SidebarClose from '@/assets/widget-ui-assets/SidebarClose.svg?react';
 import { useMobile } from '@/hooks/useMobile';
 import useFetchJoinedPage from '@/hooks/queries/useFetchJoinedPage';
 import { useCreateSharedPage } from '@/hooks/mutations/useCreateSharedPage';
-import { useCreateFolder } from '@/hooks/mutations/useCreateFolder';
-import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
-import useFetchFolderList from '@/hooks/queries/useFetchFolderList';
 import { toast } from 'react-hot-toast';
-import {
-  getCurrentContext,
-  isPersonalActive as checkPersonalActive,
-  isBookmarksActive as checkBookmarksActive,
-  isSharedPageActive as checkSharedPageActive,
-  getFolderLink as createFolderLink,
-  isFolderActive as checkFolderActive,
-} from '@/utils/sidebarRouting';
-import SidebarClose from '@/assets/widget-ui-assets/SidebarClose.svg?react';
-import FolderList from './FolderList';
-import SharedPageList from './SharedPageList';
-import MainMenuItems from './MainMenuItems';
-import FoldedSidebar from './FoldedSidebar';
-import SharedPageSectionHeader from './SharedPageSectionHeader';
-import FolderSectionHeader from './FolderSectionHeader';
+import { usePageStore } from '@/stores/pageStore';
+import useFetchFolderList from '@/hooks/queries/useFetchFolderList';
 
 type MenubarProps = {
   showSidebar: boolean;
   setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
   isFoldSidebar: boolean;
   setIsFoldSidebar: React.Dispatch<React.SetStateAction<boolean>>;
+  initialCollapsed?: boolean;
 };
 
 const SideBar: React.FC<MenubarProps> = ({
@@ -35,19 +33,40 @@ const SideBar: React.FC<MenubarProps> = ({
   setShowSidebar,
   isFoldSidebar,
   setIsFoldSidebar,
+  initialCollapsed = false,
 }) => {
   const [isFolderListOpen, setIsFolderListOpen] = useState(true);
   const sidebarRef = useRef<HTMLElement | null>(null);
+  const initialCollapseAppliedRef = useRef(false);
   const isMobile = useMobile();
   const { pageId } = usePageStore();
   const location = useLocation();
+  const navigate = useNavigate();
   const params = useParams();
 
-  //768px 이하의 경우, showSidebar를 false처리, 이외엔 true처리
+  //768px 이하의 경우 자동 접기, 홈 초기 상태 제어
   useEffect(() => {
-    setShowSidebar(!isMobile);
-    setIsFoldSidebar(isMobile);
-  }, [isMobile, setShowSidebar, setIsFoldSidebar]);
+    if (initialCollapsed && !isMobile && !initialCollapseAppliedRef.current) {
+      setShowSidebar(false);
+      setIsFoldSidebar(true);
+      initialCollapseAppliedRef.current = true;
+      return;
+    }
+
+    if (isMobile) {
+      setShowSidebar(false);
+      setIsFoldSidebar(true);
+    } else if (!initialCollapsed) {
+      setShowSidebar(true);
+      setIsFoldSidebar(false);
+    }
+  }, [initialCollapsed, isMobile, setIsFoldSidebar, setShowSidebar]);
+
+  useEffect(() => {
+    if (!initialCollapsed) {
+      initialCollapseAppliedRef.current = false;
+    }
+  }, [initialCollapsed]);
 
   //useClickOutside 사용시 isMobile === false일 때도 계속 리스너가 등록되어 있어 명시적으로
   useEffect(() => {
@@ -69,24 +88,44 @@ const SideBar: React.FC<MenubarProps> = ({
   }, [isMobile, setShowSidebar, showSidebar]);
 
   // 현재 컨텍스트 파악
-  const currentContext = getCurrentContext(location.pathname);
+  const getCurrentContext = () => {
+    const path = location.pathname;
+    if (path === '/') return 'personal';
+    if (path.startsWith('/shared/')) return 'shared';
+    if (path.startsWith('/bookmarks')) return 'bookmarks';
+    if (path.startsWith('/personal/')) return 'personal';
+    return 'personal'; // 기본값
+  };
+
+  const currentContext = getCurrentContext();
 
   // 메뉴 활성 상태 확인
-  const isPersonalActive = checkPersonalActive(location.pathname);
-  const isBookmarksActive = checkBookmarksActive(location.pathname);
+  const isPersonalActive =
+    location.pathname === '/' || location.pathname.startsWith('/personal/');
+  const isBookmarksActive =
+    location.pathname === '/bookmarks' ||
+    location.pathname.startsWith('/bookmarks/');
   const isSharedPageActive = (pageId: string) => {
-    return checkSharedPageActive(location.pathname, pageId);
+    return (
+      location.pathname === `/shared/${pageId}` ||
+      location.pathname.startsWith(`/shared/${pageId}/`)
+    );
   };
 
   // 폴더 링크 생성 헬퍼 함수
   const getFolderLink = (folderId: string) => {
-    return createFolderLink(currentContext, folderId, params.pageId);
+    switch (currentContext) {
+      case 'shared':
+        return `/shared/${params.pageId}/folder/${folderId}`;
+      case 'personal':
+      default:
+        return `/personal/folder/${folderId}`;
+    }
   };
 
   // 현재 폴더가 활성화되어 있는지 확인
   const isFolderActive = (folderId: string) => {
-    const folderLink = getFolderLink(folderId);
-    return checkFolderActive(location.pathname, folderLink);
+    return location.pathname === getFolderLink(folderId);
   };
 
   //사이드바 페이지 목록 조회
@@ -98,8 +137,13 @@ const SideBar: React.FC<MenubarProps> = ({
 
   //공유페이지 생성
   const { mutate: createSharedPage } = useCreateSharedPage({
-    onSuccess: () => {
+    onSuccess: (response) => {
       toast.success('공유페이지 생성 완료');
+
+      const createdPageId = response?.data?.pageId;
+      if (createdPageId) {
+        navigate(`/shared/${createdPageId}`);
+      }
     },
     onError: () => {
       toast.error('공유페이지 생성 실패');
@@ -113,7 +157,57 @@ const SideBar: React.FC<MenubarProps> = ({
   };
 
   const handleToggleFolderList = () => {
-    setIsFolderListOpen((prev) => !prev);
+    setIsFolderListOpen(!isFolderListOpen);
+  };
+
+  // 펼쳐진 폴더들의 ID를 저장 (초기값: 빈 Set = 모든 폴더 접힌 상태)
+  const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
+    new Set()
+  );
+
+  // 폴더 토글 함수
+  const toggleFolder = (folderId: string) => {
+    setExpandedFolders((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(folderId)) {
+        newSet.delete(folderId);
+      } else {
+        newSet.add(folderId);
+      }
+      return newSet;
+    });
+  };
+
+  const FolderToggleIcon = ({
+    isCollapsed,
+    folderId,
+  }: {
+    isCollapsed: boolean;
+    folderId: string;
+  }) => {
+    const isActive = isFolderActive(folderId);
+
+    if (isActive) {
+      return isCollapsed ? (
+        <ColorDown
+          width={12}
+          height={12}
+          style={{ filter: 'grayscale(1) brightness(0)' }}
+        />
+      ) : (
+        <ColorUp
+          width={12}
+          height={12}
+          style={{ filter: 'grayscale(1) brightness(0)' }}
+        />
+      );
+    } else {
+      return isCollapsed ? (
+        <NoColorDown width={12} height={12} />
+      ) : (
+        <NoColorUp width={12} height={12} />
+      );
+    }
   };
 
   //JSX
@@ -124,7 +218,7 @@ const SideBar: React.FC<MenubarProps> = ({
     return (
       <aside
         ref={sidebarRef}
-        className={`border-gray-10 flex h-screen w-[220px] flex-col justify-between border-r ${isMobile ? 'bg-gray-0 absolute top-0 left-0 z-50' : 'relative'} `}
+        className={`border-gray-10 flex h-screen flex-col justify-between border-r ${isMobile ? 'bg-gray-0 absolute top-0 left-0 z-50 w-[220px]' : 'relative w-[15vw] min-w-[150px]'} `}
       >
         <div className="flex flex-col gap-[8px] p-[16px]">
           <div className="flex justify-end">
@@ -141,76 +235,318 @@ const SideBar: React.FC<MenubarProps> = ({
           </div>
           <ul>
             <li>
-              <MainMenuItems
-                isPersonalActive={isPersonalActive}
-                isBookmarksActive={isBookmarksActive}
-              />
+              <Link
+                to="/"
+                className={`group sidebar-text flex items-center gap-[12px] rounded-[8px] p-[8px] text-[14px] font-[600] ${
+                  isPersonalActive
+                    ? 'bg-gray-5 text-gray-90'
+                    : 'text-gray-70 hover:bg-gray-5'
+                }`}
+              >
+                {isPersonalActive ? (
+                  <PersonalPageActive width={20} height={20} />
+                ) : (
+                  <PersonalPage width={20} height={20} />
+                )}
+                개인 페이지
+              </Link>
 
-              <SharedPageSectionHeader
-                onCreateClick={(e) => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                  handleCreateSharedPage();
-                }}
-              />
+              <Link
+                to="/bookmarks"
+                className={`group sidebar-text flex items-center gap-[12px] rounded-[8px] p-[8px] text-[14px] font-[600] ${
+                  isBookmarksActive
+                    ? 'bg-gray-5 text-gray-90'
+                    : 'text-gray-70 hover:bg-gray-5'
+                }`}
+              >
+                {isBookmarksActive ? (
+                  <BookMarkActive width={20} height={20} />
+                ) : (
+                  <BookMark width={20} height={20} />
+                )}
+                북마크
+              </Link>
 
-              {/* 공유페이지 리스트 */}
-              {joinedPage && (
-                <SharedPageList
-                  pages={joinedPage}
-                  isSharedPageActive={isSharedPageActive}
-                />
-              )}
-
-              {/* 폴더 섹션 - 개인페이지 내 폴더 표시 */}
-              {currentContext === 'personal' && refinedFolderList && (
-                <>
-                  <FolderSectionHeader
-                    isOpen={isFolderListOpen}
-                    showToggle={true}
-                    onToggleClick={(e) => {
-                      if (location.pathname === '/bookmarks') {
-                        toast.error('북마크에서는 폴더를 생성할 수 없습니다.');
-                      }
+              <div className="sidebar-text mt-4 flex items-center px-[8px] py-[4px] text-[14px] font-[600] text-gray-100 hover:rounded-[8px] active:rounded-[8px]">
+                <div className="group flex w-full items-center justify-between">
+                  <div className="flex items-center gap-[12px]">
+                    <SidebarSharedPageIcon
+                      width={20}
+                      height={20}
+                      className="text-gray-90"
+                    />
+                    <span>공유 페이지</span>
+                  </div>
+                  <PlusIcon
+                    className="text-gray-40 hover:text-gray-90 cursor-pointer"
+                    onClick={(e) => {
                       e.stopPropagation();
                       e.preventDefault();
-                      handleToggleFolderList();
+                      handleCreateSharedPage();
                     }}
+                    aria-label="공유페이지 추가"
+                    height={14}
+                    width={14}
                   />
+                </div>
+              </div>
+
+              {/* 공유페이지 리스트 */}
+              <div className="mt-2 flex flex-col gap-[2px] pl-2">
+                {joinedPage?.map((page: any) => (
+                  <Link
+                    key={page.pageId}
+                    to={`/shared/${page.pageId}`}
+                    className={`sidebar-text block rounded-[8px] py-2 pr-3 pl-4 text-[14px] font-[600] ${
+                      isSharedPageActive(page.pageId)
+                        ? 'bg-gray-5 text-gray-90'
+                        : 'text-gray-60 hover:bg-gray-5'
+                    }`}
+                  >
+                    {page.pageTitle}
+                  </Link>
+                ))}
+              </div>
+
+              {/* 폴더 섹션 - 개인페이지 내 폴더 표시 */}
+              {currentContext === 'personal' && (
+                <>
+                  <div className="sidebar-text mt-4 flex items-center px-[8px] py-[4px] text-[14px] font-[600] text-gray-100 hover:rounded-[8px] active:rounded-[8px]">
+                    <div className="group flex w-full items-center justify-between">
+                      <div className="flex items-center gap-[12px]">
+                        <SidebarFolderIcon
+                          width={20}
+                          height={20}
+                          className="text-gray-90"
+                        />
+                        <div>폴더</div>
+                      </div>
+                      {isFolderListOpen ? (
+                        <NoColorUp
+                          className="text-gray-40 hover:text-gray-90 cursor-pointer"
+                          onClick={(e) => {
+                            if (location.pathname === '/bookmarks') {
+                              toast.error(
+                                '북마크에서는 폴더를 생성할 수 없습니다.'
+                              );
+                            }
+                            e.stopPropagation();
+                            e.preventDefault();
+                            handleToggleFolderList();
+                          }}
+                          aria-label="폴더 추가"
+                          height={14}
+                          width={14}
+                        />
+                      ) : (
+                        <NoColorDown
+                          className="text-gray-40 hover:text-gray-90 cursor-pointer"
+                          onClick={(e) => {
+                            if (location.pathname === '/bookmarks') {
+                              toast.error(
+                                '북마크에서는 폴더를 생성할 수 없습니다.'
+                              );
+                            }
+                            e.stopPropagation();
+                            e.preventDefault();
+                            handleToggleFolderList();
+                          }}
+                          aria-label="폴더 추가"
+                          height={14}
+                          width={14}
+                        />
+                      )}
+                    </div>
+                  </div>
 
                   {isFolderListOpen && (
-                    <FolderList
-                      folders={refinedFolderList}
-                      getFolderLink={getFolderLink}
-                      isFolderActive={isFolderActive}
-                    />
+                    <>
+                      {/* 폴더 뎁스1 리스트 */}
+                      <div className="mt-2 flex flex-col gap-[2px] pl-2">
+                        {refinedFolderList?.map((folder: any) => (
+                          <div key={folder.folderId}>
+                            <div className="flex items-center">
+                              {/* 하위 폴더가 있는 경우 화살표 표시 */}
+
+                              <Link
+                                to={getFolderLink(folder.folderId)}
+                                className={`sidebar-text flex w-full items-center justify-between rounded-[8px] py-2 pr-3 pl-4 text-[14px] font-[600] ${
+                                  isFolderActive(folder.folderId)
+                                    ? 'bg-gray-5 text-gray-90'
+                                    : 'text-gray-60 hover:bg-gray-5'
+                                }`}
+                              >
+                                {folder.folderTitle}
+                                {folder.children &&
+                                folder.children.length > 0 ? (
+                                  <button
+                                    onClick={() =>
+                                      toggleFolder(folder.folderId)
+                                    }
+                                    className="hover:text-gray-70 mr-1 flex h-4 w-4 cursor-pointer items-center justify-center text-gray-50"
+                                    aria-label={`${folder.folderTitle} 폴더 ${expandedFolders.has(folder.folderId) ? '접기' : '펼치기'}`}
+                                  >
+                                    <FolderToggleIcon
+                                      isCollapsed={
+                                        !expandedFolders.has(folder.folderId)
+                                      }
+                                      folderId={folder.folderId}
+                                    />
+                                  </button>
+                                ) : (
+                                  <div className="mr-1 h-4 w-4" />
+                                )}
+                              </Link>
+                            </div>
+
+                            {/* 폴더 뎁스2 리스트 - 펼쳐져 있을 때만 표시 */}
+                            {folder.children &&
+                              folder.children.length > 0 &&
+                              expandedFolders.has(folder.folderId) && (
+                                <div className="mt-1 ml-6 flex flex-col gap-[2px]">
+                                  {folder.children.map((child: any) => (
+                                    <Link
+                                      key={child.folderId}
+                                      to={getFolderLink(child.folderId)}
+                                      className={`sidebar-text block rounded-[8px] py-2 pr-3 pl-4 text-[14px] font-[600] ${
+                                        isFolderActive(child.folderId)
+                                          ? 'bg-gray-5 text-gray-90'
+                                          : 'hover:bg-gray-5 text-gray-50'
+                                      }`}
+                                    >
+                                      <span className="pr-2">•</span>
+                                      <span>{child.folderTitle}</span>
+                                    </Link>
+                                  ))}
+                                </div>
+                              )}
+                          </div>
+                        ))}
+                      </div>
+                    </>
                   )}
                 </>
               )}
 
               {/* 공유페이지 내 폴더 표시 */}
-              {currentContext === 'shared' &&
-                params.pageId &&
-                refinedFolderList && (
-                  <>
-                    <FolderSectionHeader
-                      isOpen={isFolderListOpen}
-                      showToggle={true}
-                      onToggleClick={(e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        handleToggleFolderList();
-                      }}
-                    />
-                    {isFolderListOpen && (
-                      <FolderList
-                        folders={refinedFolderList}
-                        getFolderLink={getFolderLink}
-                        isFolderActive={isFolderActive}
-                      />
-                    )}
-                  </>
-                )}
+              {currentContext === 'shared' && params.pageId && (
+                <>
+                  <div className="sidebar-text mt-4 flex items-center px-[8px] py-[4px] text-[14px] font-[600] text-gray-100 hover:rounded-[8px] active:rounded-[8px]">
+                    <div className="group flex w-full items-center justify-between">
+                      <div className="flex items-center gap-[12px]">
+                        <SidebarFolderIcon
+                          width={20}
+                          height={20}
+                          className="text-gray-90"
+                        />
+                        <div>폴더</div>
+                      </div>
+                      {isFolderListOpen ? (
+                        <NoColorUp
+                          className="text-gray-40 hover:text-gray-90 cursor-pointer"
+                          onClick={(e) => {
+                            if (location.pathname === '/bookmarks') {
+                              toast.error(
+                                '북마크에서는 폴더를 생성할 수 없습니다.'
+                              );
+                            }
+                            e.stopPropagation();
+                            e.preventDefault();
+                            handleToggleFolderList();
+                          }}
+                          aria-label="폴더 추가"
+                          height={14}
+                          width={14}
+                        />
+                      ) : (
+                        <NoColorDown
+                          className="text-gray-40 hover:text-gray-90 cursor-pointer"
+                          onClick={(e) => {
+                            if (location.pathname === '/bookmarks') {
+                              toast.error(
+                                '북마크에서는 폴더를 생성할 수 없습니다.'
+                              );
+                            }
+                            e.stopPropagation();
+                            e.preventDefault();
+                            handleToggleFolderList();
+                          }}
+                          aria-label="폴더 추가"
+                          height={14}
+                          width={14}
+                        />
+                      )}
+                    </div>
+                  </div>
+                  {isFolderListOpen && (
+                    <>
+                      <div className="mt-2 flex flex-col gap-[2px] pl-2">
+                        {refinedFolderList?.map((folder: any) => (
+                          <div key={folder.folderId}>
+                            <div className="flex items-center">
+                              {/* 하위 폴더가 있는 경우 화살표 표시 */}
+
+                              <Link
+                                to={`/shared/${params.pageId}/folder/${folder.folderId}`}
+                                className={`sidebar-text flex w-full items-center justify-between rounded-[8px] py-2 pr-3 pl-4 text-[14px] font-[600] ${
+                                  location.pathname ===
+                                  `/shared/${params.pageId}/folder/${folder.folderId}`
+                                    ? 'bg-gray-5 text-gray-90'
+                                    : 'text-gray-60 hover:bg-gray-5'
+                                }`}
+                              >
+                                {folder.folderTitle}
+                                {folder.children &&
+                                folder.children.length > 0 ? (
+                                  <button
+                                    onClick={() =>
+                                      toggleFolder(folder.folderId)
+                                    }
+                                    className="hover:text-gray-70 mr-1 flex h-4 w-4 cursor-pointer items-center justify-center text-gray-50"
+                                    aria-label={`${folder.folderTitle} 폴더 ${expandedFolders.has(folder.folderId) ? '접기' : '펼치기'}`}
+                                  >
+                                    <FolderToggleIcon
+                                      isCollapsed={
+                                        !expandedFolders.has(folder.folderId)
+                                      }
+                                      folderId={folder.folderId}
+                                    />
+                                  </button>
+                                ) : (
+                                  <div className="mr-1 h-4 w-4" />
+                                )}
+                              </Link>
+                            </div>
+
+                            {/* 폴더 뎁스2 리스트 - 펼쳐져 있을 때만 표시 */}
+                            {folder.children &&
+                              folder.children.length > 0 &&
+                              expandedFolders.has(folder.folderId) && (
+                                <div className="mt-1 ml-6 flex flex-col gap-[2px]">
+                                  {folder.children.map((child: any) => (
+                                    <Link
+                                      key={child.folderId}
+                                      to={`/shared/${params.pageId}/folder/${child.folderId}`}
+                                      className={`sidebar-text block rounded-[8px] py-2 pr-3 pl-4 text-[14px] font-[600] ${
+                                        location.pathname ===
+                                        `/shared/${params.pageId}/folder/${child.folderId}`
+                                          ? 'bg-gray-5 text-gray-90'
+                                          : 'hover:bg-gray-5 text-gray-50'
+                                      }`}
+                                    >
+                                      <span className="pr-2">•</span>
+                                      <span>{child.folderTitle}</span>
+                                    </Link>
+                                  ))}
+                                </div>
+                              )}
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
             </li>
           </ul>
         </div>
@@ -218,14 +554,58 @@ const SideBar: React.FC<MenubarProps> = ({
     );
   } else if (!showSidebar && isFoldSidebar && !isMobile) {
     return (
-      <FoldedSidebar
-        isPersonalActive={isPersonalActive}
-        isBookmarksActive={isBookmarksActive}
-        onOpen={() => {
-          setShowSidebar(true);
-          setIsFoldSidebar(false);
-        }}
-      />
+      <aside
+        className="border-gray-10 h-screen border-r p-4"
+        style={{ width: 'clamp(64px, 4.5vw, 100px)' }}
+      >
+        <div className="flex justify-end">
+          <button
+            onClick={() => {
+              setShowSidebar(true);
+              setIsFoldSidebar(false);
+            }}
+            className="mb-2 cursor-pointer"
+            aria-label="사이드바 열기"
+          >
+            <SidebarOpen />
+          </button>
+        </div>
+
+        <div className="flex flex-col items-center gap-[8px]">
+          <button
+            className={`sidebar-text flex w-full items-center justify-center rounded-[8px] p-3 text-[14px] font-[600] ${
+              isPersonalActive
+                ? 'bg-gray-5 text-gray-90'
+                : 'text-gray-70 hover:bg-gray-5'
+            }`}
+            style={{ minHeight: '48px' }}
+          >
+            <Link to="/">
+              {isPersonalActive ? (
+                <PersonalPageActive width={20} height={20} />
+              ) : (
+                <PersonalPage width={20} height={20} />
+              )}
+            </Link>
+          </button>
+          <button
+            className={`sidebar-text flex w-full items-center justify-center rounded-[8px] p-3 text-[14px] font-[600] ${
+              isBookmarksActive
+                ? 'bg-gray-5 text-gray-90'
+                : 'text-gray-70 hover:bg-gray-5'
+            }`}
+            style={{ minHeight: '48px' }}
+          >
+            <Link to="/bookmarks">
+              {isBookmarksActive ? (
+                <BookMarkActive width={20} height={20} />
+              ) : (
+                <BookMark width={20} height={20} />
+              )}
+            </Link>
+          </button>
+        </div>
+      </aside>
     );
   } else if (isMobile && !showSidebar) {
     return null;

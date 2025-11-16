@@ -43,6 +43,7 @@ export interface InputProps
   maxLength?: number;
   showCharCount?: boolean;
   charCountClassName?: string;
+  focusColor?: string;
 }
 
 export const Input = ({
@@ -60,6 +61,7 @@ export const Input = ({
   charCountClassName,
   value,
   onChange,
+  focusColor,
   ...props
 }: InputProps) => {
   const inputVariant = disabled ? 'disabled' : variant;
@@ -68,6 +70,13 @@ export const Input = ({
     variant === 'error'
       ? 'border-status-danger focus:ring-status-danger focus:border-status-danger'
       : '';
+
+  const customFocusStyles = focusColor
+    ? ({
+        '--focus-ring-color': `${focusColor}40`,
+        '--focus-border-color': focusColor,
+      } as React.CSSProperties)
+    : {};
 
   const currentLength = typeof value === 'string' ? value.length : 0;
   const isNearLimit = maxLength && currentLength >= maxLength * 0.8;
@@ -101,8 +110,11 @@ export const Input = ({
           className={cn(
             inputVariants({ variant: inputVariant, inputSize, isModal }),
             errorStyles,
+            focusColor &&
+              'focus:border-[var(--focus-border-color)] focus:ring-[var(--focus-ring-color)]',
             className
           )}
+          style={customFocusStyles}
           disabled={disabled}
           maxLength={maxLength}
           value={value}

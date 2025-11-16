@@ -3,6 +3,7 @@ import { Input } from '@/components/common-ui/Input';
 import Modal from '@/components/common-ui/Modal';
 import { useCreateFolder } from '@/hooks/mutations/useCreateFolder';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
+import { useFolderColorStore } from '@/stores/folderColorStore';
 import toast from 'react-hot-toast';
 
 interface AddFolderModalProps {
@@ -19,6 +20,8 @@ export default function AddFolderModal({
   const [error, setError] = useState('');
   const { pageId } = usePageStore();
   const { parentsFolderId } = useParentsFolderIdStore();
+  const { getCurrentColor } = useFolderColorStore();
+  const currentFolderColor = getCurrentColor();
 
   const isConfirmDisabled = !folderName;
 
@@ -77,6 +80,7 @@ export default function AddFolderModal({
               containerClassName={inputClass}
               labelClassName="font-bold leading-[140%]"
               variant={error && !folderName ? 'error' : 'default'}
+              focusColor={currentFolderColor.previewColor}
             />
             <Input
               label="설명"
@@ -86,6 +90,7 @@ export default function AddFolderModal({
               isModal
               containerClassName={inputClass}
               labelClassName="font-bold leading-[140%]"
+              focusColor={currentFolderColor.previewColor}
             />
           </div>
         </div>
@@ -103,6 +108,7 @@ export default function AddFolderModal({
           onClick={handleCreateFolder}
           disabled={isConfirmDisabled || createFolderMutation.isPending}
           variant={folderName ? 'primary' : 'default'}
+          customColor={folderName ? currentFolderColor.previewColor : undefined}
         >
           {createFolderMutation.isPending ? '전송 중...' : '전송'}
         </Modal.ConfirmButton>

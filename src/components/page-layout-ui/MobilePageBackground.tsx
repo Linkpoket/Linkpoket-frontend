@@ -1,5 +1,9 @@
 import { useMobile } from '@/hooks/useMobile';
 import { useFetchPersonalPage } from '@/hooks/queries/useFetchPersonalPage';
+import { resolvePageImageUrl } from '@/utils/resolvePageImageUrl';
+
+const FALLBACK_IMAGE =
+  'https://d3b39vpyptsv01.cloudfront.net/photo/1/2/17f552dbb8d76670480cd3ec5e9ac0c2.jpg';
 
 export default function MobilePageBackground() {
   const isMobile = useMobile();
@@ -11,10 +15,7 @@ export default function MobilePageBackground() {
       {isMobile && (
         <div className="relative w-full">
           <img
-            src={
-              pageImageUrl ||
-              'https://d3b39vpyptsv01.cloudfront.net/photo/1/2/17f552dbb8d76670480cd3ec5e9ac0c2.jpg'
-            }
+            src={resolvePageImageUrl(pageImageUrl, FALLBACK_IMAGE)}
             alt="Page background"
             className="w-full object-cover"
             style={{ aspectRatio: '10 / 5.5' }}

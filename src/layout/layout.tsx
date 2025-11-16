@@ -21,8 +21,9 @@ export default function Layout() {
   useRouteChangeTracker();
   const location = useLocation();
   const path = location.pathname;
-  const [showSidebar, setShowSidebar] = useState(true);
-  const [isFoldSidebar, setIsFoldSidebar] = useState(false);
+  const isHomePage = path === '/home';
+  const [showSidebar, setShowSidebar] = useState(() => !isHomePage);
+  const [isFoldSidebar, setIsFoldSidebar] = useState(() => isHomePage);
   const {
     isProfileModalOpen,
     isWithdrawModalOpen,
@@ -49,6 +50,11 @@ export default function Layout() {
 
   useNotificationSSE(isLoggedIn);
 
+  useEffect(() => {
+    setShowSidebar(!isHomePage);
+    setIsFoldSidebar(isHomePage);
+  }, [isHomePage]);
+
   return (
     <div className="flex h-screen flex-col">
       {!isHideHeader ? (
@@ -68,9 +74,10 @@ export default function Layout() {
             setShowSidebar={setShowSidebar}
             isFoldSidebar={isFoldSidebar}
             setIsFoldSidebar={setIsFoldSidebar}
+            initialCollapsed={isHomePage}
           />
         ) : null}
-        <main className="flex-1 overflow-auto">
+        <main id="app-scroll-container" className="flex-1 overflow-auto">
           <Suspense
             fallback={
               <div className="flex h-screen items-center justify-center">

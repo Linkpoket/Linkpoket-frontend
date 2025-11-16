@@ -5,6 +5,7 @@ import { FormFields } from '@/components/signup/FormFields';
 import { TermsSection } from '@/components/signup/TermsSection';
 import { TermsModal } from '@/components/modal/signup/TermsModal';
 import { PrivacyModal } from '@/components/modal/signup/PrivacyModal';
+import Logo from '@/assets/widget-ui-assets/Logo.svg?react';
 
 const SignupPage = () => {
   const {
@@ -25,8 +26,9 @@ const SignupPage = () => {
   return (
     <main className="flex min-h-full flex-col items-center justify-center bg-white">
       <form onSubmit={onSubmit} className="w-[360px] max-w-md space-y-6">
+        <Logo className="mx-auto mb-4 h-18 w-18" />
         <h2 className="mb-8 flex justify-center text-[26px] font-bold">
-          링크모아 회원 가입
+          링크포켓 회원 가입
         </h2>
 
         <FormFields

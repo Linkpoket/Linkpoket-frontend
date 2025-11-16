@@ -1,54 +1,81 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useDebounce } from '@/hooks/useDebounce';
+import useUpdateSharedPageTitle from '@/hooks/mutations/useUpdateSharedPageTitle';
 import { useModalStore } from '@/stores/modalStore';
 import { useLocation } from 'react-router-dom';
-import { useUpdateTitle } from '@/hooks/useUpdateTitle';
-import { useFolderColorStore } from '@/stores/folderColorStore';
 import { useMobile } from '@/hooks/useMobile';
+import { useFolderColorStore } from '@/stores/folderColorStore';
 import { Button } from '../common-ui/button';
 
 type PageHeaderSectionProps = {
   pageTitle: string;
-  pageId?: string;
-  folderId?: string;
+  pageId: number;
 };
 
 const MAX_TITLE_LENGTH = 12;
 
-export default function PageHeaderSection({
+export default function SharedPageHeaderSection({
   pageTitle,
   pageId,
-  folderId,
 }: PageHeaderSectionProps) {
   const [title, setTitle] = useState(pageTitle ?? '');
-  const { debouncedUpdate, handleBlur } = useUpdateTitle(
-    folderId,
-    title,
-    folderId
-      ? undefined
-      : {
-          pageId,
-          isPageTitle: true,
-        }
-  );
-  const { openLinkModal, openFolderModal } = useModalStore();
-  const { getCurrentColor } = useFolderColorStore();
-  const currentFolderColor = getCurrentColor();
+  const lastUpdateTitle = useRef({ title });
+
   const location = useLocation();
   const currentLocation = location.pathname;
   const isLinkButtonVisible = currentLocation !== '/bookmarks';
   const isMobile = useMobile();
 
+  const { openLinkModal, openFolderModal } = useModalStore();
+  const { getCurrentColor } = useFolderColorStore();
+  const currentFolderColor = getCurrentColor();
+
+  const { mutate: updateSharedPageTitle } = useUpdateSharedPageTitle(pageId);
+
+  const updateSharedPageTitleImmediately = () => {
+    if (!pageId) return;
+
+    const updateSharedPageTitleData = {
+      baseRequest: { pageId, commandType: 'EDIT' },
+      pageTitle: title,
+    };
+
+    updateSharedPageTitle(updateSharedPageTitleData, {
+      onSuccess: () => {
+        lastUpdateTitle.current = { title };
+      },
+      onError: (error) => {
+        console.error('설명 업데이트 실패:', error);
+      },
+    });
+  };
+
+  const handleDebouncedUpdate = (data: { title: string }) => {
+    lastUpdateTitle.current = { title: data.title };
+  };
+
+  const debouncedUpdate = useDebounce(handleDebouncedUpdate, 500);
+
   useEffect(() => {
     setTitle(pageTitle ?? '');
+    const newTitleState = {
+      title: pageTitle ?? '',
+    };
+
+    lastUpdateTitle.current = newTitleState;
   }, [pageTitle]);
+
+  const handleBlur = () => {
+    const currentTitleState = { title };
+    lastUpdateTitle.current = currentTitleState;
+    updateSharedPageTitleImmediately();
+  };
 
   return (
     <div className="mb-[24px] flex w-full min-w-[328px] items-center justify-between">
       <div className="flex w-full">
         <input
-          id="page-title"
           type="text"
-          disabled={title === '개인 페이지' || title === '북마크'}
           value={title}
           onChange={(e) => {
             const value = e.target.value;
@@ -58,9 +85,9 @@ export default function PageHeaderSection({
             }
           }}
           onBlur={() => {
-            handleBlur(title);
+            handleBlur();
           }}
-          className="outline-nontext-gray-90 inline-block w-full text-[22px] font-bold"
+          className={`outline-nonetext-gray-90' } inline-block w-full text-[22px] font-bold`}
         />
         {isLinkButtonVisible && (
           <div
@@ -91,7 +118,6 @@ export default function PageHeaderSection({
             </Button>
             <Button
               size="sm"
-              variant="forHeader"
               style={{
                 borderColor: currentFolderColor.previewColor,
                 color: currentFolderColor.previewColor,

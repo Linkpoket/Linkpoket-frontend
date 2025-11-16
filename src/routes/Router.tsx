@@ -4,6 +4,7 @@ import { ProtectedRoute } from './guards/ProtectedRoute';
 import { RedirectIfAuthenticated } from './guards/RedirectIfAuthenticated';
 import Layout from '../layout/layout';
 import { LandingPage } from '@/pages/landing/LandingPage';
+import HomePage from '@/pages/home/HomePage';
 import PersonalPage from '@/pages/PersonalPage';
 
 const LoginPage = lazy(() => import('@/pages/auth/login'));
@@ -58,6 +59,7 @@ const router = createBrowserRouter([
 
       // 항상 접근 가능한 라우트들
       { path: 'landing', element: <LandingPage /> },
+      { path: 'home', element: <HomePage /> },
       { path: 'reissue', element: <ReissuePage /> },
     ],
   },

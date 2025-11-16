@@ -5,7 +5,7 @@ export default function FolderPocket({
 }) {
   return (
     <div
-      className="absolute right-0 bottom-0 left-0 h-[64%] rounded-b-[22px] opacity-95 shadow-[inset_0_1px_0_rgba(255,255,255,0.5),0_-2px_10px_rgba(0,0,0,0.06)]"
+      className="absolute right-0 bottom-0 left-0 h-[64%] rounded-b-[16px] opacity-95 shadow-[inset_0_1px_0_rgba(255,255,255,0.5),0_-2px_10px_rgba(0,0,0,0.06)]"
       style={{
         background: backgroundColor
           .replace('0.85', '0.6')

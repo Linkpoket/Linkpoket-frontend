@@ -8,6 +8,7 @@ import { useUserStore } from '@/stores/userStore';
 import { usePageLayout } from '@/hooks/usePageLayout';
 import { getPageDataLength } from '@/utils/pageData';
 import { PageLayout } from '@/components/common-ui/PageLayout';
+import ScrollToTopButton from '@/components/common-ui/ScrollToTopButton';
 
 const PersonalPageContentSection = lazy(
   () => import('@/components/page-layout-ui/PersonalPageContentSection')
@@ -66,6 +67,7 @@ export default function PersonalPage() {
           linkData={linkData}
           sortType={sortType}
         />
+        <ScrollToTopButton />
       </PageLayout>
     </>
   );

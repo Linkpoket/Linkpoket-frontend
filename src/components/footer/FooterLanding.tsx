@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import Logo from 'LinkLogo.svg?react';
+import Logo from '@assets/common-ui-assets/LinkLogo.svg?react';
 
 export function FooterLanding() {
   return (

@@ -1,6 +1,7 @@
 import { Input } from '@/components/common-ui/Input';
 import Modal from '@/components/common-ui/Modal';
 import { useAddLinkForm } from '@/hooks/useAddLinkForm';
+import { useFolderColorStore } from '@/stores/folderColorStore';
 
 const AddLinkModal = ({
   isOpen,
@@ -24,6 +25,9 @@ const AddLinkModal = ({
     submitButtonText,
   } = useAddLinkForm(isOpen, onClose);
 
+  const { getCurrentColor } = useFolderColorStore();
+  const currentFolderColor = getCurrentColor();
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <Modal.Header showCloseButton>링크 추가</Modal.Header>
@@ -38,6 +42,7 @@ const AddLinkModal = ({
             isModal={true}
             containerClassName="w-full"
             labelClassName="leading-[140%]"
+            focusColor={currentFolderColor.previewColor}
           />
           <Input
             label="링크명"
@@ -49,6 +54,7 @@ const AddLinkModal = ({
             labelClassName="leading-[140%]"
             maxLength={LINK_NAME_MAX_LENGTH}
             disabled={isPreviewing}
+            focusColor={currentFolderColor.previewColor}
           />
         </div>
       </Modal.Body>
@@ -59,6 +65,7 @@ const AddLinkModal = ({
           onClick={handleSubmit}
           disabled={isSubmitDisabled}
           variant={submitButtonVariant}
+          customColor={currentFolderColor.previewColor}
         >
           {submitButtonText}
         </Modal.ConfirmButton>

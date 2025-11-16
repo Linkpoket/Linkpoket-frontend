@@ -6,6 +6,49 @@ html {
   font-weight: 400;
 }
 
+
+:root {
+  --home-card-size: 256px;
+  --home-card-gap: 1.5rem;
+}
+
+.home-card {
+  width: var(--home-card-size);
+  height: var(--home-card-size);
+}
+
+.home-card-list {
+  gap: var(--home-card-gap);
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --home-card-size: calc(256px * 0.6);
+    --home-card-gap: 0.8rem;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+  :root {
+    --home-card-size: calc(256px * 0.7);
+    --home-card-gap: 1rem;
+  }
+}
+
+@media (min-width: 1440px) and (max-width: 1919px) {
+  :root {
+    --home-card-size: calc(256px * 0.8);
+    --home-card-gap: 1.2rem;
+  }
+}
+
+@media (min-width: 1920px) {
+  :root {
+    --home-card-size: calc(256px * 0.9);
+    --home-card-gap: 1.4rem;
+  }
+}
+
 @theme {
   --color-primary-0: #ffffff;
   --color-primary-5: #fff4e8;
@@ -42,6 +85,77 @@ html {
 }
 
 @layer utilities {
+  .header-desktop,
+  .header-mobile {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .header-desktop,
+  .header-desktop__left,
+  .header-desktop__right,
+  .header-actions,
+  .header-logo {
+    display: flex;
+    align-items: center;
+  }
+
+  .header-desktop__right,
+  .header-actions {
+    justify-content: flex-end;
+  }
+
+  .header-logo__text {
+    margin-left: 12px;
+  }
+
+  .header-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .header-mobile__top,
+  .header-mobile__left,
+  .header-mobile__right {
+    display: flex;
+    align-items: center;
+  }
+
+  .header-mobile__top {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .header-mobile__left {
+    gap: 16px;
+  }
+
+  .header-mobile__right,
+  .header-actions {
+    gap: 24px;
+  }
+
+  .hamburger-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    width: 38px;
+    padding: 10px;
+    border-radius: 10px;
+    background: transparent;
+  }
+
+  .hamburger-button:hover {
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .hamburger-button:active {
+    background: rgba(0, 0, 0, 0.06);
+  }
+
   @media (max-width: 480px) {
     .hero-section-mobile {
       padding: 64px 48px;
@@ -545,41 +659,662 @@ html {
     }
   }
 
-  @media (min-width: 324px) and (max-width: 1023px) {
+  @media (min-width: 324px) and (max-width: 768px) {
     .grid-cols-custom {
-      grid-template-columns: repeat(2, calc(50% - 8px));
+      grid-template-columns: repeat(3, calc(50% - 8px));
+    }
+  }
+
+  @media (max-width: 768px) {
+    .header-desktop,
+    .header-desktop__left,
+    .header-desktop__right,
+    .header-actions,
+    .header-search,
+    .header-mobile,
+    .header-mobile__top,
+    .header-mobile__left,
+    .header-mobile__right,
+    .header-mobile__hamburger,
+    .header-logo,
+    .header-logo__icon,
+    .header-logo__text {
+      display: none;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1023px) {
+    .grid-cols-custom {
+      grid-template-columns: repeat(3, calc(50% - 8px));
+    }
+
+    .responsive-button {
+      width: auto;
+      height: auto;
+      padding: 6.4px 10.3px;
+      border-radius: 6px;
+      font-size: 9px;
+      font-weight: 600;
+    }
+
+    .sidebar-text {
+      font-size: 10px;
+    }
+
+    .header-desktop {
+      height: 43.4px;
+      padding: 8.4px 16.8px;
+    }
+
+    .header-desktop__left,
+    .header-desktop__right {
+      gap: 16.8px;
+    }
+
+    .header-logo__icon {
+      height: 25.2px;
+      width: 25.2px;
+    }
+
+    .header-logo__text {
+      font-size: 16.8px;
+    }
+
+    .header-search {
+      height: 28px;
+    }
+
+    .header-search .header-search__input {
+      font-size: 10.5px;
+    }
+
+    .header-actions {
+      gap: 16.8px;
+    }
+
+    .header-mobile {
+      height: 39.2px;
+      padding: 0 5.6px;
+      gap: 5.6px;
+    }
+
+    .header-mobile__top {
+      min-height: 39.2px;
+      padding-bottom: 3.9px;
+    }
+
+    .header-mobile__left {
+      gap: 11.2px;
+    }
+
+    .header-mobile__right {
+      gap: 16.8px;
+    }
+
+    .header-mobile__hamburger .hamburger-button {
+      height: 26.6px;
+      width: 26.6px;
+      padding: 2.8px;
+    }
+
+    .header-mobile .header-logo__icon {
+      height: 25.2px;
+      width: 25.2px;
+    }
+
+    .header-mobile .header-logo__text {
+      font-size: 16.8px;
+    }
+
+    /* 60% 비율 */
+    .group.relative.flex[class*="h-[242px]"] {
+      height: 145.2px !important;
+    }
+
+    .group.relative.flex[class*="min-w-[156px]"] {
+      min-width: 93.6px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto,
+    .group.relative.flex > div[style*="width"] {
+      width: 72px !important;
+      height: 72px !important;
+      min-width: 72px !important;
+      min-height: 72px !important;
+      max-width: 72px !important;
+      max-height: 72px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-5"] {
+      width: 44.4px !important;
+      height: 40.2px !important;
+      top: 12px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-7"] {
+      width: 43.2px !important;
+      height: 39px !important;
+      top: 16.8px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-9"] {
+      width: 42px !important;
+      height: 37.8px !important;
+      top: 21.6px !important;
     }
   }
 
   @media (min-width: 1024px) and (max-width: 1279px) {
     .grid-cols-custom {
-      grid-template-columns: repeat(3, minmax(120px, max-content));
+      grid-template-columns: repeat(4, minmax(120px, max-content));
+    }
+
+    .responsive-button {
+      width: auto ;
+      height: auto;
+      padding: 7.1px 11.4px ;
+      border-radius: 6px ;
+      font-size: 10px ;
+      font-weight: 600 ;
+    }
+
+    .sidebar-text {
+      font-size: 11px;
+    }
+    /*70% 비율*/
+
+    /* 카드 컨테이너 (LinkCard & FolderCard) - 높이 242px → 170px */
+    .group.relative.flex[class*="h-[242px]"] {
+      height: 170px !important;
+    }
+
+    /* 데스크탑 카드 너비 156px → 109px */
+    .group.relative.flex[class*="min-w-[156px]"] {
+      min-width: 109px !important;
+    }
+
+    /* 이미지/아이콘 영역 크기 120px → 84px */
+    .group.relative.flex > div.relative.mx-auto,
+    .group.relative.flex > div[style*="width"] {
+      width: 50px !important;
+      height: 84px !important;
+      min-width: 84px !important;
+      min-height: 84px !important;
+      max-width: 84px !important;
+      max-height: 84px !important;
+    }
+
+    /* 폴더 안의 링크 카드들 크기 및 위치 조정 (0.7배) */
+    /* 첫 번째 카드: 74px × 67px → 52px × 47px, top: 20px → 14px */
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-5"] {
+      width: 52px !important;
+      height: 47px !important;
+      top: 14px !important;
+    }
+
+    /* 두 번째 카드: 72px × 65px → 50px × 46px, top: 28px → 20px */
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-7"] {
+      width: 50px !important;
+      height: 46px !important;
+      top: 20px !important;
+    }
+
+    /* 세 번째 카드: 70px × 63px → 49px × 44px, top: 36px → 25px */
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-9"] {
+      width: 49px !important;
+      height: 44px !important;
+      top: 25px !important;
+    }
+
+    .header-desktop {
+      height: 43.4px;
+      padding: 8.4px 16.8px;
+    }
+
+    .header-desktop__left,
+    .header-desktop__right {
+      gap: 16.8px;
+    }
+
+    .header-logo__icon {
+      height: 25.2px;
+      width: 25.2px;
+    }
+
+    .header-logo__text {
+      font-size: 16.8px;
+    }
+
+    .header-search {
+      height: 28px;
+    }
+
+    .header-search .header-search__input {
+      font-size: 10.5px;
+    }
+
+    .header-actions {
+      gap: 16.8px;
+    }
+
+    .header-mobile {
+      height: 39.2px;
+      padding: 0 5.6px;
+      gap: 5.6px;
+    }
+
+    .header-mobile__top {
+      min-height: 39.2px;
+      padding-bottom: 3.9px;
+    }
+
+    .header-mobile__left {
+      gap: 11.2px;
+    }
+
+    .header-mobile__right {
+      gap: 16.8px;
+    }
+
+    .header-mobile__hamburger .hamburger-button {
+      height: 26.6px;
+      width: 26.6px;
+      padding: 2.8px;
+    }
+
+    .header-mobile .header-logo__icon {
+      height: 25.2px;
+      width: 25.2px;
+    }
+
+    .header-mobile .header-logo__text {
+      font-size: 16.8px;
     }
   }
+
 
   @media (min-width: 1280px) and (max-width: 1439px) {
     .grid-cols-custom {
       grid-template-columns: repeat(4, minmax(120px, max-content));
     }
+
+    .responsive-button {
+      width: auto;
+      height: auto;
+      padding: 7.9px 12.6px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .sidebar-text {
+      font-size: 12px;
+    }
+
+    .header-desktop {
+      height: 49.6px;
+      padding: 9.6px 19.2px;
+    }
+
+    .header-desktop__left,
+    .header-desktop__right {
+      gap: 19.2px;
+    }
+
+    .header-logo__icon {
+      height: 28.8px;
+      width: 28.8px;
+    }
+
+    .header-logo__text {
+      font-size: 19.2px;
+    }
+
+    .header-search {
+      height: 32px;
+    }
+
+    .header-search .header-search__input {
+      font-size: 12px;
+    }
+
+    .header-actions {
+      gap: 14.4px;
+    }
+
+    .header-mobile {
+      height: 44.8px;
+      padding: 0 6.4px;
+      gap: 5.6px;
+    }
+
+    .header-mobile__top {
+      min-height: 44.8px;
+      padding-bottom: 4.8px;
+    }
+
+    .header-mobile__left {
+      gap: 12.8px;
+    }
+
+    .header-mobile__right {
+      gap: 14.4px;
+    }
+
+    .header-mobile__hamburger .hamburger-button {
+      height: 30.4px;
+      width: 30.4px;
+      padding: 3.2px;
+    }
+
+    .header-mobile .header-logo__icon {
+      height: 28.8px;
+      width: 28.8px;
+    }
+
+    .header-mobile .header-logo__text {
+      font-size: 19.2px;
+    }
+
+    /* 카드 컨테이너 (LinkCard & FolderCard) - 높이 242px → 170px */
+    .group.relative.flex[class*="h-[242px]"] {
+      height: 193.6px !important;
+        }
+        
+        /* 데스크탑 카드 너비 156px → 109px */
+    .group.relative.flex[class*="min-w-[156px]"] {
+      min-width: 109px !important;
+    }
+        
+        /* 이미지/아이콘 영역 크기 120px → 84px */
+        .group.relative.flex > div.relative.mx-auto,
+        .group.relative.flex > div[style*="width"] {
+      width: 96px !important;
+      height: 96px !important;
+      min-width: 96px !important;
+      min-height: 96px !important;
+      max-width: 96px !important;
+      max-height: 96px !important;
+        }
+        
+        /* 폴더 안의 링크 카드들 크기 및 위치 조정 (0.7배) */
+        /* 첫 번째 카드: 74px × 67px → 52px × 47px, top: 20px → 14px */
+        .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-5"] {
+      width: 59.2px !important;
+      height: 53.6px !important;
+      top: 16px !important;
+        }
+        
+        /* 두 번째 카드: 72px × 65px → 50px × 46px, top: 28px → 20px */
+        .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-7"] {
+      width: 57.6px !important;
+      height: 52px !important;
+      top: 22.4px !important;
+        }
+        
+        /* 세 번째 카드: 70px × 63px → 49px × 44px, top: 36px → 25px */
+        .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-9"] {
+      width: 56px !important;
+      height: 50.4px !important;
+      top: 28.8px !important;
+        }
+
+    
   }
 
   @media (min-width: 1440px) and (max-width: 1919px) {
     .grid-cols-custom {
       grid-template-columns: repeat(5, minmax(120px, max-content));
     }
+
+    .responsive-button {
+      width: auto;
+      height: auto;
+      padding: 9.3px 14.9px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .sidebar-text {
+      font-size: 13px;
+    }
+
+    /* 80% 비율 */
+    .group.relative.flex[class*="h-[242px]"] {
+      height: 193.6px !important;
+    }
+
+    .group.relative.flex[class*="min-w-[156px]"] {
+      min-width: 124.8px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto,
+    .group.relative.flex > div[style*="width"] {
+      width: 96px !important;
+      height: 96px !important;
+      min-width: 96px !important;
+      min-height: 96px !important;
+      max-width: 96px !important;
+      max-height: 96px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-5"] {
+      width: 59.2px !important;
+      height: 53.6px !important;
+      top: 16px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-7"] {
+      width: 57.6px !important;
+      height: 52px !important;
+      top: 22.4px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-9"] {
+      width: 56px !important;
+      height: 50.4px !important;
+      top: 28.8px !important;
+    }
+
+    .header-desktop {
+      height: 56px;
+      padding: 11px 22px;
+    }
+
+    .header-desktop__left,
+    .header-desktop__right {
+      gap: 22px;
+    }
+
+    .header-logo__icon {
+      height: 32px;
+      width: 32px;
+    }
+
+    .header-logo__text {
+      font-size: 22px;
+    }
+
+    .header-search {
+      height: 36px;
+    }
+
+    .header-search .header-search__input {
+      font-size: 13px;
+    }
+
+    .header-actions {
+      gap: 18px;
+    }
+
+    .header-mobile {
+      height: 50px;
+      padding: 0 8px;
+      gap: 7px;
+    }
+
+    .header-mobile__top {
+      min-height: 50px;
+      padding-bottom: 6px;
+    }
+
+    .header-mobile__left {
+      gap: 14px;
+    }
+
+    .header-mobile__right {
+      gap: 18px;
+    }
+
+    .header-mobile__hamburger .hamburger-button {
+      height: 34px;
+      width: 34px;
+      padding: 4px;
+    }
+
+    .header-mobile .header-logo__icon {
+      height: 32px;
+      width: 32px;
+    }
+
+    .header-mobile .header-logo__text {
+      font-size: 22px;
+    }
+      
   }
 
   @media (min-width: 1920px) {
     .grid-cols-custom {
       grid-template-columns: repeat(6, minmax(120px, max-content));
     }
+
+    
+
+    /* 90% 비율 */
+    .group.relative.flex[class*="h-[242px]"] {
+      height: 217.8px !important;
+    }
+
+    .group.relative.flex[class*="min-w-[156px]"] {
+      min-width: 140.4px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto,
+    .group.relative.flex > div[style*="width"] {
+      width: 108px !important;
+      height: 108px !important;
+      min-width: 108px !important;
+      min-height: 108px !important;
+      max-width: 108px !important;
+      max-height: 108px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-5"] {
+      width: 66.6px !important;
+      height: 60.3px !important;
+      top: 18px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-7"] {
+      width: 64.8px !important;
+      height: 58.5px !important;
+      top: 25.2px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-9"] {
+      width: 63px !important;
+      height: 56.7px !important;
+      top: 32.4px !important;
+    }
+
+      /* Header 90% scale */
+  .header-desktop {
+    height: 56px;
+    padding: 11px 22px;
+  }
+
+  .header-desktop__left,
+  .header-desktop__right {
+    gap: 22px;
+  }
+
+  .header-logo__icon {
+    height: 32px;
+    width: 32px;
+  }
+
+  .header-logo__text {
+    font-size: 22px;
+  }
+
+  .header-search {
+    height: 36px;
+  }
+
+  .header-search .header-search__input {
+    font-size: 13px;
+  }
+
+  .header-actions {
+    gap: 18px;
+  }
+
+  .header-mobile {
+    height: 50px;
+    padding: 0 8px;
+    gap: 7px;
+  }
+
+  .header-mobile__top {
+    min-height: 50px;
+    padding-bottom: 6px;
+  }
+
+  .header-mobile__left {
+    gap: 14px;
+  }
+
+  .header-mobile__right {
+    gap: 18px;
+  }
+
+  .header-mobile__hamburger .hamburger-button {
+    height: 34px;
+    width: 34px;
+    padding: 4px;
+  }
+
+  .header-mobile .header-logo__icon {
+    height: 32px;
+    width: 32px;
+  }
+
+  .header-mobile .header-logo__text {
+    font-size: 22px;
+  }
   }
 }
+
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+
 
 @theme {
   --font-sans: 'Pretendard', sans-serif;
 }
 
+
+
 body {
   @apply font-sans antialiased;
 }
+
+

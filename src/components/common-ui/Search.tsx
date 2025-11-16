@@ -5,7 +5,7 @@ import Close from '@/assets/common-ui-assets/Close.svg?react';
 import SearchIcon from '@/assets/common-ui-assets/Search.svg?react';
 
 const searchVariants = cva(
-  'flex items-center relative w-full text-gray-90 bg-white transition-all focus-within:ring-2 focus-within:ring-primary-30 focus-within:border-primary-40',
+  'flex items-center relative w-full text-gray-90 bg-white transition-all focus-within:ring-2',
   {
     variants: {
       variant: {
@@ -45,6 +45,7 @@ export interface SearchProps
   rightIcon?: React.ReactNode;
   containerClassName?: string;
   placeholder?: string;
+  focusColor?: string;
 }
 
 export const Search = forwardRef<HTMLInputElement, SearchProps>(
@@ -62,6 +63,7 @@ export const Search = forwardRef<HTMLInputElement, SearchProps>(
       rightIcon,
       containerClassName,
       placeholder,
+      focusColor,
       ...props
     },
     ref
@@ -88,6 +90,13 @@ export const Search = forwardRef<HTMLInputElement, SearchProps>(
       }
     };
 
+    const customFocusStyles = focusColor
+      ? ({
+          '--focus-ring-color': `${focusColor}40`,
+          '--focus-border-color': focusColor,
+        } as React.CSSProperties)
+      : {};
+
     return (
       <div className="flex w-full flex-col gap-1">
         {label && (
@@ -102,8 +111,11 @@ export const Search = forwardRef<HTMLInputElement, SearchProps>(
         <div
           className={cn(
             searchVariants({ variant, size, width, isError }),
+            focusColor &&
+              'focus-within:border-[var(--focus-border-color)] focus-within:ring-[var(--focus-ring-color)]',
             containerClassName
           )}
+          style={customFocusStyles}
         >
           <input
             ref={ref}
