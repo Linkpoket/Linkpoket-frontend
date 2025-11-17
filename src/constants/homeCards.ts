@@ -24,7 +24,7 @@ export const baseCards: HomeCard[] = [
     id: 'space-travel',
     title: '개인 페이지',
     category: 'space',
-    tags: ['planets', 'stars', 'earth'],
+    tags: ['personal', 'space', 'collection'],
     interestedCount: 5,
     backgroundImage:
       'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=800&h=600&fit=crop',
@@ -34,7 +34,7 @@ export const baseCards: HomeCard[] = [
     id: 'ocean-life',
     title: '북마크',
     category: 'marine',
-    tags: ['marine', 'deep sea', 'ocean'],
+    tags: ['bookmark'],
     interestedCount: 12,
     backgroundImage:
       'https://i.pinimg.com/736x/36/8a/10/368a106795ce2a83a451e98387ac4611.jpg',
