@@ -185,7 +185,7 @@ export default function MobileHome() {
     });
   };
 
-  // 스크롤 종료 시(디바운스) -> 하드-엔드(양쪽 끝)에서만 처음으로 순간이동
+  // 스크롤 종료 시(디바운스) -> 가장 가까운 카드를 가운데로 스냅
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
@@ -193,7 +193,23 @@ export default function MobileHome() {
     const onScroll = () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
       debounceRef.current = setTimeout(() => {
-        const idx = nearestRef.current;
+        const centerX = track.scrollLeft + track.clientWidth / 2;
+
+        // 가장 가까운 카드 찾기
+        let closestIdx = 0;
+        let minDist = Infinity;
+        for (let i = 0; i < track.children.length; i++) {
+          const el = track.children[i] as HTMLElement;
+          if (!el?.dataset.card) continue;
+          const cardCenter = el.offsetLeft + el.offsetWidth / 2;
+          const dist = Math.abs(cardCenter - centerX);
+          if (dist < minDist) {
+            minDist = dist;
+            closestIdx = i;
+          }
+        }
+
+        const idx = closestIdx;
 
         // === 하드-엔드(진짜 끝) 감지 ===
         const atHardRight =
@@ -203,18 +219,28 @@ export default function MobileHome() {
         if (atHardRight || atHardLeft) {
           const target = START_GLOBAL_INDEX; // 중앙 블록 첫 카드(사실상의 '처음')
           requestAnimationFrame(() => {
-            centerOn(target, 'auto'); // 순간 점프
+            centerOn(target, 'smooth'); // 부드럽게 이동
             setNearestGlobal(target);
             nearestRef.current = target;
           });
           return;
         }
 
-        // (선택) 완충 경계 점프가 필요 없으면 아래 두 블록은 삭제해도 됨
+        // 가장 가까운 카드를 가운데로 스냅
+        if (minDist > 5) {
+          // 5px 이상 떨어져 있으면 스냅
+          requestAnimationFrame(() => {
+            centerOn(idx, 'smooth');
+            setNearestGlobal(idx);
+            nearestRef.current = idx;
+          });
+        }
+
+        // (선택) 완충 경계 점프
         if (idx < L) {
           const target = idx + L * MIDDLE_BLOCK;
           requestAnimationFrame(() => {
-            centerOn(target, 'auto');
+            centerOn(target, 'smooth');
             setNearestGlobal(target);
             nearestRef.current = target;
           });
@@ -223,13 +249,13 @@ export default function MobileHome() {
         if (idx >= L * (CLONES - 1)) {
           const target = idx - L * MIDDLE_BLOCK;
           requestAnimationFrame(() => {
-            centerOn(target, 'auto');
+            centerOn(target, 'smooth');
             setNearestGlobal(target);
             nearestRef.current = target;
           });
           return;
         }
-      }, 120); // 120ms 동안 추가 스크롤 없으면 "정지"로 판단
+      }, 150); // 150ms 동안 추가 스크롤 없으면 "정지"로 판단
     };
 
     track.addEventListener('scroll', onScroll, { passive: true });
@@ -312,25 +338,26 @@ export default function MobileHome() {
             const delta = globalIndex - nearestGlobal;
             const ad = Math.abs(delta);
 
-            // 느린 전환(700ms)
+            // 부드러운 전환(500ms)
             const scale = Math.max(0.88, 1 - ad * 0.08);
             const opacity = Math.max(0.6, 1 - ad * 0.22);
-            const rotateY = delta * -6;
+            const rotateY = delta * -3; // 회전 각도 줄임 (-6 → -3)
             const zIndex = 100 - ad;
             const blur =
-              ad === 0 ? 'blur-0' : ad === 1 ? 'blur-[0.4px]' : 'blur-[1.0px]';
+              ad === 0 ? 'blur-0' : ad === 1 ? 'blur-[0.2px]' : 'blur-[0.5px]'; // blur 효과 줄임
 
             return (
               <article
                 key={`${card.id}-${globalIndex}`}
                 data-card
-                className={`relative h-96 min-h-80 w-[76%] shrink-0 snap-center overflow-hidden rounded-3xl shadow-2xl max-[375px]:h-80 max-[375px]:w-[76%] ${blur} ${card.id === 'ocean-life' ? 'cursor-pointer' : ''}`}
+                className={`relative h-96 min-h-80 w-[74%] shrink-0 snap-center overflow-hidden rounded-3xl shadow-2xl max-[375px]:h-80 max-[375px]:w-[76%] ${blur} ${card.id === 'ocean-life' ? 'cursor-pointer' : ''}`}
                 style={{
                   transform: `translateZ(0) rotateY(${rotateY}deg) scale(${scale})`,
                   opacity,
                   zIndex,
+                  willChange: 'transform, opacity', // 성능 최적화
                   transition:
-                    'transform 700ms cubic-bezier(.2,.8,.2,1), opacity 700ms ease, filter 700ms ease',
+                    'transform 500ms cubic-bezier(.25,.46,.45,.94), opacity 500ms ease, filter 500ms ease', // 더 부드러운 easing과 짧은 시간
                 }}
                 aria-label={card.title}
                 onClick={() => handleCardClick(card)}
