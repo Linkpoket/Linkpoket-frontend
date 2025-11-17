@@ -256,7 +256,7 @@ export default function MobileHome() {
               <article
                 key={`${card.id}-${globalIndex}`}
                 data-card
-                className={`relative h-96 w-[76%] shrink-0 snap-center overflow-hidden rounded-3xl shadow-2xl ${blur} ${card.id === 'ocean-life' ? 'cursor-pointer' : ''}`}
+                className={`relative h-96 min-h-80 w-[76%] shrink-0 snap-center overflow-hidden rounded-3xl shadow-2xl max-[375px]:h-80 max-[375px]:w-[76%] ${blur} ${card.id === 'ocean-life' ? 'cursor-pointer' : ''}`}
                 style={{
                   transform: `translateZ(0) rotateY(${rotateY}deg) scale(${scale})`,
                   opacity,
