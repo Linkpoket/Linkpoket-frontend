@@ -10,13 +10,8 @@ export const ProtectedRoute = () => {
     return <div>로딩 중...</div>;
   }
 
-  // 인증되지 않은 경우 /home으로 리다이렉트 (현재 경로를 state로 저장)
+  // 인증되지 않은 경우 랜딩 페이지로 리다이렉트
   if (!isAuthenticated) {
-    // 루트 경로(/)인 경우 /home으로 리다이렉트
-    if (location.pathname === '/') {
-      return <Navigate to="/home" state={{ from: location }} replace />;
-    }
-    // 다른 인증 필요한 경로는 랜딩 페이지로
     return <Navigate to="/landing" state={{ from: location }} replace />;
   }
 

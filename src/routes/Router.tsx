@@ -23,7 +23,6 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       // 항상 접근 가능한 라우트들 (먼저 정의)
-      { path: 'home', element: <HomePage /> },
       { path: 'landing', element: <LandingPage /> },
       { path: 'reissue', element: <ReissuePage /> },
 
@@ -31,6 +30,8 @@ const router = createBrowserRouter([
       {
         element: <ProtectedRoute />,
         children: [
+          // 홈 페이지
+          { path: 'home', element: <HomePage /> },
           // 개인페이지
           { path: '/', element: <PersonalPage /> },
           { path: '/personal/folder/:folderId', element: <FolderDetailPage /> },
