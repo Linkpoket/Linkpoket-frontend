@@ -6,7 +6,7 @@ import NewSection from './sections/NewSection';
 
 export const LandingPage: React.FC = () => {
   return (
-    <div className="from-gray-5 min-h-screen bg-white bg-gradient-to-br via-white to-white">
+    <div className="min-h-screen bg-white">
       <HeroSection />
       <NewSection />
       <CtaSection />

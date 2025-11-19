@@ -1,4 +1,4 @@
-import 확장프로그램이미지 from '@/assets/common-ui-assets/확장 프로그램 이미지.webp';
+import 확장프로그램이미지 from '@/assets/common-ui-assets/크롬브라우저 이미지.webp';
 import 폴더별정리이미지 from '@/assets/common-ui-assets/폴더별정리이미지.webp';
 import 공유페이지이미지 from '@/assets/common-ui-assets/공유페이지이미지.webp';
 
@@ -7,21 +7,12 @@ const NewSection = () => {
     {
       description: (
         <>
-          모든 링크를 한 곳에,
+          링크 포켓은 링크 공유, 저장, 관리를 위한
           <br />
-          쉽게 정리하고 꺼내보세요
+          통합 링크 관리 서비스입니다.
         </>
       ),
-      className: 'font-bold mb-4 text-[24px] md:text-[28px]',
-    },
-    {
-      description: (
-        <>
-          링크 저장부터 공유까지, 개인은 물론 <br />
-          팀까지 함께 쓰는 통합 링크 관리 서비스입니다.
-        </>
-      ),
-      className: 'text-[14px] md:text-[18px]',
+      className: 'font-bold mb-4 text-[20px] md:text-[35px]',
     },
   ];
 

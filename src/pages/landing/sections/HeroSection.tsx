@@ -1,15 +1,12 @@
 import { Button } from '@/components/common-ui/button';
-import 히어로이미지 from '@/assets/common-ui-assets/히어로 이미지.webp';
+import 히어로이미지 from '@/assets/common-ui-assets/히어로 이미지_LINKPOKET.webp';
 import { useMobile } from '@/hooks/useMobile';
 import { CHROME_EXTENSION_URL } from '@/constants/urls';
 
 const HeroSection: React.FC = () => {
   const isMobile = useMobile();
 
-  const heroTitles = [
-    '나만의 링크부터 팀의 자료까지,',
-    '한곳에서 쉽게 관리해요',
-  ];
+  const heroTitles = ['나의 링크부터 팀의 자료까지,', '한곳에서 쉽게 관리해요'];
 
   const buttonVariants = [
     {
@@ -24,17 +21,17 @@ const HeroSection: React.FC = () => {
   ];
 
   return (
-    <section className="flex bg-transparent py-16">
+    <section className="mt-30 flex bg-transparent py-16">
       <div className="mx-auto flex max-w-[980px] flex-col place-content-between px-[24px] md:w-full md:flex-row">
         <header className="flex flex-col justify-center">
           <div className="mb-6">
             {heroTitles.map((title, index) => (
               <h1
                 key={index}
-                className={`leading-[140%] font-bold ${
+                className={`leading-[160%] ${
                   index === 0
-                    ? 'text-[31px] md:text-[36px]'
-                    : 'text-[24px] md:text-[28px]'
+                    ? 'text-[40px] md:text-[38px]'
+                    : 'text-[31px] font-bold md:text-[48px]'
                 }`}
               >
                 {title}
@@ -42,7 +39,7 @@ const HeroSection: React.FC = () => {
             ))}
           </div>
 
-          <div className="mb-18 flex space-x-2 md:mb-0">
+          <div className="mt-6 mb-18 flex space-x-2 md:mb-0">
             {buttonVariants.map(({ text, href, className }, index) => (
               <a
                 key={index}
@@ -73,7 +70,7 @@ const HeroSection: React.FC = () => {
           <img
             src={히어로이미지}
             alt="Landing page main illustration"
-            className="w-[454px] rounded-3xl"
+            className="w-[600px] rounded-3xl"
             loading="eager"
             fetchPriority="high"
           />
