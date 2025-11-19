@@ -6,20 +6,19 @@ import FooterBg from '@/assets/common-ui-assets/FooterBg.webp';
 const CtaSection: React.FC = () => {
   const isMobile = useMobile();
 
-  const ctaTitles = ['링크 정리,', '지금 1분 만에 시작해보세요'];
+  const ctaTitles = ['링크 정리,', '지금 바로 시작해보세요'];
 
   const ctaButtons = [
     {
       text: '링크포켓 시작하기',
       href: '/login',
-      className:
-        'bg-primary-0 text-primary-60 active:bg-primary-0 hover:bg-gray-5',
+      className: 'bg-gray-0 text-gray-60 active:bg-gray-0 hover:bg-gray-5',
     },
     {
       text: '구글 확장 프로그램 무료 다운로드',
       href: CHROME_EXTENSION_URL,
       className:
-        'bg-primary-50 text-gray-0 border-1 border-white active:bg-primary-50 hover:bg-primary-60',
+        'bg-gray-70 text-gray-0 border-1 border-white active:bg-gray-70 hover:bg-gray-60',
     },
   ];
 
@@ -50,7 +49,10 @@ const CtaSection: React.FC = () => {
     <>
       <section className="cta-section-mobile cta-section-tablet cta-section-desktop relative mt-[100px]">
         <div className="absolute inset-0 z-0 overflow-hidden">
-          <img src={FooterBg} className="h-full w-full object-cover" />{' '}
+          <img
+            src={FooterBg}
+            className="h-full w-full object-cover grayscale"
+          />{' '}
         </div>
 
         <div className="relative z-10 mx-auto max-w-[1600px] px-4 md:px-8">

@@ -56,7 +56,7 @@ const HeroSection: React.FC = () => {
                   size={isMobile ? 'sm' : 'lg'}
                   variant={index === 1 ? 'ghost' : 'primary'}
                   className={`font-semibold ${className} ${
-                    index === 0 && 'hover:bg-primary-40 active:bg-primary-60'
+                    index === 0 && 'hover:bg-gray-60 active:bg-gray-80'
                   }`}
                 >
                   {text}
