@@ -64,3 +64,12 @@ export interface UpdateDragandDropProps {
   fromFolderId: string;
   toFolderId: string;
 }
+
+export interface UpdateDragandDropMoveProps {
+  baseRequest: BaseRequest;
+  targetId: string;
+  itemType: string;
+  fromFolderId: string;
+  toFolderId: string;
+  currentOrderIndex: number;
+}
