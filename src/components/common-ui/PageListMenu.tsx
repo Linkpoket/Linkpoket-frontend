@@ -1,4 +1,6 @@
 import { useState, useMemo } from 'react';
+import { resolvePageImageUrl } from '@/utils/resolvePageImageUrl';
+import { DEFAULT_SHARED_PAGE_IMAGE, baseCards } from '@/constants/homeCards';
 
 interface PageListMenuProps {
   personalPage: any;
@@ -19,7 +21,7 @@ export default function PageListMenu({
 
   // 페이지 이름 목록 생성 (처음에 불러온 데이터 그대로 사용)
   const pageList = useMemo(() => {
-    const pages: Array<{ title: string; index: number }> = [];
+    const pages: Array<{ title: string; index: number; imageUrl: string }> = [];
 
     // 개인 페이지 추가
     if (personalPage?.pageTitle) {
@@ -27,9 +29,18 @@ export default function PageListMenu({
         (card) => card.id === 'space-travel'
       );
       if (personalCardIndex !== -1) {
+        const personalCard = baseCards.find(
+          (card) => card.id === 'space-travel'
+        );
+        const fallbackImage =
+          personalCard?.backgroundImage || DEFAULT_SHARED_PAGE_IMAGE;
         pages.push({
           title: personalPage.pageTitle,
           index: personalCardIndex,
+          imageUrl: resolvePageImageUrl(
+            personalPage.pageImageUrl,
+            fallbackImage
+          ),
         });
       }
     }
@@ -40,7 +51,14 @@ export default function PageListMenu({
         (card) => card.pageId === page.pageId
       );
       if (cardIndex !== -1) {
-        pages.push({ title: page.pageTitle, index: cardIndex });
+        pages.push({
+          title: page.pageTitle,
+          index: cardIndex,
+          imageUrl: resolvePageImageUrl(
+            page.pageImageUrl,
+            DEFAULT_SHARED_PAGE_IMAGE
+          ),
+        });
       }
     });
 
@@ -90,8 +108,8 @@ export default function PageListMenu({
           />
 
           {/* 메뉴 */}
-          <div className="fixed bottom-24 left-6 z-50 w-64 rounded-2xl bg-white/95 shadow-2xl backdrop-blur-md">
-            <div className="max-h-[60vh] overflow-y-auto rounded-2xl p-4">
+          <div className="fixed bottom-24 left-6 z-50 rounded-2xl bg-white/90 px-4 py-3 shadow-lg backdrop-blur-md">
+            <div className="max-h-[60vh] space-y-2 overflow-y-auto">
               {pageList.length > 0 ? (
                 pageList.map((page, idx) => {
                   const isActive = page.index === activeIndex;
@@ -99,25 +117,31 @@ export default function PageListMenu({
                     <button
                       key={`${page.title}-${idx}`}
                       onClick={() => handleMenuItemClick(page.index)}
-                      className={`w-full rounded-xl px-4 py-3 text-left transition-all ${
-                        isActive
-                          ? 'bg-black text-white'
-                          : 'bg-white text-gray-800 hover:bg-gray-100'
-                      }`}
+                      className="flex w-full items-center gap-3 rounded-lg px-2 py-2.5 text-left transition-all hover:bg-gray-100/50"
                     >
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={`h-2 w-2 rounded-full ${
-                            isActive ? 'bg-white' : 'bg-gray-400'
-                          }`}
+                      {/* 원형 이미지 */}
+                      <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full">
+                        <img
+                          src={page.imageUrl}
+                          alt={page.title}
+                          className="h-full w-full object-cover"
                         />
-                        <span className="font-medium">{page.title}</span>
                       </div>
+                      {/* 페이지 이름 */}
+                      <span
+                        className={`font-medium ${
+                          isActive
+                            ? 'font-semibold text-black'
+                            : 'text-gray-800'
+                        }`}
+                      >
+                        {page.title}
+                      </span>
                     </button>
                   );
                 })
               ) : (
-                <div className="px-4 py-3 text-center text-gray-500">
+                <div className="px-2 py-2.5 text-center text-gray-500">
                   페이지가 없습니다
                 </div>
               )}
