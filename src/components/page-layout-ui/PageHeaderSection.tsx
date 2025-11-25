@@ -44,23 +44,28 @@ export default function PageHeaderSection({
   return (
     <div className="mb-[24px] flex w-full min-w-[328px] items-center justify-between">
       <div className="flex w-full">
-        <input
-          id="page-title"
-          type="text"
-          disabled={title === '개인 페이지' || title === '북마크'}
-          value={title}
-          onChange={(e) => {
-            const value = e.target.value;
-            if (value.length <= MAX_TITLE_LENGTH) {
-              setTitle(value);
-              debouncedUpdate({ title: value });
-            }
-          }}
-          onBlur={() => {
-            handleBlur(title);
-          }}
-          className="outline-nontext-gray-90 inline-block w-full text-[22px] font-bold"
-        />
+        {isMobile ? (
+          // 모바일에서는 타이틀 숨김 (MobilePageBackground에서 표시)
+          <div className="hidden"></div>
+        ) : (
+          <input
+            id="page-title"
+            type="text"
+            disabled={title === '개인 페이지' || title === '북마크'}
+            value={title}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value.length <= MAX_TITLE_LENGTH) {
+                setTitle(value);
+                debouncedUpdate({ title: value });
+              }
+            }}
+            onBlur={() => {
+              handleBlur(title);
+            }}
+            className="outline-nontext-gray-90 inline-block w-full text-[22px] font-bold"
+          />
+        )}
         {isLinkButtonVisible && (
           <div
             className={`flex items-center gap-[8px] ${isMobile ? 'hidden' : ''}`}

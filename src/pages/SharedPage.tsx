@@ -48,7 +48,11 @@ export default function SharedPage() {
 
   return (
     <>
-      <PageLayout isMobile={isMobile} pageImageUrl={pageImage}>
+      <PageLayout
+        isMobile={isMobile}
+        pageImageUrl={pageImage}
+        pageTitle={pageTitle}
+      >
         <PageHeaderSection
           pageTitle={pageTitle}
           pageId={pageId}

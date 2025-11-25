@@ -57,7 +57,11 @@ export default function PersonalPage() {
 
   return (
     <>
-      <PageLayout isMobile={isMobile} pageImageUrl={pageImage}>
+      <PageLayout
+        isMobile={isMobile}
+        pageImageUrl={pageImage}
+        pageTitle={pageTitle}
+      >
         <PageHeaderSection pageTitle={pageTitle} isMobile={isMobile} />
         <PageControllerSection
           folderDataLength={folderDataLength}

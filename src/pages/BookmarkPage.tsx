@@ -34,7 +34,11 @@ export default function BookmarkPage() {
 
   return (
     <>
-      <PageLayout isMobile={isMobile} pageImageUrl={pageImageUrl}>
+      <PageLayout
+        isMobile={isMobile}
+        pageImageUrl={pageImageUrl}
+        pageTitle="북마크"
+      >
         <PageHeaderSection pageTitle="북마크" isMobile={isMobile} />
         <PageControllerSection
           folderDataLength={folderDataLength}

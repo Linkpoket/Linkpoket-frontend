@@ -8,9 +8,11 @@ const FALLBACK_IMAGE =
 export default function MobilePageBackground({
   isMobile,
   pageImageUrl,
+  pageTitle,
 }: {
   pageImageUrl: string;
   isMobile: boolean;
+  pageTitle?: string;
 }) {
   return (
     <div>
@@ -26,6 +28,14 @@ export default function MobilePageBackground({
           />
           {/* 하단 그라데이션 */}
           <div className="absolute right-0 bottom-[-10px] left-0 h-37 bg-gradient-to-t from-white via-white/12 via-white/50 via-white/88 to-transparent"></div>
+          {/* 타이틀 - 그림 위로 */}
+          {pageTitle && (
+            <div className="absolute top-20 right-6 left-6">
+              <h1 className="text-4xl font-bold text-white drop-shadow-lg">
+                {pageTitle}
+              </h1>
+            </div>
+          )}
           {/* 버튼들 - 이미지 위에 배치 */}
           <BackButton isMobile={isMobile} />
           <CopyLinkButton isMobile={isMobile} />

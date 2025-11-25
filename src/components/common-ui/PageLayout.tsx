@@ -7,12 +7,14 @@ interface PageLayoutProps {
   className?: string;
   isMobile: boolean;
   pageImageUrl?: string;
+  pageTitle?: string;
 }
 
 export const PageLayout: React.FC<PageLayoutProps> = ({
   children,
   isMobile,
   pageImageUrl,
+  pageTitle,
   className = '',
 }) => {
   return (
@@ -21,6 +23,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
         <MobilePageBackground
           isMobile={isMobile}
           pageImageUrl={pageImageUrl ?? ''}
+          pageTitle={pageTitle}
         />
       )}
       <div
