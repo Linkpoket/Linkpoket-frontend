@@ -159,7 +159,17 @@ export default function FolderCard({
               ref={menuButtonRef}
               data-card-button
               className="cursor-pointer p-1"
-              onClick={handleMenuClick}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleMenuClick();
+              }}
+              onPointerDown={(e) => {
+                e.stopPropagation();
+              }}
+              onTouchStart={(e) => {
+                e.stopPropagation();
+              }}
+              style={{ touchAction: 'manipulation' }}
               aria-label="메뉴 열기"
             >
               <CardMenu />

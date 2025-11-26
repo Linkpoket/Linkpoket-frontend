@@ -62,13 +62,15 @@ export default function MobileNavigation() {
             <button
               key={item.id}
               onClick={() => handleNavClick(item.path)}
-              className={`flex flex-col items-center justify-center gap-1 rounded-lg px-3 py-2 transition-colors ${
-                isActive ? 'text-[#2563eb]' : 'hover:text-gray-70 text-gray-50'
+              className={`flex flex-col items-center justify-center gap-1 rounded-lg px-3 py-2 transition-all ${
+                isActive ? 'text-black' : 'hover:text-gray-70 text-gray-50'
               }`}
               aria-label={item.label}
             >
               <div
-                className={`transition-colors ${isActive ? 'text-[#2563eb]' : 'text-gray-50'}`}
+                className={`transition-all ${
+                  isActive ? 'opacity-100' : 'opacity-40'
+                }`}
               >
                 {item.icon}
               </div>
