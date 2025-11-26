@@ -64,8 +64,7 @@ export default function WebHome() {
   }, [overviewData?.data]);
 
   // 북마크 데이터만 별도로 가져오기 (북마크는 페이지가 아니므로)
-  const { favorite: bookmarkData, isLoading: bookmarkLoading } =
-    useFetchFavorite();
+  const { data: bookmarkData, isLoading: bookmarkLoading } = useFetchFavorite();
 
   // Overview 데이터를 사용하여 카드 생성
   useEffect(() => {
@@ -95,7 +94,7 @@ export default function WebHome() {
             break;
           case 'bookmark': // 북마크
             folders =
-              bookmarkData?.directorySimpleResponses?.map((folder: any) => ({
+              bookmarkData?.folderSimpleResponses?.map((folder: any) => ({
                 folderId: folder.folderId,
                 folderTitle: folder.folderTitle,
               })) || [];
