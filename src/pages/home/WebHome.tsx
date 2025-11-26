@@ -93,7 +93,7 @@ export default function WebHome() {
               card.backgroundImage
             );
             break;
-          case 'ocean-life': // 북마크
+          case 'bookmark': // 북마크
             folders =
               bookmarkData?.directorySimpleResponses?.map((folder: any) => ({
                 folderId: folder.folderId,
@@ -168,7 +168,7 @@ export default function WebHome() {
       case 'space-travel': // 개인 페이지
         navigate('/');
         break;
-      case 'ocean-life': // 북마크
+      case 'bookmark': // 북마크
         navigate('/bookmarks');
         break;
       default:
@@ -215,7 +215,7 @@ export default function WebHome() {
               )}
 
               {/* 북마크 아이콘 (북마크 카드에만 표시) */}
-              {card.id === 'ocean-life' && (
+              {card.id === 'bookmark' && (
                 <div className="absolute top-4 right-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -270,7 +270,7 @@ export default function WebHome() {
                         navigate(
                           `/shared/${hoveredCard.pageId}/folder/${folder.folderId}`
                         );
-                      } else if (hoveredCard.id === 'ocean-life') {
+                      } else if (hoveredCard.id === 'bookmark') {
                         navigate(`/bookmarks/folder/${folder.folderId}`);
                       } else {
                         navigate(`/personal/folder/${folder.folderId}`);

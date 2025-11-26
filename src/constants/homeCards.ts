@@ -31,7 +31,7 @@ export const baseCards: HomeCard[] = [
     isPopular: true,
   },
   {
-    id: 'ocean-life',
+    id: 'bookmark',
     title: '북마크',
     category: 'marine',
     tags: ['bookmark'],

@@ -7,7 +7,6 @@ import { usePageLayout } from '@/hooks/usePageLayout';
 import { getPageDataLength } from '@/utils/pageData';
 import { PageLayout } from '@/components/common-ui/PageLayout';
 import { useMobile } from '@/hooks/useMobile';
-import { useFetchPersonalPage } from '@/hooks/queries/useFetchPersonalPage';
 import { baseCards } from '@/constants/homeCards';
 
 const BookmarkPageContentSection = lazy(
@@ -18,7 +17,6 @@ export default function BookmarkPage() {
   const isMobile = useMobile();
   const { data } = useFetchFavorite();
   const { sortType, handleSort } = usePageLayout();
-  const { data: personalPageData } = useFetchPersonalPage();
 
   const folderData = data.folderSimpleResponses;
   const linkData = data.linkSimpleResponses;
@@ -27,10 +25,9 @@ export default function BookmarkPage() {
     linkData
   );
 
-  // 북마크 페이지는 개인 페이지 이미지 사용 (없으면 baseCards의 ocean-life 이미지)
-  const bookmarkCard = baseCards.find((card) => card.id === 'ocean-life');
-  const pageImageUrl =
-    personalPageData?.pageImageUrl || bookmarkCard?.backgroundImage || '';
+  // 북마크 페이지는 기본 북마크 이미지 사용
+  const bookmarkCard = baseCards.find((card) => card.id === 'bookmark');
+  const pageImageUrl = bookmarkCard?.backgroundImage || '';
 
   return (
     <>

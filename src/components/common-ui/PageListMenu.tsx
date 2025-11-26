@@ -80,10 +80,10 @@ export default function PageListMenu({
 
     // 북마크 페이지 추가
     const bookmarkCardIndex = allCards.findIndex(
-      (card) => card.id === 'ocean-life'
+      (card) => card.id === 'bookmark'
     );
     if (bookmarkCardIndex !== -1) {
-      const bookmarkCard = baseCards.find((card) => card.id === 'ocean-life');
+      const bookmarkCard = baseCards.find((card) => card.id === 'bookmark');
       pages.push({
         title: '북마크',
         index: bookmarkCardIndex,

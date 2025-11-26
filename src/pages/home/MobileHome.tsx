@@ -71,7 +71,7 @@ export default function MobileHome() {
               card.backgroundImage
             );
             break;
-          case 'ocean-life': // 북마크
+          case 'bookmark': // 북마크
             folders =
               bookmarkData?.folderSimpleResponses?.map((folder: any) => ({
                 folderId: folder.folderId,
@@ -303,7 +303,7 @@ export default function MobileHome() {
       case 'space-travel': // 개인 페이지
         navigate('/');
         break;
-      case 'ocean-life': // 북마크
+      case 'bookmark': // 북마크
         navigate('/bookmarks');
         break;
       default:
@@ -354,7 +354,7 @@ export default function MobileHome() {
               <article
                 key={`${card.id}-${globalIndex}`}
                 data-card
-                className={`relative h-96 min-h-80 w-[74%] shrink-0 snap-center overflow-hidden rounded-3xl shadow-2xl max-[375px]:h-80 max-[375px]:w-[76%] ${blur} ${card.id === 'ocean-life' ? 'cursor-pointer' : ''}`}
+                className={`relative h-96 min-h-80 w-[74%] shrink-0 snap-center overflow-hidden rounded-3xl shadow-2xl max-[375px]:h-80 max-[375px]:w-[76%] ${blur} ${card.id === 'bookmark' ? 'cursor-pointer' : ''}`}
                 style={{
                   transform: `translateZ(0) rotateY(${rotateY}deg) scale(${scale})`,
                   opacity,
@@ -386,7 +386,7 @@ export default function MobileHome() {
                 )}
 
                 {/* 북마크 아이콘 (북마크 카드에만 표시) */}
-                {card.id === 'ocean-life' && (
+                {card.id === 'bookmark' && (
                   <div className="absolute top-4 right-4">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
