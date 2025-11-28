@@ -9,16 +9,13 @@ function getRandomColor(index: number) {
 
 export default function MobileFolderCard({
   folder,
-  folderDataLength,
   index,
 }: {
   folder: FolderDetail;
   folderDataLength: number;
   index: number;
 }) {
-  const location = useLocation();
   const navigate = useNavigate();
-  const currentPath = location.pathname;
 
   return (
     <div
