@@ -2,7 +2,9 @@ import { SkeletonBase } from './SkeletonBase';
 
 export const DropDownInlineSkeleton = () => {
   return (
-    <div className="border-gray-20 bg-gray-0 absolute top-[220px] z-[1000] mt-2 inline-flex w-[140px] flex-col rounded-[10px] border p-[4px] text-[14px] font-[500] shadow sm:w-[214px] md:top-[248px] md:right-[-8px] xl:top-[250px]">
+    <div
+      className={`border-gray-20 bg-gray-0 absolute top-[130px] z-[1000] mt-2 inline-flex w-[140px] flex-col rounded-[10px] border p-[4px] text-[14px] font-[500] shadow sm:w-[214px] md:top-[160px] md:right-[-8px] xl:top-[160px]`}
+    >
       <div className="flex flex-col">
         {/* 입력 필드 스켈레톤 */}
         <div className="mb-2 h-[42px] rounded-lg">

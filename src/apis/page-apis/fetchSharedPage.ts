@@ -19,7 +19,7 @@ export async function fetchSharedPage(data: PageParamsData): Promise<PageData> {
       console.error('공유 페이지 검증 실패:', validation.error);
       throw new Error('공유 페이지 검증 실패');
     }
-    return validation.data;
+    return validation.data as PageData;
   } catch (error) {
     console.error('공유 페이지 조회 실패:', error);
     throw error;

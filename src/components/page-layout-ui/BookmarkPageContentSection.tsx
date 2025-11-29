@@ -22,7 +22,6 @@ export default function BookmarkPageContentSection({
   linkData,
   sortType,
   isMobile,
-  pageImageUrl,
 }: PageContentSectionProps & { isMobile: boolean; pageImageUrl?: string }) {
   const searchKeyword = useSearchStore((state) => state.searchKeyword);
   const searchResult = useSearchStore((state) => state.searchResult);
@@ -122,7 +121,6 @@ export default function BookmarkPageContentSection({
                       folder={item}
                       index={index}
                       folderDataLength={sortedFolderData.length}
-                      pageImageUrl={pageImageUrl}
                     />
                   </div>
                 ))}

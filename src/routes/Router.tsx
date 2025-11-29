@@ -1,9 +1,5 @@
 import { lazy } from 'react';
-import {
-  RouterProvider,
-  createBrowserRouter,
-  Navigate,
-} from 'react-router-dom';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { ProtectedRoute } from './guards/ProtectedRoute';
 import { RedirectIfAuthenticated } from './guards/RedirectIfAuthenticated';
 import Layout from '../layout/layout';

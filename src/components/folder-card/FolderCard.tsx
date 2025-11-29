@@ -44,7 +44,7 @@ export default function FolderCard({
   const requestParams = {
     pageId: pageId || '',
     commandType: 'VIEW',
-    folderId: item.folderId,
+    folderId: folderId,
     sortType: 'BASIC',
   };
 
