@@ -44,12 +44,12 @@ export default function FolderCard({
   const requestParams = {
     pageId: pageId || '',
     commandType: 'VIEW',
-    folderId: item.folderId,
+    folderId: item.folderId || '',
     sortType: 'BASIC',
   };
 
   const { data: folderDetailsData } = useFetchFolderDetails(requestParams);
-  const linkData = folderDetailsData.linkDetailResponses;
+  const linkData = folderDetailsData?.linkDetailResponses || [];
 
   const getFolderLink = (folderId: string) => {
     const currentPath = location.pathname;
