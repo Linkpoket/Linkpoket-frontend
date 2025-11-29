@@ -110,7 +110,7 @@ export default function WebHome() {
         title: page.pageTitle,
         category: 'shared',
         tags: ['collaboration', 'team'],
-        interestedCount: 0,
+        memberCount: page.memberCount || 0,
         backgroundImage: resolvePageImageUrl(
           page.pageImageUrl,
           DEFAULT_SHARED_PAGE_IMAGE
@@ -236,9 +236,14 @@ export default function WebHome() {
                 <h3 className="mb-2 text-xl font-bold text-white">
                   {card.title}
                 </h3>
-                <p className="text-sm text-white/90">
-                  {card.interestedCount} people interested
-                </p>
+                {/* 개인 페이지와 북마크에서는 memberCount 표시 안 함 */}
+                {card.id !== 'personal-page' &&
+                  card.id !== 'bookmark' &&
+                  card.memberCount > 0 && (
+                    <p className="text-sm text-white/90">
+                      {card.memberCount} people interested
+                    </p>
+                  )}
               </div>
             </div>
           ))}

@@ -89,7 +89,7 @@ export default function MobileHome() {
         title: page.pageTitle,
         category: 'shared',
         tags: ['collaboration', 'team'],
-        interestedCount: 0,
+        memberCount: page.memberCount || 0,
         backgroundImage: resolvePageImageUrl(
           page.pageImageUrl,
           DEFAULT_SHARED_PAGE_IMAGE
@@ -420,19 +420,24 @@ export default function MobileHome() {
                       </span>
                     ))}
                   </div>
-                  <div className="flex items-center">
-                    <div className="flex -space-x-2">
-                      {[...Array(3)].map((_, i) => (
-                        <div
-                          key={i}
-                          className="h-8 w-8 rounded-full border-2 border-white bg-gradient-to-br from-blue-400 to-purple-500"
-                        />
-                      ))}
-                    </div>
-                    <span className="ml-3 text-sm text-white">
-                      {card.interestedCount} people interested
-                    </span>
-                  </div>
+                  {/* 개인 페이지와 북마크에서는 memberCount 표시 안 함 */}
+                  {card.id !== 'personal-page' &&
+                    card.id !== 'bookmark' &&
+                    card.memberCount > 0 && (
+                      <div className="flex items-center">
+                        <div className="flex -space-x-2">
+                          {[...Array(3)].map((_, i) => (
+                            <div
+                              key={i}
+                              className="h-8 w-8 rounded-full border-2 border-white bg-gradient-to-br from-blue-400 to-purple-500"
+                            />
+                          ))}
+                        </div>
+                        <span className="ml-3 text-sm text-white">
+                          {card.memberCount} people interested
+                        </span>
+                      </div>
+                    )}
                 </div>
               </article>
             );

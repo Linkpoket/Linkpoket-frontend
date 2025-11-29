@@ -10,7 +10,7 @@ export interface HomeCard {
   title: string;
   category: string;
   tags: string[];
-  interestedCount: number;
+  memberCount: number;
   backgroundImage: string;
   isPopular?: boolean;
   folders?: FolderInfo[];
@@ -25,7 +25,7 @@ export const baseCards: HomeCard[] = [
     title: '개인 페이지',
     category: 'space',
     tags: ['personal', 'collection'],
-    interestedCount: 5,
+    memberCount: 0,
     backgroundImage:
       'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=800&h=600&fit=crop',
     isPopular: true,
@@ -35,7 +35,7 @@ export const baseCards: HomeCard[] = [
     title: '북마크',
     category: 'marine',
     tags: ['bookmark'],
-    interestedCount: 12,
+    memberCount: 0,
     backgroundImage:
       'https://i.pinimg.com/736x/36/8a/10/368a106795ce2a83a451e98387ac4611.jpg',
   },

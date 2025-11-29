@@ -1,9 +1,5 @@
 import { lazy } from 'react';
-import {
-  RouterProvider,
-  createBrowserRouter,
-  Navigate,
-} from 'react-router-dom';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { ProtectedRoute } from './guards/ProtectedRoute';
 import { RedirectIfAuthenticated } from './guards/RedirectIfAuthenticated';
 import Layout from '../layout/layout';
@@ -21,6 +17,7 @@ const AdminLoginPage = lazy(() => import('@/pages/admin/AdminLoginPage'));
 const AdminDashboardPage = lazy(
   () => import('@/pages/admin/AdminDashboardPage')
 );
+const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
 const router = createBrowserRouter([
   {
@@ -76,6 +73,11 @@ const router = createBrowserRouter([
       },
     ],
   },
+  // 404 페이지는 Layout 밖에 배치 (사이드바/헤더 없이 전체 화면)
+  // 명시적 404 경로 (테스트용)
+  { path: '404', element: <NotFoundPage /> },
+  // 모든 정의되지 않은 경로를 catch
+  { path: '*', element: <NotFoundPage /> },
 ]);
 
 export default function Router() {
