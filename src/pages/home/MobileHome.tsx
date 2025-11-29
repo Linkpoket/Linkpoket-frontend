@@ -4,8 +4,7 @@ import { useMobile } from '@/hooks/useMobile';
 import { useUserStore } from '@/stores/userStore';
 import { UserActions } from '@/components/header/UserActions';
 import { AuthButtons } from '@/components/header/AuthButtons';
-import { useQuery } from '@tanstack/react-query';
-import { fetchJoinedPage } from '@/apis/page-apis/fetchJoinedPage';
+import useFetchPagesOverview from '@/hooks/queries/useFetchPagesOverview';
 import useFetchFavorite from '@/hooks/queries/useFetchFavorite';
 import {
   baseCards,
@@ -22,16 +21,8 @@ export default function MobileHome() {
   const { nickname, isLoggedIn } = useUserStore();
 
   // /api/personal-pages/overview를 사용하여 모든 페이지 + 폴더 정보 한번에 가져오기
-  const { data: overviewData, isLoading: overviewLoading } = useQuery({
-    queryKey: ['pagesOverview'],
-    queryFn: fetchJoinedPage,
-    enabled: isLoggedIn,
-    staleTime: 0,
-    gcTime: 1000 * 60,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
-  });
+  const { data: overviewData, isLoading: overviewLoading } =
+    useFetchPagesOverview();
 
   // Overview API 응답에서 데이터 추출 (useMemo로 메모이제이션)
   const { personalPage, sharedPages } = useMemo(() => {

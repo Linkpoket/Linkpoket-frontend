@@ -23,104 +23,104 @@ export function useCreateFolder(
     ...options,
     mutationFn: createFolder,
 
-    onMutate: async (variables) => {
-      const context: Record<string, any> = {};
+    // onMutate: async (variables) => {
+    //   const context: Record<string, any> = {};
 
-      // 관련 쿼리 취소
-      if (isSharedPage)
-        await queryClient.cancelQueries({ queryKey: ['sharedPage', pageId] });
-      if (isFolderPage)
-        await queryClient.cancelQueries({
-          queryKey: ['folderDetails', pageId],
-        });
-      if (isMainPage)
-        await queryClient.cancelQueries({ queryKey: ['personalPage'] });
+    //   // 관련 쿼리 취소
+    //   if (isSharedPage)
+    //     await queryClient.cancelQueries({ queryKey: ['sharedPage', pageId] });
+    //   if (isFolderPage)
+    //     await queryClient.cancelQueries({
+    //       queryKey: ['folderDetails', pageId],
+    //     });
+    //   if (isMainPage)
+    //     await queryClient.cancelQueries({ queryKey: ['personalPage'] });
 
-      // 기존 데이터 저장
-      if (isSharedPage)
-        context.sharedPage = queryClient.getQueryData(['sharedPage', pageId]);
-      if (isFolderPage)
-        context.folderDetails = queryClient.getQueryData([
-          'folderDetails',
-          pageId,
-        ]);
-      if (isMainPage)
-        context.personalPage = queryClient.getQueryData(['personalPage']);
+    //   // 기존 데이터 저장
+    //   if (isSharedPage)
+    //     context.sharedPage = queryClient.getQueryData(['sharedPage', pageId]);
+    //   if (isFolderPage)
+    //     context.folderDetails = queryClient.getQueryData([
+    //       'folderDetails',
+    //       pageId,
+    //     ]);
+    //   if (isMainPage)
+    //     context.personalPage = queryClient.getQueryData(['personalPage']);
 
-      // 임시 UI 업데이트
-      const tempFolder = {
-        folderId: '',
-        folderName: variables.folderName,
-        orderIndex: 9999,
-        createdDate: new Date().toISOString().split('T')[0],
-        isFavorite: false,
-      };
+    //   // 임시 UI 업데이트
+    //   const tempFolder = {
+    //     folderId: '',
+    //     folderName: variables.folderName,
+    //     orderIndex: 9999,
+    //     createdDate: new Date().toISOString().split('T')[0],
+    //     isFavorite: false,
+    //   };
 
-      if (isSharedPage) {
-        queryClient.setQueryData(['sharedPage', pageId], (old: any) => {
-          if (!old) return old;
+    //   if (isSharedPage) {
+    //     queryClient.setQueryData(['sharedPage', pageId], (old: any) => {
+    //       if (!old) return old;
 
-          return {
-            ...old,
-            data: {
-              ...old.data,
-              folderDetailResponses: [
-                ...(old.data?.folderDetailResponses || []),
-                tempFolder,
-              ],
-            },
-          };
-        });
-      }
+    //       return {
+    //         ...old,
+    //         data: {
+    //           ...old.data,
+    //           folderDetailResponses: [
+    //             ...(old.data?.folderDetailResponses || []),
+    //             tempFolder,
+    //           ],
+    //         },
+    //       };
+    //     });
+    //   }
 
-      if (isFolderPage) {
-        queryClient.setQueryData(['folderDetails', pageId], (old: any) => {
-          if (!old) return old;
+    //   if (isFolderPage) {
+    //     queryClient.setQueryData(['folderDetails', pageId], (old: any) => {
+    //       if (!old) return old;
 
-          return {
-            ...old,
-            data: {
-              ...old.data,
-              folderDetailResponses: [
-                ...(old.data?.folderDetailResponses || []),
-                tempFolder,
-              ],
-            },
-          };
-        });
-      }
+    //       return {
+    //         ...old,
+    //         data: {
+    //           ...old.data,
+    //           folderDetailResponses: [
+    //             ...(old.data?.folderDetailResponses || []),
+    //             tempFolder,
+    //           ],
+    //         },
+    //       };
+    //     });
+    //   }
 
-      if (isMainPage) {
-        queryClient.setQueryData(['personalPage'], (old: any) => {
-          if (!old) return old;
+    //   if (isMainPage) {
+    //     queryClient.setQueryData(['personalPage'], (old: any) => {
+    //       if (!old) return old;
 
-          return {
-            ...old,
-            data: {
-              ...old.data,
-              folderDetailResponses: [
-                ...(old.data?.folderDetailResponses || []),
-                tempFolder,
-              ],
-            },
-          };
-        });
-      }
+    //       return {
+    //         ...old,
+    //         data: {
+    //           ...old.data,
+    //           folderDetailResponses: [
+    //             ...(old.data?.folderDetailResponses || []),
+    //             tempFolder,
+    //           ],
+    //         },
+    //       };
+    //     });
+    //   }
 
-      return context;
-    },
+    //   return context;
+    // },
 
     onError: (error, variables, context: any) => {
       // rollback
-      if (context?.sharedPage)
-        queryClient.setQueryData(['sharedPage', pageId], context.sharedPage);
-      if (context?.folderDetails)
-        queryClient.setQueryData(
-          ['folderDetails', pageId],
-          context.folderDetails
-        );
-      if (context?.personalPage)
-        queryClient.setQueryData(['personalPage'], context.personalPage);
+      // if (context?.sharedPage)
+      //   queryClient.setQueryData(['sharedPage', pageId], context.sharedPage);
+      // if (context?.folderDetails)
+      //   queryClient.setQueryData(
+      //     ['folderDetails', pageId],
+      //     context.folderDetails
+      //   );
+      // if (context?.personalPage)
+      //   queryClient.setQueryData(['personalPage'], context.personalPage);
       console.error('폴더 생성 에러:', error);
       toast.error(
         error instanceof Error ? error.message : '폴더 생성에 실패했습니다.'

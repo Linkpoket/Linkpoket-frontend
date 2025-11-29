@@ -26,7 +26,7 @@ export default function SharedPageFolderContentSection({
   sortType,
   isMobile,
   pageImageUrl,
-}: PageContentSectionProps & { isMobile: boolean; pageImageUrl?: string }) {
+}: PageContentSectionProps & { isMobile: boolean; pageImageUrl: string }) {
   const {
     isLinkModalOpen,
     closeLinkModal,

@@ -1,8 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { useUserStore } from '@/stores/userStore';
-import { fetchJoinedPage } from '@/apis/page-apis/fetchJoinedPage';
+import useFetchPagesOverview from '@/hooks/queries/useFetchPagesOverview';
 import useFetchFavorite from '@/hooks/queries/useFetchFavorite';
 import {
   baseCards,
@@ -12,7 +10,6 @@ import {
 import { resolvePageImageUrl } from '@/utils/resolvePageImageUrl';
 
 export default function WebHome() {
-  const { isLoggedIn } = useUserStore();
   const navigate = useNavigate();
   const [hoveredCard, setHoveredCard] = useState<HomeCard | null>(null);
   const [cards, setCards] = useState<HomeCard[]>(baseCards);
@@ -38,17 +35,8 @@ export default function WebHome() {
   };
 
   // /api/personal-pages/overview를 사용하여 모든 페이지 + 폴더 정보 한번에 가져오기
-  const { data: overviewData, isLoading: overviewLoading } = useQuery({
-    queryKey: ['pagesOverview'],
-    queryFn: fetchJoinedPage,
-    enabled: isLoggedIn,
-    // 웹에서는 실시간성을 위해 자주 refetch
-    staleTime: 0,
-    gcTime: 1000 * 60,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
-  });
+  const { data: overviewData, isLoading: overviewLoading } =
+    useFetchPagesOverview();
 
   // Overview API 응답에서 데이터 추출
   const { personalPage, sharedPages } = useMemo(() => {

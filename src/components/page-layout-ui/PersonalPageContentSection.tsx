@@ -27,8 +27,8 @@ export default function PersonalPageContentSection({
   linkData,
   sortType,
   isMobile,
-  pageImageUrl,
-}: PageContentSectionProps & { isMobile: boolean; pageImageUrl?: string }) {
+  pageImageUrl = '',
+}: PageContentSectionProps & { isMobile: boolean; pageImageUrl: string }) {
   const {
     isLinkModalOpen,
     closeLinkModal,
@@ -54,9 +54,7 @@ export default function PersonalPageContentSection({
     fromFolderId: '',
   });
 
-  const [pageData, setPageData] = useState<(FolderDetail | LinkDetail)[] | []>(
-    []
-  );
+  const [pageData, setPageData] = useState<(FolderDetail | LinkDetail)[]>([]);
 
   useEffect(() => {
     if (searchKeyword && searchResult) {
@@ -131,13 +129,13 @@ export default function PersonalPageContentSection({
                 <div className="flex-shrink-0">
                   <MobileFolderCardAddButton />
                 </div>
-                {sortedFolderData.map((item: FolderDetail, index: number) => (
+                {sortedFolderData.map((item, index) => (
                   <div key={item.folderId} className="flex-shrink-0">
                     <MobileFolderCard
                       folder={item}
                       index={index}
                       folderDataLength={sortedFolderData.length}
-                      pageImageUrl={pageImageUrl}
+                      pageImageUrl={pageImageUrl || ''}
                     />
                   </div>
                 ))}
@@ -147,7 +145,7 @@ export default function PersonalPageContentSection({
               </div>
               <div className="relative grid w-full grid-cols-3 justify-center gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                 <MobileLinkCardButton />
-                {sortedLinkData.map((item: LinkDetail) => (
+                {sortedLinkData.map((item) => (
                   <SortablePageItem key={item.linkId} item={item} />
                 ))}
               </div>
