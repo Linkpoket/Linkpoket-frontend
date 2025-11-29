@@ -17,6 +17,10 @@ const BookmarkPage = lazy(() => import('@/pages/BookmarkPage'));
 const SharedPage = lazy(() => import('@/pages/SharedPage'));
 const FolderDetailPage = lazy(() => import('@/pages/FolderDetailPage'));
 const ReissuePage = lazy(() => import('@/pages/reissue/page'));
+const AdminLoginPage = lazy(() => import('@/pages/admin/AdminLoginPage'));
+const AdminDashboardPage = lazy(
+  () => import('@/pages/admin/AdminDashboardPage')
+);
 
 const router = createBrowserRouter([
   {
@@ -25,6 +29,10 @@ const router = createBrowserRouter([
       // 항상 접근 가능한 라우트들 (먼저 정의)
       { path: 'landing', element: <LandingPage /> },
       { path: 'reissue', element: <ReissuePage /> },
+
+      // Admin 라우트
+      { path: 'admin', element: <AdminLoginPage /> },
+      { path: 'admin/dashboard', element: <AdminDashboardPage /> },
 
       // 인증이 필요한 라우트들
       {
