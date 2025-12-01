@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useLayoutEffect, useMemo } from 'react';
+import { useRef, useState, useEffect, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMobile } from '@/hooks/useMobile';
 import { useUserStore } from '@/stores/userStore';
@@ -21,17 +21,11 @@ export default function MobileHome() {
   const { nickname, isLoggedIn } = useUserStore();
 
   // /api/personal-pages/overview를 사용하여 모든 페이지 + 폴더 정보 한번에 가져오기
+  // select 옵션으로 personalPage와 sharedPages가 자동 추출됨
   const { data: overviewData, isLoading: overviewLoading } =
     useFetchPagesOverview();
 
-  // Overview API 응답에서 데이터 추출 (useMemo로 메모이제이션)
-  const { personalPage, sharedPages } = useMemo(() => {
-    const pagesLocal = overviewData?.data || [];
-    const personalPage = pagesLocal.find((p: any) => p.pageType === 'PERSONAL');
-    const sharedPages = pagesLocal.filter((p: any) => p.pageType === 'SHARED');
-
-    return { personalPage, sharedPages };
-  }, [overviewData?.data]);
+  const { personalPage, sharedPages } = overviewData || {};
 
   // 북마크 데이터만 별도로 가져오기 (북마크는 페이지가 아니므로)
   const { data: bookmarkData, isLoading: bookmarkLoading } = useFetchFavorite();
