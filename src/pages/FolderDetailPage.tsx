@@ -6,7 +6,7 @@ import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 import useFetchFolderDetails from '@/hooks/queries/useFetchFolderDetails';
 import { usePageSort } from '@/hooks/usePageSort';
-import { getPageDataLength } from '@/utils/pageData';
+import { getPageDataLength } from '@/utils/pageDataManage';
 import { PageLayout } from '@/components/common-ui/PageLayout';
 import { useFetchPersonalPage } from '@/hooks/queries/useFetchPersonalPage';
 import { useFetchSharedPage } from '@/hooks/queries/useFetchSharedPage';

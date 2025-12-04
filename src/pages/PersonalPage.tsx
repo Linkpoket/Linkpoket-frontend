@@ -5,7 +5,7 @@ import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useUserStore } from '@/stores/userStore';
 import { usePageSort } from '@/hooks/usePageSort';
 import { useMobile } from '@/hooks/useMobile';
-import { getPageDataLength } from '@/utils/pageData';
+import { getPageDataLength } from '@/utils/pageDataManage';
 import { PageLayout } from '@/components/common-ui/PageLayout';
 import ScrollToTopButton from '@/components/common-ui/ScrollToTopButton';
 import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';

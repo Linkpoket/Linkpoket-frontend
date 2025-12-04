@@ -10,7 +10,7 @@ import { DndContext, closestCenter, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, rectSwappingStrategy } from '@dnd-kit/sortable';
 import useUpdateDragandDrop from '@/hooks/mutations/useUpdateDragandDrop';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
-import { sortPageData } from '@/utils/pageData';
+import { sortPageData } from '@/utils/pageDataManage';
 import { usePageDragAndDrop } from '@/hooks/usePageDragAndDrop';
 import { useDragAndDropSensors } from '@/utils/dragAndDrop';
 import MobileFolderCard from '../folder-card/mobile/MobileFolderCard';

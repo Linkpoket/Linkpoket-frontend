@@ -4,7 +4,7 @@ import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 import useFetchFavorite from '@/hooks/queries/useFetchFavorite';
 import { usePageSort } from '@/hooks/usePageSort';
-import { getPageDataLength } from '@/utils/pageData';
+import { getPageDataLength } from '@/utils/pageDataManage';
 import { PageLayout } from '@/components/common-ui/PageLayout';
 import { useMobile } from '@/hooks/useMobile';
 import { baseCards } from '@/constants/homeCards';
