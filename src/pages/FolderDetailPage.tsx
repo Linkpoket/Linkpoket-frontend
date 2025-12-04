@@ -5,7 +5,7 @@ import { useMobile } from '@/hooks/useMobile';
 import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 import useFetchFolderDetails from '@/hooks/queries/useFetchFolderDetails';
-import { usePageLayout } from '@/hooks/usePageLayout';
+import { usePageSort } from '@/hooks/usePageSort';
 import { getPageDataLength } from '@/utils/pageData';
 import { PageLayout } from '@/components/common-ui/PageLayout';
 import { useFetchPersonalPage } from '@/hooks/queries/useFetchPersonalPage';
@@ -22,11 +22,9 @@ export default function FolderDetailPage() {
   const location = useLocation();
   const { pageId: storePageId } = usePageStore();
   const { setParentsFolderId } = useParentsFolderIdStore();
-  const { sortType, handleSort } = usePageLayout();
+  const { sortType, handleSort } = usePageSort();
 
   // URL 경로를 기반으로 페이지 타입 판단
-  const isPersonalPageRoute =
-    location.pathname.startsWith('/personal') || !urlPageId;
   const isSharedPageRoute =
     location.pathname.startsWith('/shared') && !!urlPageId;
   const actualPageId = urlPageId || storePageId;

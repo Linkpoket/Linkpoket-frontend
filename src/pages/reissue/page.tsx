@@ -42,7 +42,7 @@ export default function ReissuePage() {
           window.location.href = '/home';
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
         window.location.href = '/login';
       }
     };

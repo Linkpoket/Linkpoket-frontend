@@ -3,7 +3,7 @@ import useUserInfo from '@/hooks/queries/useUserInfo';
 import { useUserStore } from '@/stores/userStore';
 
 /**
- * 사용자 정보를 userStore에 동기화하는 커스텀 훅
+ * 사용자 정보를 userStore에 동기화하는 훅 => 컬러 코드를 위함임
  */
 export const useUserInfoSync = () => {
   const { data: userInfo } = useUserInfo();

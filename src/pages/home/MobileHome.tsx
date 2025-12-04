@@ -31,8 +31,6 @@ export default function MobileHome() {
   if (!isMobile) return null;
 
   const handleCardClick = (card: HomeCard) => {
-    console.log('Card clicked:', card.title);
-
     if (card.isSharedPage && card.pageId) {
       navigate(`/shared/${card.pageId}`);
       return;
@@ -45,8 +43,6 @@ export default function MobileHome() {
       case 'bookmark':
         navigate('/bookmarks');
         break;
-      default:
-        console.log('Unknown card:', card.id);
     }
   };
 

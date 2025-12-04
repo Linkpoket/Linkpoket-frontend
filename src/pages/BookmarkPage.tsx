@@ -3,7 +3,7 @@ import { lazy } from 'react';
 import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 import useFetchFavorite from '@/hooks/queries/useFetchFavorite';
-import { usePageLayout } from '@/hooks/usePageLayout';
+import { usePageSort } from '@/hooks/usePageSort';
 import { getPageDataLength } from '@/utils/pageData';
 import { PageLayout } from '@/components/common-ui/PageLayout';
 import { useMobile } from '@/hooks/useMobile';
@@ -16,7 +16,7 @@ const BookmarkPageContentSection = lazy(
 export default function BookmarkPage() {
   const isMobile = useMobile();
   const { data } = useFetchFavorite();
-  const { sortType, handleSort } = usePageLayout();
+  const { sortType, handleSort } = usePageSort();
 
   const folderData = data.folderSimpleResponses;
   const linkData = data.linkSimpleResponses;

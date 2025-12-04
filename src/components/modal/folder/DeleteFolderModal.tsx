@@ -27,8 +27,6 @@ const DeleteFolderModal = forwardRef<
       folderId: folderId,
     };
     deleteFolder(requestBody);
-
-    console.log('삭제');
   };
 
   return (

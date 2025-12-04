@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export const usePageLayout = () => {
+export const usePageSort = () => {
   const [sortType, setSortType] = useState<string>('기본순');
 
   const handleSort = (selectedSortType: string) => {

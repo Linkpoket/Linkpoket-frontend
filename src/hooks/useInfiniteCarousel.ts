@@ -44,13 +44,6 @@ export const useInfiniteCarousel = ({
 
   useLayoutEffect(() => {
     const timer = setTimeout(() => {
-      console.log('🎯 [MOBILE] 초기 위치 설정:', {
-        START_GLOBAL_INDEX,
-        L,
-        MIDDLE_BLOCK,
-        firstCard: allCards[0]?.title,
-        targetCard: allCards[START_GLOBAL_INDEX % L]?.title,
-      });
       centerOn(START_GLOBAL_INDEX, 'auto');
       setNearestGlobal(START_GLOBAL_INDEX);
       nearestRef.current = START_GLOBAL_INDEX;
