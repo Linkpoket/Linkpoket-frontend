@@ -2,7 +2,7 @@ import { lazy, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useFetchSharedPage } from '@/hooks/queries/useFetchSharedPage';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
-import { usePageLayout } from '@/hooks/usePageLayout';
+import { usePageSort } from '@/hooks/usePageSort';
 import { useMobile } from '@/hooks/useMobile';
 import { getPageDataLength } from '@/utils/pageData';
 import { PageLayout } from '@/components/common-ui/PageLayout';
@@ -22,7 +22,7 @@ export default function SharedPage() {
 
   const { setPageInfo } = usePageStore();
   const { setParentsFolderId } = useParentsFolderIdStore();
-  const { sortType, handleSort } = usePageLayout();
+  const { sortType, handleSort } = usePageSort();
 
   useEffect(() => {
     if (!pageId || !data) return;

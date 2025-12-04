@@ -4,7 +4,7 @@ import Copy from '@/assets/common-ui-assets/Copy.svg?react';
 import Delete from '@/assets/common-ui-assets/Delete.svg?react';
 import { usePageStore } from '@/stores/pageStore';
 import { useModalStore } from '@/stores/modalStore';
-import { useClickOutsideMultiple } from '@/hooks/useClickOutsideMultiple';
+import { useClickOutside } from '@/hooks/useClickOutside';
 import { useTransferFolder } from '@/hooks/mutations/useTransferFolder';
 import toast from 'react-hot-toast';
 import { DeleteModalSkeleton } from '../skeleton/DeleteModalSkeleton';
@@ -108,7 +108,8 @@ const DropDownInline = ({
   const linkModalRef = useRef<HTMLDivElement | null>(null);
   const transferModalRef = useRef<HTMLDivElement | null>(null);
 
-  useClickOutsideMultiple(
+  // 여러 ref를 배열로 전달하여 useClickOutside 적용
+  useClickOutside(
     [dropdownRef, folderModalRef, linkModalRef, transferModalRef],
     setIsDropDownInline,
     !isAnyModalOpen

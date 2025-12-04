@@ -3,7 +3,7 @@ import { lazy, useEffect } from 'react';
 import { useFetchPersonalPage } from '@/hooks/queries/useFetchPersonalPage';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useUserStore } from '@/stores/userStore';
-import { usePageLayout } from '@/hooks/usePageLayout';
+import { usePageSort } from '@/hooks/usePageSort';
 import { useMobile } from '@/hooks/useMobile';
 import { getPageDataLength } from '@/utils/pageData';
 import { PageLayout } from '@/components/common-ui/PageLayout';
@@ -21,7 +21,7 @@ export default function PersonalPage() {
   const { setUser } = useUserStore();
   const { setPageInfo } = usePageStore();
   const { setParentsFolderId } = useParentsFolderIdStore();
-  const { sortType, handleSort } = usePageLayout();
+  const { sortType, handleSort } = usePageSort();
   const isMobile = useMobile();
 
   useEffect(() => {
