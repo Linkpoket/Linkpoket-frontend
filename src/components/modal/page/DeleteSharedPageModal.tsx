@@ -34,7 +34,9 @@ const DeleteSharedPageModal = forwardRef<
       },
       onError: (error) => {
         console.error('공유 페이지 삭제 실패:', error);
-        toast.error('공유 페이지 삭제 실패');
+        toast.error(
+          error instanceof Error ? error.message : '공유 페이지 삭제 실패'
+        );
       },
     });
   };

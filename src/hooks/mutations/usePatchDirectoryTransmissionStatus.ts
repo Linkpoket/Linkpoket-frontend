@@ -25,8 +25,12 @@ export function usePatchDirectoryTransmissionStatus() {
 
       queryClient.refetchQueries({ queryKey: ['notifications'] });
     },
-    onError: () => {
-      toast.error('폴더 초대 상태 변경에 실패했습니다.');
+    onError: (error) => {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : '폴더 초대 상태 변경에 실패했습니다.'
+      );
     },
   });
 }

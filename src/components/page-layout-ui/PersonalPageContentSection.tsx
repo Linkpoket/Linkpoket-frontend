@@ -4,7 +4,6 @@ import LinkCard from '../link-card/LinkCard';
 import FolderCard from '../folder-card/FolderCard';
 import { useModalStore } from '@/stores/modalStore';
 import { useSearchStore } from '@/stores/searchStore';
-import { useMobile } from '@/hooks/useMobile';
 import { PageContentSectionProps } from '@/types/pages';
 import { DndContext, closestCenter, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, rectSwappingStrategy } from '@dnd-kit/sortable';
@@ -24,10 +23,12 @@ const AddLinkModal = lazy(() => import('../modal/link/AddLinkModal'));
 const AddFolderModal = lazy(() => import('../modal/folder/AddFolderModal'));
 
 export default function PersonalPageContentSection({
-  folderData = [],
-  linkData = [],
+  folderData,
+  linkData,
   sortType,
-}: PageContentSectionProps) {
+  isMobile,
+  pageImageUrl = '',
+}: PageContentSectionProps & { isMobile: boolean; pageImageUrl: string }) {
   const {
     isLinkModalOpen,
     closeLinkModal,
@@ -37,7 +38,6 @@ export default function PersonalPageContentSection({
 
   const searchKeyword = useSearchStore((state) => state.searchKeyword);
   const searchResult = useSearchStore((state) => state.searchResult);
-  const isMobile = useMobile();
 
   const { pageId } = usePageStore();
   const { parentsFolderId } = useParentsFolderIdStore();
@@ -54,9 +54,7 @@ export default function PersonalPageContentSection({
     fromFolderId: '',
   });
 
-  const [pageData, setPageData] = useState<(FolderDetail | LinkDetail)[] | []>(
-    []
-  );
+  const [pageData, setPageData] = useState<(FolderDetail | LinkDetail)[]>([]);
 
   useEffect(() => {
     if (searchKeyword && searchResult) {
@@ -68,13 +66,19 @@ export default function PersonalPageContentSection({
       setPageData(sortedData);
     } else {
       // 일반 모드
-      const safeFolderData = Array.isArray(folderData) ? folderData : [];
-      const safeLinkData = Array.isArray(linkData) ? linkData : [];
-      const combinedData = [...safeFolderData, ...safeLinkData];
+      const combinedData = [...folderData, ...linkData];
       const sortedData = sortPageData(combinedData, sortType);
       setPageData(sortedData);
     }
   }, [folderData, linkData, sortType, searchKeyword, searchResult]);
+
+  // 정렬된 pageData에서 폴더와 링크 분리
+  const sortedFolderData = pageData.filter(
+    (item): item is FolderDetail => 'folderId' in item
+  );
+  const sortedLinkData = pageData.filter(
+    (item): item is LinkDetail => 'linkId' in item
+  );
 
   const sensors = useDragAndDropSensors();
 
@@ -112,25 +116,36 @@ export default function PersonalPageContentSection({
           {isMobile ? (
             <>
               <div className="text-gray-90 mb-4 px-4 text-lg font-semibold">
-                폴더 ({folderData.length})
+                폴더 ({sortedFolderData.length})
               </div>
-              <div className="relative mb-10 grid w-full grid-cols-2 gap-x-2 gap-y-8 sm:grid-cols-3">
-                <MobileFolderCardAddButton />
-                {folderData.map((item: FolderDetail, index: number) => (
-                  <MobileFolderCard
-                    key={item.folderId}
-                    folder={item}
-                    index={index}
-                    folderDataLength={folderData.length}
-                  />
+              <div
+                className="scrollbar-hide relative mb-10 flex w-full gap-x-2 overflow-x-auto pb-2"
+                style={{
+                  WebkitOverflowScrolling: 'touch' as any,
+                  scrollbarWidth: 'none',
+                  msOverflowStyle: 'none',
+                }}
+              >
+                <div className="flex-shrink-0">
+                  <MobileFolderCardAddButton />
+                </div>
+                {sortedFolderData.map((item, index) => (
+                  <div key={item.folderId} className="flex-shrink-0">
+                    <MobileFolderCard
+                      folder={item}
+                      index={index}
+                      folderDataLength={sortedFolderData.length}
+                      pageImageUrl={pageImageUrl || ''}
+                    />
+                  </div>
                 ))}
               </div>
               <div className="text-gray-90 mb-4 px-4 text-lg font-semibold">
-                링크 ({linkData.length})
+                링크 ({sortedLinkData.length})
               </div>
-              <div className="relative grid w-full grid-cols-2 justify-center gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+              <div className="relative grid w-full grid-cols-3 justify-center gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                 <MobileLinkCardButton />
-                {linkData.map((item: LinkDetail) => (
+                {sortedLinkData.map((item) => (
                   <SortablePageItem key={item.linkId} item={item} />
                 ))}
               </div>

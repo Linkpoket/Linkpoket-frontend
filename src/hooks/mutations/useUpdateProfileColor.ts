@@ -12,8 +12,12 @@ export const useUpdateProfileColor = () => {
       queryClient.invalidateQueries({ queryKey: ['personalPage'] });
       useUserStore.getState().setColorCode(variables);
     },
-    onError: () => {
-      toast.error('색상 변경에 실패했습니다. 다시 시도해 주세요.');
+    onError: (error) => {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : '색상 변경에 실패했습니다. 다시 시도해 주세요.'
+      );
     },
   });
 };

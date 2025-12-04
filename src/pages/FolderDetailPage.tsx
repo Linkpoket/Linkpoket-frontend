@@ -1,25 +1,47 @@
 import { lazy, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
+import { useMobile } from '@/hooks/useMobile';
 import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 import useFetchFolderDetails from '@/hooks/queries/useFetchFolderDetails';
 import { usePageLayout } from '@/hooks/usePageLayout';
 import { getPageDataLength } from '@/utils/pageData';
-import { ErrorState } from '@/components/common-ui/ErrorState';
-import { LoadingState } from '@/components/common-ui/LoadingState';
 import { PageLayout } from '@/components/common-ui/PageLayout';
+import { useFetchPersonalPage } from '@/hooks/queries/useFetchPersonalPage';
+import { useFetchSharedPage } from '@/hooks/queries/useFetchSharedPage';
 
 const SharedPageFolderContentSection = lazy(
   () => import('@/components/page-layout-ui/SharedPageFolderContentSection')
 );
 
 export default function FolderDetailPage() {
-  const { folderId: folderIdParam } = useParams();
+  const { folderId: folderIdParam, pageId: urlPageId } = useParams();
   const folderId = folderIdParam ?? '';
-  const { pageId } = usePageStore();
+  const isMobile = useMobile();
+  const location = useLocation();
+  const { pageId: storePageId } = usePageStore();
   const { setParentsFolderId } = useParentsFolderIdStore();
   const { sortType, handleSort } = usePageLayout();
+
+  // URL 경로를 기반으로 페이지 타입 판단
+  const isPersonalPageRoute =
+    location.pathname.startsWith('/personal') || !urlPageId;
+  const isSharedPageRoute =
+    location.pathname.startsWith('/shared') && !!urlPageId;
+  const actualPageId = urlPageId || storePageId;
+
+  // 개인 페이지 이미지 가져오기
+  const { data: personalPageData } = useFetchPersonalPage();
+
+  // 공유 페이지 이미지 가져오기
+  const { data: sharedPageData } = useFetchSharedPage(actualPageId || '');
+
+  // 페이지 이미지 결정
+  const pageImageUrl =
+    isSharedPageRoute && sharedPageData?.pageImageUrl
+      ? sharedPageData.pageImageUrl
+      : personalPageData?.pageImageUrl || '';
 
   useEffect(() => {
     if (folderId) {
@@ -28,50 +50,43 @@ export default function FolderDetailPage() {
   }, [folderId, setParentsFolderId]);
 
   const requestParams = {
-    pageId,
+    pageId: actualPageId || '',
     commandType: 'VIEW' as const,
     folderId: folderId,
     sortType: 'BASIC' as const,
   };
 
-  const { data, isLoading, isError } = useFetchFolderDetails(requestParams);
+  const { data } = useFetchFolderDetails(requestParams);
 
-  const refinedData = data?.data;
-  const folderData = refinedData?.folderDetailResponses ?? [];
-  const linkData = refinedData?.linkDetailResponses ?? [];
+  const folderData = data.folderDetailResponses;
+  const linkData = data.linkDetailResponses;
   const { folderDataLength, linkDataLength } = getPageDataLength(
     folderData,
     linkData
   );
 
-  console.log('refinedData', refinedData);
-
-  const folderName = refinedData?.targetFolderName;
-
-  if (isError) {
-    return <ErrorState message="폴더를 불러올 수 없습니다." />;
-  }
-
-  if (isLoading) {
-    return <LoadingState />;
-  }
+  const folderName = data.targetFolderName;
 
   return (
-    <PageLayout>
+    <PageLayout isMobile={isMobile} pageImageUrl={pageImageUrl}>
       <PageHeaderSection
-        pageTitle={folderName ?? ''}
-        pageId={pageId}
+        pageTitle={folderName}
+        pageId={actualPageId || ''}
         folderId={folderId}
+        isMobile={isMobile}
       />
       <PageControllerSection
         folderDataLength={folderDataLength}
         linkDataLength={linkDataLength}
         onSortChange={handleSort}
+        isMobile={isMobile}
       />
       <SharedPageFolderContentSection
         folderData={folderData}
         linkData={linkData}
         sortType={sortType}
+        isMobile={isMobile}
+        pageImageUrl={pageImageUrl}
       />
     </PageLayout>
   );

@@ -60,7 +60,7 @@ export default function DropDownView({
       {isOpen && (
         <ul
           role="menu"
-          className="border-gray-30 text-gray-90 bg-gray-0 absolute z-10 mt-1 w-full rounded-[10px] border p-[8px] text-[14px] font-[600]"
+          className="border-gray-30 text-gray-90 bg-gray-0 absolute z-[9999] mt-1 w-full rounded-[10px] border p-[8px] text-[14px] font-[600]"
         >
           {options.map((option) => (
             <li

@@ -1,6 +1,5 @@
 import { PageControllerSectionProps } from '@/types/pages';
 import DropDownView from '../common-ui/DropDownView';
-import { useMobile } from '@/hooks/useMobile';
 import { Search } from '../common-ui/Search';
 import { useLocation } from 'react-router-dom';
 import { usePageSearch } from '@/hooks/usePageSearch';
@@ -9,8 +8,8 @@ export default function PageControllerSection({
   folderDataLength = 0,
   linkDataLength = 0,
   onSortChange,
-}: PageControllerSectionProps) {
-  const isMobile = useMobile();
+  isMobile,
+}: PageControllerSectionProps & { isMobile: boolean }) {
   const pathName = useLocation().pathname;
   const { searchKeyword, handleSearchChange, handleClear } = usePageSearch();
 

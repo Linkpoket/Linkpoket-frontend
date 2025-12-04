@@ -2,7 +2,7 @@
 set -e  # 에러 발생 시 즉시 중단
 
 SERVER="linkrew-web-dev"
-APP_DIR="/home/ubuntu/linkrew"
+APP_DIR="/home/ubuntu/linkpoket"
 TEMP_DIR="/home/ubuntu/temp-dist"
 
 echo "로컬 빌드 시작"

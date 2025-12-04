@@ -3,6 +3,7 @@ import Modal from '@/components/common-ui/Modal';
 import Status from '@/assets/common-ui-assets/Status.svg?react';
 import { useDeleteLink } from '@/hooks/mutations/useDeleteLink';
 import { DeleteLinkData } from '@/types/links';
+import toast from 'react-hot-toast';
 
 type Props = {
   isOpen: boolean;
@@ -30,7 +31,9 @@ const DeleteLinkModal = forwardRef<HTMLDivElement, Props>(
         },
         onError: (error) => {
           console.error('링크 삭제 실패:', error);
-          // TODO: 사용자에게 에러 메시지 표시
+          toast.error(
+            error instanceof Error ? error.message : '링크 삭제에 실패했습니다.'
+          );
         },
       });
     };

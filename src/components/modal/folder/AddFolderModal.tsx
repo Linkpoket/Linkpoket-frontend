@@ -33,9 +33,10 @@ export default function AddFolderModal({
       onClose();
       toast.success('폴더 생성에 성공했습니다.');
     },
-    onError: () => {
-      toast.error('폴더 생성에 실패했습니다.');
-      setError('폴더 생성에 실패했습니다.');
+    onError: (error) => {
+      toast.error(
+        error instanceof Error ? error.message : '폴더 생성에 실패했습니다.'
+      );
     },
   });
 

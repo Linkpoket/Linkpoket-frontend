@@ -8,7 +8,7 @@ export async function deleteSharedPage(data: DeleteSharedPageData) {
     });
     return response.data;
   } catch (error) {
-    console.error('Error deleting shared page:', error);
+    console.error('공유 페이지 삭제 실패:', error);
     throw error;
   }
 }

@@ -133,7 +133,7 @@ export default function LinkCard({
   return (
     <>
       <div
-        className={`group relative flex h-[242px] flex-col items-center gap-4 overflow-visible p-[16px] hover:cursor-pointer ${
+        className={`group relative flex ${isMobile ? 'h-[170px]' : 'h-[242px]'} flex-col items-center gap-4 overflow-visible p-[16px] hover:cursor-pointer ${
           // isFocusMode
           // ? 'w-[125px]'
           isMobile ? 'min-w-[125px]' : 'min-w-[156px]'
@@ -226,7 +226,17 @@ export default function LinkCard({
                 ref={menuButtonRef}
                 data-card-button
                 className="cursor-pointer p-1"
-                onClick={handleMenuClick}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleMenuClick();
+                }}
+                onPointerDown={(e) => {
+                  e.stopPropagation();
+                }}
+                onTouchStart={(e) => {
+                  e.stopPropagation();
+                }}
+                style={{ touchAction: 'manipulation' }}
                 aria-label="메뉴 열기"
               >
                 <CardMenu />

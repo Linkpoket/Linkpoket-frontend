@@ -8,7 +8,7 @@ export default async function deleteFolder(data: DeleteFolderData) {
     });
     return response.data;
   } catch (error) {
-    console.error('Error deleting folder:', error);
+    console.error('폴더 삭제 실패:', error);
     throw error;
   }
 }

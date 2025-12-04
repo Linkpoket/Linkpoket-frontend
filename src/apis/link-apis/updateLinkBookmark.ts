@@ -8,7 +8,7 @@ export default async function updateLinkBookmark(itemId: string) {
     });
     return response.data;
   } catch (error) {
-    console.error('Error updating link bookmark:', error);
+    console.error('링크 북마크 업데이트 실패:', error);
     throw error;
   }
 }

@@ -145,8 +145,10 @@ const SideBar: React.FC<MenubarProps> = ({
         navigate(`/shared/${createdPageId}`);
       }
     },
-    onError: () => {
-      toast.error('공유페이지 생성 실패');
+    onError: (error) => {
+      toast.error(
+        error instanceof Error ? error.message : '공유페이지 생성 실패'
+      );
     },
   });
 

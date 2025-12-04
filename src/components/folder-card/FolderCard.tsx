@@ -44,12 +44,12 @@ export default function FolderCard({
   const requestParams = {
     pageId: pageId || '',
     commandType: 'VIEW',
-    folderId: item.folderId,
+    folderId: folderId || '',
     sortType: 'BASIC',
   };
 
   const { data: folderDetailsData } = useFetchFolderDetails(requestParams);
-  const linkData = folderDetailsData?.data?.linkDetailResponses ?? [];
+  const linkData = folderDetailsData?.linkDetailResponses || [];
 
   const getFolderLink = (folderId: string) => {
     const currentPath = location.pathname;
@@ -90,7 +90,7 @@ export default function FolderCard({
   return (
     <div
       // 바깥 컨테이너 투명 처리
-      className={`group relative flex h-[242px] flex-col items-center gap-4 rounded-[16px] border border-transparent bg-transparent p-[16px] hover:cursor-pointer ${
+      className={`group relative flex ${isMobile ? 'h-[170px]' : 'h-[242px]'} flex-col items-center gap-4 rounded-[16px] border border-transparent bg-transparent p-[16px] hover:cursor-pointer ${
         isMobile ? 'min-w-[125px]' : 'min-w-[156px]'
       }`}
       onClick={handleCardClick}
@@ -159,7 +159,17 @@ export default function FolderCard({
               ref={menuButtonRef}
               data-card-button
               className="cursor-pointer p-1"
-              onClick={handleMenuClick}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleMenuClick();
+              }}
+              onPointerDown={(e) => {
+                e.stopPropagation();
+              }}
+              onTouchStart={(e) => {
+                e.stopPropagation();
+              }}
+              style={{ touchAction: 'manipulation' }}
               aria-label="메뉴 열기"
             >
               <CardMenu />

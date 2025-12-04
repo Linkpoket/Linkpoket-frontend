@@ -1,6 +1,9 @@
 import { axiosInstance } from '../axiosInstance';
+import { FolderListResponse } from '@/types/folders';
 
-export default async function fetchFolderList(pageId: string) {
+export default async function fetchFolderList(
+  pageId: string
+): Promise<FolderListResponse> {
   try {
     const response = await axiosInstance.get('/api/folders/sidebar', {
       params: {
@@ -10,7 +13,7 @@ export default async function fetchFolderList(pageId: string) {
     });
     return response.data;
   } catch (error) {
-    console.error('Error fetching folder list:', error);
+    console.error('폴더 목록 조회 실패:', error);
     throw error;
   }
 }

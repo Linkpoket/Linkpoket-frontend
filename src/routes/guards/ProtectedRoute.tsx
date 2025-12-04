@@ -1,5 +1,6 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { Spinner } from '@/components/common-ui/Spinner';
 
 export const ProtectedRoute = () => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -7,7 +8,11 @@ export const ProtectedRoute = () => {
 
   // 인증 상태 로딩 중일 때는 로딩 표시
   if (isLoading) {
-    return <div>로딩 중...</div>;
+    return (
+      <div className="relative h-full w-full">
+        <Spinner display={true} position="center" />
+      </div>
+    );
   }
 
   // 인증되지 않은 경우 랜딩 페이지로 리다이렉트

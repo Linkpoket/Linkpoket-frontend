@@ -6,6 +6,7 @@ import {
 import deleteFolder from '@/apis/folder-apis/deleteFolder';
 import { DeleteFolderData } from '@/types/folders';
 import { useLocation } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 export default function useDeleteFolder(
   pageId: string,
@@ -165,7 +166,7 @@ export default function useDeleteFolder(
       }
     },
 
-    onError: (error, context: any) => {
+    onError: (error, variables, context: any) => {
       // rollback
       if (context?.sharedPage)
         queryClient.setQueryData(['sharedPage', pageId], context.sharedPage);
@@ -176,7 +177,11 @@ export default function useDeleteFolder(
         );
       if (context?.personalPage)
         queryClient.setQueryData(['personalPage'], context.personalPage);
-      console.error('폴더 생성 에러:', error);
+      console.error('폴더 삭제 에러:', error);
+      toast.error(
+        error instanceof Error ? error.message : '폴더 삭제에 실패했습니다.'
+      );
+      options?.onError?.(error, variables, context);
     },
   });
 }

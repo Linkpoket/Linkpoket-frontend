@@ -8,15 +8,16 @@ export function useMobile() {
   );
 
   useEffect(() => {
-    const mql = window.matchMedia(`(max-width: ${DESKTOP_BREAKPOINT - 1}px)`);
+    // 768px 이하를 모바일로 처리 (max-width: 768px)
+    const mql = window.matchMedia(`(max-width: ${DESKTOP_BREAKPOINT}px)`);
 
     const onChange = () => {
-      setIsUnderDesktop(window.innerWidth < DESKTOP_BREAKPOINT);
+      setIsUnderDesktop(window.innerWidth <= DESKTOP_BREAKPOINT);
     };
 
     mql.addEventListener('change', onChange);
 
-    setIsUnderDesktop(window.innerWidth < DESKTOP_BREAKPOINT);
+    setIsUnderDesktop(window.innerWidth <= DESKTOP_BREAKPOINT);
 
     return () => mql.removeEventListener('change', onChange);
   }, []);

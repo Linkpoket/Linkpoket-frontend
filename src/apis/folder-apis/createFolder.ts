@@ -6,7 +6,7 @@ export async function createFolder(data: CreateFolderData) {
     const response = await axiosInstance.post('/api/folders', data);
     return response.data;
   } catch (error) {
-    console.error('Error creating folder:', error);
+    console.error('폴더 생성 실패:', error);
     throw error;
   }
 }

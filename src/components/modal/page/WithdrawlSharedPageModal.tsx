@@ -33,7 +33,9 @@ const WithdrawSharedPageModal = forwardRef<
         toast.success('공유 페이지 탈퇴 완료');
       },
       onError: (error) => {
-        toast.error('공유 페이지 탈퇴 실패');
+        toast.error(
+          error instanceof Error ? error.message : '공유 페이지 탈퇴 실패'
+        );
         throw error;
       },
     });

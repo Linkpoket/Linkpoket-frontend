@@ -10,7 +10,7 @@ export default async function updatePersonalPageTitle(
     });
     return response.data;
   } catch (error) {
-    console.error('Error updating personal page title:', error);
+    console.error('개인 페이지 제목 업데이트 실패:', error);
     throw error;
   }
 }

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useEffect } from 'react';
+import { Spinner } from '@/components/common-ui/Spinner';
 
 export default function ReissuePage() {
   useEffect(() => {
@@ -51,7 +52,7 @@ export default function ReissuePage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <p>잠시만 기다려주세요.</p>
+      <Spinner display={true} position="center" />
     </div>
   );
 }

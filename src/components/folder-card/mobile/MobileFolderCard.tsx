@@ -1,6 +1,6 @@
 import { COLOR_OPTIONS } from '@/styles/tokens';
 import { FolderDetail } from '@/types/folders';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function getRandomColor(index: number) {
   const colors = COLOR_OPTIONS;
@@ -9,16 +9,14 @@ function getRandomColor(index: number) {
 
 export default function MobileFolderCard({
   folder,
-  folderDataLength,
   index,
 }: {
   folder: FolderDetail;
   folderDataLength: number;
   index: number;
+  pageImageUrl: string;
 }) {
-  const location = useLocation();
   const navigate = useNavigate();
-  const currentPath = location.pathname;
 
   return (
     <div

@@ -9,7 +9,7 @@ export default function MobileLinkCardButton() {
   return (
     <>
       <div
-        className={`group relative flex h-[242px] flex-col items-center justify-center gap-4 overflow-visible rounded-lg p-[16px] hover:cursor-pointer`}
+        className={`group relative flex h-[170px] flex-col items-center justify-center gap-4 overflow-visible rounded-lg p-[16px] hover:cursor-pointer`}
         onClick={handleAddLinkModalOpen}
       >
         <div className="flex flex-col items-center justify-center">

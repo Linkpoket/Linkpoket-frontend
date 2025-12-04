@@ -1,9 +1,17 @@
+import { lazy, Suspense } from 'react';
 import { useMobile } from '@/hooks/useMobile';
-import MobileHome from './MobileHome';
-import WebHome from './WebHome';
+import { Spinner } from '@/components/common-ui/Spinner';
+
+// 동적 import로 필요한 컴포넌트만 로드
+const MobileHome = lazy(() => import('./MobileHome'));
+const WebHome = lazy(() => import('./WebHome'));
 
 export default function HomePage() {
   const isMobile = useMobile();
 
-  return isMobile ? <MobileHome /> : <WebHome />;
+  return (
+    <Suspense fallback={<Spinner display={true} position="center" />}>
+      {isMobile ? <MobileHome /> : <WebHome />}
+    </Suspense>
+  );
 }

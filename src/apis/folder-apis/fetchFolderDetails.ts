@@ -1,9 +1,10 @@
 import { axiosInstance } from '../axiosInstance';
-import { FetchFolderDetailsProps } from '@/types/folders';
+import { FolderDetailsProps, FolderDetailsResponse } from '@/types/folders';
+import { folderDetailsResponseSchema } from '@/schemas/folders';
 
 export default async function fetchFolderDetails(
-  data: FetchFolderDetailsProps
-) {
+  data: FolderDetailsProps
+): Promise<FolderDetailsResponse> {
   try {
     const response = await axiosInstance.get('/api/folders/details', {
       params: {
@@ -13,9 +14,15 @@ export default async function fetchFolderDetails(
         sortType: 'BASIC',
       },
     });
-    return response.data;
+
+    const validation = folderDetailsResponseSchema.safeParse(response.data);
+    if (!validation.success) {
+      console.error('폴더 상세 정보 검증 실패:', validation.error);
+      throw new Error('폴더 상세 정보 검증 실패');
+    }
+    return validation.data as FolderDetailsResponse;
   } catch (error) {
-    console.error('Error fetching folder details:', error);
+    console.error('폴더 상세 정보 조회 실패:', error);
     throw error;
   }
 }

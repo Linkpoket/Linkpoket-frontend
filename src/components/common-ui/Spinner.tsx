@@ -28,16 +28,16 @@ const Spinner = (props: SpinnerProps) => {
   return (
     <div
       className={cn(
-        'fixed z-[10000] flex h-10 w-10 items-center justify-center',
+        'absolute z-[10000] flex h-10 w-10 items-center justify-center',
         display ? 'block' : 'hidden',
         positionClasses[position]
       )}
     >
       <div className="relative h-8 w-8">
-        <div className="absolute h-8 w-8 animate-spin rounded-full border-4 border-solid border-green-500 border-t-transparent"></div>
-        <div className="absolute h-8 w-8 animate-spin rounded-full border-4 border-solid border-green-500 border-t-transparent delay-150"></div>
-        <div className="absolute h-8 w-8 animate-spin rounded-full border-4 border-solid border-green-500 border-t-transparent delay-300"></div>
-        <div className="absolute h-8 w-8 animate-spin rounded-full border-4 border-solid border-green-500 border-t-transparent delay-450"></div>
+        <div className="border-gray-60 absolute h-8 w-8 animate-spin rounded-full border-4 border-solid border-t-transparent"></div>
+        <div className="border-gray-60 absolute h-8 w-8 animate-spin rounded-full border-4 border-solid border-t-transparent delay-150"></div>
+        <div className="border-gray-60 absolute h-8 w-8 animate-spin rounded-full border-4 border-solid border-t-transparent delay-300"></div>
+        <div className="border-gray-60 absolute h-8 w-8 animate-spin rounded-full border-4 border-solid border-t-transparent delay-450"></div>
       </div>
     </div>
   );

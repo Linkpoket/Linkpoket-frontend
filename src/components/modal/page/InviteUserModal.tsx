@@ -64,7 +64,9 @@ const InviteUserModal = ({ isOpen, onClose, pageId }: InviteUserModalProps) => {
       onClose();
     },
     onError: (error) => {
-      toast.error('초대 요청이 실패했습니다.');
+      toast.error(
+        error instanceof Error ? error.message : '초대 요청이 실패했습니다.'
+      );
     },
   });
 

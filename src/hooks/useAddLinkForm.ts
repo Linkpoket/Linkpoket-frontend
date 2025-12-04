@@ -22,6 +22,7 @@ export const useAddLinkForm = (isOpen: boolean, onClose: () => void) => {
       new URL(urlString);
       return true;
     } catch (error) {
+      console.error('URL 유효성 검사 실패:', error);
       return false;
     }
   };
@@ -33,9 +34,11 @@ export const useAddLinkForm = (isOpen: boolean, onClose: () => void) => {
       onClose();
       toast.success('링크를 추가했습니다.');
     },
-    onError: (err) => {
-      toast.error('링크 추가를 실패했습니다.');
-      console.error('링크 추가 실패:', err);
+    onError: (error) => {
+      toast.error(
+        error instanceof Error ? error.message : '링크 추가를 실패했습니다.'
+      );
+      console.error('링크 추가 실패:', error);
     },
   });
 
@@ -66,7 +69,9 @@ export const useAddLinkForm = (isOpen: boolean, onClose: () => void) => {
       setIsPreviewing(false);
     },
     onError: (err) => {
-      toast.error('링크명을 가져올 수 없습니다.');
+      toast.error(
+        err instanceof Error ? err.message : '링크명을 가져올 수 없습니다.'
+      );
       console.error('링크 프리뷰 실패:', err);
       setIsPreviewing(false);
     },

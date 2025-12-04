@@ -14,9 +14,9 @@ export const useUpdateProfileNickname = () => {
       toast.success('닉네임을 변경했습니다.');
     },
     onError: (error) => {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
+      toast.error(
+        error instanceof Error ? error.message : '닉네임 변경에 실패했습니다.'
+      );
     },
   });
 };

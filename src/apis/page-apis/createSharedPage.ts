@@ -6,7 +6,7 @@ export async function createSharedPage(data: CreateSharedPageData) {
     const response = await axiosInstance.post('/api/share-pages', data);
     return response.data;
   } catch (error) {
-    console.error('Error creating shared page:', error);
+    console.error('공유 페이지 생성 실패:', error);
     throw error;
   }
 }

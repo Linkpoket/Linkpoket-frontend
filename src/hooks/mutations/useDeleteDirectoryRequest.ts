@@ -11,8 +11,10 @@ export const useDeleteDirectoryRequest = () => {
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
       toast.success('알람을 삭제했습니다.');
     },
-    onError: () => {
-      toast.error('삭제를 실패했습니다.');
+    onError: (error) => {
+      toast.error(
+        error instanceof Error ? error.message : '삭제를 실패했습니다.'
+      );
     },
   });
 };

@@ -8,7 +8,7 @@ export async function WithdrawSharedPageData(data: DeleteSharedPageData) {
     });
     return response.data;
   } catch (error) {
-    console.error('Error withdrawing shared page:', error);
+    console.error('공유 페이지 탈퇴 실패:', error);
     throw error;
   }
 }

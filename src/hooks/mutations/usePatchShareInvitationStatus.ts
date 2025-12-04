@@ -25,8 +25,12 @@ export function usePatchShareInvitationStatus() {
 
       queryClient.refetchQueries({ queryKey: ['notifications'] });
     },
-    onError: () => {
-      toast.error('공유 페이지 초대 상태 변경에 실패했습니다.');
+    onError: (error) => {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : '공유 페이지 초대 상태 변경에 실패했습니다.'
+      );
     },
   });
 }

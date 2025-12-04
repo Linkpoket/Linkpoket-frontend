@@ -42,7 +42,7 @@ const ManageSharedPageModal = ({
   //페이지 공개 여부 업데이트
   const updateSharedPageVisibility = useUpdateSharedPageVisibility(safePageId);
   const { data: sharedPageData } = useFetchSharedPage(safePageId);
-  const isPublic = sharedPageData.data.pageVisibility;
+  const isPublic = sharedPageData.pageVisibility;
 
   const handleUpdateSharedPageVisibility = () => {
     if (isPublic === 'PUBLIC') {

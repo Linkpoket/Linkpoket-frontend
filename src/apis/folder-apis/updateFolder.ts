@@ -6,7 +6,7 @@ export default async function updateFolder(data: UpdateFolderData) {
     const response = await axiosInstance.put('/api/folders', data);
     return response.data;
   } catch (error: unknown) {
-    console.error('Error updating folder:', error);
+    console.error('폴더 업데이트 실패:', error);
     throw error;
   }
 }

@@ -62,12 +62,17 @@ const DropDownInline = ({
       setIsDropDownInline(false);
     },
     onError: (error: any) => {
-      switch (error.errorCode) {
-        case 'TRANSMIT_DIRECTORY_REQUEST_ACCEPTED_EXIST':
-          toast.error('이미 해당 디렉토리 전송 요청을 수락하였습니다.');
-          break;
-        default:
-          toast.error(error.detail || '전송 중 오류가 발생했습니다.');
+      if (
+        error?.errorData?.errorCode ===
+        'TRANSMIT_DIRECTORY_REQUEST_ACCEPTED_EXIST'
+      ) {
+        toast.error('이미 해당 디렉토리 전송 요청을 수락하였습니다.');
+      } else {
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : '전송 중 오류가 발생했습니다.'
+        );
       }
     },
   });
@@ -122,7 +127,7 @@ const DropDownInline = ({
     <div
       ref={dropdownRef}
       data-dropdown
-      className={`border-gray-20 bg-gray-0 absolute top-[220px] z-[1000] mt-2 inline-flex w-[140px] flex-col rounded-[10px] border p-[4px] text-[14px] font-[500] shadow sm:w-[214px] md:top-[248px] md:right-[-8px] xl:top-[250px] ${className}`}
+      className={`border-gray-20 bg-gray-0 absolute top-[130px] z-[1000] mt-2 inline-flex w-[140px] flex-col rounded-[10px] border p-[4px] text-[14px] font-[500] shadow sm:w-[214px] md:top-[160px] md:right-[-8px] xl:top-[160px] ${className}`}
     >
       {type === 'folder' && (
         <div className="flex flex-col">

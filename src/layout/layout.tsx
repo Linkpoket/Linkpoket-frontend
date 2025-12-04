@@ -1,22 +1,14 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
-import { Header } from '@/components/header/Header';
-import SideBar from '@/components/side-bar/SideBar';
+import { Suspense, useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
+import { useMobile } from '@/hooks/useMobile';
 import { useUserStore } from '@/stores/userStore';
-import { useProfileModalStore } from '@/stores/profileModalStore';
 import { useNotificationSSE } from '@/hooks/useNotificationSSE';
 import useRouteChangeTracker from '@/hooks/useRouteChangeTracker';
-import { ProfileSettingsModalSkeleton } from '@/components/skeleton/ProfileSettingModal';
-import { DeleteModalSkeleton } from '@/components/skeleton/DeleteModalSkeleton';
-import { useMobile } from '@/hooks/useMobile';
-
-const ProfileSettingsModal = lazy(
-  () => import('@/components/modal/profile/ProfileSettingsModal')
-);
-
-const WithdrawAccountModal = lazy(
-  () => import('@/components/modal/profile/WithdrawAccountModal')
-);
+import { Header } from '@/components/header/Header';
+import { Spinner } from '@/components/common-ui/Spinner';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorState } from '@/components/common-ui/ErrorState';
+import SideBar from '@/components/side-bar/SideBar';
 
 export default function Layout() {
   useRouteChangeTracker();
@@ -28,12 +20,6 @@ export default function Layout() {
     isMobile ? false : !isHomePage
   );
   const [isFoldSidebar, setIsFoldSidebar] = useState(() => isHomePage);
-  const {
-    isProfileModalOpen,
-    isWithdrawModalOpen,
-    closeProfileModal,
-    closeWithdrawModal,
-  } = useProfileModalStore();
   const { setIsLoggedIn, isLoggedIn } = useUserStore();
 
   useEffect(() => {
@@ -87,33 +73,16 @@ export default function Layout() {
           />
         ) : null}
         <main id="app-scroll-container" className="flex-1 overflow-auto">
-          <Suspense
-            fallback={
-              <div className="flex h-screen items-center justify-center">
-                <div>로딩 중...</div>
-              </div>
-            }
+          {/* 페이지 렌더링 컴포넌트 */}
+          <ErrorBoundary
+            fallbackRender={() => (
+              <ErrorState message="페이지를 불러올 수 없습니다." />
+            )}
           >
-            <Outlet context={{ showSidebar }} />
-          </Suspense>
-
-          {isProfileModalOpen && (
-            <Suspense fallback={<ProfileSettingsModalSkeleton />}>
-              <ProfileSettingsModal
-                isOpen={isProfileModalOpen}
-                onClose={closeProfileModal}
-              />
+            <Suspense fallback={<Spinner display={true} position="center" />}>
+              <Outlet context={{ showSidebar }} />
             </Suspense>
-          )}
-
-          {isWithdrawModalOpen && (
-            <Suspense fallback={<DeleteModalSkeleton />}>
-              <WithdrawAccountModal
-                isOpen={isWithdrawModalOpen}
-                onClose={closeWithdrawModal}
-              />
-            </Suspense>
-          )}
+          </ErrorBoundary>
         </main>
       </div>
     </div>

@@ -11,7 +11,7 @@ export default async function updateSharedPageMemberTy(
     );
     return response.data;
   } catch (error) {
-    console.error('Error updating shared page member type:', error);
+    console.error('공유 페이지 멤버 권한 변경 실패:', error);
     throw error;
   }
 }

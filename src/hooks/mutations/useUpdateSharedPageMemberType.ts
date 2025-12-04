@@ -14,9 +14,9 @@ export const useUpdateSharedPageMemberType = () => {
       toast.success('권한을 변경했습니다.');
     },
     onError: (error) => {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
+      toast.error(
+        error instanceof Error ? error.message : '권한 변경에 실패했습니다.'
+      );
     },
   });
 };

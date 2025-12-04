@@ -5,6 +5,7 @@ import { useUpdateLink } from '@/hooks/mutations/useUpdateLink';
 import useUpdateSharedPageTitle from '@/hooks/mutations/useUpdateSharedPageTitle';
 import { useDebounce } from '@/hooks/useDebounce';
 import { UpdateLinkData } from '@/types/links';
+import toast from 'react-hot-toast';
 
 type TitleUpdate = {
   title: string;
@@ -48,6 +49,11 @@ export function useUpdateTitle(
       },
       onError: (error) => {
         console.error('폴더 업데이트 실패:', error);
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : '폴더 업데이트에 실패했습니다.'
+        );
       },
     });
   };
@@ -67,6 +73,11 @@ export function useUpdateTitle(
       },
       onError: (error) => {
         console.error('페이지 제목 업데이트 실패:', error);
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : '페이지 제목 업데이트에 실패했습니다.'
+        );
       },
     });
   };
@@ -91,6 +102,11 @@ export function useUpdateTitle(
       },
       onError: (error) => {
         console.error('링크 업데이트 실패:', error);
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : '링크 업데이트에 실패했습니다.'
+        );
       },
     });
   };

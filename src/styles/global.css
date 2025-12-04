@@ -683,7 +683,7 @@ html {
     }
   }
 
-  @media (min-width: 769px) and (max-width: 1023px) {
+  @media (min-width: 768px) and (max-width: 1023px) {
     .grid-cols-custom {
       grid-template-columns: repeat(3, calc(50% - 8px));
     }

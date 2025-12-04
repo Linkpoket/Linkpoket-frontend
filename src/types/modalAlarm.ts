@@ -17,6 +17,15 @@ export interface NotificationItem {
   message: string;
 }
 
+export interface NotificationsResponse {
+  status: number;
+  message: string;
+  data: {
+    SharePageInvitationRequests: NotificationItem[];
+    FolderTransmissionRequests: NotificationItem[];
+  };
+}
+
 export interface NotificationModalProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
