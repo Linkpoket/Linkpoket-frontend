@@ -1,5 +1,6 @@
 import { FolderDetail } from '@/types/folders';
 import { LinkDetail } from '@/types/links';
+import { FileResponse } from '@/types/files';
 
 export const getPageDataLength = (
   folderData: FolderDetail[],
@@ -14,7 +15,13 @@ export const getPageDataLength = (
   };
 };
 
-type PageData = FolderDetail | LinkDetail;
+type PageData = FolderDetail | LinkDetail | FileResponse;
+
+const getName = (item: PageData): string => {
+  if ('folderId' in item) return item.folderName || '';
+  if ('fileId' in item) return item.fileName || '';
+  return item.linkName || '';
+};
 
 export const sortPageData = (
   data: PageData[],
@@ -37,8 +44,8 @@ export const sortPageData = (
 
     case '이름순':
       return sortedData.sort((a, b) => {
-        const nameA = ('folderId' in a ? a.folderName : a.linkName) || '';
-        const nameB = ('folderId' in b ? b.folderName : b.linkName) || '';
+        const nameA = getName(a);
+        const nameB = getName(b);
         return nameA.localeCompare(nameB);
       });
 

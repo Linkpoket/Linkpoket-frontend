@@ -3,12 +3,20 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import LinkCard from '../link-card/LinkCard';
 import FolderCard from '../folder-card/FolderCard';
+import FileCard from '../file-card/FileCard';
 
 interface SortablePageItemProps {
   item: any;
 }
 
 export const SortablePageItem = ({ item }: SortablePageItemProps) => {
+  const itemId =
+    'folderId' in item
+      ? item.folderId
+      : 'fileId' in item
+        ? item.fileId
+        : item.linkId;
+
   const {
     attributes,
     listeners,
@@ -17,7 +25,7 @@ export const SortablePageItem = ({ item }: SortablePageItemProps) => {
     transition,
     isDragging,
   } = useSortable({
-    id: 'folderId' in item ? item.folderId : item.linkId,
+    id: itemId,
   });
 
   const style = {
@@ -38,6 +46,8 @@ export const SortablePageItem = ({ item }: SortablePageItemProps) => {
     >
       {'folderId' in item ? (
         <FolderCard isBookmark={item.isFavorite} item={item} />
+      ) : 'fileId' in item ? (
+        <FileCard isBookmark={item.isFavorite || false} item={item} />
       ) : (
         <LinkCard isBookmark={item.isFavorite} item={item} />
       )}

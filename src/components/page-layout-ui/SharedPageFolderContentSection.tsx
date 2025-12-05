@@ -9,6 +9,7 @@ import useUpdateDragandDrop from '@/hooks/mutations/useUpdateDragandDrop';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { LinkDetail } from '@/types/links';
 import { FolderDetail } from '@/types/folders';
+import { FileResponse } from '@/types/files';
 import { AddLinkModalSkeleton } from '../skeleton/AddLinkModalSkeleton';
 import { sortPageData } from '@/utils/pageData';
 import { usePageDragAndDrop } from '@/hooks/usePageDragAndDrop';
@@ -16,6 +17,11 @@ import { useDragAndDropSensors } from '@/utils/dragAndDrop';
 import MobileFolderCard from '../folder-card/mobile/MobileFolderCard';
 import MobileFolderCardAddButton from '../folder-card/mobile/MobileFolderCardAddButton';
 import MobileLinkCardButton from '../link-card/mobile/MobileLinkCardButton';
+import { useQuery } from '@tanstack/react-query';
+import {
+  fetchFilesByPageId,
+  fetchFilesByFolderId,
+} from '@/apis/file-apis/fetchFiles';
 
 const AddLinkModal = lazy(() => import('../modal/link/AddLinkModal'));
 const AddFolderModal = lazy(() => import('../modal/folder/AddFolderModal'));
@@ -44,6 +50,25 @@ export default function SharedPageFolderContentSection({
   const { pageId } = usePageStore();
   const { parentsFolderId } = useParentsFolderIdStore();
 
+  // 파일 데이터 fetch
+  const { data: fileData = [] } = useQuery<FileResponse[]>({
+    queryKey: ['files', pageId, parentsFolderId],
+    queryFn: () => {
+      if (parentsFolderId && pageId) {
+        return fetchFilesByFolderId({
+          pageId,
+          folderId: parentsFolderId,
+          commandType: 'VIEW',
+          sortType: 'BASIC',
+        });
+      } else if (pageId) {
+        return fetchFilesByPageId(pageId, 'VIEW', 'BASIC');
+      }
+      return [];
+    },
+    enabled: !!pageId,
+  });
+
   const updateDragAndDropMutation = useUpdateDragandDrop({
     baseRequest: {
       pageId: pageId,
@@ -56,7 +81,9 @@ export default function SharedPageFolderContentSection({
     fromFolderId: '',
   });
 
-  const [pageData, setPageData] = useState<(FolderDetail | LinkDetail)[]>([]);
+  const [pageData, setPageData] = useState<
+    (FolderDetail | LinkDetail | FileResponse)[]
+  >([]);
 
   useEffect(() => {
     if (searchKeyword && searchResult) {
@@ -67,12 +94,12 @@ export default function SharedPageFolderContentSection({
       const sortedData = sortPageData(combinedSearchData, sortType);
       setPageData(sortedData);
     } else {
-      // 일반 모드
-      const combinedData = [...folderData, ...linkData];
+      // 일반 모드 - 파일 데이터 포함
+      const combinedData = [...folderData, ...linkData, ...fileData];
       const sortedData = sortPageData(combinedData, sortType);
       setPageData(sortedData);
     }
-  }, [folderData, linkData, sortType, searchKeyword, searchResult]);
+  }, [folderData, linkData, fileData, sortType, searchKeyword, searchResult]);
 
   // 정렬된 pageData에서 폴더와 링크 분리
   const sortedFolderData = pageData.filter(
@@ -108,7 +135,11 @@ export default function SharedPageFolderContentSection({
       >
         <SortableContext
           items={pageData.map((item) =>
-            'folderId' in item ? item.folderId : item.linkId
+            'folderId' in item
+              ? item.folderId
+              : 'fileId' in item
+                ? item.fileId
+                : item.linkId
           )}
           strategy={rectSwappingStrategy}
         >
@@ -158,12 +189,15 @@ export default function SharedPageFolderContentSection({
                     : '데이터가 없습니다.'}
                 </div>
               ) : (
-                pageData.map((item) => (
-                  <SortablePageItem
-                    key={'folderId' in item ? item.folderId : item.linkId}
-                    item={item}
-                  />
-                ))
+                pageData.map((item) => {
+                  const itemId =
+                    'folderId' in item
+                      ? item.folderId
+                      : 'fileId' in item
+                        ? item.fileId
+                        : item.linkId;
+                  return <SortablePageItem key={itemId} item={item} />;
+                })
               )}
             </div>
           )}
