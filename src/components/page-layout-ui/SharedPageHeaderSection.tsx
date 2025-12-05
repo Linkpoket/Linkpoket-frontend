@@ -26,7 +26,7 @@ export default function SharedPageHeaderSection({
   const currentLocation = location.pathname;
   const isLinkButtonVisible = currentLocation !== '/bookmarks';
 
-  const { openLinkModal, openFolderModal } = useModalStore();
+  const { openLinkModal, openFolderModal, openFileModal } = useModalStore();
   const { getCurrentColor } = useFolderColorStore();
   const currentFolderColor = getCurrentColor();
 
@@ -98,6 +98,29 @@ export default function SharedPageHeaderSection({
           <div
             className={`flex items-center gap-[8px] ${isMobile ? 'hidden' : ''}`}
           >
+            <Button
+              size="sm"
+              style={{
+                borderColor: currentFolderColor.previewColor,
+                color: currentFolderColor.previewColor,
+              }}
+              className="responsive-button rounded-lg border-2 bg-white text-sm font-medium whitespace-nowrap transition-colors"
+              onClick={openFileModal}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}15`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'white';
+              }}
+              onMouseDown={(e) => {
+                e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}25`;
+              }}
+              onMouseUp={(e) => {
+                e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}15`;
+              }}
+            >
+              + 파일추가
+            </Button>
             <Button
               size="sm"
               style={{

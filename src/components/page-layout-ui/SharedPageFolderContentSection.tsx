@@ -19,6 +19,7 @@ import MobileLinkCardButton from '../link-card/mobile/MobileLinkCardButton';
 
 const AddLinkModal = lazy(() => import('../modal/link/AddLinkModal'));
 const AddFolderModal = lazy(() => import('../modal/folder/AddFolderModal'));
+const AddFileModal = lazy(() => import('../modal/file/AddFileModal'));
 
 export default function SharedPageFolderContentSection({
   folderData = [],
@@ -32,6 +33,8 @@ export default function SharedPageFolderContentSection({
     closeLinkModal,
     isFolderModalOpen,
     closeFolderModal,
+    isFileModalOpen,
+    closeFileModal,
   } = useModalStore();
 
   // 검색 스토어 구독
@@ -179,6 +182,11 @@ export default function SharedPageFolderContentSection({
             isOpen={isFolderModalOpen}
             onClose={closeFolderModal}
           />
+        </Suspense>
+      )}
+      {isFileModalOpen && (
+        <Suspense fallback={<AddLinkModalSkeleton />}>
+          <AddFileModal isOpen={isFileModalOpen} onClose={closeFileModal} />
         </Suspense>
       )}
     </div>

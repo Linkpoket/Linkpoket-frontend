@@ -21,6 +21,7 @@ import MobileLinkCardButton from '../link-card/mobile/MobileLinkCardButton';
 
 const AddLinkModal = lazy(() => import('../modal/link/AddLinkModal'));
 const AddFolderModal = lazy(() => import('../modal/folder/AddFolderModal'));
+const AddFileModal = lazy(() => import('../modal/file/AddFileModal'));
 
 export default function PersonalPageContentSection({
   folderData,
@@ -34,6 +35,8 @@ export default function PersonalPageContentSection({
     closeLinkModal,
     isFolderModalOpen,
     closeFolderModal,
+    isFileModalOpen,
+    closeFileModal,
   } = useModalStore();
 
   const searchKeyword = useSearchStore((state) => state.searchKeyword);
@@ -198,6 +201,11 @@ export default function PersonalPageContentSection({
             isOpen={isFolderModalOpen}
             onClose={closeFolderModal}
           />
+        </Suspense>
+      )}
+      {isFileModalOpen && (
+        <Suspense fallback={<AddLinkModalSkeleton />}>
+          <AddFileModal isOpen={isFileModalOpen} onClose={closeFileModal} />
         </Suspense>
       )}
     </div>
