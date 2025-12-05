@@ -4,12 +4,15 @@ import CardMenu from '@/assets/widget-ui-assets/CardMenu.svg?react';
 import { LinkDetail } from '@/types/links';
 import useUpdateLinkBookmark from '@/hooks/mutations/useUpdateLinkBookmark';
 import { usePageStore } from '@/stores/pageStore';
-import { useState, useRef, Suspense } from 'react';
+import { useState, useRef, Suspense, lazy } from 'react';
 import DropDownInline from '../common-ui/DropDownInline';
 // import { useFocusModeStore } from '@/stores/focusModeStore';
 import { useMobile } from '@/hooks/useMobile';
 import LinkLogo from '../common-ui/LinkLogo';
 import { DropDownInlineSkeleton } from '../skeleton/DropdownInlineSkeleton';
+import MemoButton from '../common-ui/MemoButton';
+
+const MemoModal = lazy(() => import('../modal/memo/MemoModal'));
 
 export default function LinkCard({
   isBookmark,
@@ -19,6 +22,7 @@ export default function LinkCard({
   item: LinkDetail;
 }) {
   const [isDropDownInline, setIsDropDownInline] = useState<boolean>(false);
+  const [isMemoModalOpen, setIsMemoModalOpen] = useState<boolean>(false);
   const { pageId } = usePageStore();
   // const { isFocusMode } = useFocusModeStore();
   const isMobile = useMobile();
@@ -48,6 +52,11 @@ export default function LinkCard({
 
   const handleMenuClick = () => {
     setIsDropDownInline((v) => !v);
+  };
+
+  const handleMemoSave = (memo: string) => {
+    // TODO: API 호출로 description 업데이트
+    console.log('메모 저장:', memo, 'linkId:', item.linkId);
   };
 
   const imageUrl = (() => {
@@ -193,6 +202,12 @@ export default function LinkCard({
           {isBookmark ? <ActiveBookmarkIcon /> : <InactiveBookmarkIcon />}
         </button>
 
+        {/* 메모 버튼 - 북마크 아래 */}
+        <MemoButton
+          hasMemo={!!item.description}
+          onClick={() => setIsMemoModalOpen(true)}
+        />
+
         <div className="flex flex-1 flex-col items-center justify-between text-center">
           <div className="flex flex-col gap-1">
             <div>
@@ -262,6 +277,19 @@ export default function LinkCard({
           )}
         </div>
       </div>
+
+      {/* 메모 모달 */}
+      {isMemoModalOpen && (
+        <Suspense fallback={null}>
+          <MemoModal
+            isOpen={isMemoModalOpen}
+            onClose={() => setIsMemoModalOpen(false)}
+            initialMemo={item.description || ''}
+            onSave={handleMemoSave}
+            title={item.linkName}
+          />
+        </Suspense>
+      )}
     </>
   );
 }
