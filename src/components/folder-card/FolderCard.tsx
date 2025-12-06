@@ -80,7 +80,7 @@ export default function FolderCard({
     updateFolderBookmark();
   };
 
-  const handleMenuClick = () => {
+  const handleInlineDropdownOpen = () => {
     setIsDropDownInline((v) => !v);
   };
 
@@ -161,7 +161,7 @@ export default function FolderCard({
               className="cursor-pointer p-1"
               onClick={(e) => {
                 e.stopPropagation();
-                handleMenuClick();
+                handleInlineDropdownOpen();
               }}
               onPointerDown={(e) => {
                 e.stopPropagation();

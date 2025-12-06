@@ -7,7 +7,8 @@ import { usePageSearch } from '@/hooks/usePageSearch';
 export default function PageControllerSection({
   folderDataLength = 0,
   linkDataLength = 0,
-  onSortChange,
+  sortType,
+  setSortType,
   isMobile,
 }: PageControllerSectionProps & { isMobile: boolean }) {
   const pathName = useLocation().pathname;
@@ -33,7 +34,7 @@ export default function PageControllerSection({
           onClear={handleClear}
         />
       )}
-      <DropDownView onChange={onSortChange} />
+      <DropDownView sortType={sortType} setSortType={setSortType} />
     </div>
   );
 }

@@ -129,7 +129,8 @@ export type BookmarkResponse = ApiResponseStructure<BookmarkResponseContent>;
 export interface PageControllerSectionProps {
   folderDataLength: number;
   linkDataLength: number;
-  onSortChange: (sortType: string) => void;
+  sortType: string;
+  setSortType: (sortType: string) => void;
 }
 
 export interface PageContentSectionProps {

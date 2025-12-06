@@ -46,7 +46,7 @@ export default function LinkCard({
     updateLinkBookmark(item.linkId);
   };
 
-  const handleMenuClick = () => {
+  const handleInlineDropdownOpen = () => {
     setIsDropDownInline((v) => !v);
   };
 
@@ -228,7 +228,7 @@ export default function LinkCard({
                 className="cursor-pointer p-1"
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleMenuClick();
+                  handleInlineDropdownOpen();
                 }}
                 onPointerDown={(e) => {
                   e.stopPropagation();

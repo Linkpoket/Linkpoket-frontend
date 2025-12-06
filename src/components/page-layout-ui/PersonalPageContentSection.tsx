@@ -12,7 +12,7 @@ import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { FolderDetail } from '@/types/folders';
 import { LinkDetail } from '@/types/links';
 import { AddLinkModalSkeleton } from '../skeleton/AddLinkModalSkeleton';
-import { sortPageData } from '@/utils/handlePageDataSort';
+import { handlePageDataSort } from '@/utils/handlePageDataSort';
 import { usePageDragAndDrop } from '@/hooks/usePageDragAndDrop';
 import { useDragAndDropSensors } from '@/utils/dragAndDrop';
 import MobileFolderCard from '../folder-card/mobile/MobileFolderCard';
@@ -62,12 +62,12 @@ export default function PersonalPageContentSection({
       const searchFolders = searchResult.directorySimpleResponses || [];
       const searchLinks = searchResult.siteSimpleResponses || [];
       const combinedSearchData = [...searchFolders, ...searchLinks];
-      const sortedData = sortPageData(combinedSearchData, sortType);
+      const sortedData = handlePageDataSort(combinedSearchData, sortType);
       setPageData(sortedData);
     } else {
       // 일반 모드
       const combinedData = [...folderData, ...linkData];
-      const sortedData = sortPageData(combinedData, sortType);
+      const sortedData = handlePageDataSort(combinedData, sortType);
       setPageData(sortedData);
     }
   }, [folderData, linkData, sortType, searchKeyword, searchResult]);
@@ -94,12 +94,12 @@ export default function PersonalPageContentSection({
 
   return (
     <div className="w-full">
-      {/* 검색 상태 표시 */}
+      {/* controllerSection으로 이동 필요
       {searchKeyword && (
         <div className="text-gray-60 mb-4 text-sm">
           "{searchKeyword}" 검색 결과 {pageData.length}개
         </div>
-      )}
+      )} */}
 
       <DndContext
         sensors={sensors}

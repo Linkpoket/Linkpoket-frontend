@@ -1,9 +1,8 @@
-import { lazy } from 'react';
+import { lazy, useState } from 'react';
 
 import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 import useFetchFavorite from '@/hooks/queries/useFetchFavorite';
-import { usePageSort } from '@/hooks/usePageSort';
 import { getPageDataLength } from '@/utils/getPageDataLength';
 import { PageLayout } from '@/components/common-ui/PageLayout';
 import { useMobile } from '@/hooks/useMobile';
@@ -16,7 +15,7 @@ const BookmarkPageContentSection = lazy(
 export default function BookmarkPage() {
   const isMobile = useMobile();
   const { data } = useFetchFavorite();
-  const { sortType, handleSort } = usePageSort();
+  const [sortType, setSortType] = useState<string>('기본순');
 
   const folderData = data.folderSimpleResponses;
   const linkData = data.linkSimpleResponses;
@@ -40,7 +39,8 @@ export default function BookmarkPage() {
         <PageControllerSection
           folderDataLength={folderDataLength}
           linkDataLength={linkDataLength}
-          onSortChange={handleSort}
+          sortType={sortType}
+          setSortType={setSortType}
           isMobile={isMobile}
         />
         <BookmarkPageContentSection
