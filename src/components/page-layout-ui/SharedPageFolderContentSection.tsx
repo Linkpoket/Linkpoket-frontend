@@ -6,12 +6,16 @@ import { SortablePageItem } from '../common-ui/SortablePageItem';
 import { useModalStore } from '@/stores/modalStore';
 import { useSearchStore } from '@/stores/searchStore';
 import useUpdateDragandDrop from '@/hooks/mutations/useUpdateDragandDrop';
-import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
+import {
+  usePageStore,
+  useParentsFolderIdStore,
+  useFileListViewStore,
+} from '@/stores/pageStore';
 import { LinkDetail } from '@/types/links';
 import { FolderDetail } from '@/types/folders';
 import { FileResponse } from '@/types/files';
 import { AddLinkModalSkeleton } from '../skeleton/AddLinkModalSkeleton';
-import { sortPageData } from '@/utils/pageData';
+import { handlePageDataSort } from '@/utils/handlePageDataSort';
 import { usePageDragAndDrop } from '@/hooks/usePageDragAndDrop';
 import { useDragAndDropSensors } from '@/utils/dragAndDrop';
 import MobileFolderCard from '../folder-card/mobile/MobileFolderCard';
@@ -49,6 +53,7 @@ export default function SharedPageFolderContentSection({
 
   const { pageId } = usePageStore();
   const { parentsFolderId } = useParentsFolderIdStore();
+  const { showFilesOnly } = useFileListViewStore();
 
   // 파일 데이터 fetch
   const { data: fileData = [] } = useQuery<FileResponse[]>({
@@ -91,15 +96,32 @@ export default function SharedPageFolderContentSection({
       const searchFolders = searchResult.directorySimpleResponses || [];
       const searchLinks = searchResult.siteSimpleResponses || [];
       const combinedSearchData = [...searchFolders, ...searchLinks];
-      const sortedData = sortPageData(combinedSearchData, sortType);
+      const sortedData = handlePageDataSort(combinedSearchData, sortType);
       setPageData(sortedData);
     } else {
-      // 일반 모드 - 파일 데이터 포함
-      const combinedData = [...folderData, ...linkData, ...fileData];
-      const sortedData = sortPageData(combinedData, sortType);
+      // 일반 모드
+      let combinedData: (FolderDetail | LinkDetail | FileResponse)[];
+
+      if (showFilesOnly) {
+        // 파일만 표시
+        combinedData = [...fileData];
+      } else {
+        // 링크/폴더만 표시
+        combinedData = [...folderData, ...linkData];
+      }
+
+      const sortedData = handlePageDataSort(combinedData, sortType);
       setPageData(sortedData);
     }
-  }, [folderData, linkData, fileData, sortType, searchKeyword, searchResult]);
+  }, [
+    folderData,
+    linkData,
+    fileData,
+    sortType,
+    searchKeyword,
+    searchResult,
+    showFilesOnly,
+  ]);
 
   // 정렬된 pageData에서 폴더와 링크 분리
   const sortedFolderData = pageData.filter(
@@ -122,11 +144,12 @@ export default function SharedPageFolderContentSection({
 
   return (
     <div className="w-full">
+      {/* controllerSection으로 이동 필요
       {searchKeyword && (
         <div className="text-gray-60 mb-4 text-sm">
           "{searchKeyword}" 검색 결과 {pageData.length}개
         </div>
-      )}
+      )} */}
 
       <DndContext
         sensors={sensors}

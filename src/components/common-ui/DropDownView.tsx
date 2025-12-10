@@ -5,17 +5,17 @@ import PageSortBoxIconUp from '@/assets/common-ui-assets/PageSortBoxIconUp.svg?r
 import PageSortBoxIconCheck from '@/assets/common-ui-assets/PageSortBoxIconCheck.svg?react';
 
 interface SortSelectProps {
-  options?: string[];
-  onChange?: (value: string) => void;
+  sortType: string;
+  setSortType: (value: string) => void;
   className?: string;
 }
 
 export default function DropDownView({
-  options = ['기본순', '최신순', '이름순'],
-  onChange,
+  sortType,
+  setSortType,
   className,
 }: SortSelectProps) {
-  const [selected, setSelected] = useState<string>(options[0]);
+  const options = ['기본순', '최신순', '이름순'];
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -38,9 +38,8 @@ export default function DropDownView({
   }, [isOpen]);
 
   const handleSelect = (option: string) => {
-    setSelected(option);
     setIsOpen(false);
-    onChange?.(option);
+    setSortType(option);
   };
 
   return (
@@ -53,7 +52,7 @@ export default function DropDownView({
         onClick={() => setIsOpen((prev) => !prev)}
         className="text-gray-60 inline-flex h-[48px] min-w-max cursor-pointer items-center justify-between gap-[10px] rounded-[8px] px-[20px] text-[14px] font-[600]"
       >
-        <span>{selected}</span>
+        <span>{sortType}</span>
         {isOpen ? <PageSortBoxIconUp /> : <PageSortBoxIcon />}
       </button>
 
@@ -69,11 +68,11 @@ export default function DropDownView({
               onClick={() => handleSelect(option)}
               className={cn(
                 'hover:bg-gray-5 flex cursor-pointer items-center justify-between px-3 py-3 hover:rounded-[8px]',
-                selected === option && 'bg-gray-5 rounded-[8px]'
+                sortType === option && 'bg-gray-5 rounded-[8px]'
               )}
             >
               <span>{option}</span>
-              {selected === option && (
+              {sortType === option && (
                 <PageSortBoxIconCheck className="h-4 w-4 text-gray-500" />
               )}
             </li>

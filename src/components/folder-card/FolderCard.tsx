@@ -4,7 +4,7 @@ import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useFolderColorStore } from '@/stores/folderColorStore';
 import { useMobile } from '@/hooks/useMobile';
 import useUpdateFolderBookmark from '@/hooks/mutations/useUpdateFolderBookmark';
-import useFetchFolderDetails from '@/hooks/queries/useFetchFolderDetails';
+// import useFetchFolderDetails from '@/hooks/queries/useFetchFolderDetails';
 import { FolderDetail } from '@/types/folders';
 import { DropDownInlineSkeleton } from '../skeleton/DropdownInlineSkeleton';
 import LinksInFolder from './LinksInFolder';
@@ -45,15 +45,15 @@ export default function FolderCard({
   });
 
   // 폴더 상세 정보를 가져와서 링크 정보 추출 (유효한 folderId일 때만)
-  const requestParams = {
-    pageId: pageId || '',
-    commandType: 'VIEW',
-    folderId: folderId || '',
-    sortType: 'BASIC',
-  };
+  // const requestParams = {
+  //   pageId: pageId || '',
+  //   commandType: 'VIEW',
+  //   folderId: folderId || '',
+  //   sortType: 'BASIC',
+  // };
 
-  const { data: folderDetailsData } = useFetchFolderDetails(requestParams);
-  const linkData = folderDetailsData?.linkDetailResponses || [];
+  // const { data: folderDetailsData } = useFetchFolderDetails(requestParams);
+  // const linkData = folderDetailsData?.linkDetailResponses || [];
 
   const getFolderLink = (folderId: string) => {
     const currentPath = location.pathname;
@@ -84,7 +84,7 @@ export default function FolderCard({
     updateFolderBookmark();
   };
 
-  const handleMenuClick = () => {
+  const handleInlineDropdownOpen = () => {
     setIsDropDownInline((v) => !v);
   };
 
@@ -94,7 +94,7 @@ export default function FolderCard({
   };
 
   // 링크 데이터 사용 (상위 3개만)
-  const displayLinks = linkData.slice(0, 3);
+  // const displayLinks = linkData.slice(0, 3);
 
   return (
     <>

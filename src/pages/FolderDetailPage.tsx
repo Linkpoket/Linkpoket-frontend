@@ -1,12 +1,11 @@
-import { lazy, useEffect } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useMobile } from '@/hooks/useMobile';
 import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 import useFetchFolderDetails from '@/hooks/queries/useFetchFolderDetails';
-import { usePageLayout } from '@/hooks/usePageLayout';
-import { getPageDataLength } from '@/utils/pageData';
+import { getPageDataLength } from '@/utils/getPageDataLength';
 import { PageLayout } from '@/components/common-ui/PageLayout';
 import { useFetchPersonalPage } from '@/hooks/queries/useFetchPersonalPage';
 import { useFetchSharedPage } from '@/hooks/queries/useFetchSharedPage';
@@ -22,11 +21,9 @@ export default function FolderDetailPage() {
   const location = useLocation();
   const { pageId: storePageId } = usePageStore();
   const { setParentsFolderId } = useParentsFolderIdStore();
-  const { sortType, handleSort } = usePageLayout();
+  const [sortType, setSortType] = useState<string>('기본순');
 
   // URL 경로를 기반으로 페이지 타입 판단
-  const isPersonalPageRoute =
-    location.pathname.startsWith('/personal') || !urlPageId;
   const isSharedPageRoute =
     location.pathname.startsWith('/shared') && !!urlPageId;
   const actualPageId = urlPageId || storePageId;
@@ -78,7 +75,8 @@ export default function FolderDetailPage() {
       <PageControllerSection
         folderDataLength={folderDataLength}
         linkDataLength={linkDataLength}
-        onSortChange={handleSort}
+        sortType={sortType}
+        setSortType={setSortType}
         isMobile={isMobile}
       />
       <SharedPageFolderContentSection

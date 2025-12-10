@@ -23,7 +23,7 @@ const getName = (item: PageData): string => {
   return item.linkName || '';
 };
 
-export const sortPageData = (
+export const handlePageDataSort = (
   data: PageData[],
   sortType: string
 ): PageData[] => {

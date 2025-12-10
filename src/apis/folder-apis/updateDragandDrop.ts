@@ -19,6 +19,6 @@ export default async function updateDragandDrop(data: UpdateDragandDropProps) {
     return response.data;
   } catch (error) {
     console.error('드래그 앤 드롭 업데이트 실패:', error);
-    throw error; // 에러를 다시 throw하여 호출자가 처리할 수 있도록 함
+    throw error;
   }
 }

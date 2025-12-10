@@ -1,11 +1,11 @@
+import { useState } from 'react';
 import { lazy, useEffect } from 'react';
 
 import { useFetchPersonalPage } from '@/hooks/queries/useFetchPersonalPage';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useUserStore } from '@/stores/userStore';
-import { usePageLayout } from '@/hooks/usePageLayout';
 import { useMobile } from '@/hooks/useMobile';
-import { getPageDataLength } from '@/utils/pageData';
+import { getPageDataLength } from '@/utils/getPageDataLength';
 import { PageLayout } from '@/components/common-ui/PageLayout';
 import ScrollToTopButton from '@/components/common-ui/ScrollToTopButton';
 import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
@@ -16,12 +16,12 @@ const PersonalPageContentSection = lazy(
 );
 
 export default function PersonalPage() {
+  const [sortType, setSortType] = useState<string>('기본순');
   const { data } = useFetchPersonalPage();
 
   const { setUser } = useUserStore();
   const { setPageInfo } = usePageStore();
   const { setParentsFolderId } = useParentsFolderIdStore();
-  const { sortType, handleSort } = usePageLayout();
   const isMobile = useMobile();
 
   useEffect(() => {
@@ -66,7 +66,8 @@ export default function PersonalPage() {
         <PageControllerSection
           folderDataLength={folderDataLength}
           linkDataLength={linkDataLength}
-          onSortChange={handleSort}
+          sortType={sortType}
+          setSortType={setSortType}
           isMobile={isMobile}
         />
         <PersonalPageContentSection

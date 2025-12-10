@@ -27,14 +27,6 @@ export default function WebHome() {
     }
   }, [cards, overviewData, bookmarkData]);
 
-  useEffect(() => {
-    if (overviewData) {
-      console.log('📦 Overview 데이터:', overviewData.rawData);
-      console.log('👤 개인 페이지:', overviewData.personalPage);
-      console.log('👥 공유 페이지들:', overviewData.sharedPages);
-    }
-  }, [overviewData]);
-
   const getRandomColor = (index: number) => {
     const colors = [
       '#8B5CF6', // 보라색

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 export function useClickOutside<T extends HTMLElement>(
-  ref: React.RefObject<T>,
+  ref: React.RefObject<T> | React.RefObject<T>[],
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
   enabled: boolean = true
 ) {
@@ -10,7 +10,19 @@ export function useClickOutside<T extends HTMLElement>(
 
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
-      if (ref.current && !ref.current.contains(target)) {
+      const refs = Array.isArray(ref) ? ref : [ref];
+
+      const validRefs = refs.filter((r) => r.current !== null);
+      if (validRefs.length === 0) return;
+
+      let matchFound = false;
+      validRefs.forEach((r) => {
+        if (r.current && r.current.contains(target)) {
+          matchFound = true;
+        }
+      });
+
+      if (!matchFound) {
         setIsOpen(false);
       }
     };
