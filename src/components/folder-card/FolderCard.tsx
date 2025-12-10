@@ -1,10 +1,10 @@
-import { useState, useRef, Suspense, lazy, useMemo } from 'react';
+import { useState, useRef, Suspense, lazy } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useFolderColorStore } from '@/stores/folderColorStore';
 import { useMobile } from '@/hooks/useMobile';
 import useUpdateFolderBookmark from '@/hooks/mutations/useUpdateFolderBookmark';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import fetchFolderDetails from '@/apis/folder-apis/fetchFolderDetails';
 import { fetchPersonalPage } from '@/apis/page-apis/fetchPersonalPage';
 import { FolderDetail } from '@/types/folders';
@@ -18,10 +18,7 @@ import InactiveBookmarkIcon from '@/assets/common-ui-assets/InactiveBookmark.svg
 import ActiveBookmarkIcon from '@/assets/common-ui-assets/ActiveBookmark.svg?react';
 import CardMenu from '@/assets/widget-ui-assets/CardMenu.svg?react';
 import MemoButton from '../common-ui/MemoButton';
-import { useFetchMemo } from '@/hooks/queries/useFetchMemo';
-import { useCreateMemo } from '@/hooks/mutations/useCreateMemo';
-import { useDeleteMemo } from '@/hooks/mutations/useDeleteMemo';
-import { ItemType } from '@/types/memos';
+import { useFolderMemo } from '@/hooks/useFolderMemo';
 
 const DropDownInline = lazy(() => import('../common-ui/DropDownInline'));
 const MemoModal = lazy(() => import('../modal/memo/MemoModal'));
@@ -131,138 +128,16 @@ export default function FolderCard({
     setIsDropDownInline((v) => !v);
   };
 
-  // 메모 조회에 사용할 pageId 결정
-  // 북마크 페이지: item.pageId가 있으면 그것을 사용, 없으면 개인 페이지 pageId 사용
-  // 일반 페이지: store의 pageId 사용
-  const memoPageId = useMemo(() => {
-    if (isBookmarkPage) {
-      return item.pageId || personalPageData?.pageId || pageId || '';
-    }
-    return pageId || '';
-  }, [isBookmarkPage, item.pageId, personalPageData?.pageId, pageId]);
-
-  // Memo 조회
-  const memoParams = useMemo(
-    () =>
-      memoPageId && folderId
-        ? {
-            pageId: memoPageId,
-            commandType: 'VIEW' as const,
-            itemType: 'FOLDER' as ItemType,
-            itemId: folderId,
-          }
-        : null,
-    [memoPageId, folderId]
-  );
-
-  const { data: memo } = useFetchMemo(memoParams);
-
-  const queryClient = useQueryClient();
-
-  // Memo 생성
-  const { mutate: createMemo } = useCreateMemo({
-    onSuccess: () => {
-      console.log('폴더 메모 생성 성공');
-      queryClient.invalidateQueries({
-        queryKey: ['memo', 'FOLDER', folderId, memoPageId],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['folderDetails'],
-        exact: false,
-      });
-      setIsMemoModalOpen(false);
-    },
-    onError: (error) => {
-      console.error('폴더 메모 생성 실패:', error);
-    },
+  // 폴더 메모 기능
+  const { hasMemo, memoContent, handleMemoSave } = useFolderMemo({
+    folderId,
+    itemPageId: item.pageId,
   });
 
-  // Memo 삭제
-  const { mutate: deleteMemo } = useDeleteMemo({
-    onSuccess: () => {
-      console.log('폴더 메모 삭제 성공');
-      queryClient.invalidateQueries({
-        queryKey: ['memo', 'FOLDER', folderId, memoPageId],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['folderDetails'],
-        exact: false,
-      });
+  const handleMemoSaveAndClose = (memoContent: string) => {
+    handleMemoSave(memoContent, () => {
       setIsMemoModalOpen(false);
-    },
-    onError: (error) => {
-      console.error('폴더 메모 삭제 실패:', error);
-    },
-  });
-
-  const handleMemoSave = (memoContent: string) => {
-    if (!memoPageId || !folderId) {
-      console.error('pageId 또는 folderId가 없습니다.');
-      return;
-    }
-
-    const trimmedMemo = memoContent.trim();
-
-    // 메모가 비어있으면 삭제
-    if (trimmedMemo === '') {
-      if (memo?.memoId) {
-        deleteMemo({
-          baseRequest: {
-            pageId: memoPageId,
-            commandType: 'EDIT',
-          },
-          memoId: memo.memoId,
-        });
-      } else {
-        // 메모가 없는데 삭제하려고 하면 모달만 닫기
-        setIsMemoModalOpen(false);
-      }
-      return;
-    }
-
-    // 메모가 있으면
-    if (memo?.memoId) {
-      // 기존 메모가 있고 내용이 다르면 삭제 후 새로 생성 (수정처럼 동작)
-      if (memo.content !== trimmedMemo) {
-        deleteMemo(
-          {
-            baseRequest: {
-              pageId: memoPageId,
-              commandType: 'EDIT',
-            },
-            memoId: memo.memoId,
-          },
-          {
-            onSuccess: () => {
-              // 삭제 성공 후 새 메모 생성
-              createMemo({
-                baseRequest: {
-                  pageId: memoPageId,
-                  commandType: 'CREATE',
-                },
-                itemType: 'FOLDER',
-                itemId: folderId,
-                content: trimmedMemo,
-              });
-            },
-          }
-        );
-      } else {
-        // 내용이 같으면 그냥 모달 닫기
-        setIsMemoModalOpen(false);
-      }
-    } else {
-      // 기존 메모가 없으면 바로 생성
-      createMemo({
-        baseRequest: {
-          pageId: memoPageId,
-          commandType: 'CREATE',
-        },
-        itemType: 'FOLDER',
-        itemId: folderId,
-        content: trimmedMemo,
-      });
-    }
+    });
   };
 
   return (
@@ -307,7 +182,7 @@ export default function FolderCard({
 
         {/* 메모 버튼 - 북마크 아래 */}
         <MemoButton
-          hasMemo={!!memo?.content}
+          hasMemo={hasMemo}
           onClick={() => setIsMemoModalOpen(true)}
         />
 
@@ -383,8 +258,8 @@ export default function FolderCard({
           <MemoModal
             isOpen={isMemoModalOpen}
             onClose={() => setIsMemoModalOpen(false)}
-            initialMemo={memo?.content || ''}
-            onSave={handleMemoSave}
+            initialMemo={memoContent}
+            onSave={handleMemoSaveAndClose}
             title={item.folderName}
           />
         </Suspense>
