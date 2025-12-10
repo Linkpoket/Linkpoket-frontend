@@ -6,6 +6,7 @@ import { useMobile } from '@/hooks/useMobile';
 import useUpdateFolderBookmark from '@/hooks/mutations/useUpdateFolderBookmark';
 import { useQuery } from '@tanstack/react-query';
 import fetchFolderDetails from '@/apis/folder-apis/fetchFolderDetails';
+import { fetchPersonalPage } from '@/apis/page-apis/fetchPersonalPage';
 import { FolderDetail, LinkDetail } from '@/types/folders';
 import { DropDownInlineSkeleton } from '../skeleton/DropdownInlineSkeleton';
 import LinksInFolder from './LinksInFolder';
@@ -48,6 +49,15 @@ export default function FolderCard({
   // 북마크 페이지인지 확인
   const isBookmarkPage = location.pathname.startsWith('/bookmarks');
 
+  // 북마크 페이지인 경우 개인 페이지 정보 가져오기 (pageId 비교용)
+  const { data: personalPageData } = useQuery({
+    queryKey: ['personalPage'],
+    queryFn: () => fetchPersonalPage(),
+    select: (response) => response.data,
+    enabled: isBookmarkPage, // 북마크 페이지에서만 조회
+    staleTime: 1000 * 60 * 5, // 5분간 캐시 유지
+  });
+
   // 폴더 상세 정보를 가져와서 링크 정보 추출
   // 북마크 페이지에서는 이미지를 표시하지 않으므로 fetch하지 않음
   const actualPageId = item.pageId || pageId || '';
@@ -80,12 +90,19 @@ export default function FolderCard({
       return `/shared/${sharedPageId}/folder/${folderId}`;
     }
     if (currentPath.startsWith('/bookmarks')) {
-      // 북마크 폴더의 경우 pageId가 있으면 URL에 포함
-      if (item.pageId) {
+      // 북마크 폴더의 경우:
+      // 1. item.pageId가 없으면 → 개인 페이지로 이동
+      // 2. item.pageId가 있고, 개인 페이지 pageId와 같으면 → 개인 페이지로 이동
+      // 3. item.pageId가 있고, 개인 페이지 pageId와 다르면 → 공유 페이지로 이동
+      const personalPageId = personalPageData?.pageId;
+
+      if (!item.pageId || item.pageId === personalPageId) {
+        // item.pageId가 없거나 개인 페이지와 같으면 개인 페이지로
+        return `/personal/folder/${folderId}`;
+      } else {
+        // item.pageId가 있고 개인 페이지와 다르면 공유 페이지로
         return `/shared/${item.pageId}/folder/${folderId}`;
       }
-      // pageId가 없으면 개인 페이지 폴더로 이동
-      return `/personal/folder/${folderId}`;
     }
     return `/personal/folder/${folderId}`;
   };
