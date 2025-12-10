@@ -4,13 +4,16 @@ import CardMenu from '@/assets/widget-ui-assets/CardMenu.svg?react';
 import { LinkDetail } from '@/types/links';
 import useUpdateLinkBookmark from '@/hooks/mutations/useUpdateLinkBookmark';
 import { usePageStore } from '@/stores/pageStore';
-import { useState, useRef, Suspense, lazy } from 'react';
+import { useState, useRef, Suspense, lazy, useMemo } from 'react';
 import DropDownInline from '../common-ui/DropDownInline';
 // import { useFocusModeStore } from '@/stores/focusModeStore';
 import { useMobile } from '@/hooks/useMobile';
 import LinkLogo from '../common-ui/LinkLogo';
 import { DropDownInlineSkeleton } from '../skeleton/DropdownInlineSkeleton';
 import MemoButton from '../common-ui/MemoButton';
+import { useFetchMemo } from '@/hooks/queries/useFetchMemo';
+import { useCreateMemo } from '@/hooks/mutations/useCreateMemo';
+import { useDeleteMemo } from '@/hooks/mutations/useDeleteMemo';
 
 const MemoModal = lazy(() => import('../modal/memo/MemoModal'));
 
@@ -27,6 +30,22 @@ export default function LinkCard({
   // const { isFocusMode } = useFocusModeStore();
   const isMobile = useMobile();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Memo 조회
+  const memoParams = useMemo(
+    () =>
+      pageId
+        ? {
+            pageId,
+            commandType: 'VIEW' as const,
+            itemType: 'LINK' as const,
+            itemId: item.linkId,
+          }
+        : null,
+    [pageId, item.linkId]
+  );
+
+  const { data: memo } = useFetchMemo(memoParams);
 
   const handleCardClick = (e: React.MouseEvent) => {
     // 드롭다운이나 버튼 영역인지 확인
@@ -54,9 +73,96 @@ export default function LinkCard({
     setIsDropDownInline((v) => !v);
   };
 
-  const handleMemoSave = (memo: string) => {
-    // TODO: API 호출로 description 업데이트
-    console.log('메모 저장:', memo, 'linkId:', item.linkId);
+  // Memo 생성
+  const { mutate: createMemo } = useCreateMemo({
+    onSuccess: () => {
+      console.log('메모 생성 성공');
+      setIsMemoModalOpen(false);
+    },
+    onError: (error) => {
+      console.error('메모 생성 실패:', error);
+    },
+  });
+
+  // Memo 삭제
+  const { mutate: deleteMemo } = useDeleteMemo({
+    onSuccess: () => {
+      console.log('메모 삭제 성공');
+      setIsMemoModalOpen(false);
+    },
+    onError: (error) => {
+      console.error('메모 삭제 실패:', error);
+    },
+  });
+
+  const handleMemoSave = (memoContent: string) => {
+    if (!pageId) {
+      console.error('pageId가 없습니다.');
+      return;
+    }
+
+    const trimmedMemo = memoContent.trim();
+
+    // 메모가 비어있으면 삭제
+    if (trimmedMemo === '') {
+      if (memo?.memoId) {
+        deleteMemo({
+          baseRequest: {
+            pageId,
+            commandType: 'EDIT',
+          },
+          memoId: memo.memoId,
+        });
+      } else {
+        // 메모가 없는데 삭제하려고 하면 모달만 닫기
+        setIsMemoModalOpen(false);
+      }
+      return;
+    }
+
+    // 메모가 있으면
+    if (memo?.memoId) {
+      // 기존 메모가 있고 내용이 다르면 삭제 후 새로 생성 (수정처럼 동작)
+      if (memo.content !== trimmedMemo) {
+        deleteMemo(
+          {
+            baseRequest: {
+              pageId,
+              commandType: 'EDIT',
+            },
+            memoId: memo.memoId,
+          },
+          {
+            onSuccess: () => {
+              // 삭제 성공 후 새 메모 생성
+              createMemo({
+                baseRequest: {
+                  pageId,
+                  commandType: 'CREATE',
+                },
+                itemType: 'LINK',
+                itemId: item.linkId,
+                content: trimmedMemo,
+              });
+            },
+          }
+        );
+      } else {
+        // 내용이 같으면 그냥 모달 닫기
+        setIsMemoModalOpen(false);
+      }
+    } else {
+      // 기존 메모가 없으면 새로 생성
+      createMemo({
+        baseRequest: {
+          pageId,
+          commandType: 'CREATE',
+        },
+        itemType: 'LINK',
+        itemId: item.linkId,
+        content: trimmedMemo,
+      });
+    }
   };
 
   const imageUrl = (() => {
@@ -204,7 +310,7 @@ export default function LinkCard({
 
         {/* 메모 버튼 - 북마크 아래 */}
         <MemoButton
-          hasMemo={!!item.description}
+          hasMemo={!!memo?.content}
           onClick={() => setIsMemoModalOpen(true)}
         />
 
@@ -284,7 +390,7 @@ export default function LinkCard({
           <MemoModal
             isOpen={isMemoModalOpen}
             onClose={() => setIsMemoModalOpen(false)}
-            initialMemo={item.description || ''}
+            initialMemo={memo?.content || ''}
             onSave={handleMemoSave}
             title={item.linkName}
           />
