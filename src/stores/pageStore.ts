@@ -34,3 +34,16 @@ export const useParentsFolderIdStore = create<ParentsFolderIdStoreState>()(
     }
   )
 );
+
+interface FileListViewStoreState {
+  showFilesOnly: boolean;
+  toggleFileListView: () => void;
+  setShowFilesOnly: (show: boolean) => void;
+}
+
+export const useFileListViewStore = create<FileListViewStoreState>((set) => ({
+  showFilesOnly: false,
+  toggleFileListView: () =>
+    set((state) => ({ showFilesOnly: !state.showFilesOnly })),
+  setShowFilesOnly: (show: boolean) => set({ showFilesOnly: show }),
+}));

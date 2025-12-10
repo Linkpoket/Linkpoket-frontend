@@ -4,8 +4,9 @@ import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useFolderColorStore } from '@/stores/folderColorStore';
 import { useMobile } from '@/hooks/useMobile';
 import useUpdateFolderBookmark from '@/hooks/mutations/useUpdateFolderBookmark';
-// import useFetchFolderDetails from '@/hooks/queries/useFetchFolderDetails';
-import { FolderDetail } from '@/types/folders';
+import { useQuery } from '@tanstack/react-query';
+import fetchFolderDetails from '@/apis/folder-apis/fetchFolderDetails';
+import { FolderDetail, LinkDetail } from '@/types/folders';
 import { DropDownInlineSkeleton } from '../skeleton/DropdownInlineSkeleton';
 import LinksInFolder from './LinksInFolder';
 import FolderBackground from './FolderBackground';
@@ -44,16 +45,32 @@ export default function FolderCard({
     pageId: pageId as string,
   });
 
-  // 폴더 상세 정보를 가져와서 링크 정보 추출 (유효한 folderId일 때만)
-  // const requestParams = {
-  //   pageId: pageId || '',
-  //   commandType: 'VIEW',
-  //   folderId: folderId || '',
-  //   sortType: 'BASIC',
-  // };
+  // 북마크 페이지인지 확인
+  const isBookmarkPage = location.pathname.startsWith('/bookmarks');
 
-  // const { data: folderDetailsData } = useFetchFolderDetails(requestParams);
-  // const linkData = folderDetailsData?.linkDetailResponses || [];
+  // 폴더 상세 정보를 가져와서 링크 정보 추출
+  // 북마크 페이지에서는 이미지를 표시하지 않으므로 fetch하지 않음
+  const actualPageId = item.pageId || pageId || '';
+
+  const { data: folderDetailsData } = useQuery({
+    queryKey: ['folderDetails', actualPageId, folderId, 'preview'],
+    queryFn: () =>
+      fetchFolderDetails({
+        pageId: actualPageId,
+        commandType: 'VIEW',
+        folderId: folderId || '',
+        sortType: 'BASIC',
+      }),
+    // 북마크 페이지가 아니고, pageId와 folderId가 있을 때만 fetch
+    enabled: !isBookmarkPage && !!actualPageId && !!folderId,
+    select: (response) => response.data,
+    staleTime: 1000 * 60 * 5, // 5분간 캐시 유지
+  });
+
+  const linkData: LinkDetail[] = folderDetailsData?.linkDetailResponses || [];
+
+  // 링크 데이터 사용 (상위 3개만) - 북마크 페이지에서는 빈 배열
+  const displayLinks = isBookmarkPage ? [] : linkData.slice(0, 3);
 
   const getFolderLink = (folderId: string) => {
     const currentPath = location.pathname;
@@ -63,6 +80,10 @@ export default function FolderCard({
       return `/shared/${sharedPageId}/folder/${folderId}`;
     }
     if (currentPath.startsWith('/bookmarks')) {
+      // 북마크 폴더의 경우 pageId가 있으면 URL에 포함
+      if (item.pageId) {
+        return `/shared/${item.pageId}/folder/${folderId}`;
+      }
       return `/bookmarks/folder/${folderId}`;
     }
     return `/personal/folder/${folderId}`;
@@ -92,9 +113,6 @@ export default function FolderCard({
     // TODO: API 호출로 폴더 description 업데이트
     console.log('메모 저장:', memo, 'folderId:', folderId);
   };
-
-  // 링크 데이터 사용 (상위 3개만)
-  // const displayLinks = linkData.slice(0, 3);
 
   return (
     <>

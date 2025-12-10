@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState, useMemo } from 'react';
 import { SortablePageItem } from '../common-ui/SortablePageItem';
 import LinkCard from '../link-card/LinkCard';
 import FolderCard from '../folder-card/FolderCard';
@@ -55,6 +55,7 @@ export default function PersonalPageContentSection({
 
   const { pageId } = usePageStore();
   const { parentsFolderId } = useParentsFolderIdStore();
+  const { showFilesOnly } = useFileListViewStore();
 
   // 파일 데이터 fetch
   const { data: fileData = [] } = useQuery<FileResponse[]>({
@@ -91,6 +92,13 @@ export default function PersonalPageContentSection({
     (FolderDetail | LinkDetail | FileResponse)[]
   >([]);
 
+  // fileData의 길이와 주요 속성을 사용하여 무한 루프 방지
+  const fileDataLength = fileData?.length || 0;
+  const fileDataIds = useMemo(
+    () => fileData.map((f) => f.fileId).join(','),
+    [fileDataLength]
+  );
+
   useEffect(() => {
     if (searchKeyword && searchResult) {
       // 검색 모드
@@ -114,10 +122,12 @@ export default function PersonalPageContentSection({
       const sortedData = handlePageDataSort(combinedData, sortType);
       setPageData(sortedData);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     folderData,
     linkData,
-    fileData,
+    fileDataLength,
+    fileDataIds,
     sortType,
     searchKeyword,
     searchResult,

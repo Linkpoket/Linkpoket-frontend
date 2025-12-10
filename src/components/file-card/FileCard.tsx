@@ -3,13 +3,10 @@ import ActiveBookmarkIcon from '@/assets/common-ui-assets/ActiveBookmark.svg?rea
 import CardMenu from '@/assets/widget-ui-assets/CardMenu.svg?react';
 import { FileResponse } from '@/types/files';
 import { usePageStore } from '@/stores/pageStore';
-import { useState, useRef, Suspense, lazy } from 'react';
+import { useState, useRef, Suspense } from 'react';
 import DropDownInline from '../common-ui/DropDownInline';
 import { useMobile } from '@/hooks/useMobile';
 import { DropDownInlineSkeleton } from '../skeleton/DropdownInlineSkeleton';
-import MemoButton from '../common-ui/MemoButton';
-
-const MemoModal = lazy(() => import('../modal/memo/MemoModal'));
 
 interface FileDetail extends FileResponse {
   isFavorite?: boolean;
@@ -23,7 +20,6 @@ export default function FileCard({
   item: FileDetail;
 }) {
   const [isDropDownInline, setIsDropDownInline] = useState<boolean>(false);
-  const [isMemoModalOpen, setIsMemoModalOpen] = useState<boolean>(false);
   const { pageId } = usePageStore();
   const isMobile = useMobile();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
@@ -42,11 +38,6 @@ export default function FileCard({
 
   const handleMenuClick = () => {
     setIsDropDownInline((v) => !v);
-  };
-
-  const handleMemoSave = (memo: string) => {
-    // TODO: API 호출로 파일 메모 업데이트
-    console.log('메모 저장:', memo, 'fileId:', item.fileId);
   };
 
   const formatFileSize = (bytes: number): string => {
@@ -120,15 +111,6 @@ export default function FileCard({
           {isBookmark ? <ActiveBookmarkIcon /> : <InactiveBookmarkIcon />}
         </button>
 
-        {/* 메모 버튼 */}
-        <MemoButton
-          hasMemo={false}
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsMemoModalOpen(true);
-          }}
-        />
-
         {/* 파일 이름 */}
         <div className="flex flex-1 flex-col items-center justify-between">
           <p
@@ -175,19 +157,6 @@ export default function FileCard({
           </Suspense>
         )}
       </div>
-
-      {/* 메모 모달 */}
-      {isMemoModalOpen && (
-        <Suspense fallback={null}>
-          <MemoModal
-            isOpen={isMemoModalOpen}
-            onClose={() => setIsMemoModalOpen(false)}
-            initialMemo=""
-            onSave={handleMemoSave}
-            title={item.fileName}
-          />
-        </Suspense>
-      )}
     </>
   );
 }
