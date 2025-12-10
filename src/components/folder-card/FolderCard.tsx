@@ -84,7 +84,8 @@ export default function FolderCard({
       if (item.pageId) {
         return `/shared/${item.pageId}/folder/${folderId}`;
       }
-      return `/bookmarks/folder/${folderId}`;
+      // pageId가 없으면 개인 페이지 폴더로 이동
+      return `/personal/folder/${folderId}`;
     }
     return `/personal/folder/${folderId}`;
   };
@@ -195,7 +196,7 @@ export default function FolderCard({
                 className="cursor-pointer p-1"
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleMenuClick();
+                  handleInlineDropdownOpen();
                 }}
                 onPointerDown={(e) => {
                   e.stopPropagation();

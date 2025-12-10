@@ -1,4 +1,4 @@
-import { lazy, useEffect, useState } from 'react';
+import { lazy, useEffect, useState, useMemo } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useMobile } from '@/hooks/useMobile';
@@ -26,10 +26,20 @@ export default function FolderDetailPage() {
   // URL 경로를 기반으로 페이지 타입 판단
   const isSharedPageRoute =
     location.pathname.startsWith('/shared') && !!urlPageId;
-  const actualPageId = urlPageId || storePageId;
+  const isBookmarkRoute = location.pathname.startsWith('/bookmarks/folder');
 
-  // 개인 페이지 이미지 가져오기
+  // 개인 페이지 데이터 가져오기 (북마크 폴더의 pageId가 없을 때 사용)
   const { data: personalPageData } = useFetchPersonalPage();
+
+  // actualPageId 결정: URL의 pageId가 있으면 사용, 없으면 북마크 경로면 개인 페이지 pageId 사용
+  const actualPageId = useMemo(() => {
+    if (urlPageId) return urlPageId;
+    // 북마크 폴더 경로이고 pageId가 없으면 개인 페이지로 간주
+    if (isBookmarkRoute) {
+      return personalPageData?.pageId || '';
+    }
+    return storePageId;
+  }, [urlPageId, isBookmarkRoute, personalPageData?.pageId, storePageId]);
 
   // 공유 페이지 이미지 가져오기
   const { data: sharedPageData } = useFetchSharedPage(actualPageId || '');
