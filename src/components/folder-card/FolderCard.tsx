@@ -91,17 +91,11 @@ export default function FolderCard({
       return `/shared/${sharedPageId}/folder/${folderId}`;
     }
     if (currentPath.startsWith('/bookmarks')) {
-      // 북마크 폴더의 경우:
-      // 1. item.pageId가 없으면 → 개인 페이지로 이동
-      // 2. item.pageId가 있고, 개인 페이지 pageId와 같으면 → 개인 페이지로 이동
-      // 3. item.pageId가 있고, 개인 페이지 pageId와 다르면 → 공유 페이지로 이동
       const personalPageId = personalPageData?.pageId;
 
       if (!item.pageId || item.pageId === personalPageId) {
-        // item.pageId가 없거나 개인 페이지와 같으면 개인 페이지로
         return `/personal/folder/${folderId}`;
       } else {
-        // item.pageId가 있고 개인 페이지와 다르면 공유 페이지로
         return `/shared/${item.pageId}/folder/${folderId}`;
       }
     }

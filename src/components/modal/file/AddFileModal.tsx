@@ -4,6 +4,7 @@ import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useFolderColorStore } from '@/stores/folderColorStore';
 import toast from 'react-hot-toast';
 import { uploadFile } from '@/apis/file-apis/uploadFile';
+import { useQueryClient } from '@tanstack/react-query';
 
 const AddFileModal = ({
   isOpen,
@@ -19,6 +20,7 @@ const AddFileModal = ({
   const { parentsFolderId } = useParentsFolderIdStore();
   const { getCurrentColor } = useFolderColorStore();
   const currentFolderColor = getCurrentColor();
+  const queryClient = useQueryClient();
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -40,6 +42,35 @@ const AddFileModal = ({
         pageId,
         commandType: 'CREATE',
         folderId: parentsFolderId || undefined,
+      });
+
+      // 파일 업로드 후 저장 용량 업데이트를 위해 userInfo 쿼리 무효화
+      queryClient.invalidateQueries({
+        queryKey: ['userInfo'],
+      });
+
+      // 파일 목록 자동 새로고침을 위한 쿼리 무효화
+      if (parentsFolderId) {
+        // 폴더 내 파일 목록 무효화
+        queryClient.invalidateQueries({
+          queryKey: ['files', pageId, parentsFolderId],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['folderDetails', pageId, parentsFolderId],
+        });
+      }
+      // 페이지 전체 파일 목록 무효화
+      queryClient.invalidateQueries({
+        queryKey: ['files', pageId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['folderDetails', pageId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['personalPage'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['sharedPage', pageId],
       });
 
       toast.success('파일 업로드에 성공했습니다.');
