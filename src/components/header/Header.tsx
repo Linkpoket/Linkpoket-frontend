@@ -28,7 +28,8 @@ export function Header({
   const { getCurrentColor } = useFolderColorStore();
   const currentFolderColor = getCurrentColor();
 
-  const showSearch = pathName !== '/signup' && pathName !== '/login';
+  const showSearch =
+    pathName !== '/signup' && pathName !== '/login' && pathName !== '/home';
 
   return !isMobile ? (
     <header className="header-desktop border-b-gray-10 flex items-center justify-between border-b">
