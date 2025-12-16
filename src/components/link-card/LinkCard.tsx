@@ -393,6 +393,7 @@ export default function LinkCard({
             initialMemo={memo?.content || ''}
             onSave={handleMemoSave}
             title={item.linkName}
+            memoData={memo || undefined}
           />
         </Suspense>
       )}

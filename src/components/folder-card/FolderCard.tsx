@@ -123,7 +123,7 @@ export default function FolderCard({
   };
 
   // 폴더 메모 기능
-  const { hasMemo, memoContent, handleMemoSave } = useFolderMemo({
+  const { memo, hasMemo, memoContent, handleMemoSave } = useFolderMemo({
     folderId,
     itemPageId: item.pageId,
   });
@@ -255,6 +255,7 @@ export default function FolderCard({
             initialMemo={memoContent}
             onSave={handleMemoSaveAndClose}
             title={item.folderName}
+            memoData={memo || undefined}
           />
         </Suspense>
       )}
