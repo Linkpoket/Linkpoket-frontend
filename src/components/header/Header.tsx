@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import { lazy, Suspense, useState } from 'react';
 import Logo from '@/assets/widget-ui-assets/Logo.svg?react';
 import { HamburgerButton } from './HamburgerButton';
 import { UserActions } from './UserActions';
@@ -7,6 +8,11 @@ import { useMobile } from '@/hooks/useMobile';
 import { Search } from '../common-ui/Search';
 import { usePageSearch } from '@/hooks/usePageSearch';
 import { useFolderColorStore } from '@/stores/folderColorStore';
+import { ManageSharedPageModalSkeleton } from '../skeleton/ManageSharedPageModalSkeleton';
+
+const ManageSharedPageModal = lazy(
+  () => import('../modal/page/ManageSharedPageModal')
+);
 
 interface Props {
   isLoggedIn: boolean;
@@ -23,13 +29,20 @@ export function Header({
 }: Props) {
   const isMobile = useMobile();
   const pathName = useLocation().pathname;
+  const [isManageSharedPageModalOpen, setIsManageSharedPageModalOpen] =
+    useState(false);
 
   const { searchKeyword, handleSearchChange, handleClear } = usePageSearch();
   const { getCurrentColor } = useFolderColorStore();
   const currentFolderColor = getCurrentColor();
 
+  const isSharedPage = pathName.includes('/shared');
   const showSearch =
     pathName !== '/signup' && pathName !== '/login' && pathName !== '/home';
+
+  const handleOpenManageModal = () => {
+    setIsManageSharedPageModalOpen(true);
+  };
 
   return !isMobile ? (
     <header className="header-desktop border-b-gray-10 flex items-center justify-between border-b">
@@ -51,10 +64,26 @@ export function Header({
             focusColor={currentFolderColor.previewColor}
           />
         )}
-        <div className="header-actions flex items-center">
+        <div className="header-actions flex items-center gap-3">
+          {isLoggedIn && isSharedPage && (
+            <button
+              onClick={handleOpenManageModal}
+              className="text-gray-90 hover:text-gray-70 text-sm font-medium transition-colors"
+            >
+              공유
+            </button>
+          )}
           {showHeaderButton && (isLoggedIn ? <UserActions /> : <AuthButtons />)}
         </div>
       </div>
+      {isManageSharedPageModalOpen && (
+        <Suspense fallback={<ManageSharedPageModalSkeleton />}>
+          <ManageSharedPageModal
+            isOpen={isManageSharedPageModalOpen}
+            onClose={() => setIsManageSharedPageModalOpen(false)}
+          />
+        </Suspense>
+      )}
     </header>
   ) : (
     <header className="header-mobile flex flex-col">
@@ -69,12 +98,28 @@ export function Header({
           </Link>
         </div>
         <div className="header-mobile__right flex items-center">
-          <div className="header-actions flex items-center">
+          <div className="header-actions flex items-center gap-3">
+            {isLoggedIn && isSharedPage && (
+              <button
+                onClick={handleOpenManageModal}
+                className="text-gray-90 hover:text-gray-70 text-sm font-medium transition-colors"
+              >
+                공유
+              </button>
+            )}
             {showHeaderButton &&
               (isLoggedIn ? <UserActions /> : <AuthButtons />)}
           </div>
         </div>
       </div>
+      {isManageSharedPageModalOpen && (
+        <Suspense fallback={<ManageSharedPageModalSkeleton />}>
+          <ManageSharedPageModal
+            isOpen={isManageSharedPageModalOpen}
+            onClose={() => setIsManageSharedPageModalOpen(false)}
+          />
+        </Suspense>
+      )}
     </header>
   );
 }
