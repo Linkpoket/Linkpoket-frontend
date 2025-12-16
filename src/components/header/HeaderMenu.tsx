@@ -5,12 +5,8 @@ import { lazy, Suspense, useRef, useState } from 'react';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useLocation } from 'react-router-dom';
 import { usePageStore } from '@/stores/pageStore';
-import SharedPage from '@/assets/common-ui-assets/Setting.svg?react';
-import SiteIcon from '@/assets/common-ui-assets/Link.svg?react';
 import useFetchSharedPageDashboard from '@/hooks/queries/useFetchSharedPageDashboard';
-import toast from 'react-hot-toast';
 import { ContactDetail } from './ContactDetail';
-import { ManageSharedPageModalSkeleton } from '../skeleton/ManageSharedPageModalSkeleton';
 import { DeleteModalSkeleton } from '../skeleton/DeleteModalSkeleton';
 import FolderColorModal from '../modal/folder/FolderColorModal';
 import DeleteFolderModal from '../modal/folder/DeleteFolderModal';
@@ -20,9 +16,6 @@ const DeleteSharedPageModal = lazy(
 );
 const WithdrawSharedPageModal = lazy(
   () => import('../modal/page/WithdrawlSharedPageModal')
-);
-const ManageSharedPageModal = lazy(
-  () => import('../modal/page/ManageSharedPageModal')
 );
 
 interface HeaderMenuProps {
@@ -44,8 +37,6 @@ export default function HeaderMenu({
   const [isWithdrawSharedPageModalOpen, setisWithdrawSharedPageModalOpen] =
     useState(false);
   const [isDeleteFolderModalOpen, setIsDeleteFolderModalOpen] = useState(false);
-  const [isManageSharedPageModalOpen, setIsManageSharedPageModalOpen] =
-    useState(false);
   const [isFolderColorModalOpen, setIsFolderColorModalOpen] = useState(false);
 
   const modalRef = useRef<HTMLDivElement>(null);
@@ -55,7 +46,6 @@ export default function HeaderMenu({
     if (
       !isWithdrawSharedPageModalOpen &&
       !isDeleteSharedPageModalOpen &&
-      !isManageSharedPageModalOpen &&
       !isFolderColorModalOpen
     ) {
       setIsOpen(false);
@@ -76,16 +66,6 @@ export default function HeaderMenu({
   const pageMemberLength = dashboardData?.data.pageMembers.length;
   const pageMemberRole = dashboardData?.data.pageMembers[0].role;
 
-  const handleCopyLink = async () => {
-    try {
-      const currentUrl = window.location.href;
-      await navigator.clipboard.writeText(`${currentUrl}`);
-      toast.success('링크가 복사되었습니다.');
-    } catch (error) {
-      toast.error('링크 복사를 실패했습니다.');
-    }
-  };
-
   return (
     <div
       className="border-gray-30 bg-gray-0 absolute top-14 right-6 z-1 inline-flex w-[198px] flex-col justify-center rounded-[10px] border p-2 font-[500] shadow-lg"
@@ -95,23 +75,6 @@ export default function HeaderMenu({
         <>
           <div className="flex flex-col">
             <>
-              <button
-                onClick={handleCopyLink}
-                className="hover:bg-gray-10 active:bg-gray-5 text-gray-90 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[500]"
-              >
-                <SiteIcon width={18} height={18} />
-                <span className="text-[14px]">링크 복사</span>
-              </button>
-              {isHost && (
-                <button
-                  onClick={() => setIsManageSharedPageModalOpen(true)}
-                  className="hover:bg-gray-10 active:bg-gray-5 text-gray-90 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[500]"
-                >
-                  <SharedPage width={18} height={18} />
-                  <span className="text-[14px]">공유 페이지 관리</span>
-                </button>
-              )}
-
               {/* 탈퇴 버튼 */}
               {pageMemberRole === 'HOST' && pageMemberLength === 1 ? null : (
                 <button
@@ -150,15 +113,6 @@ export default function HeaderMenu({
                 <Deleted />
                 <span className="text-[14px]">폴더 삭제</span>
               </button>
-            )}
-
-            {isManageSharedPageModalOpen && (
-              <Suspense fallback={<ManageSharedPageModalSkeleton />}>
-                <ManageSharedPageModal
-                  isOpen={isManageSharedPageModalOpen}
-                  onClose={() => setIsManageSharedPageModalOpen(false)}
-                />
-              </Suspense>
             )}
 
             {isDeleteSharedPageModalOpen && (

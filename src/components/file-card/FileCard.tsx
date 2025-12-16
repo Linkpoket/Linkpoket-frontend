@@ -1,8 +1,5 @@
-import InactiveBookmarkIcon from '@/assets/common-ui-assets/InactiveBookmark.svg?react';
-import ActiveBookmarkIcon from '@/assets/common-ui-assets/ActiveBookmark.svg?react';
 import CardMenu from '@/assets/widget-ui-assets/CardMenu.svg?react';
 import { FileResponse } from '@/types/files';
-import { usePageStore } from '@/stores/pageStore';
 import { useState, useRef, Suspense } from 'react';
 import DropDownInline from '../common-ui/DropDownInline';
 import { useMobile } from '@/hooks/useMobile';
@@ -12,15 +9,8 @@ interface FileDetail extends FileResponse {
   isFavorite?: boolean;
 }
 
-export default function FileCard({
-  isBookmark,
-  item,
-}: {
-  isBookmark: boolean;
-  item: FileDetail;
-}) {
+export default function FileCard({ item }: { item: FileDetail }) {
   const [isDropDownInline, setIsDropDownInline] = useState<boolean>(false);
-  const { pageId } = usePageStore();
   const isMobile = useMobile();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -98,61 +88,62 @@ export default function FileCard({
           </div>
         </div>
 
-        {/* 북마크 버튼 */}
-        <button
-          data-card-button
-          className="absolute top-2 right-2 z-10 cursor-pointer"
-          onClick={(e) => {
-            e.stopPropagation();
-            // TODO: 북마크 기능 구현
-          }}
-          aria-label={isBookmark ? '북마크 제거' : '북마크 추가'}
-        >
-          {isBookmark ? <ActiveBookmarkIcon /> : <InactiveBookmarkIcon />}
-        </button>
-
         {/* 파일 이름 */}
         <div className="flex flex-1 flex-col items-center justify-between">
-          <p
-            className="text-gray-90 line-clamp-2 text-center text-sm font-medium"
-            style={{
-              WebkitLineClamp: 2,
-              display: '-webkit-box',
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-            }}
-          >
-            {item.fileName}
-          </p>
+          <div className="flex flex-col gap-1 text-center">
+            <p
+              className="text-gray-90 line-clamp-2 text-center text-sm font-medium"
+              style={{
+                WebkitLineClamp: 2,
+                display: '-webkit-box',
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+              }}
+            >
+              {item.fileName}
+            </p>
+            {!isMobile && (
+              <p className="text-xs text-gray-50">
+                {formatFileSize(item.fileSize)}
+              </p>
+            )}
+          </div>
 
-          {/* 파일 정보 */}
-          <p className="text-xs text-gray-50">
-            {formatFileSize(item.fileSize)}
-          </p>
-
-          {/* 메뉴 버튼 */}
-          <button
-            ref={menuButtonRef}
-            data-card-button
-            className="absolute right-2 bottom-2 z-10 cursor-pointer opacity-0 transition-opacity group-hover:opacity-100"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleMenuClick();
-            }}
-            aria-label="메뉴"
-          >
-            <CardMenu />
-          </button>
+          <div className="mt-2 flex items-center justify-end">
+            <div className="relative">
+              <button
+                ref={menuButtonRef}
+                data-card-button
+                className="cursor-pointer p-1"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleMenuClick();
+                }}
+                onPointerDown={(e) => {
+                  e.stopPropagation();
+                }}
+                onTouchStart={(e) => {
+                  e.stopPropagation();
+                }}
+                style={{ touchAction: 'manipulation' }}
+                aria-label="메뉴 열기"
+              >
+                <CardMenu />
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* 드롭다운 메뉴 */}
         {isDropDownInline && menuButtonRef.current && (
           <Suspense fallback={<DropDownInlineSkeleton />}>
             <DropDownInline
-              itemType="file"
-              itemId={item.fileId}
-              anchorElement={menuButtonRef.current}
-              onClose={() => setIsDropDownInline(false)}
+              id={item.fileId}
+              type="file"
+              initialTitle={item.fileName}
+              initialLink={item.fileUrl}
+              isDropDownInline={isDropDownInline}
+              setIsDropDownInline={setIsDropDownInline}
             />
           </Suspense>
         )}

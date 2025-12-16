@@ -247,10 +247,7 @@ export default function PersonalPageContentSection({
                   item={getActiveItem() as FolderDetail}
                 />
               ) : 'fileId' in getActiveItem()! ? (
-                <FileCard
-                  isBookmark={getActiveItem()!.isFavorite || false}
-                  item={getActiveItem() as FileResponse}
-                />
+                <FileCard item={getActiveItem() as FileResponse} />
               ) : (
                 <LinkCard
                   isBookmark={getActiveItem()!.isFavorite}

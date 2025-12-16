@@ -47,7 +47,7 @@ export const SortablePageItem = ({ item }: SortablePageItemProps) => {
       {'folderId' in item ? (
         <FolderCard isBookmark={item.isFavorite} item={item} />
       ) : 'fileId' in item ? (
-        <FileCard isBookmark={item.isFavorite || false} item={item} />
+        <FileCard item={item} />
       ) : (
         <LinkCard isBookmark={item.isFavorite} item={item} />
       )}

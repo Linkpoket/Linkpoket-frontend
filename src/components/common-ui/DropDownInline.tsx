@@ -17,10 +17,11 @@ const DeleteFolderModal = lazy(
   () => import('../modal/folder/DeleteFolderModal')
 );
 const DeleteLinkModal = lazy(() => import('../modal/link/DeleteLinkModal'));
+const DeleteFileModal = lazy(() => import('../modal/file/DeleteFileModal'));
 
 type DropDownInlineProps = {
   id: string;
-  type: 'folder' | 'link';
+  type: 'folder' | 'link' | 'file';
   initialTitle: string;
   initialLink?: string;
   onTitleChange?: (id: string, title: string) => void;
@@ -50,6 +51,7 @@ const DropDownInline = ({
 
   const [isFolderDeleteOpen, setIsFolderDeleteOpen] = useState(false);
   const [isLinkDeleteOpen, setIsLinkDeleteOpen] = useState(false);
+  const [isFileDeleteOpen, setIsFileDeleteOpen] = useState(false);
 
   const { openTransferFolderModal } = useModalStore();
   const { isTransferFolderModalOpen, closeTransferFolderModal } =
@@ -85,6 +87,7 @@ const DropDownInline = ({
 
   const handleFolderDeleteOpen = () => setIsFolderDeleteOpen(true);
   const handleLinkDeleteOpen = () => setIsLinkDeleteOpen(true);
+  const handleFileDeleteOpen = () => setIsFileDeleteOpen(true);
 
   const handleTransferClick = () => {
     openTransferFolderModal();
@@ -92,25 +95,34 @@ const DropDownInline = ({
 
   const handleCopyClick = () => {
     if (type === 'folder') {
-    } else {
+    } else if (type === 'link') {
       navigator.clipboard
         .writeText(link)
         .then(() => toast.success('링크가 복사되었습니다.'))
+        .catch((err) => console.error('복사 실패:', err));
+    } else if (type === 'file') {
+      navigator.clipboard
+        .writeText(link)
+        .then(() => toast.success('파일 링크가 복사되었습니다.'))
         .catch((err) => console.error('복사 실패:', err));
     }
   };
 
   const isAnyModalOpen =
-    isFolderDeleteOpen || isLinkDeleteOpen || isTransferFolderModalOpen;
+    isFolderDeleteOpen ||
+    isLinkDeleteOpen ||
+    isFileDeleteOpen ||
+    isTransferFolderModalOpen;
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const folderModalRef = useRef<HTMLDivElement | null>(null);
   const linkModalRef = useRef<HTMLDivElement | null>(null);
+  const fileModalRef = useRef<HTMLDivElement | null>(null);
   const transferModalRef = useRef<HTMLDivElement | null>(null);
 
   // 여러 ref를 배열로 전달하여 useClickOutside 적용
   useClickOutside(
-    [dropdownRef, folderModalRef, linkModalRef, transferModalRef],
+    [dropdownRef, folderModalRef, linkModalRef, fileModalRef, transferModalRef],
     setIsDropDownInline,
     !isAnyModalOpen
   );
@@ -221,6 +233,45 @@ const DropDownInline = ({
                 isOpen={isLinkDeleteOpen}
                 onClose={() => setIsLinkDeleteOpen(false)}
                 linkId={id}
+                pageId={pageId}
+              />
+            </Suspense>
+          )}
+        </div>
+      )}
+
+      {type === 'file' && (
+        <div className="flex flex-col">
+          <div className="border-gray-20 flex flex-col overflow-hidden rounded-lg border">
+            <div className="border-gray-20 border-b p-[12px]">
+              <p className="text-gray-90 text-[14px] font-[600]">{title}</p>
+            </div>
+            <div className="text-gray-60 p-[12px] text-[13px] font-[400] break-all">
+              {link}
+            </div>
+          </div>
+
+          <button
+            onClick={handleCopyClick}
+            className="flex cursor-pointer items-center gap-[10px] px-[12px] py-[11px]"
+          >
+            <Copy width={18} height={18} /> 복사하기
+          </button>
+
+          <button
+            onClick={handleFileDeleteOpen}
+            className="text-status-danger flex cursor-pointer items-center gap-[10px] p-[12px]"
+          >
+            <Delete width={18} height={18} /> 삭제하기
+          </button>
+
+          {isFileDeleteOpen && (
+            <Suspense fallback={<DeleteModalSkeleton />}>
+              <DeleteFileModal
+                ref={fileModalRef}
+                isOpen={isFileDeleteOpen}
+                onClose={() => setIsFileDeleteOpen(false)}
+                fileId={id}
                 pageId={pageId}
               />
             </Suspense>
