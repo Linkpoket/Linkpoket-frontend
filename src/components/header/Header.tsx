@@ -68,7 +68,8 @@ export function Header({
           {isLoggedIn && isSharedPage && (
             <button
               onClick={handleOpenManageModal}
-              className="text-gray-90 hover:text-gray-70 text-sm font-medium transition-colors"
+              className="text-gray-90 hover:text-gray-70 text-[17.5px] font-medium whitespace-nowrap transition-colors"
+              style={{ writingMode: 'horizontal-tb' }}
             >
               공유
             </button>
@@ -102,7 +103,8 @@ export function Header({
             {isLoggedIn && isSharedPage && (
               <button
                 onClick={handleOpenManageModal}
-                className="text-gray-90 hover:text-gray-70 text-sm font-medium transition-colors"
+                className="text-gray-90 hover:text-gray-70 text-[17.5px] font-medium whitespace-nowrap transition-colors"
+                style={{ writingMode: 'horizontal-tb' }}
               >
                 공유
               </button>

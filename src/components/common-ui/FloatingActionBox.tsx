@@ -4,8 +4,10 @@ import { ActionButton } from '@/components/common-ui/ActionButton';
 import FloatingLinkIcon from '@/assets/common-ui-assets/FloatingLinkIcon.svg?react';
 import FloatingFileIcon from '@/assets/common-ui-assets/FloatingFileIcon.svg?react';
 import FloatingFolderIcon from '@/assets/common-ui-assets/FloatingFolderIcon.svg?react';
+import { useMobile } from '@/hooks/useMobile';
 
 const FloatingActionBox = () => {
+  const isMobile = useMobile();
   const { openLinkModal, openFileModal, openFolderModal } = useModalStore();
   const [left, setLeft] = useState('50%');
 
@@ -54,6 +56,11 @@ const FloatingActionBox = () => {
   const handleAddFolder = () => {
     openFolderModal();
   };
+
+  // 모바일에서는 표시하지 않음
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <div className="fixed bottom-16 z-[9998] -translate-x-1/2" style={{ left }}>
