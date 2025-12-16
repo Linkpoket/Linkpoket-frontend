@@ -56,25 +56,24 @@ const FloatingActionBox = () => {
   };
 
   return (
-    <div
-      className="fixed bottom-16 z-[10000] -translate-x-1/2"
-      style={{ left }}
-    >
-      <div className="flex items-center justify-center gap-8 rounded-[20px] bg-white px-8 py-6 shadow-lg">
+    <div className="fixed bottom-16 z-[9998] -translate-x-1/2" style={{ left }}>
+      <div className="flex items-center justify-center gap-[50px] rounded-[26px] bg-white px-[50px] py-[31px] shadow-lg">
         <ActionButton
-          icon={<FloatingLinkIcon className="text-gray-90 h-6 w-6" />}
+          icon={<FloatingLinkIcon className="text-gray-90 h-[31px] w-[37px]" />}
           label="링크 추가"
           onClick={handleAddLink}
           ariaLabel="링크 추가"
         />
         <ActionButton
-          icon={<FloatingFileIcon className="text-gray-90 h-6 w-6" />}
+          icon={<FloatingFileIcon className="text-gray-90 h-[31px] w-[37px]" />}
           label="파일 추가"
           onClick={handleAddFile}
           ariaLabel="파일 추가"
         />
         <ActionButton
-          icon={<FloatingFolderIcon className="text-gray-90 h-6 w-6" />}
+          icon={
+            <FloatingFolderIcon className="text-gray-90 h-[31px] w-[37px]" />
+          }
           label="폴더 추가"
           onClick={handleAddFolder}
           ariaLabel="폴더 추가"
