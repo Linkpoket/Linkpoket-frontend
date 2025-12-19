@@ -10,7 +10,6 @@ import DropDownInline from '../common-ui/DropDownInline';
 import { useMobile } from '@/hooks/useMobile';
 import LinkLogo from '../common-ui/LinkLogo';
 import { DropDownInlineSkeleton } from '../skeleton/DropdownInlineSkeleton';
-import MemoButton from '../common-ui/MemoButton';
 import { useFetchMemo } from '@/hooks/queries/useFetchMemo';
 import { useCreateMemo } from '@/hooks/mutations/useCreateMemo';
 import { useDeleteMemo } from '@/hooks/mutations/useDeleteMemo';
@@ -277,7 +276,7 @@ export default function LinkCard({
           )}
         </div>
 
-        {/* 북마크/메모/더보기: 북마크와 동일한 세로줄(같은 right, 같은 간격) */}
+        {/* 북마크/더보기: 북마크와 동일한 세로줄(같은 right, 같은 간격) */}
         <div className="absolute top-2 right-2 z-20 flex flex-col items-center gap-2">
           <button
             data-card-button
@@ -287,12 +286,6 @@ export default function LinkCard({
           >
             {isBookmark ? <ActiveBookmarkIcon /> : <InactiveBookmarkIcon />}
           </button>
-
-          <MemoButton
-            hasMemo={!!memo?.content}
-            onClick={() => setIsMemoModalOpen(true)}
-            className="static top-auto right-auto z-auto"
-          />
 
           <div onMouseEnter={handleMoreEnter} onMouseLeave={handleMoreLeave}>
             <button
@@ -318,7 +311,7 @@ export default function LinkCard({
 
             {/* 투명 브릿지: 버튼 → 드롭다운으로 이동할 때 닫힘 방지 */}
             {!isMobile && isDropDownInline && (
-              <div className="absolute top-[60px] right-0 h-3 w-[80px]" />
+              <div className="absolute top-[28px] right-0 h-3 w-[80px]" />
             )}
           </div>
         </div>

@@ -17,7 +17,6 @@ import FolderDeviderLine from './FolderDeviderLine';
 import InactiveBookmarkIcon from '@/assets/common-ui-assets/InactiveBookmark.svg?react';
 import ActiveBookmarkIcon from '@/assets/common-ui-assets/ActiveBookmark.svg?react';
 import CardMenu from '@/assets/widget-ui-assets/CardMenu.svg?react';
-import MemoButton from '../common-ui/MemoButton';
 import MoreIcon from '@/assets/common-ui-assets/더보기.png';
 import { useFolderMemo } from '@/hooks/useFolderMemo';
 
@@ -173,7 +172,7 @@ export default function FolderCard({
           <FolderDeviderLine />
         </div>
 
-        {/* 북마크/메모/더보기: 북마크와 동일한 세로줄(같은 right, 같은 간격) */}
+        {/* 북마크/더보기: 북마크와 동일한 세로줄(같은 right, 같은 간격) */}
         <div className="absolute top-2 right-2 z-20 flex flex-col items-center gap-2">
           <button
             data-card-button
@@ -183,12 +182,6 @@ export default function FolderCard({
           >
             {isBookmark ? <ActiveBookmarkIcon /> : <InactiveBookmarkIcon />}
           </button>
-
-          <MemoButton
-            hasMemo={hasMemo}
-            onClick={() => setIsMemoModalOpen(true)}
-            className="static top-auto right-auto z-auto"
-          />
 
           <div onMouseEnter={handleMoreEnter} onMouseLeave={handleMoreLeave}>
             <button
@@ -214,7 +207,7 @@ export default function FolderCard({
 
             {/* 투명 브릿지: 버튼 → 드롭다운으로 이동할 때 닫힘 방지 */}
             {!isMobile && isDropDownInline && (
-              <div className="absolute top-[60px] right-0 h-3 w-[80px]" />
+              <div className="absolute top-[28px] right-0 h-3 w-[80px]" />
             )}
           </div>
         </div>
