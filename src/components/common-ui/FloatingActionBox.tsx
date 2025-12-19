@@ -64,22 +64,22 @@ const FloatingActionBox = () => {
 
   return (
     <div className="fixed bottom-16 z-[9998] -translate-x-1/2" style={{ left }}>
-      <div className="flex items-center justify-center gap-[50px] rounded-[26px] bg-white px-[50px] py-[31px] shadow-lg">
+      <div className="flex items-center justify-center gap-[47px] rounded-[24px] bg-white/60 px-[47px] py-[29px] shadow-lg">
         <ActionButton
-          icon={<FloatingLinkIcon className="text-gray-90 h-[31px] w-[37px]" />}
+          icon={<FloatingLinkIcon className="text-gray-90 h-[29px] w-[34px]" />}
           label="링크 추가"
           onClick={handleAddLink}
           ariaLabel="링크 추가"
         />
         <ActionButton
-          icon={<FloatingFileIcon className="text-gray-90 h-[31px] w-[37px]" />}
+          icon={<FloatingFileIcon className="text-gray-90 h-[29px] w-[34px]" />}
           label="파일 추가"
           onClick={handleAddFile}
           ariaLabel="파일 추가"
         />
         <ActionButton
           icon={
-            <FloatingFolderIcon className="text-gray-90 h-[31px] w-[37px]" />
+            <FloatingFolderIcon className="text-gray-90 h-[29px] w-[34px]" />
           }
           label="폴더 추가"
           onClick={handleAddFolder}

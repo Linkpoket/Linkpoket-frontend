@@ -24,6 +24,7 @@ type DropDownInlineProps = {
   type: 'folder' | 'link' | 'file';
   initialTitle: string;
   initialLink?: string;
+  onMemoClick?: () => void;
   onTitleChange?: (id: string, title: string) => void;
   onLinkChange?: (id: string, link: string) => void;
   className?: string;
@@ -36,6 +37,7 @@ const DropDownInline = ({
   type,
   initialTitle = '',
   initialLink = '',
+  onMemoClick,
   onLinkChange,
   setIsDropDownInline,
   className = '',
@@ -170,6 +172,20 @@ const DropDownInline = ({
           >
             <Copy width={18} height={18} /> 복사하기
           </button>
+          {onMemoClick && (
+            <button
+              onClick={() => {
+                onMemoClick();
+                setIsDropDownInline(false);
+              }}
+              className="flex cursor-pointer items-center gap-[10px] px-[8px] py-[11px]"
+            >
+              <span className="flex h-[18px] w-[18px] items-center justify-center text-[16px] leading-none">
+                ✎
+              </span>
+              메모하기
+            </button>
+          )}
           <button
             onClick={handleFolderDeleteOpen}
             className="text-status-danger flex cursor-pointer items-center gap-[10px] px-[8px] py-[11px]"
@@ -218,6 +234,20 @@ const DropDownInline = ({
           >
             <Copy width={18} height={18} /> 복사하기
           </button>
+          {onMemoClick && (
+            <button
+              onClick={() => {
+                onMemoClick();
+                setIsDropDownInline(false);
+              }}
+              className="flex cursor-pointer items-center gap-[10px] px-[12px] py-[11px]"
+            >
+              <span className="flex h-[18px] w-[18px] items-center justify-center text-[16px] leading-none">
+                ✎
+              </span>
+              메모하기
+            </button>
+          )}
 
           <button
             onClick={handleLinkDeleteOpen}
