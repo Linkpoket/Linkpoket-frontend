@@ -4,7 +4,7 @@ import CardMenu from '@/assets/widget-ui-assets/CardMenu.svg?react';
 import { LinkDetail } from '@/types/links';
 import useUpdateLinkBookmark from '@/hooks/mutations/useUpdateLinkBookmark';
 import { usePageStore } from '@/stores/pageStore';
-import { useState, useRef, Suspense, lazy, useMemo } from 'react';
+import { useState, useRef, Suspense, lazy, useMemo, useEffect } from 'react';
 import DropDownInline from '../common-ui/DropDownInline';
 // import { useFocusModeStore } from '@/stores/focusModeStore';
 import { useMobile } from '@/hooks/useMobile';
@@ -30,6 +30,7 @@ export default function LinkCard({
   // const { isFocusMode } = useFocusModeStore();
   const isMobile = useMobile();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Memo 조회
   const memoParams = useMemo(
@@ -46,6 +47,15 @@ export default function LinkCard({
   );
 
   const { data: memo } = useFetchMemo(memoParams);
+
+  // 컴포넌트 언마운트 시 타임아웃 정리
+  useEffect(() => {
+    return () => {
+      if (closeTimeoutRef.current) {
+        clearTimeout(closeTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleCardClick = (e: React.MouseEvent) => {
     // 드롭다운이나 버튼 영역인지 확인
@@ -74,11 +84,24 @@ export default function LinkCard({
   };
 
   const handleMoreEnter = () => {
-    if (!isMobile) setIsDropDownInline(true);
+    if (!isMobile) {
+      // 기존 타임아웃 클리어
+      if (closeTimeoutRef.current) {
+        clearTimeout(closeTimeoutRef.current);
+        closeTimeoutRef.current = null;
+      }
+      setIsDropDownInline(true);
+    }
   };
 
   const handleMoreLeave = () => {
-    if (!isMobile) setIsDropDownInline(false);
+    if (!isMobile) {
+      // 약간의 지연을 주어 드롭다운으로 마우스 이동 시간 확보
+      closeTimeoutRef.current = setTimeout(() => {
+        setIsDropDownInline(false);
+        closeTimeoutRef.current = null;
+      }, 200);
+    }
   };
 
   // Memo 생성
@@ -311,7 +334,7 @@ export default function LinkCard({
 
             {/* 투명 브릿지: 버튼 → 드롭다운으로 이동할 때 닫힘 방지 */}
             {!isMobile && isDropDownInline && (
-              <div className="absolute top-[28px] right-0 h-3 w-[80px]" />
+              <div className="absolute top-[28px] right-0 h-8 w-[180px]" />
             )}
           </div>
         </div>
@@ -377,6 +400,7 @@ export default function LinkCard({
                   type="link"
                   initialTitle={item.linkName}
                   initialLink={item.linkUrl}
+                  memoData={memo || undefined}
                   onMemoClick={() => setIsMemoModalOpen(true)}
                   className="!top-[84px] !right-3"
                   isDropDownInline={isDropDownInline}
