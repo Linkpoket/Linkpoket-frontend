@@ -9,6 +9,7 @@ import { useTransferFolder } from '@/hooks/mutations/useTransferFolder';
 import toast from 'react-hot-toast';
 import { DeleteModalSkeleton } from '../skeleton/DeleteModalSkeleton';
 import { useUpdateTitle } from '@/hooks/useUpdateTitle';
+import { MemoResponse } from '@/types/memos';
 
 const FolderTransferModal = lazy(
   () => import('../modal/folder/FolderTransferModal')
@@ -24,6 +25,8 @@ type DropDownInlineProps = {
   type: 'folder' | 'link' | 'file';
   initialTitle: string;
   initialLink?: string;
+  memoData?: MemoResponse | null;
+  onMemoClick?: () => void;
   onTitleChange?: (id: string, title: string) => void;
   onLinkChange?: (id: string, link: string) => void;
   className?: string;
@@ -36,6 +39,8 @@ const DropDownInline = ({
   type,
   initialTitle = '',
   initialLink = '',
+  memoData,
+  onMemoClick,
   onLinkChange,
   setIsDropDownInline,
   className = '',
@@ -48,6 +53,41 @@ const DropDownInline = ({
   });
 
   const { pageId } = usePageStore();
+
+  // 날짜 포맷팅 함수
+  const formatDate = (dateString: string) => {
+    if (!dateString) return '';
+    try {
+      const dateMatch = dateString.match(
+        /^(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2})/
+      );
+      if (!dateMatch) return dateString;
+
+      const [, year, month, day, hour, minute] = dateMatch;
+      const date = new Date(
+        parseInt(year),
+        parseInt(month) - 1,
+        parseInt(day),
+        parseInt(hour),
+        parseInt(minute)
+      );
+
+      const now = new Date();
+      const diffMs = now.getTime() - date.getTime();
+      const diffMins = Math.floor(diffMs / (1000 * 60));
+      const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+      if (diffMins < 1) return '방금 전';
+      if (diffMins < 60) return `${diffMins}분 전`;
+      if (diffHours < 24) return `${diffHours}시간 전`;
+      if (diffDays < 7) return `${diffDays}일 전`;
+
+      return `${year}-${month}-${day}`;
+    } catch (error) {
+      return dateString;
+    }
+  };
 
   const [isFolderDeleteOpen, setIsFolderDeleteOpen] = useState(false);
   const [isLinkDeleteOpen, setIsLinkDeleteOpen] = useState(false);
@@ -158,6 +198,30 @@ const DropDownInline = ({
             className="border-gray-20 mb-2 rounded-lg border px-[8px] py-[11px] outline-none"
           />
 
+          {/* 메모 미리보기 */}
+          {memoData?.content ? (
+            <div className="border-gray-20 mb-2 flex flex-col gap-2 rounded-lg border px-[8px] py-[11px] text-left">
+              <p
+                className="text-gray-90 overflow-y-auto text-left text-[13px] leading-relaxed font-[400] break-words whitespace-pre-wrap"
+                style={{
+                  maxHeight: '4.5em', // 세 줄 기준 (13px * 1.5 * 3)
+                  lineHeight: '1.5em',
+                }}
+              >
+                {memoData.content}
+              </p>
+              <div className="text-left text-[11px] text-gray-50">
+                {memoData.memberNickname} · {formatDate(memoData.createdDate)}
+              </div>
+            </div>
+          ) : (
+            <div className="border-gray-20 mb-2 rounded-lg border px-[8px] py-[11px] text-left">
+              <div className="text-left text-[13px] font-[400] text-gray-50">
+                메모가 없습니다
+              </div>
+            </div>
+          )}
+
           <button
             onClick={handleTransferClick}
             className="flex cursor-pointer items-center gap-[10px] px-[8px] py-[11px]"
@@ -170,6 +234,20 @@ const DropDownInline = ({
           >
             <Copy width={18} height={18} /> 복사하기
           </button>
+          {onMemoClick && (
+            <button
+              onClick={() => {
+                onMemoClick();
+                setIsDropDownInline(false);
+              }}
+              className="flex cursor-pointer items-center gap-[10px] px-[8px] py-[11px]"
+            >
+              <span className="flex h-[18px] w-[18px] items-center justify-center text-[16px] leading-none">
+                ✎
+              </span>
+              메모하기
+            </button>
+          )}
           <button
             onClick={handleFolderDeleteOpen}
             className="text-status-danger flex cursor-pointer items-center gap-[10px] px-[8px] py-[11px]"
@@ -204,12 +282,27 @@ const DropDownInline = ({
               placeholder="사이트명 입력"
               className="border-gray-20 border-b p-[12px] outline-none"
             />
-            <textarea
-              value={link}
-              onChange={handleLinkChange}
-              placeholder="링크를 입력하세요"
-              className="text-gray-60 resize-none p-[12px] text-[13px] font-[400] outline-none"
-            />
+            {/* 메모 미리보기 */}
+            {memoData?.content ? (
+              <div className="flex flex-col gap-2 p-[12px] text-left">
+                <p
+                  className="text-gray-90 overflow-y-auto text-left text-[13px] leading-relaxed font-[400] break-words whitespace-pre-wrap"
+                  style={{
+                    maxHeight: '4.5em', // 세 줄 기준 (13px * 1.5 * 3)
+                    lineHeight: '1.5em',
+                  }}
+                >
+                  {memoData.content}
+                </p>
+                <div className="text-left text-[11px] text-gray-50">
+                  {memoData.memberNickname} · {formatDate(memoData.createdDate)}
+                </div>
+              </div>
+            ) : (
+              <div className="p-[12px] text-left text-[13px] font-[400] text-gray-50">
+                메모가 없습니다
+              </div>
+            )}
           </div>
 
           <button
@@ -218,6 +311,20 @@ const DropDownInline = ({
           >
             <Copy width={18} height={18} /> 복사하기
           </button>
+          {onMemoClick && (
+            <button
+              onClick={() => {
+                onMemoClick();
+                setIsDropDownInline(false);
+              }}
+              className="flex cursor-pointer items-center gap-[10px] px-[12px] py-[11px]"
+            >
+              <span className="flex h-[18px] w-[18px] items-center justify-center text-[16px] leading-none">
+                ✎
+              </span>
+              메모하기
+            </button>
+          )}
 
           <button
             onClick={handleLinkDeleteOpen}

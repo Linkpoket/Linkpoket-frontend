@@ -1,13 +1,23 @@
+import { cn } from '@/utils/cn';
+
 interface MemoButtonProps {
   hasMemo: boolean;
   onClick: () => void;
+  className?: string;
 }
 
-export default function MemoButton({ hasMemo, onClick }: MemoButtonProps) {
+export default function MemoButton({
+  hasMemo,
+  onClick,
+  className,
+}: MemoButtonProps) {
   return (
     <button
       data-card-button
-      className="absolute top-[34px] right-3 z-10 flex cursor-pointer items-center justify-center"
+      className={cn(
+        'absolute top-[34px] right-3 z-10 flex cursor-pointer items-center justify-center',
+        className
+      )}
       onClick={(e) => {
         e.stopPropagation();
         onClick();

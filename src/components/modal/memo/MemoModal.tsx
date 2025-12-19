@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { Textarea } from '@/components/common-ui/Textarea';
 import ModalClose from '@assets/common-ui-assets/ModalClose.svg?react';
 import { MemoResponse } from '@/types/memos';
+import { useFolderColorStore } from '@/stores/folderColorStore';
 
 interface MemoModalProps {
   isOpen: boolean;
@@ -23,6 +24,8 @@ export default function MemoModal({
 }: MemoModalProps) {
   const [memo, setMemo] = useState(initialMemo);
   const modalRef = useRef<HTMLDivElement>(null);
+  const { getCurrentColor } = useFolderColorStore();
+  const currentFolderColor = getCurrentColor();
 
   useEffect(() => {
     setMemo(initialMemo);
@@ -124,7 +127,19 @@ export default function MemoModal({
             value={memo}
             onChange={(e) => setMemo(e.target.value)}
             placeholder="메모를 입력하세요..."
-            className="min-h-[100px] w-full resize-none text-sm"
+            className="min-h-[100px] w-full resize-none text-left text-sm transition-all focus:ring-2"
+            style={{
+              borderColor: currentFolderColor.previewColor,
+              textAlign: 'left',
+            }}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor =
+                currentFolderColor.previewColor;
+              e.currentTarget.style.boxShadow = `0 0 0 2px ${currentFolderColor.previewColor}40`;
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.boxShadow = '';
+            }}
             autoFocus
           />
         </div>
