@@ -200,17 +200,23 @@ const DropDownInline = ({
 
           {/* 메모 미리보기 */}
           {memoData?.content ? (
-            <div className="border-gray-20 mb-2 flex flex-col gap-2 rounded-lg border px-[8px] py-[11px]">
-              <p className="text-gray-90 text-[13px] font-[400] break-words whitespace-pre-wrap">
+            <div className="border-gray-20 mb-2 flex flex-col gap-2 rounded-lg border px-[8px] py-[11px] text-left">
+              <p
+                className="text-gray-90 overflow-y-auto text-left text-[13px] leading-relaxed font-[400] break-words whitespace-pre-wrap"
+                style={{
+                  maxHeight: '4.5em', // 세 줄 기준 (13px * 1.5 * 3)
+                  lineHeight: '1.5em',
+                }}
+              >
                 {memoData.content}
               </p>
-              <div className="text-[11px] text-gray-50">
+              <div className="text-left text-[11px] text-gray-50">
                 {memoData.memberNickname} · {formatDate(memoData.createdDate)}
               </div>
             </div>
           ) : (
-            <div className="border-gray-20 mb-2 rounded-lg border px-[8px] py-[11px]">
-              <div className="text-[13px] font-[400] text-gray-50">
+            <div className="border-gray-20 mb-2 rounded-lg border px-[8px] py-[11px] text-left">
+              <div className="text-left text-[13px] font-[400] text-gray-50">
                 메모가 없습니다
               </div>
             </div>
@@ -278,16 +284,22 @@ const DropDownInline = ({
             />
             {/* 메모 미리보기 */}
             {memoData?.content ? (
-              <div className="flex flex-col gap-2 p-[12px]">
-                <p className="text-gray-90 text-[13px] font-[400] break-words whitespace-pre-wrap">
+              <div className="flex flex-col gap-2 p-[12px] text-left">
+                <p
+                  className="text-gray-90 overflow-y-auto text-left text-[13px] leading-relaxed font-[400] break-words whitespace-pre-wrap"
+                  style={{
+                    maxHeight: '4.5em', // 세 줄 기준 (13px * 1.5 * 3)
+                    lineHeight: '1.5em',
+                  }}
+                >
                   {memoData.content}
                 </p>
-                <div className="text-[11px] text-gray-50">
+                <div className="text-left text-[11px] text-gray-50">
                   {memoData.memberNickname} · {formatDate(memoData.createdDate)}
                 </div>
               </div>
             ) : (
-              <div className="p-[12px] text-[13px] font-[400] text-gray-50">
+              <div className="p-[12px] text-left text-[13px] font-[400] text-gray-50">
                 메모가 없습니다
               </div>
             )}
