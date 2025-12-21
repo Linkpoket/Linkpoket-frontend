@@ -5,7 +5,7 @@ export default async function updateSharedPageInvitation(
   data: UpdateSharedPageInvitationData
 ) {
   try {
-    console.log('📤 공유 페이지 초대 요청 전송:', {
+    console.log('공유 페이지 초대 요청 전송:', {
       url: '/api/dispatch/share-page-invitations',
       data,
     });
@@ -15,10 +15,10 @@ export default async function updateSharedPageInvitation(
       data
     );
 
-    console.log('✅ 공유 페이지 초대 요청 성공:', response.data);
+    console.log('공유 페이지 초대 요청 성공:', response.data);
     return response.data;
   } catch (error: any) {
-    console.error('❌ 공유 페이지 초대 업데이트 실패:', {
+    console.error('공유 페이지 초대 업데이트 실패:', {
       error,
       response: error?.response,
       status: error?.response?.status,
