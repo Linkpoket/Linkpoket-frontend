@@ -8,12 +8,10 @@
 export const formatDate = (dateString: string): string => {
   if (!dateString) return '';
   try {
-    // "yyyy-MM-dd HH:mm" 형식을 파싱 (예: "2024-01-15 14:30")
     const dateMatch = dateString.match(
       /^(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2})/
     );
     if (!dateMatch) {
-      // 다른 형식이면 그대로 반환
       return dateString;
     }
 
@@ -37,7 +35,6 @@ export const formatDate = (dateString: string): string => {
     if (diffHours < 24) return `${diffHours}시간 전`;
     if (diffDays < 7) return `${diffDays}일 전`;
 
-    // 7일 이상이면 날짜 표시 (yyyy-MM-dd 형식)
     return `${year}-${month}-${day}`;
   } catch (error) {
     return dateString;
