@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import { DeleteModalSkeleton } from '../skeleton/DeleteModalSkeleton';
 import { useUpdateTitle } from '@/hooks/useUpdateTitle';
 import { MemoResponse } from '@/types/memos';
+import { formatDate } from '@/utils/formatDate';
 
 const FolderTransferModal = lazy(
   () => import('../modal/folder/FolderTransferModal')
@@ -54,48 +55,15 @@ const DropDownInline = ({
 
   const { pageId } = usePageStore();
 
-  // 날짜 포맷팅 함수
-  const formatDate = (dateString: string) => {
-    if (!dateString) return '';
-    try {
-      const dateMatch = dateString.match(
-        /^(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2})/
-      );
-      if (!dateMatch) return dateString;
-
-      const [, year, month, day, hour, minute] = dateMatch;
-      const date = new Date(
-        parseInt(year),
-        parseInt(month) - 1,
-        parseInt(day),
-        parseInt(hour),
-        parseInt(minute)
-      );
-
-      const now = new Date();
-      const diffMs = now.getTime() - date.getTime();
-      const diffMins = Math.floor(diffMs / (1000 * 60));
-      const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-      if (diffMins < 1) return '방금 전';
-      if (diffMins < 60) return `${diffMins}분 전`;
-      if (diffHours < 24) return `${diffHours}시간 전`;
-      if (diffDays < 7) return `${diffDays}일 전`;
-
-      return `${year}-${month}-${day}`;
-    } catch (error) {
-      return dateString;
-    }
-  };
-
   const [isFolderDeleteOpen, setIsFolderDeleteOpen] = useState(false);
   const [isLinkDeleteOpen, setIsLinkDeleteOpen] = useState(false);
   const [isFileDeleteOpen, setIsFileDeleteOpen] = useState(false);
 
-  const { openTransferFolderModal } = useModalStore();
-  const { isTransferFolderModalOpen, closeTransferFolderModal } =
-    useModalStore();
+  const {
+    openTransferFolderModal,
+    isTransferFolderModalOpen,
+    closeTransferFolderModal,
+  } = useModalStore();
 
   const { mutate: transferFolder } = useTransferFolder({
     onSuccess: (data) => {
@@ -224,13 +192,13 @@ const DropDownInline = ({
 
           <button
             onClick={handleTransferClick}
-            className="flex cursor-pointer items-center gap-[10px] px-[8px] py-[11px]"
+            className="hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-[8px] py-[11px] transition-colors"
           >
             <Transfer width={18} height={18} /> 전송하기
           </button>
           <button
             onClick={handleCopyClick}
-            className="flex cursor-pointer items-center gap-[10px] px-[8px] py-[11px]"
+            className="hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-[8px] py-[11px] transition-colors"
           >
             <Copy width={18} height={18} /> 복사하기
           </button>
@@ -240,7 +208,7 @@ const DropDownInline = ({
                 onMemoClick();
                 setIsDropDownInline(false);
               }}
-              className="flex cursor-pointer items-center gap-[10px] px-[8px] py-[11px]"
+              className="hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-[8px] py-[11px] transition-colors"
             >
               <span className="flex h-[18px] w-[18px] items-center justify-center text-[16px] leading-none">
                 ✎
@@ -250,7 +218,7 @@ const DropDownInline = ({
           )}
           <button
             onClick={handleFolderDeleteOpen}
-            className="text-status-danger flex cursor-pointer items-center gap-[10px] px-[8px] py-[11px]"
+            className="hover:bg-gray-10 active:bg-gray-5 text-status-danger flex cursor-pointer items-center gap-[10px] rounded-lg px-[8px] py-[11px] transition-colors"
           >
             <Delete width={18} height={18} /> 삭제하기
           </button>
@@ -307,7 +275,7 @@ const DropDownInline = ({
 
           <button
             onClick={handleCopyClick}
-            className="flex cursor-pointer items-center gap-[10px] px-[12px] py-[11px]"
+            className="hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-[12px] py-[11px] transition-colors"
           >
             <Copy width={18} height={18} /> 복사하기
           </button>
@@ -317,7 +285,7 @@ const DropDownInline = ({
                 onMemoClick();
                 setIsDropDownInline(false);
               }}
-              className="flex cursor-pointer items-center gap-[10px] px-[12px] py-[11px]"
+              className="hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-[12px] py-[11px] transition-colors"
             >
               <span className="flex h-[18px] w-[18px] items-center justify-center text-[16px] leading-none">
                 ✎
@@ -328,7 +296,7 @@ const DropDownInline = ({
 
           <button
             onClick={handleLinkDeleteOpen}
-            className="text-status-danger flex cursor-pointer items-center gap-[10px] p-[12px]"
+            className="hover:bg-gray-10 active:bg-gray-5 text-status-danger flex cursor-pointer items-center gap-[10px] rounded-lg p-[12px] transition-colors"
           >
             <Delete width={18} height={18} /> 삭제하기
           </button>
@@ -360,14 +328,14 @@ const DropDownInline = ({
 
           <button
             onClick={handleCopyClick}
-            className="flex cursor-pointer items-center gap-[10px] px-[12px] py-[11px]"
+            className="hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-[12px] py-[11px] transition-colors"
           >
             <Copy width={18} height={18} /> 복사하기
           </button>
 
           <button
             onClick={handleFileDeleteOpen}
-            className="text-status-danger flex cursor-pointer items-center gap-[10px] p-[12px]"
+            className="hover:bg-gray-10 active:bg-gray-5 text-status-danger flex cursor-pointer items-center gap-[10px] rounded-lg p-[12px] transition-colors"
           >
             <Delete width={18} height={18} /> 삭제하기
           </button>

@@ -1,18 +1,17 @@
-import InactiveBookmarkIcon from '@/assets/common-ui-assets/InactiveBookmark.svg?react';
-import ActiveBookmarkIcon from '@/assets/common-ui-assets/ActiveBookmark.svg?react';
-import CardMenu from '@/assets/widget-ui-assets/CardMenu.svg?react';
-import { LinkDetail } from '@/types/links';
-import useUpdateLinkBookmark from '@/hooks/mutations/useUpdateLinkBookmark';
-import { usePageStore } from '@/stores/pageStore';
 import { useState, useRef, Suspense, lazy, useMemo, useEffect } from 'react';
-import DropDownInline from '../common-ui/DropDownInline';
-// import { useFocusModeStore } from '@/stores/focusModeStore';
+import { LinkDetail } from '@/types/links';
+import { usePageStore } from '@/stores/pageStore';
 import { useMobile } from '@/hooks/useMobile';
-import LinkLogo from '../common-ui/LinkLogo';
-import { DropDownInlineSkeleton } from '../skeleton/DropdownInlineSkeleton';
+import useUpdateLinkBookmark from '@/hooks/mutations/useUpdateLinkBookmark';
 import { useFetchMemo } from '@/hooks/queries/useFetchMemo';
 import { useCreateMemo } from '@/hooks/mutations/useCreateMemo';
 import { useDeleteMemo } from '@/hooks/mutations/useDeleteMemo';
+import DropDownInline from '../common-ui/DropDownInline';
+import LinkLogo from '../common-ui/LinkLogo';
+import { DropDownInlineSkeleton } from '../skeleton/DropdownInlineSkeleton';
+import InactiveBookmarkIcon from '@/assets/common-ui-assets/InactiveBookmark.svg?react';
+import ActiveBookmarkIcon from '@/assets/common-ui-assets/ActiveBookmark.svg?react';
+import CardMenu from '@/assets/widget-ui-assets/CardMenu.svg?react';
 import MoreIcon from '@/assets/common-ui-assets/더보기.png';
 
 const MemoModal = lazy(() => import('../modal/memo/MemoModal'));
