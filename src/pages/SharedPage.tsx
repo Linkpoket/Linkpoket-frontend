@@ -5,7 +5,7 @@ import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useMobile } from '@/hooks/useMobile';
 import { getPageDataLength } from '@/utils/getPageDataLength';
 import { PageLayout } from '@/components/common-ui/PageLayout';
-import ScrollToTopButton from '@/components/common-ui/ScrollToTopButton';
+import FloatingActionBox from '@/components/common-ui/FloatingActionBox';
 import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 const SharedPageFolderContentSection = lazy(
@@ -71,8 +71,8 @@ export default function SharedPage() {
           isMobile={isMobile}
           pageImageUrl={pageImage}
         />
-        <ScrollToTopButton />
       </PageLayout>
+      <FloatingActionBox />
     </>
   );
 }

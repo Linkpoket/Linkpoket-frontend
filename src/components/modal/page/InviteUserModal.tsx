@@ -61,34 +61,62 @@ const InviteUserModal = ({ isOpen, onClose, pageId }: InviteUserModalProps) => {
     pageId,
     onSuccess: () => {
       toast.success('초대 요청이 완료되었습니다.');
+      setEmail('');
+      setRole('VIEWER');
+      setButtonStatus('초대');
       onClose();
     },
-    onError: (error) => {
-      toast.error(
-        error instanceof Error ? error.message : '초대 요청이 실패했습니다.'
-      );
+    onError: (error: any) => {
+      // 에러 메시지 추출
+      const errorMessage =
+        error?.response?.data?.message ||
+        error?.errorData?.detail ||
+        error?.errorData?.title ||
+        error?.message ||
+        '초대 요청이 실패했습니다.';
+
+      console.error('공유 페이지 초대 에러:', error);
+      toast.error(errorMessage);
+      setButtonStatus('초대'); // 에러 발생 시 버튼 상태 리셋
     },
   });
 
   const handleInvite = () => {
-    if (!email) return;
+    if (!email.trim()) {
+      toast.error('이메일을 입력해주세요.');
+      return;
+    }
+
+    // 이메일 형식 간단 검증
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error('올바른 이메일 형식을 입력해주세요.');
+      return;
+    }
 
     const requestBody: UpdateSharedPageInvitationData = {
       baseRequest: {
         pageId,
         commandType: 'SHARED_PAGE_INVITATION',
       },
-      receiverEmail: email,
+      receiverEmail: email.trim(),
       permissionType: role,
     };
 
     updateSharedPageInvitation.mutate(requestBody);
-
     setButtonStatus('완료');
   };
 
+  // 모달이 닫힐 때 상태 초기화
+  const handleClose = () => {
+    setEmail('');
+    setRole('VIEWER');
+    setButtonStatus('초대');
+    onClose();
+  };
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} className="p-[24px]">
+    <Modal isOpen={isOpen} onClose={handleClose} className="p-[24px]">
       <Modal.Header>멤버 초대</Modal.Header>
       <div>
         <div className="flex items-center gap-4">
@@ -104,7 +132,9 @@ const InviteUserModal = ({ isOpen, onClose, pageId }: InviteUserModalProps) => {
             variant="primary"
             className="h-[44px] w-[64px] text-[17px] font-bold"
             onClick={handleInvite}
-            disabled={buttonStatus === '완료'}
+            disabled={
+              buttonStatus === '완료' || updateSharedPageInvitation.isPending
+            }
           >
             {buttonStatus}
           </Button>

@@ -3,10 +3,11 @@ import { z } from 'zod';
 // FolderDetail 스키마
 export const folderDetailSchema = z.object({
   isFavorite: z.boolean(),
-  orderIndex: z.number(),
+  orderIndex: z.number().optional(),
   createdDate: z.string(),
   folderId: z.string(),
   folderName: z.string(),
+  pageId: z.string().optional(), // 북마크 폴더의 경우 pageId 포함
 });
 
 // LinkDetail 스키마

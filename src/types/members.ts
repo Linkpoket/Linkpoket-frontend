@@ -43,6 +43,7 @@ interface PersonalUserInfoResponseContent {
   nickName: string;
   colorCode: string;
   foldeerColorCode: string;
+  totalFileSizeGB?: number;
 }
 
 export type PersonalUserInfoResponse =

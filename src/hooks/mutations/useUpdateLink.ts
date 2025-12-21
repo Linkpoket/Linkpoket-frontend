@@ -22,42 +22,65 @@ export function useUpdateLink(
     mutationFn: updateLink,
 
     onSuccess: (response, variables, context) => {
+      // favorite 쿼리 무효화 및 리페치
       queryClient.invalidateQueries({
         queryKey: ['favorite'],
       });
 
-      if (!isFolderPage && isSharedPage) {
+      // folderDetails 쿼리 무효화 및 리페치 (exact: false로 모든 관련 쿼리 무효화)
+      queryClient.invalidateQueries({
+        queryKey: ['folderDetails'],
+        exact: false,
+      });
+
+      // 공유 페이지 무효화 및 리페치
+      if (isSharedPage && !isFolderPage) {
         queryClient.invalidateQueries({
           queryKey: ['sharedPage', variables.baseRequest.pageId],
         });
       }
 
-      if (isFolderPage) {
-        queryClient.invalidateQueries({
-          queryKey: ['folderDetails', variables.baseRequest.pageId],
-        });
-      }
-
-      if (isMainPage) {
+      // 개인 페이지 무효화 및 리페치 (폴더 페이지인 경우도 포함)
+      if (isMainPage || isFolderPage) {
         queryClient.invalidateQueries({
           queryKey: ['personalPage'],
         });
       }
 
+      // 북마크 페이지 무효화 및 리페치
       if (isBookmarksPage) {
         queryClient.invalidateQueries({
           queryKey: ['favorite'],
         });
         queryClient.invalidateQueries({
-          queryKey: ['folderDetails', variables.baseRequest.pageId],
+          queryKey: ['folderDetails'],
+          exact: false,
         });
         queryClient.invalidateQueries({
-          queryKey: ['sharedPage', variables.baseRequest.pageId],
+          queryKey: ['sharedPage'],
+          exact: false,
         });
         queryClient.invalidateQueries({
           queryKey: ['personalPage'],
         });
       }
+
+      // 모든 관련 쿼리를 즉시 리페치
+      queryClient.refetchQueries({
+        queryKey: ['personalPage'],
+      });
+      queryClient.refetchQueries({
+        queryKey: ['sharedPage'],
+        exact: false,
+      });
+      queryClient.refetchQueries({
+        queryKey: ['folderDetails'],
+        exact: false,
+      });
+      queryClient.refetchQueries({
+        queryKey: ['favorite'],
+      });
+
       if (options?.onSuccess) {
         options.onSuccess(response, variables, context);
       }

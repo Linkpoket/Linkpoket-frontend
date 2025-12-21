@@ -20,10 +20,18 @@ export default function ReissuePage() {
         );
         const sseToken = response.data?.data?.value;
 
-        const isNewUser = new URL(redirectUrl).pathname === '/signup';
+        // redirectUrl이 없거나 파싱 실패 시 안전하게 처리
+        let isNewUser = false;
+        if (redirectUrl) {
+          try {
+            isNewUser = new URL(redirectUrl).pathname === '/signup';
+          } catch (e) {
+            // redirectUrl 파싱 실패 시 기본값 유지
+          }
+        }
 
         if (isNewUser) {
-          // 신규 회원: 임시 토큰으로 저장 (useAuth가 인식 안 함)
+          localStorage.removeItem('access_token');
           if (accessToken) {
             localStorage.setItem('temp_access_token', accessToken);
           }
@@ -42,7 +50,6 @@ export default function ReissuePage() {
           window.location.href = '/home';
         }
       } catch (error) {
-        console.error(error);
         window.location.href = '/login';
       }
     };

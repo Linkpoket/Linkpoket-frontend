@@ -59,6 +59,9 @@ export function useAuth() {
   // 로그아웃 함수
   const logout = () => {
     localStorage.removeItem('access_token');
+    localStorage.removeItem('sse_token');
+    localStorage.removeItem('temp_access_token');
+    localStorage.removeItem('temp_sse_token');
     delete axiosInstance.defaults.headers.common['Authorization'];
     setIsAuthenticated(false);
   };

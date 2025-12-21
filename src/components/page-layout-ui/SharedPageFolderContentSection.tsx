@@ -6,9 +6,14 @@ import { SortablePageItem } from '../common-ui/SortablePageItem';
 import { useModalStore } from '@/stores/modalStore';
 import { useSearchStore } from '@/stores/searchStore';
 import useUpdateDragandDrop from '@/hooks/mutations/useUpdateDragandDrop';
-import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
+import {
+  usePageStore,
+  useParentsFolderIdStore,
+  useFileListViewStore,
+} from '@/stores/pageStore';
 import { LinkDetail } from '@/types/links';
 import { FolderDetail } from '@/types/folders';
+import { FileResponse } from '@/types/files';
 import { AddLinkModalSkeleton } from '../skeleton/AddLinkModalSkeleton';
 import { handlePageDataSort } from '@/utils/handlePageDataSort';
 import { usePageDragAndDrop } from '@/hooks/usePageDragAndDrop';
@@ -16,9 +21,15 @@ import { useDragAndDropSensors } from '@/utils/dragAndDrop';
 import MobileFolderCard from '../folder-card/mobile/MobileFolderCard';
 import MobileFolderCardAddButton from '../folder-card/mobile/MobileFolderCardAddButton';
 import MobileLinkCardButton from '../link-card/mobile/MobileLinkCardButton';
+import { useQuery } from '@tanstack/react-query';
+import {
+  fetchFilesByPageId,
+  fetchFilesByFolderId,
+} from '@/apis/file-apis/fetchFiles';
 
 const AddLinkModal = lazy(() => import('../modal/link/AddLinkModal'));
 const AddFolderModal = lazy(() => import('../modal/folder/AddFolderModal'));
+const AddFileModal = lazy(() => import('../modal/file/AddFileModal'));
 
 export default function SharedPageFolderContentSection({
   folderData = [],
@@ -32,6 +43,8 @@ export default function SharedPageFolderContentSection({
     closeLinkModal,
     isFolderModalOpen,
     closeFolderModal,
+    isFileModalOpen,
+    closeFileModal,
   } = useModalStore();
 
   // 검색 스토어 구독
@@ -40,6 +53,26 @@ export default function SharedPageFolderContentSection({
 
   const { pageId } = usePageStore();
   const { parentsFolderId } = useParentsFolderIdStore();
+  const { showFilesOnly } = useFileListViewStore();
+
+  // 파일 데이터 fetch
+  const { data: fileData = [] } = useQuery<FileResponse[]>({
+    queryKey: ['files', pageId, parentsFolderId],
+    queryFn: () => {
+      if (parentsFolderId && pageId) {
+        return fetchFilesByFolderId({
+          pageId,
+          folderId: parentsFolderId,
+          commandType: 'VIEW',
+          sortType: 'BASIC',
+        });
+      } else if (pageId) {
+        return fetchFilesByPageId(pageId, 'VIEW', 'BASIC');
+      }
+      return [];
+    },
+    enabled: !!pageId,
+  });
 
   const updateDragAndDropMutation = useUpdateDragandDrop({
     baseRequest: {
@@ -53,7 +86,9 @@ export default function SharedPageFolderContentSection({
     fromFolderId: '',
   });
 
-  const [pageData, setPageData] = useState<(FolderDetail | LinkDetail)[]>([]);
+  const [pageData, setPageData] = useState<
+    (FolderDetail | LinkDetail | FileResponse)[]
+  >([]);
 
   useEffect(() => {
     if (searchKeyword && searchResult) {
@@ -65,11 +100,28 @@ export default function SharedPageFolderContentSection({
       setPageData(sortedData);
     } else {
       // 일반 모드
-      const combinedData = [...folderData, ...linkData];
+      let combinedData: (FolderDetail | LinkDetail | FileResponse)[];
+
+      if (showFilesOnly) {
+        // 파일만 표시
+        combinedData = [...fileData];
+      } else {
+        // 링크/폴더만 표시
+        combinedData = [...folderData, ...linkData];
+      }
+
       const sortedData = handlePageDataSort(combinedData, sortType);
       setPageData(sortedData);
     }
-  }, [folderData, linkData, sortType, searchKeyword, searchResult]);
+  }, [
+    folderData,
+    linkData,
+    fileData,
+    sortType,
+    searchKeyword,
+    searchResult,
+    showFilesOnly,
+  ]);
 
   // 정렬된 pageData에서 폴더와 링크 분리
   const sortedFolderData = pageData.filter(
@@ -106,7 +158,11 @@ export default function SharedPageFolderContentSection({
       >
         <SortableContext
           items={pageData.map((item) =>
-            'folderId' in item ? item.folderId : item.linkId
+            'folderId' in item
+              ? item.folderId
+              : 'fileId' in item
+                ? item.fileId
+                : item.linkId
           )}
           strategy={rectSwappingStrategy}
         >
@@ -156,12 +212,15 @@ export default function SharedPageFolderContentSection({
                     : '데이터가 없습니다.'}
                 </div>
               ) : (
-                pageData.map((item) => (
-                  <SortablePageItem
-                    key={'folderId' in item ? item.folderId : item.linkId}
-                    item={item}
-                  />
-                ))
+                pageData.map((item) => {
+                  const itemId =
+                    'folderId' in item
+                      ? item.folderId
+                      : 'fileId' in item
+                        ? item.fileId
+                        : item.linkId;
+                  return <SortablePageItem key={itemId} item={item} />;
+                })
               )}
             </div>
           )}
@@ -180,6 +239,11 @@ export default function SharedPageFolderContentSection({
             isOpen={isFolderModalOpen}
             onClose={closeFolderModal}
           />
+        </Suspense>
+      )}
+      {isFileModalOpen && (
+        <Suspense fallback={<AddLinkModalSkeleton />}>
+          <AddFileModal isOpen={isFileModalOpen} onClose={closeFileModal} />
         </Suspense>
       )}
     </div>

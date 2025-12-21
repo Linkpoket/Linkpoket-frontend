@@ -37,7 +37,9 @@ export type CreateLinkData = WithBaseRequest<
   }
 >;
 
-export type UpdateLinkData = WithBaseRequest<LinkBaseFields & LinkIdentity>;
+export type UpdateLinkData = WithBaseRequest<
+  LinkBaseFields & LinkIdentity & { description?: string }
+>;
 
 export type DeleteLinkData = WithBaseRequest<LinkIdentity>;
 
