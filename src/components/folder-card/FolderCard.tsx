@@ -40,17 +40,6 @@ export default function FolderCard({
     pageId: pageId as string,
   });
 
-  // 폴더 상세 정보를 가져와서 링크 정보 추출 (유효한 folderId일 때만)
-  // const requestParams = {
-  //   pageId: pageId || '',
-  //   commandType: 'VIEW',
-  //   folderId: folderId || '',
-  //   sortType: 'BASIC',
-  // };
-
-  // const { data: folderDetailsData } = useFetchFolderDetails(requestParams);
-  // const linkData = folderDetailsData?.linkDetailResponses || [];
-
   const getFolderLink = (folderId: string) => {
     const currentPath = location.pathname;
     if (currentPath.startsWith('/shared/')) {
@@ -84,9 +73,6 @@ export default function FolderCard({
     setIsDropDownInline((v) => !v);
   };
 
-  // 링크 데이터 사용 (상위 3개만)
-  // const displayLinks = linkData.slice(0, 3);
-
   return (
     <div
       // 바깥 컨테이너 투명 처리
@@ -106,8 +92,8 @@ export default function FolderCard({
         {/* 폴더 배경 */}
         <FolderBackground backgroundColor={currentFolderColor.gradient} />
 
-        {/* 폴더 내부 링크들 */}
-        <LinksInFolder displayLinks={[]} />
+        {/* 폴더 내부 링크들 // create 즉시 fetch에 대한 문제로 파비콘으로서 사용 */}
+        <LinksInFolder />
 
         {/* Front pocket (투명도 적용) */}
         <FolderPocket backgroundColor={currentFolderColor.gradient} />

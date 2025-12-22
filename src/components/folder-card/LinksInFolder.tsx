@@ -2,12 +2,9 @@ import { useMobile } from '@/hooks/useMobile';
 import LinkLogo from '@/components/common-ui/LinkLogo';
 import { LinkDetail } from '@/types/links';
 
-interface LinksInFolderProps {
-  displayLinks: LinkDetail[];
-}
-
-export default function LinksInFolder({ displayLinks }: LinksInFolderProps) {
+export default function LinksInFolder({}) {
   const isMobile = useMobile();
+  const displayLinks: LinkDetail[] = [];
 
   return (
     <>
