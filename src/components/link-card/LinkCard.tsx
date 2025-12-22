@@ -12,7 +12,7 @@ import { DropDownInlineSkeleton } from '../skeleton/DropdownInlineSkeleton';
 import InactiveBookmarkIcon from '@/assets/common-ui-assets/InactiveBookmark.svg?react';
 import ActiveBookmarkIcon from '@/assets/common-ui-assets/ActiveBookmark.svg?react';
 import CardMenu from '@/assets/widget-ui-assets/CardMenu.svg?react';
-import MoreIcon from '@/assets/common-ui-assets/더보기.png';
+import MoreIcon from '@/assets/common-ui-assets/More.png';
 
 const MemoModal = lazy(() => import('../modal/memo/MemoModal'));
 
@@ -248,7 +248,7 @@ export default function LinkCard({
   return (
     <>
       <div
-        className={`group relative flex ${isMobile ? 'h-[170px]' : 'h-[242px]'} flex-col items-center gap-4 overflow-visible p-[16px] hover:cursor-pointer ${
+        className={`group relative flex transition-all duration-300 hover:translate-y-[-4px] ${isMobile ? 'h-[170px]' : 'h-[242px]'} flex-col items-center gap-4 overflow-visible p-[16px] hover:cursor-pointer ${
           // isFocusMode
           // ? 'w-[125px]'
           isMobile ? 'min-w-[125px]' : 'min-w-[156px]'

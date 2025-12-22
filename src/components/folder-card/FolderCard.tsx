@@ -13,7 +13,7 @@ import FolderPocket from './FolderPocket';
 import FolderDeviderLine from './FolderDeviderLine';
 import InactiveBookmarkIcon from '@/assets/common-ui-assets/InactiveBookmark.svg?react';
 import ActiveBookmarkIcon from '@/assets/common-ui-assets/ActiveBookmark.svg?react';
-import MoreIcon from '@/assets/common-ui-assets/더보기.png';
+import MoreIcon from '@/assets/common-ui-assets/More.png';
 import CardMenu from '@/assets/widget-ui-assets/CardMenu.svg?react';
 import { useFolderMemo } from '@/hooks/useFolderMemo';
 const DropDownInline = lazy(() => import('../common-ui/DropDownInline'));
@@ -124,7 +124,7 @@ export default function FolderCard({
     <>
       <div
         // 바깥 컨테이너 투명 처리
-        className={`group relative flex ${isMobile ? 'h-[170px]' : 'h-[242px]'} flex-col items-center gap-4 rounded-[16px] border border-transparent bg-transparent p-[16px] hover:cursor-pointer ${
+        className={`group relative flex transition-all duration-300 hover:translate-y-[-4px] ${isMobile ? 'h-[170px]' : 'h-[242px]'} flex-col items-center gap-4 rounded-[16px] border border-transparent bg-transparent p-[16px] hover:cursor-pointer ${
           isMobile ? 'min-w-[125px]' : 'min-w-[156px]'
         }`}
         onClick={handleCardClick}

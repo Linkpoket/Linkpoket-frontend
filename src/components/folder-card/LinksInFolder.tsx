@@ -10,7 +10,7 @@ export default function LinksInFolder({}) {
     <>
       {/* 여러 겹의 카드 - 실제 링크 파비콘 표시 */}
       <div
-        className="absolute top-5 left-[48%] -translate-x-1/2 rounded-[14px] bg-white/60 shadow-[0_2px_6px_rgba(0,0,0,0.08)] backdrop-blur-sm"
+        className="absolute top-5 left-[48%] -translate-x-1/2 rounded-[14px] bg-white/60 shadow-[0_2px_6px_rgba(0,0,0,0.08)] backdrop-blur-sm transition-transform duration-300 group-hover:scale-105"
         style={{
           transform: 'translateX(20%) rotate(8deg)',
           width: isMobile ? '54px' : '74px',
@@ -100,7 +100,7 @@ export default function LinksInFolder({}) {
           })()}
       </div>
       <div
-        className="absolute top-9 left-[10%] rounded-[12px] bg-white/60 shadow-[0_3px_10px_rgba(0,0,0,0.12)] backdrop-blur-md"
+        className="absolute top-9 left-[10%] rounded-[12px] bg-white/60 shadow-[0_3px_10px_rgba(0,0,0,0.12)] backdrop-blur-md transition-transform duration-300 group-hover:scale-105"
         style={{
           transform: 'rotate(-4deg)',
           width: isMobile ? '50px' : '70px',
