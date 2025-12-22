@@ -4,11 +4,8 @@ import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useFolderColorStore } from '@/stores/folderColorStore';
 import { useMobile } from '@/hooks/useMobile';
 import useUpdateFolderBookmark from '@/hooks/mutations/useUpdateFolderBookmark';
-import { useQuery } from '@tanstack/react-query';
-import fetchFolderDetails from '@/apis/folder-apis/fetchFolderDetails';
-import { fetchPersonalPage } from '@/apis/page-apis/fetchPersonalPage';
+// import useFetchFolderDetails from '@/hooks/queries/useFetchFolderDetails';
 import { FolderDetail } from '@/types/folders';
-import { LinkDetail } from '@/types/links';
 import { DropDownInlineSkeleton } from '../skeleton/DropdownInlineSkeleton';
 import LinksInFolder from './LinksInFolder';
 import FolderBackground from './FolderBackground';
@@ -16,10 +13,9 @@ import FolderPocket from './FolderPocket';
 import FolderDeviderLine from './FolderDeviderLine';
 import InactiveBookmarkIcon from '@/assets/common-ui-assets/InactiveBookmark.svg?react';
 import ActiveBookmarkIcon from '@/assets/common-ui-assets/ActiveBookmark.svg?react';
-import CardMenu from '@/assets/widget-ui-assets/CardMenu.svg?react';
 import MoreIcon from '@/assets/common-ui-assets/더보기.png';
+import CardMenu from '@/assets/widget-ui-assets/CardMenu.svg?react';
 import { useFolderMemo } from '@/hooks/useFolderMemo';
-
 const DropDownInline = lazy(() => import('../common-ui/DropDownInline'));
 const MemoModal = lazy(() => import('../modal/memo/MemoModal'));
 
@@ -49,41 +45,6 @@ export default function FolderCard({
     pageId: pageId as string,
   });
 
-  // 북마크 페이지인지 확인
-  const isBookmarkPage = location.pathname.startsWith('/bookmarks');
-
-  // 북마크 페이지인 경우 개인 페이지 정보 가져오기 (pageId 비교용)
-  const { data: personalPageData } = useQuery({
-    queryKey: ['personalPage'],
-    queryFn: () => fetchPersonalPage(),
-    select: (response) => response.data,
-    enabled: isBookmarkPage, // 북마크 페이지에서만 조회
-    staleTime: 1000 * 60 * 5, // 5분간 캐시 유지
-  });
-
-  // 폴더 상세 정보를 가져와서 링크 정보 추출
-  const actualPageId = item.pageId || pageId || '';
-
-  const { data: folderDetailsData } = useQuery({
-    queryKey: ['folderDetails', actualPageId, folderId, 'preview'],
-    queryFn: () =>
-      fetchFolderDetails({
-        pageId: actualPageId,
-        commandType: 'VIEW',
-        folderId: folderId || '',
-        sortType: 'BASIC',
-      }),
-    // pageId와 folderId가 있을 때만 fetch
-    enabled: !!actualPageId && !!folderId,
-    select: (response) => response.data,
-    staleTime: 1000 * 60 * 5, // 5분간 캐시 유지
-  });
-
-  const linkData: LinkDetail[] = folderDetailsData?.linkDetailResponses || [];
-
-  // 링크 데이터 사용 (상위 3개만)
-  const displayLinks = linkData.slice(0, 3);
-
   const getFolderLink = (folderId: string) => {
     const currentPath = location.pathname;
     if (currentPath.startsWith('/shared/')) {
@@ -92,13 +53,7 @@ export default function FolderCard({
       return `/shared/${sharedPageId}/folder/${folderId}`;
     }
     if (currentPath.startsWith('/bookmarks')) {
-      const personalPageId = personalPageData?.pageId;
-
-      if (!item.pageId || item.pageId === personalPageId) {
-        return `/personal/folder/${folderId}`;
-      } else {
-        return `/shared/${item.pageId}/folder/${folderId}`;
-      }
+      return `/bookmarks/folder/${folderId}`;
     }
     return `/personal/folder/${folderId}`;
   };
@@ -186,7 +141,7 @@ export default function FolderCard({
           <FolderBackground backgroundColor={currentFolderColor.gradient} />
 
           {/* 폴더 내부 링크들 */}
-          <LinksInFolder displayLinks={displayLinks} />
+          <LinksInFolder />
 
           {/* Front pocket (투명도 적용) */}
           <FolderPocket backgroundColor={currentFolderColor.gradient} />
