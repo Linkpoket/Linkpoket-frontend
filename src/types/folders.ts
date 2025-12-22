@@ -65,6 +65,7 @@ export interface FolderDetail {
   createdDate: string;
   folderId: string;
   folderName: string;
+  pageId?: string; // 북마크 폴더의 경우 pageId 포함
 }
 
 export type FolderDetailResponse = Array<FolderDetail>;

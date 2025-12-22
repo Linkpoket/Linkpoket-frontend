@@ -14,7 +14,7 @@ interface FolderColorState {
 export const useFolderColorStore = create<FolderColorState>()(
   persist(
     (set, get) => ({
-      selectedColorId: 'Orange',
+      selectedColorId: 'Gray',
 
       setSelectedColorId: (colorId: string) =>
         set({ selectedColorId: colorId }),

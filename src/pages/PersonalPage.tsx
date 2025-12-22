@@ -7,7 +7,7 @@ import { useUserStore } from '@/stores/userStore';
 import { useMobile } from '@/hooks/useMobile';
 import { getPageDataLength } from '@/utils/getPageDataLength';
 import { PageLayout } from '@/components/common-ui/PageLayout';
-import ScrollToTopButton from '@/components/common-ui/ScrollToTopButton';
+import FloatingActionBox from '@/components/common-ui/FloatingActionBox';
 import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 
@@ -77,8 +77,8 @@ export default function PersonalPage() {
           isMobile={isMobile}
           pageImageUrl={pageImage}
         />
-        <ScrollToTopButton />
       </PageLayout>
+      <FloatingActionBox />
     </>
   );
 }

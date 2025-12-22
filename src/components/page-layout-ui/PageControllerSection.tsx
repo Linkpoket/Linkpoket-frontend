@@ -3,6 +3,9 @@ import DropDownView from '../common-ui/DropDownView';
 import { Search } from '../common-ui/Search';
 import { useLocation } from 'react-router-dom';
 import { usePageSearch } from '@/hooks/usePageSearch';
+import { usePageStore, useFileListViewStore } from '@/stores/pageStore';
+import { useFolderColorStore } from '@/stores/folderColorStore';
+import FloatingFileIcon from '@/assets/common-ui-assets/FloatingFileIcon.svg?react';
 
 export default function PageControllerSection({
   folderDataLength = 0,
@@ -13,6 +16,10 @@ export default function PageControllerSection({
 }: PageControllerSectionProps & { isMobile: boolean }) {
   const pathName = useLocation().pathname;
   const { searchKeyword, handleSearchChange, handleClear } = usePageSearch();
+  const { pageId } = usePageStore();
+  const { showFilesOnly, toggleFileListView } = useFileListViewStore();
+  const { getCurrentColor } = useFolderColorStore();
+  const currentFolderColor = getCurrentColor();
 
   const showSearch = pathName !== '/signup' && pathName !== '/login';
 
@@ -34,7 +41,32 @@ export default function PageControllerSection({
           onClear={handleClear}
         />
       )}
-      <DropDownView sortType={sortType} setSortType={setSortType} />
+      <div className="flex items-center gap-2">
+        {/* 파일 선택 버튼 - 원형 버튼 */}
+        {pageId && !isMobile && (
+          <button
+            onClick={toggleFileListView}
+            className={`relative flex h-[42px] w-[42px] items-center justify-center rounded-full border transition-all hover:border-gray-400 ${
+              showFilesOnly ? 'border-gray-300' : 'border-gray-300 bg-white'
+            }`}
+            style={
+              showFilesOnly
+                ? {
+                    backgroundColor: currentFolderColor.previewColor,
+                    borderColor: currentFolderColor.previewColor,
+                  }
+                : {}
+            }
+            aria-label="파일 필터"
+          >
+            <FloatingFileIcon
+              className="h-[21px] w-[21px]"
+              stroke={showFilesOnly ? '#FFFFFF' : '#000000'}
+            />
+          </button>
+        )}
+        <DropDownView sortType={sortType} setSortType={setSortType} />
+      </div>
     </div>
   );
 }

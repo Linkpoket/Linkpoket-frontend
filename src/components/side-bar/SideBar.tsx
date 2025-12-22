@@ -19,6 +19,7 @@ import { useCreateSharedPage } from '@/hooks/mutations/useCreateSharedPage';
 import { toast } from 'react-hot-toast';
 import { usePageStore } from '@/stores/pageStore';
 import useFetchFolderList from '@/hooks/queries/useFetchFolderList';
+import StorageUsage from './StorageUsage';
 
 type MenubarProps = {
   showSidebar: boolean;
@@ -222,7 +223,7 @@ const SideBar: React.FC<MenubarProps> = ({
         ref={sidebarRef}
         className={`border-gray-10 flex h-screen flex-col justify-between border-r ${isMobile ? 'bg-gray-0 absolute top-0 left-0 z-50 w-[220px]' : 'relative w-[15vw] min-w-[150px]'} `}
       >
-        <div className="flex flex-col gap-[8px] p-[16px]">
+        <div className="flex flex-1 flex-col gap-[8px] overflow-y-auto p-[16px]">
           <div className="flex justify-end">
             <button
               onClick={() => {
@@ -552,6 +553,7 @@ const SideBar: React.FC<MenubarProps> = ({
             </li>
           </ul>
         </div>
+        <StorageUsage />
       </aside>
     );
   } else if (!showSidebar && isFoldSidebar && !isMobile) {

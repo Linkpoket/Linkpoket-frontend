@@ -46,6 +46,8 @@ export default function DropDownView({
     <div
       ref={dropdownRef}
       className={cn('relative inline-block text-left', className)}
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
     >
       <button
         aria-haspopup="listbox"
@@ -57,38 +59,34 @@ export default function DropDownView({
       </button>
 
       {isOpen && (
-        <ul
-          role="menu"
-          className="border-gray-30 text-gray-90 bg-gray-0 absolute z-[9999] mt-1 w-full rounded-[10px] border p-[8px] text-[14px] font-[600]"
-        >
-          {options.map((option) => (
-            <li
-              key={option}
-              role="menuitem"
-              onClick={() => handleSelect(option)}
-              className={cn(
-                'hover:bg-gray-5 flex cursor-pointer items-center justify-between px-3 py-3 hover:rounded-[8px]',
-                sortType === option && 'bg-gray-5 rounded-[8px]'
-              )}
-            >
-              <span>{option}</span>
-              {sortType === option && (
-                <PageSortBoxIconCheck className="h-4 w-4 text-gray-500" />
-              )}
-            </li>
-          ))}
-        </ul>
+        <>
+          {/* 버튼과 드롭다운 사이 간격을 채우는 보이지 않는 영역 */}
+          <div className="absolute top-full right-0 left-0 h-1" />
+          <ul
+            role="menu"
+            className="border-gray-30 text-gray-90 bg-gray-0 absolute z-[9999] mt-1 w-full rounded-[10px] border p-[8px] text-[14px] font-[600]"
+            onMouseEnter={() => setIsOpen(true)}
+            onMouseLeave={() => setIsOpen(false)}
+          >
+            {options.map((option) => (
+              <li
+                key={option}
+                role="menuitem"
+                onClick={() => handleSelect(option)}
+                className={cn(
+                  'hover:bg-gray-5 flex cursor-pointer items-center justify-between px-3 py-3 hover:rounded-[8px]',
+                  sortType === option && 'bg-gray-5 rounded-[8px]'
+                )}
+              >
+                <span>{option}</span>
+                {sortType === option && (
+                  <PageSortBoxIconCheck className="h-4 w-4 text-gray-500" />
+                )}
+              </li>
+            ))}
+          </ul>
+        </>
       )}
     </div>
   );
 }
-
-// 사용하기. 해당 컴포넌트는 uncontrolled component임. onChange는 부모컴포넌트에서 선택된 값을 알기 위함함
-// <SortSelect
-//   defaultValue="기본순"
-//   onChange={(val) => {
-//     // 선택된 정렬값으로 API 요청 다시 보내기
-//     fetchSortedPosts(val);
-//   }}
-// 또는 새로운 함수 로직 작성을 하고 onChange={새로운 함수} 이렇게도 가능
-// />;

@@ -1,7 +1,27 @@
 import { FolderDetail } from '@/types/folders';
 import { LinkDetail } from '@/types/links';
+import { FileResponse } from '@/types/files';
 
-type PageData = FolderDetail | LinkDetail;
+export const getPageDataLength = (
+  folderData: FolderDetail[],
+  linkData: LinkDetail[]
+) => {
+  const folderDataLength = folderData?.length ?? 0;
+  const linkDataLength = linkData?.length ?? 0;
+
+  return {
+    folderDataLength,
+    linkDataLength,
+  };
+};
+
+type PageData = FolderDetail | LinkDetail | FileResponse;
+
+const getName = (item: PageData): string => {
+  if ('folderId' in item) return item.folderName || '';
+  if ('fileId' in item) return item.fileName || '';
+  return item.linkName || '';
+};
 
 export const handlePageDataSort = (
   data: PageData[],
@@ -24,8 +44,8 @@ export const handlePageDataSort = (
 
     case '이름순':
       return sortedData.sort((a, b) => {
-        const nameA = ('folderId' in a ? a.folderName : a.linkName) || '';
-        const nameB = ('folderId' in b ? b.folderName : b.linkName) || '';
+        const nameA = getName(a);
+        const nameB = getName(b);
         return nameA.localeCompare(nameB);
       });
 

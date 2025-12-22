@@ -1,9 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useModalStore } from '@/stores/modalStore';
-import { useLocation } from 'react-router-dom';
 import { useUpdateTitle } from '@/hooks/useUpdateTitle';
-import { useFolderColorStore } from '@/stores/folderColorStore';
-import { Button } from '../common-ui/button';
 
 type PageHeaderSectionProps = {
   pageTitle: string;
@@ -30,12 +26,6 @@ export default function PageHeaderSection({
           isPageTitle: true,
         }
   );
-  const { openLinkModal, openFolderModal } = useModalStore();
-  const { getCurrentColor } = useFolderColorStore();
-  const currentFolderColor = getCurrentColor();
-  const location = useLocation();
-  const currentLocation = location.pathname;
-  const isLinkButtonVisible = currentLocation !== '/bookmarks';
 
   useEffect(() => {
     setTitle(pageTitle ?? '');
@@ -65,59 +55,6 @@ export default function PageHeaderSection({
             }}
             className="outline-nontext-gray-90 inline-block w-full text-[22px] font-bold"
           />
-        )}
-        {isLinkButtonVisible && (
-          <div
-            className={`flex items-center gap-[8px] ${isMobile ? 'hidden' : ''}`}
-          >
-            <Button
-              size="sm"
-              style={{
-                borderColor: currentFolderColor.previewColor,
-                color: currentFolderColor.previewColor,
-              }}
-              className="responsive-button rounded-lg border-2 bg-white text-sm font-medium whitespace-nowrap transition-colors"
-              onClick={openLinkModal}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}15`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'white';
-              }}
-              onMouseDown={(e) => {
-                e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}25`;
-              }}
-              onMouseUp={(e) => {
-                e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}15`;
-              }}
-            >
-              + 링크추가
-            </Button>
-            <Button
-              size="sm"
-              variant="forHeader"
-              style={{
-                borderColor: currentFolderColor.previewColor,
-                color: currentFolderColor.previewColor,
-              }}
-              className="responsive-button rounded-lg border-2 bg-white text-sm font-medium whitespace-nowrap transition-colors"
-              onClick={openFolderModal}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}15`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'white';
-              }}
-              onMouseDown={(e) => {
-                e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}25`;
-              }}
-              onMouseUp={(e) => {
-                e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}15`;
-              }}
-            >
-              + 폴더추가
-            </Button>
-          </div>
         )}
       </div>
     </div>
